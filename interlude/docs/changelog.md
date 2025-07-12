@@ -2,6 +2,7 @@
 ===
 # Fixes
 🐈 Default maps are no longer here
+🐈 Removed score-screen audio play when a chart finishes
 
 # Miscellaneous
 🐈 Merged commits from fork : https://github.com/YAVSRG/YAVSRG
