@@ -106,7 +106,7 @@ type ScoreScreen(score_info: ScoreInfo, results: ImprovementFlags * SessionXPGai
         //    |> this.Add
         //| None -> ()
 
-        Sounds.get("score-screen").Play()
+        //Sounds.get("score-screen").Play()
 
         base.Init parent
 
@@ -122,7 +122,7 @@ type ScoreScreen(score_info: ScoreInfo, results: ImprovementFlags * SessionXPGai
         score_info.Ruleset <- Rulesets.current
         (graph :> System.IDisposable).Dispose()
         on_ruleset_changed.Dispose()
-        Sounds.get("score-screen").Stop()
+        // Sounds.get("score-screen").Stop()
         Toolbar.show ()
 
     override this.OnBack() =
