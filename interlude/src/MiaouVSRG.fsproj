@@ -22,54 +22,56 @@
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="Locale\map (1).osz">
+<!-- TODO : Understand why it doesn't work
+    <EmbeddedResource Include="Resources\Locale\map (1).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (2).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (2).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (3).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (3).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (4).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (4).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (5).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (5).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (6).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (6).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (7).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (7).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (8).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (8).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (9).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (9).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (10).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (10).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (11).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (11).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (12).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (12).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (13).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (13).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (14).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (14).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (15).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (15).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Locale\map (16).osz">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\map (16).osz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
+-->
     <EmbeddedResource Include="Resources\Locale\en_GB.txt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
