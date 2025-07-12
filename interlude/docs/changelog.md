@@ -1,3 +1,8 @@
+0.1.0.1
+===
+# Fixes
+🐈 Default maps are no longer here
+
 0.1.1.0
 ===
 # Improvements
