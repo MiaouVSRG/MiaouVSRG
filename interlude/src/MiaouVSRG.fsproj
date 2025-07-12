@@ -72,9 +72,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
 -->
-    <EmbeddedResource Include="Resources\Locale\en_GB.txt">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale\en_GB.txt" />
     <EmbeddedResource Include="Resources\icon.png" />
     <EmbeddedResource Include="Resources\miaoum.zip" />
     <EmbeddedResource Include="Resources\CrashSplashes.txt" />
@@ -172,7 +170,7 @@
     <Compile Include="Features\Collections\CreatePlaylistPage.fs" />
     <Compile Include="Features\Collections\EditPlaylistPage.fs" />
     <Compile Include="Features\Collections\SelectCollectionsPage.fs" />
-    <Compile Include="Features\Play\State.fs" />
+    <Compile Include="Features\Play\PlayState.fs" />
     <Compile Include="Features\Play\LocalOffset.fs" />
     <Compile Include="Features\Score\Username.fs" />
     <Compile Include="Features\Score\Utils.fs" />
@@ -309,11 +307,11 @@
     <Compile Include="Features\LevelSelect\Tree\Tree.fs" />
     <Compile Include="Features\LevelSelect\Preview.fs" />
     <Compile Include="Features\LevelSelect\ModSelect.fs" />
-    <Compile Include="Features\LevelSelect\Scoreboard\Score.fs" />
     <Compile Include="Features\LevelSelect\Scoreboard\LocalScores.fs" />
+    <Compile Include="Features\LevelSelect\Scoreboard\LocalScoreCard.fs" />
     <Compile Include="Features\LevelSelect\Scoreboard\Scoreboard.fs" />
-    <Compile Include="Features\LevelSelect\Leaderboard\Score.fs" />
     <Compile Include="Features\LevelSelect\Leaderboard\OnlineScores.fs" />
+    <Compile Include="Features\LevelSelect\Leaderboard\OnlineScoreCard.fs" />
     <Compile Include="Features\LevelSelect\Leaderboard\Leaderboard.fs" />
     <Compile Include="Features\LevelSelect\Info\CurrentChart.fs" />
     <Compile Include="Features\LevelSelect\Info\GameplayInfoBoxes.fs" />

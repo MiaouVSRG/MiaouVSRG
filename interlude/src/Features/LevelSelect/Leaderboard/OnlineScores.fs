@@ -14,6 +14,8 @@ open Interlude.Features.Gameplay
 open Interlude.Features.Online
 open Interlude.Web.Shared.Requests
 
+type LeaderboardScore = Charts.Scores.Leaderboard.Score
+
 module OnlineScores =
 
     [<RequireQualifiedAccess>]
@@ -100,7 +102,7 @@ module OnlineScores =
                                 Grade = Grade.calculate req.Ruleset.Grades scoring.Accuracy
 
                                 Rating = rating
-                                Physical = Performance.calculate rating scoring
+                                Performance = Performance.calculate rating scoring
 
                                 ImportedFromOsu = false
                                 IsFailed = false

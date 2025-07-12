@@ -12,7 +12,7 @@ open Interlude.UI
 open Interlude.Features.Score
 open Interlude.Features.Gameplay
 
-type private ScoreCard(score_info: ScoreInfo) =
+type private LocalScoreCard(score_info: ScoreInfo) =
     inherit
         Container(
             NodeType.Button(
@@ -30,13 +30,15 @@ type private ScoreCard(score_info: ScoreInfo) =
     let animation = Animation.seq [ Animation.Delay 200; fade ]
     let mod_string = score_info.ModString()
 
-    override this.Init(parent) =
+    override this.Init(parent: Widget) =
         this
-        |* MouseListener()
-            .Button(this)
-            .OnRightClick(fun () -> ScoreContextMenu(false, score_info).Show())
+            .Add(
+                MouseListener()
+                    .Button(this)
+                    .OnRightClick(fun () -> ScoreContextMenu(false, score_info).Show())
+            )
 
-        base.Init parent
+        base.Init(parent)
 
     member this.Data = score_info
 
@@ -137,9 +139,9 @@ type private ScoreCard(score_info: ScoreInfo) =
         Render.rect box box_color
         Text.fill_b (
             Style.font,
-            (sprintf "%.2f" score_info.Physical),
+            (sprintf "%.2f" score_info.Performance),
             box.ShrinkY(5.0f),
-            (Colors.white.O4a alpha, (Difficulty.color score_info.Physical).O4a alpha),
+            (Colors.white.O4a alpha, (Difficulty.color score_info.Performance).O4a alpha),
             Alignment.CENTER
         )
 

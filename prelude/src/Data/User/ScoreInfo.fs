@@ -31,7 +31,7 @@ type ScoreInfo =
         mutable Grade: int
 
         Rating: Difficulty
-        Physical: float32
+        Performance: float32
 
         ImportedFromOsu: bool
         IsFailed: bool
@@ -61,8 +61,8 @@ type ScoreInfo =
 
     member this.ModStatus = this.WithMods.Status
 
-    member this.ModString() =
-        ModState.format (this.Rate, this.Mods)
+    member this.ModString() = ModState.format (this.Rate, this.Mods)
+    member this.Shorthand = sprintf "%s | %s" this.Scoring.FormattedAccuracy (this.Ruleset.LampName this.Lamp)
 
 module ScoreInfo =
 
@@ -90,7 +90,7 @@ module ScoreInfo =
             Grade = Grade.calculate ruleset.Grades scoring.Accuracy
 
             Rating = difficulty
-            Physical = Performance.calculate difficulty scoring
+            Performance = Performance.calculate difficulty scoring
 
             ImportedFromOsu = score.IsImported
             IsFailed = score.IsFailed

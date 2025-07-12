@@ -69,7 +69,7 @@ type MultiplayerScreen =
                         Grade = Grade.calculate scoring.Ruleset.Grades scoring.Accuracy
 
                         Rating = info.Difficulty
-                        Physical = Performance.calculate info.Difficulty scoring
+                        Performance = Performance.calculate info.Difficulty scoring
 
                         ImportedFromOsu = false
                         IsFailed = quit_out_early
@@ -139,7 +139,7 @@ type MultiplayerScreen =
             then
                 CURRENT_SESSION.PlaysCompleted <- CURRENT_SESSION.PlaysCompleted + 1
 
-        { new IPlayScreen(info.Chart, info.WithColors, PacemakerState.None, scoring) with
+        { new IPlayScreen(info, PacemakerState.None, scoring) with
             override this.AddWidgets() =
                 let hud_config = Content.HUD
                 let inline add_widget position constructor =

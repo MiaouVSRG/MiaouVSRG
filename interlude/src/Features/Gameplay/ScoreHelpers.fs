@@ -8,7 +8,6 @@ open Prelude.Gameplay.Replays
 open Prelude.Gameplay.Scoring
 open Prelude.Gameplay.Rulesets
 open Prelude.Calculator
-open Prelude.Skins.Noteskins
 open Prelude.Data.User
 open Prelude.Data.User.Stats
 open Prelude.Data.Library
@@ -75,7 +74,7 @@ module Gameplay =
             Grade = Grade.calculate scoring.Ruleset.Grades scoring.Accuracy
 
             Rating = info.Difficulty
-            Physical = Performance.calculate info.Difficulty scoring
+            Performance = Performance.calculate info.Difficulty scoring
 
             ImportedFromOsu = false
             IsFailed = failed
@@ -134,15 +133,12 @@ module Gameplay =
             ImprovementFlags.None, None
 
     let delete_score (score_info: ScoreInfo) =
-        let score_name =
-            sprintf "%s | %s" score_info.Scoring.FormattedAccuracy (score_info.Ruleset.LampName score_info.Lamp)
-
         if UserDatabase.delete_score score_info.ChartMeta.Hash score_info.TimePlayed Content.UserData then
             score_deleted_ev.Trigger score_info.TimePlayed
-            Notifications.action_feedback (Icons.TRASH, [ score_name ] %> "notification.deleted", "")
+            Notifications.action_feedback (Icons.TRASH, [ score_info.Shorthand ] %> "notification.deleted", "")
         else
             Logging.Debug("Couldn't find score matching timestamp to delete")
 
-    let mutable watch_replay: ScoreInfo * ColoredChart -> unit = ignore
+    let mutable watch_replay: ScoreInfo -> unit = ignore
     let mutable continue_endless_mode: unit -> bool = fun () -> false
     let mutable retry: unit -> unit = ignore

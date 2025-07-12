@@ -3,6 +3,9 @@
 # Fixes
 🐈 Default maps are no longer here
 
+# Miscellaneous
+🐈 Merged commits from fork : https://github.com/YAVSRG/YAVSRG
+
 0.1.1.0
 ===
 # Improvements
