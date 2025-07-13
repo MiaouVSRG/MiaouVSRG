@@ -17,7 +17,7 @@ let HTTPS_PORT = 443
 try
     Logging.Verbosity <- LoggingLevel.DEBUG
 
-    Logging.LogFile <- sprintf "log-%s.txt" (DateTime.Today.ToString("yyyyMMdd"))
+    Logging.LogFile <- Some(Path.Combine("Logs", sprintf "log-%s.txt" (DateTime.Today.ToString("yyyyMMdd"))))
 
     Logging.Info "~~ Interlude.Web [%s] ~~" TAGLINE
 
