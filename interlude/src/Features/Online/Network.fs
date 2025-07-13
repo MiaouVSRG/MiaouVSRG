@@ -244,6 +244,7 @@ module Network =
 
     let mutable private api_initialised = false
     let connect () =
+        Logging.Debug "Trying to connect to https://%s" credentials.Api
         if not api_initialised then
             API.Client.init ("https://" + credentials.Api)
             api_initialised <- true

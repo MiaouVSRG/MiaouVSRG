@@ -27,6 +27,20 @@
     <link rel="icon" type="image/png" href="assets/images/favicon.png?v=5abe79e6" />
     <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png?v=5abe79e6" />
     <style>
+        @keyframes horizontal-shaking {
+            0% { transform: translateY(0) }
+            50% { transform: translateY(-10px) }
+        }
+
+        #miaou-banner{
+            animation: horizontal-shaking 5s infinite;
+        }
+
+        .buttons:hover{
+            transform: scale(1.075);
+            transition: all 0.125s ease-in;
+        }
+
         html,
         body,
         div,
@@ -2216,7 +2230,7 @@
                     <div class="wrapper">
                         <div class="inner">
                             <div id="image01" class="image" data-position="center"><span class="frame"><img
-                                        src="assets/images/image01.png?v=5abe79e6" alt=""  width="500" height="600" /></span></div>
+                                        src="assets/images/image01.png?v=5abe79e6" alt=""  width="500" height="600" id="miaou-banner"/></span></div>
                         </div>
                     </div>
                 </div>
@@ -2230,7 +2244,7 @@
                 <div id="container03" class="container columns">
                     <div class="wrapper">
                         <div class="inner">
-                            <div>
+                            <div style="margin-top: 2%;">
                                 <ul id="buttons02" class="buttons">
                                     <li><a href="#" class="button n01">NEWS</a></li>
                                 </ul>
@@ -2278,7 +2292,7 @@
 
 
                             </div>
-                            <div>
+                            <div style="margin-top: 2%;">
                                 <ul id="buttons05" class="buttons">
                                     <li><a href="http://miaouvsrg.com/interlude/wiki/index.html" class="button n01">WIKI</a></li>
                                 </ul>
