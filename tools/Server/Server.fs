@@ -27,7 +27,7 @@ module Server =
         use client = new HttpClient()
 
         let response =
-            client.Send(new HttpRequestMessage(HttpMethod.Get, "https://api.yavsrg.net/health"))
+            client.Send(new HttpRequestMessage(HttpMethod.Get, "https://miaouvsrg.com/health"))
 
         if response.IsSuccessStatusCode then
             printfn "Server OK"

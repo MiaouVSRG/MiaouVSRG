@@ -20,8 +20,8 @@ type Credentials =
                 "Doing so is equivalent to giving someone your account password"
             Username = ""
             Token = ""
-            Host = "online.yavsrg.net"
-            Api = "api.yavsrg.net"
+            Host = "miaouvsrg.com"
+            Api = "miaouvsrg.com"
         }
 
     static member Location : string = Path.Combine(get_game_folder "Data", "login.json")

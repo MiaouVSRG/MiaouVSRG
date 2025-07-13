@@ -81,8 +81,8 @@ module Printerlude =
                     "Switch to local development server",
                     "flag",
                     fun (io: IOContext) (b: bool) ->
-                        Network.credentials.Host <- (if b then "localhost" else "online.yavsrg.net")
-                        Network.credentials.Api <- (if b then "localhost" else "api.yavsrg.net")
+                        Network.credentials.Host <- (if b then "localhost" else "miaouvsrg.com")
+                        Network.credentials.Api <- (if b then "localhost" else "miaouvsrg.com")
                         Updates.restart_on_exit <- true
                         WindowThread.exit()
                 )
