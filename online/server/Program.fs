@@ -16,6 +16,9 @@ let HTTPS_PORT = 443
 
 try
     Logging.Verbosity <- LoggingLevel.DEBUG
+
+    Logging.LogFile <- Some(Path.Combine("Logs", sprintf "log-%s.txt" (DateTime.Today.ToString("yyyyMMdd"))))
+
     Logging.Info "~~ Interlude.Web [%s] ~~" TAGLINE
 
     let api_cert =
@@ -47,8 +50,8 @@ try
     Server.start ()
     Logging.Info "Launching api on port %i ..." HTTPS_PORT
     API.Server.start ()
-    Logging.Info "Launching discord bot ..."
-    Bot.start ()
+    // Logging.Info "Launching discord bot ..."
+    // Bot.start ()
 
 #if DEBUG
     Console.ReadLine() |> ignore
