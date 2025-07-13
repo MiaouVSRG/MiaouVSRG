@@ -50,8 +50,8 @@ try
     Server.start ()
     Logging.Info "Launching api on port %i ..." HTTPS_PORT
     API.Server.start ()
-    Logging.Info "Launching discord bot ..."
-    Bot.start ()
+    // Logging.Info "Launching discord bot ..."
+    // Bot.start ()
 
 #if DEBUG
     Console.ReadLine() |> ignore
