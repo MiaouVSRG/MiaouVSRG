@@ -16,6 +16,9 @@ let HTTPS_PORT = 443
 
 try
     Logging.Verbosity <- LoggingLevel.DEBUG
+
+    Logging.LogFile <- sprintf "log-%s.txt" (DateTime.Today.ToString("yyyyMMdd"))
+
     Logging.Info "~~ Interlude.Web [%s] ~~" TAGLINE
 
     let api_cert =
