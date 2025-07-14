@@ -42,7 +42,7 @@ try
     API.Server.init
         {
             Port = HTTPS_PORT
-            SSLContext = SslContext(SslProtocols.Tls12, api_cert)
+            SSLContext = SslContext(SslProtocols.Tls12, api_cert, ClientCertificateRequired = false)
             Handle_Request = API.handle_request
         }
 
