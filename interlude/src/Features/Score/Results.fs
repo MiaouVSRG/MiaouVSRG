@@ -22,10 +22,10 @@ type Grade(grade: GradeResult ref, score_info: ScoreInfo) =
         base.Init parent
 
     override this.Draw() =
-        Render.rect (this.Bounds.Translate(10.0f, 10.0f)) Colors.black
-        Background.draw (this.Bounds, (Color.FromArgb(40, 40, 40)), 2.0f)
-        let grade_color = score_info.Ruleset.GradeColor (!grade).Grade
-        Render.rect this.Bounds grade_color.O1
+        // Render.rect (this.Bounds.Translate(10.0f, 10.0f)) Colors.black
+        // Background.draw (this.Bounds, (Color.FromArgb(40, 40, 40)), 2.0f)
+        // let grade_color = score_info.Ruleset.GradeColor (!grade).Grade
+        // Render.rect this.Bounds grade_color.O1
         base.Draw()
 
 type Accuracy

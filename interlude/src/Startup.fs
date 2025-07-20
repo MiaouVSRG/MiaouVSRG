@@ -41,67 +41,67 @@ module Startup =
             DiscordRPC.init ()
             Interlude.Updates.check_for_updates ()
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (1).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (1).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (2).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (2).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (3).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (3).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (4).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (4).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (5).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (5).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (6).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (6).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (7).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (7).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (8).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (8).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (9).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (9).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (10).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (10).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (11).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (11).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (12).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (12).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (13).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (13).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (14).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (14).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (15).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (15).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 
-            // let path = Path.GetFullPath("./Resources/Locale/map (16).osz")
+            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (16).osz")
             // if Path.Exists(path) then
             //     FileDrop.handle path
 

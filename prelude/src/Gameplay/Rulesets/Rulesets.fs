@@ -397,16 +397,18 @@ module Ruleset =
                 match rule with
                 | HeadTailCombineRule.OsuMania windows ->
 
-                    if ruleset.Judgements.Length <> 6 then failwith "osu!mania ln mechanics must be used with exactly 6 judgements"
+                    // if ruleset.Judgements.Length <> 6 then failwith "osu!mania ln mechanics must be used with exactly 6 judgements"
 
-                    if negative(windows.Window320) then failwith "osu!mania ln Window320 must be non-negative"
-                    if negative(windows.Window300) then failwith "osu!mania ln Window300 must be non-negative"
-                    if negative(windows.Window200) then failwith "osu!mania ln Window200 must be non-negative"
-                    if negative(windows.Window100) then failwith "osu!mania ln Window100 must be non-negative"
-                    if negative(windows.Window50) then failwith "osu!mania ln Window50 must be non-negative"
-                    if negative(windows.Window0) then failwith "osu!mania ln Window50 must be non-negative"
-                    if negative(windows.WindowOverhold200) then failwith "osu!mania ln WindowOverhold200 must be non-negative"
-                    if negative(windows.WindowOverhold100) then failwith "osu!mania ln WindowOverhold100 must be non-negative"
+                    // if negative(windows.Window320) then failwith "osu!mania ln Window320 must be non-negative"
+                    // if negative(windows.Window300) then failwith "osu!mania ln Window300 must be non-negative"
+                    // if negative(windows.Window200) then failwith "osu!mania ln Window200 must be non-negative"
+                    // if negative(windows.Window100) then failwith "osu!mania ln Window100 must be non-negative"
+                    // if negative(windows.Window50) then failwith "osu!mania ln Window50 must be non-negative"
+                    // if negative(windows.Window0) then failwith "osu!mania ln Window50 must be non-negative"
+                    // if negative(windows.WindowOverhold200) then failwith "osu!mania ln WindowOverhold200 must be non-negative"
+                    // if negative(windows.WindowOverhold100) then failwith "osu!mania ln WindowOverhold100 must be non-negative"
+
+                    if false then failwith "gay cat"
 
                     // todo: make sure they are ordered in some way
 
