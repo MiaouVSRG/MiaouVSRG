@@ -8,7 +8,7 @@ services:
         restart: unless-stopped
         ports:
             - 32767:32767
-            - 443:443
+            - 444:444
         volumes:
             - ./secrets:/docker_root/secrets
             - ./data:/docker_root/data

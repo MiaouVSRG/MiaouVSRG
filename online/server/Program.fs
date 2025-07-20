@@ -12,7 +12,7 @@ open Interlude.Web.Server.API
 open Interlude.Web.Server.Bot
 
 let SOCKET_PORT = 32767
-let HTTPS_PORT = 443
+let HTTPS_PORT = 444 // Avoir errors with HTTPS port 443
 
 try
     Logging.Verbosity <- LoggingLevel.DEBUG
