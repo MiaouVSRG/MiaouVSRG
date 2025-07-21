@@ -34,7 +34,7 @@ module DiscordRPC =
             client.ClearPresence()
 
     let large_image_text () : string =
-        if Network.status = Network.Status.LoggedIn then Network.credentials.Username else "www.miaouvsrg.com"
+        if Network.status = Network.Status.LoggedIn then Network.credentials.Username else "api.miaouvsrg.com"
 
     let in_menus (details: string) =
         if not client.IsDisposed then

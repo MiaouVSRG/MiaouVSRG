@@ -39,7 +39,7 @@ module Config =
             Config.Default
 
     [<Json.AutoCodec>]
-    type LoginCredentials = { Api: string; Token: string } with static member Default = { Api = "miaouvsrg.com"; Token = "" }
+    type LoginCredentials = { Api: string; Token: string } with static member Default = { Api = "api.miaouvsrg.com"; Token = "" }
 
     do
         try
