@@ -188,7 +188,7 @@ module UserCommands =
                                                 sprintf
                                                     "`%6.2f%%` `%6s` `%6s` `%8s`"
                                                     (s.Accuracy * 100.0)
-                                                    (SC_J4.LampName s.Lamp)
+                                                    (DEFAULT_RULESET.LampName s.Lamp)
                                                     (format_mods s)
                                                     (format_time_ago s.TimePlayed)
                                             )

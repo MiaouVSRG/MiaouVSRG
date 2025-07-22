@@ -52,9 +52,9 @@ type SkillBreakdownGraph(pattern_type: CorePattern, source: GraphSource, data: P
     let threshold_a, threshold_c, threshold_p = pattern_type.AccuracyBreakpoints
 
     let accuracy_label (threshold: float) =
-        let base_label = sprintf "%g%% %s" (threshold * 100.0) Rulesets.DEFAULT_RULESET.Name
-        if Rulesets.current_hash <> Rulesets.DEFAULT_RULESET_HASH then
-            match RulesetComparison.compare (threshold * 100.0) Rulesets.DEFAULT_RULESET Rulesets.current with
+        let base_label = sprintf "%g%% %s" (threshold * 100.0) DEFAULT_RULESET.Name // Rulesets.DEFAULT_RULESET.Name
+        if Rulesets.current_hash <> DEFAULT_RULESET_HASH then // Rulesets.DEFAULT_RULESET_HASH then
+            match RulesetComparison.compare (threshold * 100.0) DEFAULT_RULESET Rulesets.current with // Rulesets.DEFAULT_RULESET Rulesets.current with
             | Some cmp -> sprintf "%s (~= %.1f%% %s)" base_label cmp.Average Rulesets.current.Name
             | None -> base_label
         else base_label

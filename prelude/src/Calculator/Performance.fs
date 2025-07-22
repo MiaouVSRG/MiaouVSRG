@@ -56,8 +56,8 @@ module Performance =
     let calculate (rr: Difficulty) (scoring: ScoreProcessor) : float32 =
 
         let scoring =
-            if SC_J4_HASH <> Ruleset.hash scoring.Ruleset then
-                let on_standard_ruleset = scoring.Recreate(SC_J4)
+            if DEFAULT_RULESET_HASH <> Ruleset.hash scoring.Ruleset then
+                let on_standard_ruleset = scoring.Recreate(DEFAULT_RULESET)
                 on_standard_ruleset.Update Time.infinity
                 on_standard_ruleset
             else

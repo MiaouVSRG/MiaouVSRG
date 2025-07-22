@@ -21,7 +21,7 @@ module ScoreSync =
             let best_eligible_score =
                 match SelectedChart.SAVE_DATA with
                 | Some data ->
-                    match data.PersonalBests |> Bests.ruleset_best_above SC_J4_HASH (_.Accuracy) 1.0f<rate> with
+                    match data.PersonalBests |> Bests.ruleset_best_above DEFAULT_RULESET_HASH (_.Accuracy) 1.0f<rate> with
                     | Some (acc, _, timestamp) ->
                         match LocalScores.local_scores |> Seq.tryFind (fun s -> s.TimePlayed = timestamp) with
                         | Some local_score when not local_score.ImportedFromOsu ->

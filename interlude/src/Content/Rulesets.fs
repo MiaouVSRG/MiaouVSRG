@@ -15,9 +15,14 @@ module Rulesets =
     /// You could have two different versions of a ruleset with different grade colors
     //   If their gameplay behaviour is the same they get the same hash for gameplay purposes
     //   They get different IDs which allows the user to distinguish and select the version they want
-    let DEFAULT_ID = "sc-j4"
-    let DEFAULT_RULESET = SC_J4
-    let DEFAULT_RULESET_HASH = SC_J4_HASH
+    // 
+    // Changing this constant will only change the file name of the default ruleset,
+    // meaning that changing from "normal" to "hard" will change the file name from "normal" to "hard", but not the ruleset from NORMAL to HARD
+    // (to change the default ruleset, change DEFAULT_RULESET constant in Prelude)
+    let DEFAULT_ID = "normal"
+
+    // Other rulesets that have to be loaded but not selected by default
+    let OTHER_RULESETS = [EASY; HARD; INSANE]
 
     let mutable private initialised = false
     let private loaded = Dictionary<string, Ruleset>()
@@ -38,6 +43,21 @@ module Rulesets =
 
         if not (File.Exists default_path) then
             JSON.ToFile (default_path, true) DEFAULT_RULESET
+
+        // Install other rulesets, verifying before that it has not been installed before
+        // TODO : When a ruleset in OTHER_RULESETS has been modified, update it and not ignore it just because it has the same id
+        for ruleset in OTHER_RULESETS do
+            let ruleset_id : string =
+                ruleset.Name
+                |> Seq.filter (function '\'' | '_' | '.' | ' ' -> true | c -> Char.IsAsciiLetterOrDigit c)
+                |> Array.ofSeq
+                |> String
+                |> fun s -> s.ToLowerInvariant()
+                |> fun s -> s.Split(' ', StringSplitOptions.RemoveEmptyEntries ||| StringSplitOptions.TrimEntries) |> String.concat "-"
+            let ruleset_path = Path.Combine(path, ruleset_id + ".ruleset")
+
+            if not (File.Exists ruleset_path) then
+                JSON.ToFile (ruleset_path, true) ruleset
 
         for f in Directory.GetFiles(path) do
             if Path.GetExtension(f).ToLower() = ".ruleset" then

@@ -89,8 +89,8 @@ module Gameplay =
             if mod_status = ModStatus.Ranked then
 
                 let standardised_score =
-                    if Rulesets.current_hash <> SC_J4_HASH then
-                        score_info.WithRuleset SC_J4
+                    if Rulesets.current_hash <> DEFAULT_RULESET_HASH then
+                        score_info.WithRuleset DEFAULT_RULESET
                     else score_info
 
                 if Network.status = Network.Status.LoggedIn && not standardised_score.IsFailed then
@@ -112,12 +112,12 @@ module Gameplay =
                     score_saved_ev.Trigger score_info
                     save_data.PersonalBests <- Map.add Rulesets.current_hash new_bests save_data.PersonalBests
 
-                    if Rulesets.current_hash <> SC_J4_HASH then
+                    if Rulesets.current_hash <> DEFAULT_RULESET_HASH then
                         let new_standard_bests =
-                            match Map.tryFind SC_J4_HASH save_data.PersonalBests with
+                            match Map.tryFind DEFAULT_RULESET_HASH save_data.PersonalBests with
                             | Some existing_bests -> Bests.update standardised_score existing_bests |> fst
                             | None -> Bests.create standardised_score
-                        save_data.PersonalBests <- Map.add SC_J4_HASH new_standard_bests save_data.PersonalBests
+                        save_data.PersonalBests <- Map.add DEFAULT_RULESET_HASH new_standard_bests save_data.PersonalBests
 
                     UserDatabase.save_changes Content.UserData
                 improvement_flags, Some xp_gain

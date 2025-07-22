@@ -3,10 +3,28 @@
 open Prelude.Charts
 
 [<AutoOpen>]
-module DefaultRuleset =
+module DefaultRulesets =
 
-    let SC_J4 = Defaults.EASY
-    let SC_J4_HASH = Ruleset.hash SC_J4
+    // load all default rulesets in Defaults.fs
+    let EASY = Defaults.EASY
+    let EASY_HASH = Ruleset.hash EASY
+
+    let NORMAL = Defaults.NORMAL
+    let NORMAL_HASH = Ruleset.hash NORMAL
+
+    let HARD = Defaults.HARD
+    let HARD_HASH = Ruleset.hash HARD
+
+    let INSANE = Defaults.INSANE
+    let INSANE_HASH = Ruleset.hash INSANE
+
+    // let a default ruleset, that will be used everywhere in code : 
+    // - Performance calculation
+    // - Default judgement on first installation
+    // - Leaderboards
+    // - User data
+    let DEFAULT_RULESET = NORMAL
+    let DEFAULT_RULESET_HASH = NORMAL_HASH
 
 module Rulesets =
 
