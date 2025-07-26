@@ -9,13 +9,13 @@
 :root {
     --shadow-1: #050308;
     --shadow-2: #0a0911;
-    --shadow-2-3a: #0a0911DD;
+    --shadow-2-3a: #4b428877;
     --shadow-2-2a: #0a0911AA;
     --shadow-2-1a: #0a091177;
-    --cyan: #f082ff00;
+    --cyan: #f082ff4d;
     --cyan-2: #e47aff;
-    --cyan-accent: #43e1ef00;
-    --cyan-shadow: #c92fc900;
+    --cyan-accent: #43e1ef;
+    --cyan-shadow: #2fc949;
     --cyan-shadow-2a: #084251AA;
     --cyan-shadow-0a: #08425100;
     --cyan-shadow-dark: #042125;
@@ -32,7 +32,7 @@
 }
 
 .akrobat {
-    font-family: 'akrobatblack';
+    font-family: 'Fredoka One', cursive;
     color: white;
 }
 
@@ -187,3 +187,7 @@ a:hover {
     background: var(--cyan);
     border-bottom: 5px solid var(--cyan-accent);
 }
+
+
+
+
