@@ -98,18 +98,32 @@ module Mounts =
                         "%s Songs folder has moved or can no longer be found.\n This may break any mounted songs, if so you will need to set up the link again."
                         name
                     Logging.Info "Trying to search folder from other filesystems..."
+
+                    // Brute-force logic : 
+                    // 1. Replace the first letter of the SourceFolder (Usually the filesystem letter like C: or D:) by another one to search for
+                    // 2. If the folder is found then use it
+                    // This trick works because the user should just have changed the filesystem (if game is on an external drive), not the folders to access it.
+
+                    // Remove the first letter of the filesystem
                     let oldSourceFolder = mount.SourceFolder[1..] |> Seq.toList
-                    let ALPHABET = ['A' .. 'Z']
-                    for letter in ALPHABET do
+
+                    // We may not show the notification when we find a working filesystem
+                    let mutable shouldShowNotification = true
+
+                    for letter in ['A' .. 'Z'] do
                         let newSourceFolderArray = letter :: oldSourceFolder
                         let newSourceFolder = System.String (Array.ofList newSourceFolderArray)
                         if Directory.Exists newSourceFolder then
                             Logging.Info "Folder found on another filesystem : %s" newSourceFolder
+                            shouldShowNotification <- false
+                            
                             if mount.ImportOnStartup then
                                 Logging.Info "Checking for new %s songs to import.." name
                                 let task = Mount.import_new(mount, Content.Charts, Content.UserData, ignore)
                                 import_queue.Request(task, ignore)
-                    Notifications.error(moved_warning, %"notification.mount_moved.body")
+                    
+                    if shouldShowNotification then
+                        Notifications.error(moved_warning, %"notification.mount_moved.body")
             | None -> ()
 
         import_mount_if_auto_enabled(options.OsuMount, "osu!", %"notification.mount_moved.osu")
