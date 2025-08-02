@@ -4,6 +4,8 @@ open System
 open System.IO
 open Prelude
 
+open Percyqaz.Common
+
 type ConversionAssetBehaviour =
     | CopyAssetFiles
     | LinkAssetFiles
