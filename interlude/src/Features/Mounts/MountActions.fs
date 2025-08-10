@@ -105,24 +105,24 @@ module Mounts =
                     // This trick works because the user should just have changed the filesystem (if game is on an external drive), not the folders to access it.
 
                     // Remove the first letter of the filesystem
-                    let oldSourceFolder = mount.SourceFolder[1..] |> Seq.toList
+                    // let oldSourceFolder = mount.SourceFolder[1..] |> Seq.toList
 
                     // We may not show the notification when we find a working filesystem
-                    let mutable shouldShowNotification = true
+                    // let mutable shouldShowNotification = true
 
-                    for letter in ['A' .. 'Z'] do
-                        let newSourceFolderArray = letter :: oldSourceFolder
-                        let newSourceFolder = System.String (Array.ofList newSourceFolderArray)
-                        if Directory.Exists newSourceFolder then
-                            Logging.Info "Folder found on another filesystem : %s" newSourceFolder
-                            shouldShowNotification <- false
+                    // for letter in ['A' .. 'Z'] do
+                    //     let newSourceFolderArray = letter :: oldSourceFolder
+                    //     let newSourceFolder = System.String (Array.ofList newSourceFolderArray)
+                    //     if Directory.Exists newSourceFolder then
+                    //         Logging.Info "Folder found on another filesystem : %s" newSourceFolder
+                    //         shouldShowNotification <- false
                             
-                            if mount.ImportOnStartup then
-                                Logging.Info "Checking for new %s songs to import.." name
-                                let task = Mount.import_new(mount, Content.Charts, Content.UserData, ignore)
-                                import_queue.Request(task, ignore)
+                    //         if mount.ImportOnStartup then
+                    //             Logging.Info "Checking for new %s songs to import.." name
+                    //             let task = Mount.import_new(mount, Content.Charts, Content.UserData, ignore)
+                    //             import_queue.Request(task, ignore)
                     
-                    if shouldShowNotification then
+                    if true then //shouldShowNotification then
                         Notifications.error(moved_warning, %"notification.mount_moved.body")
             | None -> ()
 
