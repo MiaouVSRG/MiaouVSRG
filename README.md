@@ -2,7 +2,7 @@
 
 ### MiaouVSRG
 
-**MiaouVSRG** is a **work-in-progress** rhythm game project built upon the engine of **[YAVSRG](https://github.com/YAVSRG/YAVSRG)** (Yet Another Vertically Scrolling Rhythm Game), created by [@Percyqaz](https://github.com/YAVSRG).
+**MiaouVSRG** is a **work-in-progress** rhythm game project created by Babil and Kyun, built upon the engine of **[YAVSRG](https://github.com/YAVSRG/YAVSRG)** (Yet Another Vertically Scrolling Rhythm Game), created by [@Percyqaz](https://github.com/YAVSRG).
 
 Our goal is to deliver a fresh rhythm game experience, featuring:
 - Lots of quality-of-life improvements
