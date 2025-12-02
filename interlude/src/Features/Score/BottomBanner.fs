@@ -85,7 +85,7 @@ type BottomBanner(score_info: ScoreInfo, played_just_now: bool, graph: ScoreGrap
 
         this
         |+ graph
-        |+ Text(Updates.version + "  : :  www.yavsrg.net")
+        |+ Text(Updates.version + "  : :  www.miaouvsrg.com")
             .Color(Colors.text_subheading)
             .Align(Alignment.CENTER)
             .Position(
