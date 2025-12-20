@@ -56,13 +56,14 @@ type Theme(storage) as this =
 
     member this.GetTexture(name: string) : TextureLoadResult =
         let name =
-            if
-                (name = "logo" || name = "rain")
-                && (let dayOfYear = System.DateTime.Today.DayOfYear in dayOfYear < 5 || dayOfYear > 350)
-            then
-                name + "-winterlude"
-            else
-                name
+            // if
+            //     (name = "logo" || name = "rain")
+            //     && (let dayOfYear = System.DateTime.Today.DayOfYear in dayOfYear < 5 || dayOfYear > 350)
+            // then
+            //     name + "-winterlude"
+            // else
+            //     name
+            name
 
         let rules =
             {
