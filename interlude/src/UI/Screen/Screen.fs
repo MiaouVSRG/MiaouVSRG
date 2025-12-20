@@ -232,7 +232,8 @@ module Screen =
 
                     Render.sprite
                         (Rect.FromSize(x, y, Content.ThemeConfig.CursorSize, Content.ThemeConfig.CursorSize))
-                        (Palette.color (255, 1.0f, 0.5f))
+                        //(Palette.color (255, 1.0f, 0.5f))
+                        ((Content.Texture "cursor").AccentColor)
                         (Content.Texture "cursor")
 
             perf.Draw()

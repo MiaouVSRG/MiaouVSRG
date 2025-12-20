@@ -258,6 +258,8 @@ module Render =
 
                         Rows = 1
                         Columns = 1
+                        
+                        AccentColor = Color.Transparent // placeholder
 
                         PrecomputedQuad = ValueNone
                     }

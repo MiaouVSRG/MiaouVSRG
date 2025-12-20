@@ -42,6 +42,8 @@ type Sprite =
 
         Rows: int
         Columns: int
+        
+        AccentColor: Drawing.Color
 
         mutable PrecomputedQuad: Quad voption
     }
@@ -152,7 +154,7 @@ module Texture =
             References = 0
         }
 
-    let create_sprite (x: int, y: int) (layer: int) (w: int, h: int) (rows: int, columns: int) (texture: Texture) : Sprite =
+    let create_sprite (x: int, y: int) (layer: int) (w: int, h: int) (rows: int, columns: int) (texture: Texture) (color: Drawing.Color) : Sprite =
         texture.References <- texture.References + 1
 
         {
@@ -167,6 +169,8 @@ module Texture =
 
             Rows = rows
             Columns = columns
+            
+            AccentColor = color
 
             PrecomputedQuad = ValueNone
         }
@@ -184,6 +188,8 @@ module Texture =
 
             Rows = 1
             Columns = 1
+            
+            AccentColor = Drawing.Color.White
 
             PrecomputedQuad = ValueSome Rect.Zero.AsQuad
         }
@@ -427,6 +433,8 @@ module Sprite =
         let mutable layer = 1
 
         let gen_sprite (info: SpriteUpload) : string * Sprite =
+            
+            let centered_pixel = info.Image[info.Image.Width/2, info.Image.Height/2]
 
             let sprite =
                 Texture.create_sprite
@@ -435,6 +443,13 @@ module Sprite =
                     (info.Image.Width, info.Image.Height)
                     (info.Rows, info.Columns)
                     texture
+                    (Drawing.Color.FromArgb(
+                         int centered_pixel.A,
+                         int centered_pixel.R,
+                         int centered_pixel.G,
+                         int centered_pixel.B
+                    ))
+
 
             let sprite =
                 if info.Rows = 1 && info.Columns = 1 then

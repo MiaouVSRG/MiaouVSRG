@@ -232,6 +232,7 @@ type SpriteFont(font_family: FontFamily, fallbacks: FontFamily list, options: Sp
                         (int glyph.Width, int glyph.Height)
                         (1, 1)
                         atlas_texture
+                        Drawing.Color.Transparent // placeholder
 
                 char_lookup_sm.Add(
                     glyph.Code,
@@ -259,6 +260,7 @@ type SpriteFont(font_family: FontFamily, fallbacks: FontFamily list, options: Sp
                         (int glyph.Width, int glyph.Height)
                         (1, 1)
                         atlas_texture
+                        Drawing.Color.Transparent // placeholder
 
                 char_lookup_md.Add(
                     glyph.Code,
@@ -286,6 +288,7 @@ type SpriteFont(font_family: FontFamily, fallbacks: FontFamily list, options: Sp
                         (int glyph.Width, int glyph.Height)
                         (1, 1)
                         atlas_texture
+                        Drawing.Color.Transparent // placeholder
 
                 char_lookup_lg.Add(
                     glyph.Code,
