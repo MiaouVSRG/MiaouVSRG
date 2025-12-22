@@ -232,7 +232,7 @@ module Screen =
 
                     Render.sprite
                         (Rect.FromSize(x, y, Content.ThemeConfig.CursorSize, Content.ThemeConfig.CursorSize))
-                        //(Palette.color (255, 1.0f, 0.5f))
+                        //(Palette.color (255, 1.0f, 0.5f)) -> Will be an option for later
                         ((Content.Texture "cursor").AccentColor)
                         (Content.Texture "cursor")
 

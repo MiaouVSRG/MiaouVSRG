@@ -43,6 +43,7 @@ type Sprite =
         Rows: int
         Columns: int
         
+        /// The color of the centered pixel.
         AccentColor: Drawing.Color
 
         mutable PrecomputedQuad: Quad voption
