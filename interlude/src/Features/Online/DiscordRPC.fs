@@ -41,7 +41,7 @@ module DiscordRPC =
 
             let rp =
                 new RichPresence(
-                    State = "Dans les menus",
+                    State = "In menus",
                     Details = details,
                     Assets = Assets(LargeImageKey = "icon", LargeImageText = large_image_text())
                 )

@@ -209,7 +209,7 @@ type LobbyScreen() =
         | None -> ()
 
         Song.on_finish <- SongFinishAction.LoopFromPreview
-        DiscordRPC.in_menus ("Dans un lobby")
+        DiscordRPC.in_menus ("In a lobby")
 
     override this.OnExit(_) =
         Selection.clear()

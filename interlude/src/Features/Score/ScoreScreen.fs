@@ -116,7 +116,7 @@ type ScoreScreen(score_info: ScoreInfo, results: ImprovementFlags * SessionXPGai
 
     override this.OnEnter prev =
         Toolbar.hide ()
-        DiscordRPC.in_menus ("Admire un score")
+        DiscordRPC.in_menus ("Admiring a score")
 
     override this.OnExit next =
         score_info.Ruleset <- Rulesets.current
