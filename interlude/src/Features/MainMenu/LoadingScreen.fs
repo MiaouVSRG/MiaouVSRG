@@ -51,7 +51,7 @@ type LoadingScreen(post_init_thunk: unit -> unit) =
 
         match prev with
         | ScreenType.SplashScreen ->
-            //animation.Add(Animation.Action(fun () -> Sounds.get("hello").Play()))
+            animation.Add(Animation.Action(fun () -> Sounds.get("hello").Play()))
             animation.Add(Animation.Delay 100.0)
             animation.Add(Animation.Action(fun () -> Screen.logo.MoveCenter()))
             animation.Add(Animation.Delay 900.0)
@@ -61,9 +61,11 @@ type LoadingScreen(post_init_thunk: unit -> unit) =
             closing <- true
             DiscordRPC.clear()
             audio_fade.Snap()
-            animation.Add(Animation.Delay 1000.0)
             animation.Add(Animation.Action(fun () -> audio_fade.Target <- 0.0f))
-            animation.Add(Animation.Delay 1200.0)
+            animation.Add(Animation.Delay 1000.0)
+            animation.Add(Animation.Delay 600.0)
+            animation.Add(Animation.Action(fun () -> Sounds.get("goodbye").Play()))
+            animation.Add(Animation.Delay 500.0)
             animation.Add(Animation.Action(fun () -> Screen.back Transitions.Default |> ignore))
 
     override this.OnExit _ =
