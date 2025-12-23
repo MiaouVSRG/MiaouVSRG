@@ -1,3 +1,23 @@
+0.1.2.1
+===
+# Meowmas update :3
+
+# Improvements & additions
+🐈 New hello.wav in startup menu
+🐈 New notify-error.wav
+🐈 New notify-info.wav
+🐈 New goodbye.wav when closing the game
+🐈 Say hi to peep, our brand new mascot made by [@KyunTheCat](https://x.com/kyunthecat), thanks a lot !!
+🐈 New Christmas themed logo
+
+
+# Fixes & minor changes
+🐈 The cursor opacity has been removed. 
+    - The whole cursor will now be of the same color, we are currently working on a way to fix it properly
+    - This tweak will be an option in the settings, so the player can set a custom opacity
+🐈 Changed RPC texts to english
+🐈 User can now update the game in the main menu
+
 0.1.2.0
 ===
 # WEBSITE IS NOW ON !! :3
