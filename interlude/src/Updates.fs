@@ -95,8 +95,8 @@ module Updates =
 
     let asset_name =
         match RuntimeInformation.OSArchitecture with
-        | Architecture.X64 when OperatingSystem.IsWindows() -> Ok "MiaouVSRG-win64.zip"
-        | Architecture.X64 when OperatingSystem.IsLinux() -> Ok "MiaouVSRG-linux-x64.zip"
+        | Architecture.X64 when OperatingSystem.IsWindows() -> Ok "MiaouVSRG.zip"
+        // | Architecture.X64 when OperatingSystem.IsLinux() -> Ok "MiaouVSRG-linux-x64.zip"   >>> Currently not supported for MiaouVSRG
         | other -> Error other
 
     let private handle_update (release: GithubRelease) : unit =
@@ -131,7 +131,7 @@ module Updates =
 
     let check_for_updates () : unit =
         WebServices.download_json (
-            "https://api.github.com/repos/MiaouVSRG/miaouVSRG/releases/latest",
+            "https://api.github.com/repos/MiaouVSRG/MiaouVSRG/releases/latest",
             function
             | WebResult.Ok(d: GithubRelease) -> handle_update d
             | _ -> ()
@@ -154,7 +154,7 @@ module Updates =
 
             match
                 latest_release.Value.assets
-                |> List.tryFind (fun asset -> Ok (asset.name.ToLower()) = asset_name)
+                |> List.tryFind (fun asset -> Ok (asset.name) = asset_name)
             with
             | None ->
                 Logging.Error(
