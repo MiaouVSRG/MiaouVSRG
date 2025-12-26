@@ -129,7 +129,7 @@ module Updates =
         | Error arch -> Logging.Info "Auto-updater doesn't support this OS or architecture (%O)" arch
         | Ok _ ->
 
-        if is_beta && (credentials.Channel = "Beta") then
+        if is_beta && (credentials.Channel.ToLower() <> "beta") then
             Logging.Info "Beta update available, but user is on Stable channel"
         elif pincoming > pcurrent then
             Logging.Info "Update available (%s)!" incoming
