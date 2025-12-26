@@ -8,7 +8,6 @@ open Prelude
 open Prelude.Data.User.Stats
 open Interlude.Content
 open Interlude.UI
-open Interlude
 open Interlude.Options
 open Interlude.Features.Import
 open Interlude.Features.Gameplay
@@ -17,6 +16,9 @@ open Interlude.Features.Wiki
 open Interlude.Features.OptionsMenu
 open Interlude.Features.OptionsMenu.Library
 open Interlude.Features.Printerlude
+open Interlude.Features.Online
+
+open System.Drawing
 
 type Toolbar() =
     inherit Widget(NodeType.None)
@@ -48,11 +50,11 @@ type Toolbar() =
 
             Render.rect
                 (Rect.FromSize(bounds.Left + float32 i * s + 2.5f, bounds.Top, s - 5.0f, level))
-                (Palette.color (int level, 1.0f, 0.5f))
+                (Palette.color (int level + 70, 1.0f, 0.5f))
 
             Render.rect
                 (Rect.FromSize(bounds.Right - (float32 i + 1.0f) * s + 2.5f, bounds.Bottom - level, s - 5.0f, level))
-                (Palette.color (int level, 1.0f, 0.5f))
+                (Palette.color (int level + 70, 1.0f, 0.5f))
 
     let import_status_fade = Animation.Fade 0.0f
     let import_button =
@@ -158,8 +160,8 @@ type Toolbar() =
         if Toolbar.hidden then
             volume_when_hidden.Draw()
         else
-            Render.rect (this.Bounds.SliceT HEIGHT) !*Palette.MAIN_100
-            Render.rect (this.Bounds.SliceB HEIGHT) !*Palette.MAIN_100
+            Render.rect (this.Bounds.SliceT HEIGHT) !*Palette.TRANSPARENT
+            Render.rect (this.Bounds.SliceB HEIGHT) !*Palette.TRANSPARENT
 
             if Toolbar.slideout_amount.Value > 0.01f then draw_waveform this.Bounds
 

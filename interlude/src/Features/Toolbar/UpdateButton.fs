@@ -5,6 +5,7 @@ open Percyqaz.Flux.Graphics
 open Prelude
 open Interlude
 open Interlude.UI
+open Interlude.Features.Online
 
 /// Shown on the toolbar when an update is available
 type UpdateButton() as this =

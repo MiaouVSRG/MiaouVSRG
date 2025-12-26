@@ -29,7 +29,6 @@
     <EmbeddedResource Include="Resources\MenuSplashes.txt" />
     <EmbeddedResource Include="Resources\default.zip" />
     <Compile Include="Utils.fs" />
-    <Compile Include="Updates.fs" />
     <Compile Include="Content\Sprites.fs" />
     <Compile Include="Content\Sounds.fs" />
     <Compile Include="Content\Rulesets.fs" />
@@ -90,6 +89,7 @@
     <Compile Include="Features\Online\Players\Profile\RecentScores.fs" />
     <Compile Include="Features\Online\Players\Profile\Profile.fs" />
     <Compile Include="Features\Online\Players\PlayerListPage.fs" />
+    <Compile Include="Features\Online\Updates.fs" />
     <Compile Include="Features\Export\Osz.fs" />
     <Compile Include="Features\Rulesets\Create\SCRulesetPage.fs" />
     <Compile Include="Features\Rulesets\Create\OsuRulesetPage.fs" />

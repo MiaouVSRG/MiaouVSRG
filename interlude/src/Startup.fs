@@ -39,7 +39,7 @@ module Startup =
             Mounts.init ()
             Network.init ()
             DiscordRPC.init ()
-            Interlude.Updates.check_for_updates ()
+            Updates.check_for_updates ()
 
             // let path = Path.GetFullPath("MiaouVSRG.Resources.map (1).osz")
             // if Path.Exists(path) then

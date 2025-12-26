@@ -123,6 +123,13 @@ module Palette =
             int ((b + bd) * brightness) |> min 255
         )
 
+    let TRANSPARENT =
+        {
+            Alpha = 0
+            Brightness = 0f
+            White = 0f
+        }
+    
     let WHITE =
         {
             Alpha = 255

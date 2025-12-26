@@ -1,4 +1,4 @@
-﻿namespace Interlude
+﻿namespace Interlude.Features.Online
 
 open System
 open System.IO
@@ -13,6 +13,8 @@ open Prelude.Data
 open Prelude.Data.Library.Imports
 
 module Updates =
+    
+    let credentials = Credentials.Load()
 
     /// Numeric version e.g. "0.5.16"
     let short_version : string =
@@ -111,7 +113,13 @@ module Updates =
                 (int s.[0], int s.[1], int s.[2], 0)
 
         let current = short_version
-        let incoming = release.tag_name.Replace("MiaouVSRG-", "").Substring(1)
+        
+        let tag_name = release.tag_name
+        
+        let is_beta = tag_name.Contains("b")
+        
+        // Possible tags : "MiaouVSRG-v0.x.x.x" or "MiaouVSRG-v0.x.x.xb", where "b" stands for beta
+        let incoming = tag_name.Replace("MiaouVSRG-", "").Replace("b", "").Substring(1)
         latest_version_name <- incoming
 
         let pcurrent = parse_version current
@@ -121,7 +129,9 @@ module Updates =
         | Error arch -> Logging.Info "Auto-updater doesn't support this OS or architecture (%O)" arch
         | Ok _ ->
 
-        if pincoming > pcurrent then
+        if is_beta && (credentials.Channel = "Beta") then
+            Logging.Info "Beta update available, but user is on Stable channel"
+        elif pincoming > pcurrent then
             Logging.Info "Update available (%s)!" incoming
             update_available <- true
         elif pincoming < pcurrent then

@@ -13,6 +13,7 @@ type Credentials =
         mutable Token: string
         mutable Host: string
         mutable Api: string
+        mutable Channel: string // Currently 'stable' or 'beta'
     }
     static member Default =
         {
@@ -22,6 +23,7 @@ type Credentials =
             Token = ""
             Host = "online.miaouvsrg.com"
             Api = "api.miaouvsrg.com"
+            Channel = "stable"
         }
 
     static member Location : string = Path.Combine(get_game_folder "Data", "login.json")

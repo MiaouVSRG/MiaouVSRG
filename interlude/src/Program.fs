@@ -11,6 +11,7 @@ open Interlude
 open Interlude.Options
 open Interlude.UI
 open Interlude.Features
+open Interlude.Features.Online
 
 let crash_text_file (message: string) =
     let path = Path.ChangeExtension(Path.GetTempFileName(), ".txt")

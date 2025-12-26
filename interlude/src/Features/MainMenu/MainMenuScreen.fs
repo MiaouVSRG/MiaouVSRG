@@ -6,6 +6,7 @@ open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.Windowing
 open Percyqaz.Flux.UI
 open Prelude
+open System.Drawing
 open Prelude.Data.User.Stats
 open Interlude
 open Interlude.Utils
@@ -16,7 +17,7 @@ open Interlude.Features.Online
 open Interlude.Features.OptionsMenu
 open Interlude.Features.LevelSelect
 
-type private MenuButton(label: string, on_click: unit -> unit, position: Position) =
+type private MenuButton(label: string, on_click: unit -> unit, position: Position, bg_color: Color, outline_color: Color) =
     inherit
         SlideContainer(
             NodeType.Button(fun () ->
@@ -35,7 +36,7 @@ type private MenuButton(label: string, on_click: unit -> unit, position: Positio
                         if this.Focused then Colors.text_yellow_2
                         else Colors.text
                     )
-                    .Position(Position.SlicePercentR(0.3f).ShrinkY(10.0f).ShrinkB(10.0f))
+                    .Position(Position.ShrinkY(7.0f).ShrinkB(10.0f).ShrinkPercentT(0.2f))
             )
             .Position(position)
             .Hide()
@@ -47,9 +48,10 @@ type private MenuButton(label: string, on_click: unit -> unit, position: Positio
         Style.hover.Play()
 
     override this.Draw() =
-        Render.quad (Quad.parallelogram 0.5f (this.Bounds.Expand 5.0f)) (!*Palette.HIGHLIGHT_100)
-
-        Render.quad (Quad.parallelogram 0.5f this.Bounds) (!*Palette.MAIN_100)
+        Render.quad (Quad.parallelogram 0.5f this.Bounds) (bg_color)
+        
+        Render.quad (Quad.parallelogram 0.5f (this.Bounds.Expand 10.0f)) (outline_color)
+        
         base.Draw()
 
     member this.Hide() =
@@ -79,26 +81,68 @@ type MainMenuScreen() =
 
     let play_button =
         MenuButton(
-            %"menu.play",
+            (%"menu.play").ToUpper(),
             play_action,
-            Position.Box(0.0f, 0.5f, -300.0f, -200.0f, 1430.0f, 100.0f)
+            Position.Box(0.0f, 0.5f, 800.0f, -200.0f, 450.0f, 100.0f),
+            Color.FromArgb
+                (
+                    108,
+                    176,
+                    242,
+                    253
+                ),
+            Color.FromArgb
+                (
+                    100,
+                    176,
+                    242,
+                    253
+                )
         )
 
     let options_button =
         MenuButton(
-            %"menu.options",
+            (%"menu.options").ToUpper(),
             (fun () -> OptionsPage().Show()),
-            Position.Box(0.0f, 0.5f, -300.0f, -50.0f, 1430.0f, 100.0f)
+            Position.Box(0.0f, 0.5f, 800.0f, -50.0f, 450.0f, 100.0f),
+            Color.FromArgb
+                (
+                    108,
+                    175,
+                    255,
+                    175
+                ),
+            Color.FromArgb
+                (
+                    100,
+                    175,
+                    255,
+                    175
+                )
         )
 
     let quit_button =
         MenuButton(
-            %"menu.quit",
+            (%"menu.quit").ToUpper(),
             (fun () ->
                 if Screen.back Transitions.UnderLogo then
                     Screen.logo.MoveCenter ()
             ),
-            Position.Box(0.0f, 0.5f, -300.0f, 100.0f, 1430.0f, 100.0f)
+            Position.Box(0.0f, 0.5f, 800.0f, 100.0f, 450.0f, 100.0f),
+            Color.FromArgb
+                (
+                    108,
+                    255,
+                    135,
+                    135
+                ),
+            Color.FromArgb
+                (
+                    100,
+                    255,
+                    135,
+                    135
+                )
         )
 
     let choose_splash =
