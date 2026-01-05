@@ -179,6 +179,7 @@ module Updates =
             update_started <- true
             
             credentials.LastTimeUpdated <- latest_release.Value.assets.[0].updated_at
+            credentials.Save()
 
             match
                 latest_release.Value.assets
