@@ -38,7 +38,7 @@ type CreatePlaylistPage(starting_name: string, on_create: (string * Collection) 
 
     static member Icons =
         [|
-            Icons.STAR, Icons.STAR
+            Icons.HEART, Icons.HEART
             Icons.FLAG, Icons.FLAG
             Icons.PLAY, Icons.PLAY
             Icons.LIST, Icons.LIST

@@ -61,7 +61,7 @@ type GameplayInfo() =
                 | ModStatus.Unstored -> Icons.X_CIRCLE + " " + %"mods.mod_status.unstored", Colors.text_red
                 | ModStatus.Offline -> Icons.CLOUD_OFF + " " + %"mods.mod_status.offline", Colors.text_yellow_2
                 | ModStatus.Unranked -> Icons.CLOUD_OFF + " " + %"mods.mod_status.unranked", Colors.text_yellow_2
-                | ModStatus.Ranked -> failwith "impossible"
+                | ModStatus.Ranked -> failwith "impossible" // lmao
             let x = Text.measure(Style.font, mod_string) * play_info.Height * 0.6f + 10.0f
             Text.fill_b (Style.font, text, play_info.ShrinkL(x).ShrinkY(2.0f), color, Alignment.LEFT)
 
@@ -70,7 +70,7 @@ type GameplayInfo() =
         Text.fill_b (Style.font, notecounts, chart_info, Colors.text_subheading, Alignment.RIGHT)
 
         let three_icon_infos = this.Bounds.SliceT(155.0f, 70.0f).ShrinkX(15.0f)
-        Text.fill_b (Style.font, sprintf "%s %.2f" Icons.STAR rating, three_icon_infos, (Colors.white, Difficulty.color rating), Alignment.LEFT)
+        Text.fill_b (Style.font, sprintf "%s %.2f" Icons.HEART rating, three_icon_infos, (Colors.white, Difficulty.color rating), Alignment.LEFT)
         Text.fill_b (Style.font, SelectedChart.FMT_BPM, three_icon_infos, Colors.text, Alignment.CENTER)
         Text.fill_b (Style.font, SelectedChart.FMT_DURATION, three_icon_infos, Colors.text, Alignment.RIGHT)
 

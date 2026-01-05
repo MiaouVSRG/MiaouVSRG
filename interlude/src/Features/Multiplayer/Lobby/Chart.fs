@@ -160,7 +160,7 @@ type SelectedChart(lobby: Lobby) =
         |+ Text(
             (fun () ->
                 match LobbyChart.info_if_selected() with
-                | Some info -> sprintf "%s %.2f" Icons.STAR info.Difficulty.Overall
+                | Some info -> sprintf "%s %.2f" Icons.HEART info.Difficulty.Overall
                 | None -> ""
             ))
             .Align(Alignment.LEFT)

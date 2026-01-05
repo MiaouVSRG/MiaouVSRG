@@ -42,13 +42,13 @@ type FiltersPage() =
         |+ PageSetting("Min rating",
             Slider(
                 difficulty_min |> Setting.trigger (fun v -> Setting.app (max v) difficulty_max),
-                Format = fun x -> sprintf "%s %.2f" Icons.STAR x
+                Format = fun x -> sprintf "%s %.2f" Icons.HEART x
             )
         ).Pos(5)
         |+ PageSetting("Max rating",
             Slider(
                 difficulty_max |> Setting.trigger (fun v -> Setting.app (min v) difficulty_min),
-                Format = function 15.0f -> "Any" | x -> sprintf "%s %.2f" Icons.STAR x
+                Format = function 15.0f -> "Any" | x -> sprintf "%s %.2f" Icons.HEART x
             )
         ).Pos(7)
         :> Widget

@@ -14,6 +14,7 @@ type Credentials =
         mutable Host: string
         mutable Api: string
         mutable Channel: string // Currently 'stable' or 'beta'
+        mutable LastTimeUpdated: string // When was the last update client-side ?
     }
     static member Default =
         {
@@ -24,6 +25,7 @@ type Credentials =
             Host = "online.miaouvsrg.com"
             Api = "api.miaouvsrg.com"
             Channel = "stable"
+            LastTimeUpdated = ""
         }
 
     static member Location : string = Path.Combine(get_game_folder "Data", "login.json")

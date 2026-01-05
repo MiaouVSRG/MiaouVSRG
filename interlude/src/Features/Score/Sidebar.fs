@@ -38,7 +38,7 @@ type Sidebar(stats: ScoreScreenStats ref, score_info: ScoreInfo) =
             .Color(Colors.text_subheading)
             .Align(Alignment.CENTER)
             .Position(Position.ShrinkT(90.0f).SliceT(70.0f).ShrinkX(25.0f))
-        |+ Text(sprintf "%s %.2f" Icons.STAR score_info.Rating.Overall)
+        |+ Text(sprintf "%s %.2f" Icons.HEART score_info.Rating.Overall)
             .Color(Colors.white, Difficulty.color score_info.Rating.Overall)
             .Align(Alignment.LEFT)
             .Position(Position.ShrinkT(530.0f).SliceT(70.0f).ShrinkX(25.0f))

@@ -24,6 +24,18 @@ type LevelSelectScreen() =
     let OTHER_BUTTONS_WIDTH = 60.0f
 
     let search_text = Setting.simple ""
+    
+    member this.ApplyKeymodeFilter(keymode : int) =
+        let inner_filter = LevelSelect.filter.Filter
+        LevelSelect.filter <-
+            { LevelSelect.filter with
+                Filter =
+                    { inner_filter with
+                        Keymode = Some keymode
+                    }
+            }
+        Tree.refresh ()
+        LevelSelect.refresh_all ()
 
     override this.Init(parent: Widget) =
         base.Init parent
@@ -60,6 +72,32 @@ type LevelSelectScreen() =
                             .ShrinkR((TOP_BAR_HEIGHT - AngledButton.HEIGHT - SearchBox.HEIGHT - Style.PADDING) * 0.5f)
                     )
                     .Help(Help.Info("levelselect.search", "search")),
+                    
+                DropdownMenu(
+                    {
+                        Items = [
+                            (fun() -> this.ApplyKeymodeFilter(1)), " 1K"
+                            (fun() -> this.ApplyKeymodeFilter(2)), " 2K"
+                            (fun() -> this.ApplyKeymodeFilter(3)), " 3K"
+                            (fun() -> this.ApplyKeymodeFilter(4)), " 4K"
+                            (fun() -> this.ApplyKeymodeFilter(5)), " 5K"
+                            (fun() -> this.ApplyKeymodeFilter(6)), " 6K"
+                            (fun() -> this.ApplyKeymodeFilter(7)), " 7K"
+                            (fun() -> this.ApplyKeymodeFilter(8)), " 8K"
+                            (fun() -> this.ApplyKeymodeFilter(9)), " 9K"
+                            (fun() -> this.ApplyKeymodeFilter(10)), "10K"
+                        ]
+                    }   
+                ).Position(
+                        Position
+                            .SliceT(TOP_BAR_HEIGHT)
+                            .ShrinkB(AngledButton.HEIGHT)
+                            .SliceY(SearchBox.HEIGHT)
+                            .ShrinkPercentL(0.4f)
+                            .ShrinkL(1075.0f)
+                            .ShrinkR((TOP_BAR_HEIGHT - AngledButton.HEIGHT - SearchBox.HEIGHT - Style.PADDING) * 0.5f)
+                            .TranslateX(-950.0f)
+                ),
 
                 InfoPanel()
                     .Position(Position.ShrinkT(TOP_BAR_HEIGHT + 5.0f).SlicePercentL(INFO_SCREEN_SPLIT)),

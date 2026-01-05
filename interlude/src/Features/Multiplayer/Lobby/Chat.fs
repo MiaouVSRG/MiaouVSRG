@@ -178,7 +178,7 @@ type Chat(lobby: Lobby) =
                 match (kind, data) with
                 | LobbyEvent.Join, who -> sprintf "%s %s %s" Icons.LOG_IN who %"lobby.action.joined", Colors.green_accent
                  | LobbyEvent.Leave, who -> sprintf "%s %s %s" Icons.LOG_OUT who %"lobby.action.left", Colors.red_accent
-                 | LobbyEvent.Host, who -> sprintf "%s %s %s" Icons.STAR who %"lobby.action.became_host", Colors.yellow_accent
+                 | LobbyEvent.Host, who -> sprintf "%s %s %s" Icons.HEART who %"lobby.action.became_host", Colors.yellow_accent
                  | LobbyEvent.Ready, who -> sprintf "%s %s %s" Icons.CHECK who %"lobby.action.ready", Colors.green
                  | LobbyEvent.Ready_Spectate, who -> sprintf "%s %s %s" Icons.EYE who %"lobby.action.ready", Colors.green
                  | LobbyEvent.NotReady, who -> sprintf "%s %s %s" Icons.X who %"lobby.action.not_ready", Colors.pink

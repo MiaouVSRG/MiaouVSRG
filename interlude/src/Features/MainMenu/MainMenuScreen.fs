@@ -163,7 +163,7 @@ type MainMenuScreen() =
                 quit_button,
 
                 // AngledButton(
-                //     Icons.STAR + " " + %"menu.changelog",
+                //     Icons.HEART + " " + %"menu.changelog",
                 //     WikiBrowserPage.ShowChangelog,
                 //     Palette.MAIN_100
                 // )

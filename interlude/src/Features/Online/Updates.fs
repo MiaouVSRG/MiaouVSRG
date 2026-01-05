@@ -74,6 +74,7 @@ module Updates =
         {
             name: string
             browser_download_url: string
+            updated_at: string
         }
 
     [<Json.AutoCodec>]
@@ -85,6 +86,7 @@ module Updates =
             published_at: string
             body: string
             assets: GithubAsset list
+            prerelease: bool
         }
 
     let mutable restart_on_exit = false
@@ -100,8 +102,20 @@ module Updates =
         | Architecture.X64 when OperatingSystem.IsWindows() -> Ok "MiaouVSRG.zip"
         // | Architecture.X64 when OperatingSystem.IsLinux() -> Ok "MiaouVSRG-linux-x64.zip"   >>> Currently not supported for MiaouVSRG
         | other -> Error other
+        
+    let private get_release_information (releases: GithubRelease list) : bool * GithubRelease =
+        let is_user_in_beta_channel = credentials.Channel.ToLower() = "beta"
+        
+        // We first check if there is a beta version available
+        // Beta version <=> pre-release, and the pre-release is always the second release visible on the API
+        let is_beta = is_user_in_beta_channel && releases.[1].prerelease
+        let release = if is_beta then releases.[1] else releases.[0]
+        
+        is_beta, release
 
-    let private handle_update (release: GithubRelease) : unit =
+    let private handle_update (releases: GithubRelease list) : unit =
+        let is_beta, release = get_release_information releases
+        
         latest_release <- Some release
 
         let parse_version (s: string) =
@@ -116,22 +130,24 @@ module Updates =
         
         let tag_name = release.tag_name
         
-        let is_beta = tag_name.Contains("b")
-        
         // Possible tags : "MiaouVSRG-v0.x.x.x" or "MiaouVSRG-v0.x.x.xb", where "b" stands for beta
         let incoming = tag_name.Replace("MiaouVSRG-", "").Replace("b", "").Substring(1)
         latest_version_name <- incoming
 
         let pcurrent = parse_version current
         let pincoming = parse_version incoming
+        
+        Logging.Debug "%s %s" release.assets.[0].updated_at credentials.LastTimeUpdated
+        
+        let is_new_update = pincoming >= pcurrent && release.assets.[0].updated_at <> credentials.LastTimeUpdated
 
         match asset_name with
         | Error arch -> Logging.Info "Auto-updater doesn't support this OS or architecture (%O)" arch
         | Ok _ ->
 
-        if is_beta && (credentials.Channel.ToLower() <> "beta") then
+        if is_beta && (credentials.Channel.ToLower() <> "beta") && is_new_update then
             Logging.Info "Beta update available, but user is on Stable channel"
-        elif pincoming > pcurrent then
+        elif is_new_update then
             Logging.Info "Update available (%s)!" incoming
             update_available <- true
         elif pincoming < pcurrent then
@@ -141,9 +157,9 @@ module Updates =
 
     let check_for_updates () : unit =
         WebServices.download_json (
-            "https://api.github.com/repos/MiaouVSRG/MiaouVSRG/releases/latest",
+            "https://api.github.com/repos/MiaouVSRG/MiaouVSRG/releases",
             function
-            | WebResult.Ok(d: GithubRelease) -> handle_update d
+            | WebResult.Ok(d: GithubRelease list) -> handle_update d
             | _ -> ()
         )
 
@@ -161,6 +177,8 @@ module Updates =
         else
 
             update_started <- true
+            
+            credentials.LastTimeUpdated <- latest_release.Value.assets.[0].updated_at
 
             match
                 latest_release.Value.assets
