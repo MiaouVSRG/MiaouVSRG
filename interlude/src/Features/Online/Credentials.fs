@@ -1,5 +1,6 @@
 ﻿namespace Interlude.Features.Online
 
+open System.Diagnostics
 open System.IO
 open Percyqaz.Common
 open Percyqaz.Data
@@ -31,6 +32,12 @@ type Credentials =
     static member Location : string = Path.Combine(get_game_folder "Data", "login.json")
 
     static member Load() =
+        let path = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)
+        let saved_login_file = Path.Combine(path, "Data", "login.json.old")
+        Logging.Debug "login file search : %s" saved_login_file
+        if Path.Exists(saved_login_file) then
+            Logging.Debug "There is already a login.json ! Copying it..."
+            File.Move(saved_login_file, Path.Combine(path, "Data", "login.json"), true)
         if File.Exists Credentials.Location then
             File.SetAttributes(Credentials.Location, FileAttributes.Normal)
 

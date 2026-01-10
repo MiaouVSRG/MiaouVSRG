@@ -49,16 +49,31 @@ module Updates =
         Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)
 
     // this doesn't just copy a folder to a destination, but renames any existing/duplicates of the same name to .old
-    let rec private swap_update_files (source: string) (dest: string) : unit =
+    let rec private swap_update_files (source: string) (dest: string) (swap_login_file: bool) : unit =
+
+        Logging.Debug $"Swapping update files from %s{source} to %s{dest}"
+
+        if swap_login_file then
+            // Copy login file to prevent data loss
+            let login_file = Path.Combine(dest, "Data", "login.json")
+            Logging.Debug "%s %s" (Path.Combine(source, "login.json")) login_file
+            try
+                Directory.CreateDirectory (Path.Combine(source, "Data")) |> ignore
+                File.Copy(login_file, Path.Combine(source, "Data", "login.json"), true)
+                File.Move(login_file, Path.Combine(source, "Data", "login.json.old"), true)
+            with
+            | :? FileNotFoundException -> ()
+            | other -> Logging.Error $"Error while moving login.json file during auto-update: {other}"
+        
+        
         Directory.EnumerateFiles source
         |> Seq.iter (fun source ->
             let target = Path.Combine(dest, Path.GetFileName source)
-
             try
                 File.Move(target, source + ".old", true)
             with
             | :? FileNotFoundException -> ()
-            | other -> Logging.Error "Error while moving file '%s' during auto-update: %O" source other
+            | other -> Logging.Error $"Error while moving file '%s{source}' during auto-update: {other}"
             File.Copy(source, target, true)
         )
 
@@ -66,7 +81,7 @@ module Updates =
         |> Seq.iter (fun d ->
             let targetd = Path.Combine(dest, Path.GetFileName d)
             Directory.CreateDirectory targetd |> ignore
-            swap_update_files d targetd
+            swap_update_files d targetd false
         )
 
     [<Json.AutoCodec>]
@@ -108,8 +123,8 @@ module Updates =
         
         // We first check if there is a beta version available
         // Beta version <=> pre-release, and the pre-release is always the second release visible on the API
-        let is_beta = is_user_in_beta_channel && releases.[1].prerelease
-        let release = if is_beta then releases.[1] else releases.[0]
+        let is_beta = is_user_in_beta_channel && releases[1].prerelease
+        let release = if is_beta then releases[1] else releases[0]
         
         is_beta, release
 
@@ -122,9 +137,9 @@ module Updates =
             let s = s.Split(".")
 
             if s.Length > 3 then
-                (int s.[0], int s.[1], int s.[2], int s.[3])
+                (int s[0], int s[1], int s[2], int s[3])
             else
-                (int s.[0], int s.[1], int s.[2], 0)
+                (int s[0], int s[1], int s[2], 0)
 
         let current = short_version
         
@@ -137,9 +152,7 @@ module Updates =
         let pcurrent = parse_version current
         let pincoming = parse_version incoming
         
-        Logging.Debug "%s %s" release.assets.[0].updated_at credentials.LastTimeUpdated
-        
-        let is_new_update = pincoming >= pcurrent && release.assets.[0].updated_at <> credentials.LastTimeUpdated
+        let is_new_update = pincoming >= pcurrent && release.assets[0].updated_at <> credentials.LastTimeUpdated
 
         match asset_name with
         | Error arch -> Logging.Info "Auto-updater doesn't support this OS or architecture (%O)" arch
@@ -178,12 +191,12 @@ module Updates =
 
             update_started <- true
             
-            credentials.LastTimeUpdated <- latest_release.Value.assets.[0].updated_at
+            credentials.LastTimeUpdated <- latest_release.Value.assets[0].updated_at
             credentials.Save()
 
             match
                 latest_release.Value.assets
-                |> List.tryFind (fun asset -> Ok (asset.name) = asset_name)
+                |> List.tryFind (fun asset -> Ok asset.name = asset_name)
             with
             | None ->
                 Logging.Error(
@@ -203,7 +216,7 @@ module Updates =
                     if success then
                         ZipFile.ExtractToDirectory(zip_path, folder_path)
                         Imports.delete_file.Request(zip_path, ignore)
-                        swap_update_files folder_path path
+                        swap_update_files folder_path path true
                         callback ()
                         update_complete <- true
             )
