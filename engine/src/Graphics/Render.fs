@@ -410,6 +410,18 @@ module Render =
         _batch.Vertex(q.TopLeft, uv.TopLeft, colors.TopLeft, layer)
         _batch.Vertex(q.BottomRight, uv.BottomRight, colors.BottomRight, layer)
         _batch.Vertex(q.BottomLeft, uv.BottomLeft, colors.BottomLeft, layer)
+        
+    /// <summary>
+    /// Hmmm...
+    /// </summary>
+    let tex_not_quad ({ Texture = t; Layer = layer; UV = uv } : QuadTexture) : unit =
+        _batch.Texture t
+        
+    /// <summary>
+    /// Yes... This should work...
+    /// </summary>
+    let inline sprite_not_quad (s: Sprite) : unit =
+        tex_not_quad <| Sprite.pick_texture (0, 0) s
 
     /// <summary>
     /// Draws a rectangular sprite to the screen.

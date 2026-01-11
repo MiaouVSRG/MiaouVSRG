@@ -83,7 +83,7 @@ type MainMenuScreen() =
         MenuButton(
             (%"menu.play").ToUpper(),
             play_action,
-            Position.Box(0.0f, 0.5f, 800.0f, -200.0f, 450.0f, 100.0f),
+            Position.Box(0.0f, 0.5f, 750.0f, -100.0f, 450.0f, 100.0f),
             Color.FromArgb
                 (
                     108,
@@ -104,7 +104,7 @@ type MainMenuScreen() =
         MenuButton(
             (%"menu.options").ToUpper(),
             (fun () -> OptionsPage().Show()),
-            Position.Box(0.0f, 0.5f, 800.0f, -50.0f, 450.0f, 100.0f),
+            Position.Box(0.0f, 0.5f, 750.0f, 50.0f, 450.0f, 100.0f),
             Color.FromArgb
                 (
                     108,
@@ -128,7 +128,7 @@ type MainMenuScreen() =
                 if Screen.back Transitions.UnderLogo then
                     Screen.logo.MoveCenter ()
             ),
-            Position.Box(0.0f, 0.5f, 800.0f, 100.0f, 450.0f, 100.0f),
+            Position.Box(0.0f, 0.5f, 750.0f, 200.0f, 450.0f, 100.0f),
             Color.FromArgb
                 (
                     108,

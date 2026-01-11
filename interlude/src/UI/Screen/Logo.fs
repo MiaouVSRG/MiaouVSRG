@@ -2,6 +2,7 @@
 
 open System
 open OpenTK.Mathematics
+open Percyqaz.Common
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.Audio
 open Percyqaz.Flux.UI
@@ -29,9 +30,9 @@ type Logo() =
     let LOWER_X_THICKNESS = LOWER_Y_THICKNESS / GRADIENT
 
     let OFFSCREEN_BELOW : Position = { Left = 0.5f %- 300.0f; Top = 0.5f %+ 1000.0f; Right = 0.5f %+ 300.0f; Bottom = 0.5f %+ 1600.0f }
-    let CENTER : Position = { Left = 0.5f %- 400.0f; Top = 0.5f %- 400.0f; Right = 0.5f %+ 400.0f; Bottom = 0.5f %+ 400.0f }
+    let CENTER : Position = { Left = 0.5f %- 400.0f; Top = 0.5f %- 750.0f; Right = 0.5f %+ 400.0f; Bottom = 0.5f %+ 50.0f }
     let OFFSCREEN_LEFT : Position = { Left = 0.0f %- 610.0f; Top = 0.5f %- 300.0f; Right = 0.0f %- 100.0f; Bottom = 0.5f %+ 300.0f }
-    let MENU : Position = { Left = 0.0f %- 0.0f; Top = 0.5f %- 400.0f; Right = 0.0f %+ 800.0f; Bottom = 0.5f %+ 400.0f }
+    let MENU : Position = { Left = 0.5f %- 400.0f; Top = 0.5f %- 980.0f; Right = 0.5f %+ 400.0f; Bottom = 0.5f %- 190.0f }
 
     let WAVE_HEIGHT = 20.0f
     let WAVE_SPEED = 0.002f
@@ -226,4 +227,4 @@ type Logo() =
         this.SnapPosition()
 
     member this.MoveMenu() : unit =
-        this.Position <- MENU
+        this.Position <- MENU.Expand 75.0f

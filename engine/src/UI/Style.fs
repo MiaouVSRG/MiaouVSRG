@@ -9,6 +9,8 @@ open System.Drawing
 module Colors =
 
     // todo: capitalise all of these constants
+    
+    let TRANSPARENT = Color.Transparent
 
     let black = Color.Black
     let shadow_1 = Color.FromArgb 0xFF_050308
