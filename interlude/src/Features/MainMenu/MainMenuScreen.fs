@@ -1,5 +1,6 @@
 ﻿namespace Interlude.Features.MainMenu
 
+open Percyqaz.Common
 open Percyqaz.Flux.Audio
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.Graphics
@@ -8,9 +9,8 @@ open Percyqaz.Flux.UI
 open Prelude
 open System.Drawing
 open Prelude.Data.User.Stats
-open Interlude
-open Interlude.Utils
 open Interlude.Content
+open Interlude.Utils
 open Interlude.UI
 open Interlude.Features.Online
 // open Interlude.Features.Wiki
@@ -60,11 +60,68 @@ type private MenuButton(label: string, on_click: unit -> unit, position: Positio
     member this.Show() =
         this.Hide()
         this.Position <- position
+        
+        
+type private MenuButton2(sprite: Sprite, on_click: unit -> unit, r: Rect, position: Position, focused_sprite: Sprite option) =
+    inherit
+        SlideContainer(
+            NodeType.Button(fun () ->
+                Style.click.Play()
+                on_click ()
+            )
+        )
+
+    override this.Init(parent) =
+        this
+            .With(
+                MouseListener().Button(this),
+                Text("")
+                    .Align(Alignment.CENTER)
+                    .Color(fun () ->
+                        if this.Focused then Colors.text_yellow_2
+                        else Colors.text
+                    )
+                    .Position(Position.ShrinkY(7.0f).ShrinkB(10.0f).ShrinkPercentT(0.2f))
+            )
+            .Position(position)
+            .Hide()
+
+        base.Init parent
+
+    override this.OnFocus(by_mouse: bool) =
+        base.OnFocus by_mouse
+        if this.Focused && focused_sprite.IsSome then
+            Logging.Debug "Showing focused sprite"
+            // Render.sprite r Colors.white focused_sprite.Value
+        Style.hover.Play()
+
+    override this.Draw() =
+        Render.sprite r Colors.white sprite
+        
+        base.Draw()
+        
+    override this.Update(elapsed_ms, moved) =
+        base.Update(elapsed_ms, moved)
+            
+
+    member this.Hide() =
+        this.Position(position.SliceL(-100.0f)).SnapPosition()
+
+    member this.Show() =
+        this.Hide()
+        this.Position <- position
 
 // todo: cool redesign with news feed and stuff
 
 type MainMenuScreen() =
     inherit Screen()
+    
+    let play_button_texture = Content.Texture "play-button"
+    let play_button_hover_texture = Content.Texture "play-button-hover"
+    let options_button_texture = Content.Texture "options-button"
+    let options_button_hover_texture = Content.Texture "options-button-hover"
+    let quit_button_texture = Content.Texture "quit-button"
+    let quit_button_hover_texture = Content.Texture "quit-button-hover"
 
     let mutable confirmed_quit = false
     let confirm_quit () =
@@ -78,71 +135,65 @@ type MainMenuScreen() =
 
     let play_action () =
         Screen.change ScreenType.LevelSelect Transitions.Default |> ignore
+        
+    let play_hover_menu_button =
+        MenuButton2(
+            play_button_hover_texture,
+            play_action,
+            Rect.FromSize(750.0f, 420.0f, 400.0f, 400.0f),
+            Position.Box(0.0f, 0.5f, 730.0f, -80.0f, 450.0f, 100.0f),
+            None
+        )
 
     let play_button =
-        MenuButton(
-            (%"menu.play").ToUpper(),
+        MenuButton2(
+            play_button_texture,
             play_action,
-            Position.Box(0.0f, 0.5f, 750.0f, -100.0f, 450.0f, 100.0f),
-            Color.FromArgb
-                (
-                    108,
-                    176,
-                    242,
-                    253
-                ),
-            Color.FromArgb
-                (
-                    100,
-                    176,
-                    242,
-                    253
-                )
+            Rect.FromSize(750.0f, 420.0f, 400.0f, 400.0f),
+            Position.Box(0.0f, 0.5f, 730.0f, -80.0f, 450.0f, 100.0f),
+            Some play_button_hover_texture
+        )
+        
+    let options_hover_menu_button =
+        MenuButton2(
+            options_button_hover_texture,
+            (fun () -> OptionsPage().Show()),
+            Rect.FromSize(750.0f, 595.0f, 400.0f, 400.0f),
+            Position.Box(0.0f, 0.5f, 730.0f, 95.0f, 450.0f, 100.0f),
+            None
         )
 
     let options_button =
-        MenuButton(
-            (%"menu.options").ToUpper(),
+        MenuButton2(
+            options_button_texture,
             (fun () -> OptionsPage().Show()),
-            Position.Box(0.0f, 0.5f, 750.0f, 50.0f, 450.0f, 100.0f),
-            Color.FromArgb
-                (
-                    108,
-                    175,
-                    255,
-                    175
-                ),
-            Color.FromArgb
-                (
-                    100,
-                    175,
-                    255,
-                    175
-                )
+            Rect.FromSize(750.0f, 595.0f, 400.0f, 400.0f),
+            Position.Box(0.0f, 0.5f, 730.0f, 95.0f, 450.0f, 100.0f),
+            Some options_button_hover_texture
         )
-
-    let quit_button =
-        MenuButton(
-            (%"menu.quit").ToUpper(),
+        
+    let quit_hover_menu_button =
+        MenuButton2(
+            quit_button_hover_texture,
             (fun () ->
                 if Screen.back Transitions.UnderLogo then
                     Screen.logo.MoveCenter ()
             ),
-            Position.Box(0.0f, 0.5f, 750.0f, 200.0f, 450.0f, 100.0f),
-            Color.FromArgb
-                (
-                    108,
-                    255,
-                    135,
-                    135
-                ),
-            Color.FromArgb
-                (
-                    100,
-                    255,
-                    135,
-                    135
-                )
+            Rect.FromSize(750.0f, 770.0f, 400.0f, 400.0f),
+            Position.Box(0.0f, 0.5f, 730.0f, 270.0f, 450.0f, 100.0f),
+            None
+        )
+
+    let quit_button =
+        MenuButton2(
+            quit_button_texture,
+            (fun () ->
+                if Screen.back Transitions.UnderLogo then
+                    Screen.logo.MoveCenter ()
+            ),
+            Rect.FromSize(750.0f, 770.0f, 400.0f, 400.0f),
+            Position.Box(0.0f, 0.5f, 730.0f, 270.0f, 450.0f, 100.0f),
+            Some quit_button_hover_texture
         )
 
     let choose_splash =
@@ -271,6 +322,10 @@ type MainMenuScreen() =
             (Colors.white.O4a a2, Palette.color (a2, 0.5f, 0.0f)),
             Alignment.CENTER
         )
+        
+        (*Render.sprite (Rect.FromSize(750.0f, 420.0f, 400.0f, 400.0f)) Colors.white play_button_texture
+        Render.sprite (Rect.FromSize(750.0f, 595.0f, 400.0f, 400.0f)) Colors.white options_button_texture
+        Render.sprite (Rect.FromSize(750.0f, 770.0f, 400.0f, 400.0f)) Colors.white quit_button_texture*)
 
         base.Draw()
 

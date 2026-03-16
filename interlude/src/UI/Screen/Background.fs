@@ -1,6 +1,9 @@
 ﻿namespace Interlude.UI
 
 open System
+open System.IO
+open System.IO.Compression
+open Interlude
 open SixLabors.ImageSharp.Processing
 open Percyqaz.Common
 open Percyqaz.Flux.Graphics
@@ -34,7 +37,7 @@ module Background =
                     | Some file ->
 
                         try
-                            use stream = IO.File.OpenRead file
+                            use stream = File.OpenRead file
 
                             match Bitmap.from_stream true stream with
                             | None -> return (failwith "Unsupported or invalid image format")
@@ -75,6 +78,7 @@ module Background =
                                 bmp.Mutate(fun img -> img.Resize(true_screen_width, 0) |> ignore)
                             let new_bmp = new Bitmap(bmp.Width, bmp.Height, SixLabors.ImageSharp.PixelFormats.Rgba32(0uy, 0uy, 0uy, 255uy))
                             new_bmp.Mutate(fun img -> img.DrawImage(bmp, 1.0f) |> ignore)
+                            // new_bmp.Mutate(fun img -> img.GaussianBlur() |> ignore)
 
                             bmp.Dispose()
 
@@ -93,9 +97,74 @@ module Background =
                     Palette.accent_color.Target <- col
                     background <- (sprite, Animation.Fade(0.0f, Target = 1.0f), false) :: background
                 | None ->
-                    background <-
-                        (Content.Texture "background", Animation.Fade(0.0f, Target = 1.0f), true)
-                        :: background
+                    // TODO: Will this override every new theme background configuration ?
+                    //       Meaning that it will always use the default background ?
+                    let zip_stream = (Utils.get_resource_stream "default.zip")
+                    let zip_archve = new ZipArchive(zip_stream, ZipArchiveMode.Read)
+                    
+                    let entry = zip_archve.GetEntry("Textures/background[1x1].png")
+                    
+                    use stream = entry.Open()
+                    
+                    // Had to do this so we can apply a blur on the bg
+                    let get_bitmap (stream: Stream) : (Bitmap * Color) option =
+                         match Bitmap.from_stream true stream with
+                         | None -> (failwith "Unsupported or invalid image format")
+                         | Some bmp ->
+
+                            let col =
+                                if Content.ThemeConfig.AlwaysUseDefaultAccentColor then
+                                    Content.ThemeConfig.DefaultAccentColor
+                                else
+                                    let vibrance (c: Color) =
+                                        Math.Abs(int c.R - int c.B)
+                                        + Math.Abs(int c.B - int c.G)
+                                        + Math.Abs(int c.G - int c.R)
+
+                                    seq {
+                                        let w = bmp.Width / 50
+                                        let h = bmp.Height / 50
+
+                                        for x = 0 to 49 do
+                                            for y = 0 to 49 do
+                                                yield
+                                                    Color.FromArgb(
+                                                        int bmp.[w * x, h * x].R,
+                                                        int bmp.[w * x, h * x].G,
+                                                        int bmp.[w * x, h * x].B
+                                                    )
+                                    }
+                                    |> Seq.maxBy vibrance
+                                    |> fun c ->
+                                        if vibrance c > 127 then
+                                            Color.FromArgb(255, c)
+                                        else
+                                            Content.ThemeConfig.DefaultAccentColor
+
+                            let true_screen_width = fst (Render.framebuffer_size())
+
+                            if bmp.Width * 3 / 4 > true_screen_width && true_screen_width > 0 then
+                                bmp.Mutate(fun img -> img.Resize(true_screen_width, 0) |> ignore)
+                            let new_bmp = new Bitmap(bmp.Width, bmp.Height, SixLabors.ImageSharp.PixelFormats.Rgba32(0uy, 0uy, 0uy, 255uy))
+                            new_bmp.Mutate(fun img -> img.DrawImage(bmp, 1.0f) |> ignore)
+                            new_bmp.Mutate(fun img -> img.GaussianBlur(3.0f) |> ignore)
+
+                            bmp.Dispose()
+
+                            Some(new_bmp, col)
+                            
+                    let result = get_bitmap stream
+                    match result with
+                    | Some(bmp, col) ->
+                        let sprite = Sprite.upload_one true LinearSampling (SpriteUpload.OfImage("BACKGROUND", bmp))
+
+                        bmp.Dispose()
+                        Palette.accent_color.Target <- col
+                        background <- (sprite, Animation.Fade(0.0f, Target = 1.0f), false) :: background
+                    | None ->
+                        background <-
+                            (Content.Texture "background", Animation.Fade(0.0f, Target = 1.0f), true)
+                            :: background
 
                     Palette.accent_color.Target <- Content.ThemeConfig.DefaultAccentColor
         }
