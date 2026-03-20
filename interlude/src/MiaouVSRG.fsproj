@@ -13,6 +13,7 @@
 	<PublishTrimmed>True</PublishTrimmed>
 	<TrimMode>partial</TrimMode>
 	<CETCompat>false</CETCompat>
+    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
   <PropertyGroup>
     <Optimize>True</Optimize>
@@ -91,6 +92,7 @@
     <Compile Include="Features\Online\Players\PlayerListPage.fs" />
     <Compile Include="Features\Online\Updates.fs" />
     <Compile Include="Features\Export\Osz.fs" />
+    <Compile Include="Features\Export\Default.fs" />
     <Compile Include="Features\Rulesets\Create\SCRulesetPage.fs" />
     <Compile Include="Features\Rulesets\Create\OsuRulesetPage.fs" />
     <Compile Include="Features\Rulesets\Create\QuaverRulesetPage.fs" />

@@ -2,6 +2,7 @@
 
 open System.IO
 open System.IO.Compression
+open System.Text.Json
 open Prelude
 open Prelude.Charts
 open Prelude.Formats.Osu
@@ -157,6 +158,16 @@ module OsuExport =
         }
 
 module Exports =
+    
+    let create_default (chart: Chart) (chart_meta: ChartMeta) (export_folder: string) =
+        let file_name = chart_meta.Title + ".miaou" // default file name extension
+        let file_path = Path.Combine(export_folder, file_name)
+        
+        let file_content = JsonSerializer.Serialize chart_meta
+        
+        let sw = new StreamWriter(file_path)
+        sw.WriteLine file_content
+        Ok()
 
     /// Creates an .osz representation of the chart in the given folder `export_folder`
     /// If successful, the exported beatmap data + the filename of the .osz are returned

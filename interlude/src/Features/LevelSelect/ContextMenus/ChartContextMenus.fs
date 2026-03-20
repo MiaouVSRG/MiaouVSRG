@@ -160,7 +160,7 @@ type ChartContextMenu(chart_meta: ChartMeta, context: LibraryContext) =
             )
                 .Icon(Icons.TARGET)
                 .Hotkey("practice_mode")
-            |* PageButton.Once(%"chart.export_osz", fun () ->
+            |+ PageButton.Once(%"chart.export_osz", fun () ->
                 match SelectedChart.CHART, SelectedChart.WITH_MODS with
                 | Some c, Some m ->
                     OsuExportOptionsPage(
@@ -169,6 +169,25 @@ type ChartContextMenu(chart_meta: ChartMeta, context: LibraryContext) =
                         function
                         | true -> OsuExport.export_chart_with_mods m chart_meta
                         | false -> OsuExport.export_chart_without_mods c chart_meta
+                    )
+                        .Show()
+                | _ -> ()
+            )
+                .Icon(Icons.UPLOAD)
+            |* PageButton.Once(%"chart.export.default", fun () ->
+                
+                if SelectedChart.CHART.IsSome && not SelectedChart.WITH_MODS.IsSome then
+                    let c = SelectedChart.CHART.Value
+                    DefaultExport.export_chart_without_mods c chart_meta
+                
+                match SelectedChart.CHART, SelectedChart.WITH_MODS with
+                | Some c, Some m ->
+                    DefaultExportOptionsPage(
+                        %"chart.export.default",
+                        m.ModsApplied,
+                        function
+                        | true -> DefaultExport.export_chart_with_mods m chart_meta
+                        | false -> DefaultExport.export_chart_without_mods c chart_meta
                     )
                         .Show()
                 | _ -> ()
