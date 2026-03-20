@@ -1,5 +1,6 @@
 ﻿namespace Interlude.Features.LevelSelect
 
+open Percyqaz.Common
 open Percyqaz.Flux.UI
 open Prelude
 open Prelude.Data.Library
@@ -176,7 +177,12 @@ type ChartContextMenu(chart_meta: ChartMeta, context: LibraryContext) =
                 .Icon(Icons.UPLOAD)
             |* PageButton.Once(%"chart.export.default", fun () ->
                 
-                if SelectedChart.CHART.IsSome && not SelectedChart.WITH_MODS.IsSome then
+                // If we do not have a modded chart, already load the export process and do not show the "apply mods" menu
+                if SelectedChart.CHART.IsSome // There is a chart
+                   && (not SelectedChart.WITH_MODS.IsSome // but not a modded one (check if with_mods exists)
+                       || (SelectedChart.WITH_MODS.IsSome // but not a modded one (check if the mods map is empty)
+                           && SelectedChart.WITH_MODS.Value.ModsApplied.IsEmpty)) then
+                    
                     let c = SelectedChart.CHART.Value
                     DefaultExport.export_chart_without_mods c chart_meta
                 
