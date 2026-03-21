@@ -1,11 +1,10 @@
-﻿namespace Prelude.Charts
+﻿namespace Prelude
 
 open System
 open System.IO
 open System.Linq
 open System.Collections.Generic
 open System.Security.Cryptography
-open Prelude
 
 type NoteType =
     | NOTHING = 0uy

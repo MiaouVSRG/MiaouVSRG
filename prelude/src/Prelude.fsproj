@@ -23,7 +23,6 @@
     <Compile Include="Random.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="Chart.fs" />
-    <Compile Include="Imports.fs" />
     <Compile Include="Formats\Conversions.fs" />
     <Compile Include="Formats\osu!\Shared.fs" />
     <Compile Include="Formats\osu!\Headers.fs" />
@@ -130,6 +129,7 @@
     <Compile Include="Data\Library\Views\Grouping.fs" />
     <Compile Include="Data\Library\Views\Views.fs" />
     <Compile Include="Data\Library\Endless.fs" />
+    <Compile Include="Data\Library\Imports.fs" />
     <Compile Include="Data\User\Stats\Helpers.fs" />
     <Compile Include="Data\User\Stats\State.fs" />
     <Compile Include="Data\User\Stats\Sync.fs" />

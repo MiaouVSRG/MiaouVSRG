@@ -84,7 +84,8 @@ module Utilities =
         match s with
         | ".sm"
         | ".qua"
-        | ".osu" -> Some s
+        | ".osu"
+        | ".json" -> Some s //json file is chartdata.json of .miaou chartfile
         | _ -> None
 
     let (|ChartArchive|_|) (path: string) =
@@ -92,7 +93,8 @@ module Utilities =
         match s with
         | ".osz"
         | ".qp"
-        | ".zip" -> Some s
+        | ".zip"
+        | ".miaou" -> Some s
         | _ -> None
 
     let (|SongFolder|_|) (path: string) =

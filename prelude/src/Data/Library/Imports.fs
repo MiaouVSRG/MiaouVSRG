@@ -1,10 +1,13 @@
-﻿namespace Prelude.Charts
+﻿namespace Prelude.Data.Library
 
 open System
 open System.IO
+open System.Text.Json
 open Percyqaz.Common
 open Percyqaz.Data
 open Prelude
+
+open Newtonsoft.Json
 
 [<Json.AutoCodec>]
 type OsuOrigin =
@@ -153,27 +156,18 @@ type ImportChart =
 
 module ImportChart =
 
-    let from_file (pack_name: string) (path: string) : Result<ImportChart, string> =
+    let from_file (path: string) : Result<ImportChart, string> =
         try
-            use fs = new FileStream(path, FileMode.Open)
-            use br = new BinaryReader(fs)
-            let keys = br.ReadByte() |> int
-
-            let header =
-                match JSON.FromString(br.ReadString()) with
-                | Ok v -> v
-                | Error err ->
-                    Logging.Error "%O" err
-                    raise err
-
-            match Chart.read_headless keys br with
-            | Ok chart ->
-                Ok {
-                    PackName = pack_name
-                    Header = header
-                    LoadedFromPath = path
-                    Chart = chart
-                }
-            | Error reason -> Error reason
+            use chart_data_stream = File.Open(path, FileMode.Open)
+            use sr = new StreamReader(chart_data_stream)
+            
+            let chart_data_raw = sr.ReadToEnd()
+            
+            let chart_data = JsonConvert.DeserializeObject(chart_data_raw)
+            
+            Logging.Debug "%A" chart_data
+            
+            
+            Ok(null)
 
         with err -> Error err.Message

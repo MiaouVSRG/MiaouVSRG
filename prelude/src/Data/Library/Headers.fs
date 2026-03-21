@@ -3,7 +3,6 @@
 open System.IO
 open Percyqaz.Data
 open Prelude
-open Prelude.Charts
 open Prelude.Calculator
 open Prelude.Calculator.Patterns
 
@@ -121,3 +120,9 @@ type ChartMeta =
             Rating = difficulty.Overall
             Patterns = (PatternReport.from_chart(difficulty, chart))
         }
+           
+type DefaultExportChart =
+    {
+        Chart: Chart
+        ChartMeta: ChartMeta
+    }

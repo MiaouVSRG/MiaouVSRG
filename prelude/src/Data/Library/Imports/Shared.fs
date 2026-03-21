@@ -119,6 +119,9 @@ module Shared =
             | Error msg ->
                 Logging.Debug "Parse error in osu! file %s: %O" action.Source msg
                 [ Error (action.Source, "Failed to parse this file") ]
+        
+        | ".json" ->
+            
 
         | _ -> []
 

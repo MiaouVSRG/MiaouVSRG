@@ -2,9 +2,7 @@
 
 open System.IO
 open System.IO.Compression
-open Percyqaz.Common
 open Prelude
-open Prelude.Charts
 open Prelude.Formats.Osu
 open Newtonsoft.Json
 
@@ -157,12 +155,6 @@ module OsuExport =
             Objects = notes_to_hitobjects chart.Notes chart.Keys
             Timing = convert_timing_points chart.BPM chart.SV (Chart.find_most_common_bpm chart)
         }
-        
-type DefaultExportChart =
-    {
-        Chart: Chart
-        ChartMeta: ChartMeta
-    }
 
 module Exports =
     
@@ -178,7 +170,10 @@ module Exports =
     let create_default (chart: Chart) (chart_meta: ChartMeta) (export_folder: string) =
         let archive_file_name = chart_meta.Title + "[" + chart_meta.DifficultyName + "].miaou" // default file name extension
         let archive_file_path = Path.Combine(export_folder, archive_file_name)
-        let export_chart: DefaultExportChart = {Chart=chart;ChartMeta=chart_meta}
+        let export_chart: DefaultExportChart = {
+            Chart = chart
+            ChartMeta = chart_meta
+        }
         
         let json_settings = JsonSerializerSettings()
         json_settings.Formatting <- Formatting.Indented // TODO: Remove this (generated file is ~10x larger with this setting)

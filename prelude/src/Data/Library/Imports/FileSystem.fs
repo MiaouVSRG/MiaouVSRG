@@ -196,6 +196,7 @@ module Imports =
                             match ext with
                             | ".osu" -> "osu!"
                             | ".qua" -> "Quaver"
+                            | ".json" -> "MiaouVSRG"
                             | _ -> "Singles"
                         let! result =
                             convert_song_folder(
