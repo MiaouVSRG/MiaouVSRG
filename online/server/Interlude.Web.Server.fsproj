@@ -15,6 +15,7 @@
     <Compile Include="Domain\Backbeat\Sources.fs" />
     <Compile Include="Domain\Backbeat\Songs.fs" />
     <Compile Include="Domain\Backbeat\Tables.fs" />
+    <Compile Include="Domain\New\Charts.fs" />
     <Compile Include="Domain\Services\Backbeat.fs" />
     <Compile Include="Domain\Services\Tables.fs" />
     <Compile Include="Domain\Services\Scores.fs" />
@@ -63,6 +64,7 @@
     <Compile Include="API\Stats\Leaderboard\MonthlyKeymode.fs" />
     <Compile Include="API\Stats\Fetch.fs" />
     <Compile Include="API\Stats\Sync.fs" />
+    <Compile Include="API\New\Charts\Add.fs" />
     <Compile Include="API\API.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

@@ -122,14 +122,26 @@ module Migrations =
                     );
                 """ db |> expect |> ignore)
             db
+            
+    open Interlude.Web.Server.Domain.New
+    
+    let run_new (db: Database) : unit =
+        Database.migrate
+            "CreateChartsTable"
+            (fun db ->
+                Charts.CREATE_TABLE.Execute () db |> expect |> ignore
+            )
+            db
 
 module Database =
 
     let startup () =
         core_db <- Database.from_file ("./data/core.db")
         backbeat_db <- Database.from_file ("./data/backbeat.db")
+        new_db <- Database.from_file ("./data/new.db")
         Migrations.run_core core_db
         Migrations.run_backbeat backbeat_db
+        Migrations.run_new new_db
 
     let startup_unit_tests () : IDisposable =
         let _core_db, keep_alive = Database.in_memory ("unit_tests_core")

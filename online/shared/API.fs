@@ -206,26 +206,20 @@ module API =
             )
 
         let internal post_return<'T, 'U> (route: string, payload: 'T, callback: 'U option -> unit) : unit =
-
-            Logging.Info "Trying to POST %s" route
             let handle_response (response: HttpResponseMessage) =
-                Logging.Info "oui y'a une réponse"
                 if response.IsSuccessStatusCode then
-                    Logging.Info "en plus c'est un succès"
                     match response.Content.ReadAsStream() |> fun s -> JSON.FromStream(route, s) with
                     | Ok res -> callback (Some res)
                     | Error err ->
                         Logging.Error "Error reading post %s: %s" route err.Message
                         callback None
                 else
-                    Logging.Info "non pas de réponse"
                     callback None
 
             queue.Request(
                 fun client ->
                     async {
                         try
-                            Logging.Info "jsp gros"
                             let request = new HttpRequestMessage(HttpMethod.Post, route)
                             request.Content <-
                                 new StringContent(

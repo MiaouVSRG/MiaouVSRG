@@ -1,6 +1,7 @@
 ﻿namespace Interlude.Web.Server.API.Charts.Scores
 
 open NetCoreServer
+open Percyqaz.Common
 open Prelude
 open Interlude.Web.Shared
 open Interlude.Web.Shared.Requests
@@ -20,16 +21,21 @@ module Save =
         ) =
         async {
             let user_id, _ = authorize headers
+            
+            if body.Contains("Accuracy") then // New API request has this attribute
+                match JSON.FromString body with
+                | Error e -> raise (BadRequestException None)
+                | Ok(request: Request) ->
 
-            match JSON.FromString body with
-            | Error e -> raise (BadRequestException None)
-            | Ok(request: Request) -> // todo: basic clamp on how much data can be sent in one request (about 10kb?)
+                let chart_id = request.ChartId.ToUpper()
 
-            let chart_id = request.ChartId.ToUpper()
-
-            match! Scores.submit (user_id, chart_id, request.Replay, request.Rate, request.Mods, request.Timestamp) with
-            | Scores.ScoreUploadOutcome.Failed -> raise (BadRequestException None)
-            | Scores.ScoreUploadOutcome.Unranked -> response.ReplyJson<Response>(None)
-            | Scores.ScoreUploadOutcome.Ranked(new_position) ->
-                response.ReplyJson<Response>(Some { LeaderboardPosition = new_position })
+                match! Scores.submit (user_id, chart_id, request.Replay, request.Rate, request.Mods, request.Timestamp, request.Accuracy, request.JudgementCounts, request.ComboBreaks) with
+                | Scores.ScoreUploadOutcome.Failed -> raise (BadRequestException None)
+                | Scores.ScoreUploadOutcome.Unranked -> response.ReplyJson<Response>(None)
+                | Scores.ScoreUploadOutcome.Ranked(new_position) ->
+                    response.ReplyJson<Response>(Some { LeaderboardPosition = new_position })
+                    
+            else // Old client
+                Logging.Info "User with id %s is using an old client !" (user_id.ToString())
+                response.ReplyError(400, "Your client is out of date !")
         }

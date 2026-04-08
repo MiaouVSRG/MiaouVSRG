@@ -60,6 +60,8 @@ module API =
         add_endpoint Stats.Leaderboard.MonthlyXP.ROUTE Stats.Leaderboard.MonthlyXP.handle
         add_endpoint Stats.Leaderboard.Keymode.ROUTE Stats.Leaderboard.Keymode.handle
         add_endpoint Stats.Leaderboard.MonthlyKeymode.ROUTE Stats.Leaderboard.MonthlyKeymode.handle
+        
+        add_endpoint New.Charts.Add.ROUTE New.Charts.Add.handle
 
     let handle_request
         (
