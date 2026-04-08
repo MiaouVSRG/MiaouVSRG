@@ -2,6 +2,9 @@
 
 open Percyqaz.Data
 open Prelude
+open Prelude.Charts
+open Prelude.Gameplay.Replays
+open Prelude.Gameplay.Scoring
 open Prelude.Mods
 open Interlude.Web.Shared.API
 
@@ -80,10 +83,13 @@ module Charts =
             type Request =
                 {
                     ChartId: string
-                    Replay: string
+                    Replay: ReplayData
                     Rate: Rate
                     Mods: ModState
                     Timestamp: int64
+                    Accuracy: float
+                    JudgementCounts: int array
+                    ComboBreaks: int
                 }
 
             [<Json.AutoCodec>]
@@ -656,3 +662,25 @@ module Stats =
 
             let get (keys: int, sort: Sort, callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE + "?sort=" + sort.ToString() + "&keys=" + keys.ToString(), callback)
+                
+module New =
+    module Charts =
+        module Add =
+            let ROUTE = (POST, "/v2/chart")
+            
+            [<Json.AutoCodec>]
+            type Request = {
+                ChartId: string
+                DownloadLink: string
+                Source: string
+            }
+            
+            [<Json.AutoCodec>]
+            type Response = {
+                Caca: string
+                Pipi: string
+                Bite: bool
+            }
+
+            let post (request: Request, callback: bool option -> unit) =
+                Client.post<Request> (snd ROUTE, request, callback)

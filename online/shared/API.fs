@@ -219,7 +219,6 @@ module API =
                 fun client ->
                     async {
                         try
-                            Logging.Info "jsp gros"
                             let request = new HttpRequestMessage(HttpMethod.Post, route)
                             request.Content <-
                                 new StringContent(

@@ -12,14 +12,14 @@ open Interlude.Web.Server.API
 open Interlude.Web.Server.Bot
 
 let SOCKET_PORT = 32767
-let HTTPS_PORT = 444 // Avoir errors with HTTPS port 443
+let HTTPS_PORT = 444 // Avoid errors with HTTPS port 443
 
 try
     Logging.Verbosity <- LoggingLevel.DEBUG
 
     Logging.LogFile <- Some(Path.Combine("Logs", sprintf "log-%s.txt" (DateTime.Today.ToString("yyyyMMdd"))))
 
-    Logging.Info "~~ Interlude.Web [%s] ~~" TAGLINE
+    Logging.Info "~~ MiaouVSRG Server [%s] ~~" TAGLINE
 
     let api_cert =
         X509CertificateLoader.LoadPkcs12FromFile(Path.Combine("./secrets", SECRETS.ApiCert), SECRETS.ApiCertPassword)
