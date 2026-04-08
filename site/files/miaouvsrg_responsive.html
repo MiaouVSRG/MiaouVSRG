@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>MiaouVSRG</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <style>
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            font-family: sans-serif;
+        }
+
+        @keyframes horizontal-shaking {
+            0% { transform: translateY(0) }
+            50% { transform: translateY(-10px) }
+        }
+
+        /* VIDEO BACKGROUND FIX */
+        .bgvideo {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            z-index: 0;
+            filter: blur(7px);
+        }
+
+        /* BANNER FIX */
+        .miaoubanner {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            width: 90%;
+            max-width: 900px;
+            z-index: 2;
+            animation: horizontal-shaking 5s infinite;
+        }
+
+        /* BUTTONS FIX */
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .buttons a {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 10px auto;
+            padding: 15px;
+            text-align: center;
+            border-radius: 30px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .btn-main { background: #d478ffa4; }
+        .btn-secondary { background: #a3e5ff85; }
+
+        /* CONTAINER */
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            margin-top: 20vh;
+        }
+
+        /* SOCIAL ICONS */
+        .socials img {
+            height: 50px;
+            margin: 5px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            .miaoubanner {
+                top: 5%;
+                width: 95%;
+            }
+
+            .container {
+                margin-top: 25vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- VIDEO -->
+    <video class="bgvideo" autoplay loop muted playsinline>
+        <source src="assets/images/bgvideo.mp4" type="video/mp4">
+    </video>
+
+    <!-- BANNER -->
+    <img class="miaoubanner" src="assets/images/image01.png">
+
+    <!-- CONTENT -->
+    <div class="container">
+
+        <div class="buttons">
+            <a class="btn-secondary" href="https://github.com/MiaouVSRG/MiaouVSRG/blob/master/interlude/docs/changelog.md" target="_blank">NEWS</a>
+            <a class="btn-main" href="https://github.com/MiaouVSRG/MiaouVSRG/releases/latest/download/miaouvsrg.zip">DOWNLOAD</a>
+            <a class="btn-secondary">SOCIALS</a>
+        </div>
+
+        <div class="socials">
+            <a href="https://x.com/MiaouVSRG" target="_blank">
+                <img src="assets/images/gallery01/9913eba8.png">
+            </a>
+            <a href="https://github.com/MiaouVSRG/MiaouVSRG" target="_blank">
+                <img src="assets/images/gallery01/ddf81d7b.png">
+            </a>
+            <a href="https://discord.gg/ast4VPbXGA" target="_blank">
+                <img src="assets/images/gallery01/1df64c12.png">
+            </a>
+        </div>
+
+        <div class="buttons">
+            <a class="btn-secondary" href="https://www.miaouvsrg.com/interlude/wiki/index.html">WIKI</a>
+        </div>
+
+        <p style="color:white; margin-top:40px;">
+            Website design by <a href="https://x.com/kyunthecat" style="color:white;">@KyunTheCat</a>
+        </p>
+
+    </div>
+
+</body>
+</html>
