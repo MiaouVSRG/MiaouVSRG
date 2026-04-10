@@ -1,0 +1,224 @@
+body{
+    overflow: hidden;
+    background-image:linear-gradient( #43e1ef, #e476ff);
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+a{
+    text-decoration: none;
+}
+
+
+.bgvideo{
+    width: 100%;
+    height: 100%;
+    top:0;
+    left:0;
+    object-fit: cover;
+    filter: blur(7px);
+}
+
+.bgvideodiv{
+    position:fixed;
+    z-index:-1;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+
+}
+
+.miaoubanner{
+    width:70%;
+    height:40%;
+    animation: horizontal-shaking 5s  infinite;
+
+}
+
+.miaoubannerdiv{
+    left: 24%;
+    top:10%;
+    position: absolute;
+}
+
+.button{
+    font-family: "Fredoka One";
+    color: white;
+    text-align: center;
+
+
+    transition: all 0.25s ease-out;
+}
+
+.button:hover{
+    cursor: pointer;
+        -webkit-animation: shadow-inset-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        animation: shadow-inset-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+
+    transform: scale(1.075);
+    transition: all 0.25s ease-in;
+
+
+
+}
+
+
+@-webkit-keyframes shadow-inset-center {
+    0% {
+        -webkit-box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0);
+        box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+    100% {
+        -webkit-box-shadow: inset 0 0 14px 0px rgba(0, 0, 0, 0.5);
+        box-shadow: inset 0 0 14px 0px rgba(0, 0, 0, 0.5);
+    }
+}
+@keyframes shadow-inset-center {
+    0% {
+        -webkit-box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0);
+        box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+    100% {
+        -webkit-box-shadow: inset 0 0 14px 0px rgba(0, 0, 0, 0.5);
+        box-shadow: inset 0 0 14px 0px rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+.firstrow{
+    display: flex;
+    justify-content: center;
+    gap:20px;
+    align-items: center;
+    width: 100%;
+    height: 33%;
+
+
+}
+
+.buttons{
+
+    margin:26% auto ;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 42%;
+    height: 35%;
+
+}
+
+
+.NEWS{
+
+    text-align: center;
+    font-size: 1.5rem;
+    border-radius: 2.25rem;
+    height: 3rem;
+    padding-left: 5rem;
+    padding-right: 5rem;
+    background-color: #a3e5ff85;
+    align-content: center;
+
+}
+
+.DOWNLOAD{
+    background-color: #d478ffa4;
+    text-align: center;
+    font-size: 2rem;
+    border-radius: 2.25rem;
+    height: 3rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    align-content: center;
+    padding-top:1rem;
+    padding-bottom:1rem;
+}
+
+.WIKI{
+    text-align: center;
+    font-size: 1.5rem;
+    border-radius: 2.25rem;
+    height: 3rem;
+    padding-left: 5.5rem;
+    padding-right: 5.5rem;
+    background-color: #a3e5ff85;
+    align-content: center;
+}
+
+.SOCIAL{
+
+    font-family: "Fredoka One";
+    color: white;
+    text-align: center;
+    background-color: #a3e5ff85;
+    font-size: 1.5rem;
+    align-content: center;
+    border-radius: 2.25rem;
+    height: 3rem;
+    padding-left: 5rem;
+    padding-right: 5rem;
+
+}
+
+.secondrow{
+    display: flex;
+
+    width: 100%;
+    height: 22%;
+    justify-content: center;
+    align-items: end;
+
+}
+
+
+.thirdrow{
+    display: flex;
+
+    width: 100%;
+    height: 47%;
+    justify-content: center;
+    gap:10px;
+    padding-top:5px
+}
+
+
+.github img{
+    width: 4.5rem;
+    height:4.5rem ;
+}
+
+.twitter img{
+    width: 4.5rem;
+    height:4.5rem;
+}
+
+.discord img{
+    width: 4.5rem;
+    height:4.5rem;
+}
+
+@keyframes horizontal-shaking {
+    0% { transform: translateY(0) }
+    50% { transform: translateY(-10px) }
+}
+
+@media (min-width: 200px) and (max-width: 640px){
+    .miaoubanner{
+        width:100%;
+    }
+
+    .miaoubannerdiv{
+        left:2%;
+    }
+
+    .buttons{
+        margin-top:60%;
+        width:5rem;
+        height:45rem;
+    }
+    .firstrow{
+        flex-wrap: wrap;
+    }
+}
+
