@@ -14,13 +14,19 @@ open Prelude
 module HttpResponseExtensions =
 
     type HttpResponse with
-        member this.ReplyJson<'T>(data: 'T) =
-            this.MakeGetResponse(JSON.ToString data, "application/json") |> ignore
+        member this.ReplyJson<'T>(data: 'T, ?code: int) =
+            this.Clear()
+                .SetBegin(if code.IsSome then code.Value else 200)
+                .SetHeader("Access-Control-Allow-Origin", "*")
+                .SetHeader("Content-Type", "application/json")
+                .SetBody(JSON.ToString data)
+            |> ignore
 
         member this.ReplyRedirect(url: string) =
             this.Clear()
                 .SetBegin(303)
                 .SetHeader("Location", url)
+                .SetHeader("Access-Control-Allow-Origin", "*")
                 .SetBody()
             |> ignore
 
@@ -29,6 +35,7 @@ module HttpResponseExtensions =
                 .SetBegin(code)
                 .SetHeader("Cache-Control", "no-cache, no-store")
                 .SetHeader("Content-Type", "text/plain; charset=UTF-8")
+                .SetHeader("Access-Control-Allow-Origin", "*")
                 .SetBody(reason)
             |> ignore
 

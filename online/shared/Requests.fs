@@ -506,6 +506,8 @@ module Players =
             let post (request: Request, callback: bool option -> unit) =
                 Client.post<Request> (snd ROUTE, request, callback)
 
+open Players.Profile.View
+
 module Friends =
 
     /// requires login token as Authorization header
@@ -674,13 +676,26 @@ module New =
                 DownloadLink: string
                 Source: string
             }
-            
-            [<Json.AutoCodec>]
-            type Response = {
-                Caca: string
-                Pipi: string
-                Bite: bool
-            }
 
             let post (request: Request, callback: bool option -> unit) =
                 Client.post<Request> (snd ROUTE, request, callback)
+                
+module Web =
+    
+    let MAIN_ENDPOINT = "/web"
+    
+    module User =
+        module Search =
+            let ROUTE = (GET, MAIN_ENDPOINT + "/user")
+            
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Username: string
+                    Country: string // TODO: how ?
+                    Followers: int
+                    Level: int64
+                }
+            
+            let get (name: string, callback: Response option -> unit) =
+                Client.get<Response> (snd ROUTE + "?name=" + name, callback)

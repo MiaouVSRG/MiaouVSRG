@@ -62,6 +62,9 @@ module API =
         add_endpoint Stats.Leaderboard.MonthlyKeymode.ROUTE Stats.Leaderboard.MonthlyKeymode.handle
         
         add_endpoint New.Charts.Add.ROUTE New.Charts.Add.handle
+        
+        // WEBSITE REQUESTS
+        add_endpoint Web.User.Search.ROUTE Web.Users.Search.handle
 
     let handle_request
         (
