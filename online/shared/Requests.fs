@@ -699,3 +699,26 @@ module Web =
             
             let get (name: string, callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE + "?name=" + name, callback)
+                
+    module Leaderboard =
+        let ROUTE = (GET, MAIN_ENDPOINT + "/leaderboard")
+        
+        [<Json.AutoCodec>]
+        type LeaderboardUser =
+            {
+                Username: string
+                Country: string
+                Level: int64
+                Playcount: float
+                Accuracy: float
+                Rating: int
+            }
+        
+        [<Json.AutoCodec>]
+        type Response =
+            {
+                Leaderboard: LeaderboardUser array
+            }
+            
+        let get(callback: Response option -> unit) =
+            Client.get<Response> (snd ROUTE, callback)

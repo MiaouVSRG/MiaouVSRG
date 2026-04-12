@@ -66,6 +66,7 @@
     <Compile Include="API\Stats\Sync.fs" />
     <Compile Include="API\New\Charts\Add.fs" />
     <Compile Include="API\Web\Users\Search.fs" />
+    <Compile Include="API\Web\Leaderboard.fs" />
     <Compile Include="API\API.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
