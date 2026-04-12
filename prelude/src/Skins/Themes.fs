@@ -104,7 +104,18 @@ type Theme(storage) as this =
 
 module Theme =
 
-    let TEXTURES = [| "background"; "rain"; "logo"; "cursor"; "play-button"; "options-button"; "quit-button"; "play-button-hover"; "options-button-hover"; "quit-button-hover" |]
+    let TEXTURES = [|
+        "background"
+        "rain"
+        "logo"
+        "cursor"
+        "play-button"
+        "options-button"
+        "quit-button"
+        "play-button-hover"
+        "options-button-hover"
+        "quit-button-hover"
+    |]
 
     let SOUNDS =
         [|

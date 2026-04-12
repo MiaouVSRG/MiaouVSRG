@@ -16,53 +16,8 @@ open Interlude.Features.Online
 // open Interlude.Features.Wiki
 open Interlude.Features.OptionsMenu
 open Interlude.Features.LevelSelect
-
-type private MenuButton(label: string, on_click: unit -> unit, position: Position, bg_color: Color, outline_color: Color) =
-    inherit
-        SlideContainer(
-            NodeType.Button(fun () ->
-                Style.click.Play()
-                on_click ()
-            )
-        )
-
-    override this.Init(parent) =
-        this
-            .With(
-                MouseListener().Button(this),
-                Text(label)
-                    .Align(Alignment.CENTER)
-                    .Color(fun () ->
-                        if this.Focused then Colors.text_yellow_2
-                        else Colors.text
-                    )
-                    .Position(Position.ShrinkY(7.0f).ShrinkB(10.0f).ShrinkPercentT(0.2f))
-            )
-            .Position(position)
-            .Hide()
-
-        base.Init parent
-
-    override this.OnFocus(by_mouse: bool) =
-        base.OnFocus by_mouse
-        Style.hover.Play()
-
-    override this.Draw() =
-        Render.quad (Quad.parallelogram 0.5f this.Bounds) (bg_color)
         
-        Render.quad (Quad.parallelogram 0.5f (this.Bounds.Expand 10.0f)) (outline_color)
-        
-        base.Draw()
-
-    member this.Hide() =
-        this.Position(position.SliceL(-100.0f)).SnapPosition()
-
-    member this.Show() =
-        this.Hide()
-        this.Position <- position
-        
-        
-type private MenuButton2(sprite: Sprite, on_click: unit -> unit, r: Rect, position: Position, focused_sprite: Sprite option) =
+type private MenuButton(sprite: Sprite, on_click: unit -> unit, r: Rect, position: Position, focused_sprite: Sprite option) =
     inherit
         SlideContainer(
             NodeType.Button(fun () ->
@@ -90,13 +45,13 @@ type private MenuButton2(sprite: Sprite, on_click: unit -> unit, r: Rect, positi
 
     override this.OnFocus(by_mouse: bool) =
         base.OnFocus by_mouse
-        if this.Focused && focused_sprite.IsSome then
-            Logging.Debug "Showing focused sprite"
-            // Render.sprite r Colors.white focused_sprite.Value
         Style.hover.Play()
 
     override this.Draw() =
         Render.sprite r Colors.white sprite
+        // Percyqaz I love you for implementing this
+        if this.Focused && focused_sprite.IsSome then
+            Render.sprite r Colors.white focused_sprite.Value
         
         base.Draw()
         
@@ -135,57 +90,27 @@ type MainMenuScreen() =
 
     let play_action () =
         Screen.change ScreenType.LevelSelect Transitions.Default |> ignore
-        
-    let play_hover_menu_button =
-        MenuButton2(
-            play_button_hover_texture,
-            play_action,
-            Rect.FromSize(750.0f, 420.0f, 400.0f, 400.0f),
-            Position.Box(0.0f, 0.5f, 730.0f, -80.0f, 450.0f, 100.0f),
-            None
-        )
 
     let play_button =
-        MenuButton2(
+        MenuButton(
             play_button_texture,
             play_action,
             Rect.FromSize(750.0f, 420.0f, 400.0f, 400.0f),
             Position.Box(0.0f, 0.5f, 730.0f, -80.0f, 450.0f, 100.0f),
             Some play_button_hover_texture
         )
-        
-    let options_hover_menu_button =
-        MenuButton2(
-            options_button_hover_texture,
-            (fun () -> OptionsPage().Show()),
-            Rect.FromSize(750.0f, 595.0f, 400.0f, 400.0f),
-            Position.Box(0.0f, 0.5f, 730.0f, 95.0f, 450.0f, 100.0f),
-            None
-        )
 
     let options_button =
-        MenuButton2(
+        MenuButton(
             options_button_texture,
             (fun () -> OptionsPage().Show()),
             Rect.FromSize(750.0f, 595.0f, 400.0f, 400.0f),
             Position.Box(0.0f, 0.5f, 730.0f, 95.0f, 450.0f, 100.0f),
             Some options_button_hover_texture
         )
-        
-    let quit_hover_menu_button =
-        MenuButton2(
-            quit_button_hover_texture,
-            (fun () ->
-                if Screen.back Transitions.UnderLogo then
-                    Screen.logo.MoveCenter ()
-            ),
-            Rect.FromSize(750.0f, 770.0f, 400.0f, 400.0f),
-            Position.Box(0.0f, 0.5f, 730.0f, 270.0f, 450.0f, 100.0f),
-            None
-        )
 
     let quit_button =
-        MenuButton2(
+        MenuButton(
             quit_button_texture,
             (fun () ->
                 if Screen.back Transitions.UnderLogo then
