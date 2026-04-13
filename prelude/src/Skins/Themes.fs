@@ -67,7 +67,7 @@ type Theme(storage) as this =
         let rules =
             {
                 IsRequired = true
-                MustBeSquare = name <> "background"
+                MustBeSquare = false // name <> "background"
                 MaxGridSize = (1, 1)
             }
 
@@ -116,6 +116,7 @@ module Theme =
         "options-button-hover"
         "quit-button-hover"
         "menu-button-background"
+        "menu-button-background-hover"
     |]
 
     let SOUNDS =

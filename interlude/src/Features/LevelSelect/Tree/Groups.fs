@@ -59,7 +59,7 @@ type private GroupItem(tree_ctx: TreeContext, name: string, items: ResizeArray<C
 
     override this.Bounds(this_top: float32) =
         Rect.FromEdges(
-            Render.width() * (TREE_LEFT_SPLIT + 0.1f - 0.05f * select_animation.Value),
+            Render.width() * (GROUP_ITEM_LEFT_SPLIT + 0.1f - 0.05f * select_animation.Value),
             this_top,
             Render.width() - 25.0f,
             this_top + GROUP_HEIGHT

@@ -15,12 +15,17 @@ module TreeConstants =
 
     let MULTI_SELECT_KEY = Bind.mk Keys.LeftShift
 
+    // "menu-button-background" sprite is 850px by 100px
+    // We apply a 100px off-screen margin to the left, so the "hoveranimation" (see Charts.fs) can go without cutting the sprite
     let [<Literal>] CHART_HEIGHT = 100.0f
+    let [<Literal>] CHART_WIDTH = 850.0f
+    let [<Literal>] CHART_LEFT_MARGIN = 100.0f
+    let [<Literal>] CHART_SELECTED_PADDING = 50.0f
     let [<Literal>] CHART_SPACING = Style.PADDING
     let [<Literal>] GROUP_HEIGHT = 55.0f
     let [<Literal>] GROUP_SPACING = Style.PADDING * 4.0f
 
-    let [<Literal>] TREE_LEFT_SPLIT = 0.55f
+    let [<Literal>] GROUP_ITEM_LEFT_SPLIT = 0.55f
 
 [<Struct>]
 [<RequireQualifiedAccess>]

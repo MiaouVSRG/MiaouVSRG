@@ -4,6 +4,7 @@ open Percyqaz.Common
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.UI
+open Percyqaz.Flux.UI.Selection
 open Prelude
 open Prelude.Data.User
 open Prelude.Data.Library
@@ -25,6 +26,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
     inherit TreeItem(tree_ctx)
 
     let hover_animation = Animation.Fade 0.0f
+    let mutable focused = false
     let mutable last_cached_flag = -1
     let mutable chart_save_data = None
     let mutable personal_bests: Bests option = None
@@ -122,7 +124,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             | _ -> if CollectionActions.is_liked chart_meta then Icons.HEART else ""
 
     override this.Bounds(top: float32) : Rect =
-        Rect.FromEdges(Render.width() * TREE_LEFT_SPLIT + Style.PADDING, top, Render.width(), top + CHART_HEIGHT)
+        Rect.FromEdges(Render.width() - (CHART_WIDTH - CHART_LEFT_MARGIN) + Style.PADDING, top, Render.width() + CHART_LEFT_MARGIN, top + CHART_HEIGHT)
     override this.Spacing : float32 = Style.PADDING_SONG_SELECT
 
     member this.Selected : bool = tree_ctx.IsSelected(chart_meta, library_ctx)
@@ -138,7 +140,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
 
     member private this.DrawPersonalBests(bounds: Rect, data: PersonalBestCached, pos: float32, accent: Color) : unit =
         if data.Color.A > 0uy then
-            Render.rect (bounds.SliceR(pos - 40.0f, 80.0f).SliceT(90.0f)) accent
+            Render.rect (bounds.SliceR(pos - 40.0f, 80.0f).SliceT(90.0f).ExpandB(10.0f)) accent
 
             Text.draw_aligned_b (
                 Style.font,
@@ -169,34 +171,30 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             let alpha = 80 + int (hover_animation.Value * 40.0f)
             if is_multi_selected then Colors.grey_2.O2a alpha else Palette.color (alpha, 1.0f, 0.4f)
 
-        let color, left_ribbon_color =
-            if is_multi_selected then Colors.grey_2.O2, Colors.white.O2
-            elif this.Selected then !*Palette.MAIN_100, !*Palette.LIGHT
-            else Colors.shadow_1.O2, Colors.grey_2.O2
+        let stripe_length = CHART_LEFT_MARGIN * hover_animation.Value
+        let play_button_texture = if this.Selected then Content.Texture "menu-button-background-hover" else Content.Texture "menu-button-background"
+        
+        let r = Rect.FromSize(
             
-        // Render.rect bounds color
-        // Render.rect (bounds.BorderL Style.PADDING) left_ribbon_color
-
-        let stripe_length = bounds.Width * (0.4f + 0.6f * hover_animation.Value)
-        let play_button_texture = Content.Texture "menu-button-background"
-        let r = Rect.FromSize(bounds.Left, bounds.Top - 5.5f, bounds.Width, bounds.Height + 830.0f) |> _.AsQuad
+            (if this.Selected then
+                bounds.Left - CHART_SELECTED_PADDING
+            else
+                bounds.Left - stripe_length),
+            
+            bounds.Top - 5.5f,
+            bounds.Width,
+            bounds.Height)
+        let q = r.AsQuad
         Render.tex_quad
-            r
+            q
             Color.White.AsQuad
             (Sprite.pick_texture (0,0) play_button_texture)
-        // Render.quad_points_c
-        //     (bounds.Left, bounds.Top)
-        //     (bounds.Left + stripe_length, bounds.Top)
-        //     (bounds.Left + stripe_length, bounds.Bottom - 25.0f)
-        //     (bounds.Left, bounds.Bottom - 25.0f)
-        //     (Quad.gradient_left_to_right accent_color Color.Transparent)
 
         if personal_bests.IsSome then
-            this.DrawPersonalBests(bounds, grade_or_accuracy.Value, 290.0f, accent_color)
-            this.DrawPersonalBests(bounds, lamp.Value, 165.0f, accent_color)
+            this.DrawPersonalBests(r, grade_or_accuracy.Value, 290.0f, accent_color)
+            this.DrawPersonalBests(r, lamp.Value, 165.0f, accent_color)
 
         // draw text
-        // Render.rect (bounds.SliceB 25.0f) Colors.shadow_1.O1
         Text.draw_b (
             Style.font,
             (
@@ -206,16 +204,22 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
                     chart_meta.Title
             ),
             23.0f,
-            bounds.Left + 12f,
+            (if this.Selected then
+                bounds.Left - CHART_SELECTED_PADDING + 12.0f
+            else
+                bounds.Left - stripe_length + 12.0f),
             bounds.Top,
-            if is_multi_selected then Colors.text_yellow_2 else Colors.text
+            if this.Selected then Colors.text_yellow_2 else Colors.text
         )
 
         Text.draw_b (
             Style.font,
             sprintf "%s  •  %s" (if options.TreeShowNativeText.Value then chart_meta.ArtistNative |> Option.defaultValue chart_meta.Artist else chart_meta.Artist) chart_meta.Creator,
             18.0f,
-            bounds.Left + 12f,
+            (if this.Selected then
+                bounds.Left - CHART_SELECTED_PADDING + 12.0f
+            else
+                bounds.Left - stripe_length + 12.0f),
             bounds.Top + 34.0f,
             Colors.text_subheading
         )
@@ -224,7 +228,10 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             Style.font,
             chart_meta.Subtitle |> Option.defaultValue chart_meta.DifficultyName,
             15.0f,
-            bounds.Left + 12f,
+            (if this.Selected then
+                bounds.Left - CHART_SELECTED_PADDING + 12.0f
+            else
+                bounds.Left - stripe_length + 12.0f),
             bounds.Top + 65.0f,
             Colors.text_subheading
         )
@@ -249,6 +256,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             tree_ctx.ToggleMultiSelect(chart_meta, library_ctx)
 
         if Mouse.hover bounds then
+            focused <- true
             hover_animation.Target <- 1.0f
 
             if this.LeftClicked(tree_top) then
@@ -270,6 +278,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
                 | Some selection when selection.Contains(chart_meta, library_ctx) -> selection.ConfirmDelete()
                 | _ -> ChartDeleteMenu(chart_meta, library_ctx, false).Show()
         else
+            focused <- false
             hover_animation.Target <- 0.0f
 
         hover_animation.Update(elapsed_ms) |> ignore
