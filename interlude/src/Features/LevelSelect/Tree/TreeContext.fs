@@ -15,12 +15,12 @@ module TreeConstants =
 
     let MULTI_SELECT_KEY = Bind.mk Keys.LeftShift
 
-    let [<Literal>] CHART_HEIGHT = 90.0f
+    let [<Literal>] CHART_HEIGHT = 100.0f
     let [<Literal>] CHART_SPACING = Style.PADDING
     let [<Literal>] GROUP_HEIGHT = 55.0f
     let [<Literal>] GROUP_SPACING = Style.PADDING * 4.0f
 
-    let [<Literal>] TREE_LEFT_SPLIT = 0.4f
+    let [<Literal>] TREE_LEFT_SPLIT = 0.55f
 
 [<Struct>]
 [<RequireQualifiedAccess>]

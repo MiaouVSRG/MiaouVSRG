@@ -122,8 +122,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             | _ -> if CollectionActions.is_liked chart_meta then Icons.HEART else ""
 
     override this.Bounds(top: float32) : Rect =
-        //Rect.FromEdges(Render.width() * TREE_LEFT_SPLIT + Style.PADDING, top, Render.width(), top + CHART_HEIGHT)
-        Rect.FromEdges(Render.width() * 0.6f + Style.PADDING, top, Render.width(), top + CHART_HEIGHT)
+        Rect.FromEdges(Render.width() * TREE_LEFT_SPLIT + Style.PADDING, top, Render.width(), top + CHART_HEIGHT)
     override this.Spacing : float32 = Style.PADDING_SONG_SELECT
 
     member this.Selected : bool = tree_ctx.IsSelected(chart_meta, library_ctx)
@@ -139,14 +138,14 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
 
     member private this.DrawPersonalBests(bounds: Rect, data: PersonalBestCached, pos: float32, accent: Color) : unit =
         if data.Color.A > 0uy then
-            Render.rect (bounds.SliceR(pos - 40.0f, 80.0f)) accent
+            Render.rect (bounds.SliceR(pos - 40.0f, 80.0f).SliceT(90.0f)) accent
 
             Text.draw_aligned_b (
                 Style.font,
                 data.Text,
                 20.0f,
                 bounds.Right - pos,
-                bounds.Top + 8.0f,
+                bounds.Top + 20.0f,
                 (data.Color, Color.Black),
                 0.5f
             )
@@ -156,7 +155,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
                 data.Details,
                 14.0f,
                 bounds.Right - pos,
-                bounds.Top + 35.0f,
+                bounds.Top + 47.0f,
                 (data.Color, Color.Black),
                 0.5f
             )
@@ -174,24 +173,30 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             if is_multi_selected then Colors.grey_2.O2, Colors.white.O2
             elif this.Selected then !*Palette.MAIN_100, !*Palette.LIGHT
             else Colors.shadow_1.O2, Colors.grey_2.O2
-
-        Render.rect bounds color
-        Render.rect (bounds.BorderL Style.PADDING) left_ribbon_color
+            
+        // Render.rect bounds color
+        // Render.rect (bounds.BorderL Style.PADDING) left_ribbon_color
 
         let stripe_length = bounds.Width * (0.4f + 0.6f * hover_animation.Value)
-        Render.quad_points_c
-            (bounds.Left, bounds.Top)
-            (bounds.Left + stripe_length, bounds.Top)
-            (bounds.Left + stripe_length, bounds.Bottom - 25.0f)
-            (bounds.Left, bounds.Bottom - 25.0f)
-            (Quad.gradient_left_to_right accent_color Color.Transparent)
+        let play_button_texture = Content.Texture "menu-button-background"
+        let r = Rect.FromSize(bounds.Left, bounds.Top - 5.5f, bounds.Width, bounds.Height + 830.0f) |> _.AsQuad
+        Render.tex_quad
+            r
+            Color.White.AsQuad
+            (Sprite.pick_texture (0,0) play_button_texture)
+        // Render.quad_points_c
+        //     (bounds.Left, bounds.Top)
+        //     (bounds.Left + stripe_length, bounds.Top)
+        //     (bounds.Left + stripe_length, bounds.Bottom - 25.0f)
+        //     (bounds.Left, bounds.Bottom - 25.0f)
+        //     (Quad.gradient_left_to_right accent_color Color.Transparent)
 
         if personal_bests.IsSome then
             this.DrawPersonalBests(bounds, grade_or_accuracy.Value, 290.0f, accent_color)
             this.DrawPersonalBests(bounds, lamp.Value, 165.0f, accent_color)
 
         // draw text
-        Render.rect (bounds.SliceB 25.0f) Colors.shadow_1.O1
+        // Render.rect (bounds.SliceB 25.0f) Colors.shadow_1.O1
         Text.draw_b (
             Style.font,
             (
@@ -201,7 +206,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
                     chart_meta.Title
             ),
             23.0f,
-            bounds.Left + 7f,
+            bounds.Left + 12f,
             bounds.Top,
             if is_multi_selected then Colors.text_yellow_2 else Colors.text
         )
@@ -210,7 +215,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             Style.font,
             sprintf "%s  •  %s" (if options.TreeShowNativeText.Value then chart_meta.ArtistNative |> Option.defaultValue chart_meta.Artist else chart_meta.Artist) chart_meta.Creator,
             18.0f,
-            bounds.Left + 7f,
+            bounds.Left + 12f,
             bounds.Top + 34.0f,
             Colors.text_subheading
         )
@@ -219,7 +224,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             Style.font,
             chart_meta.Subtitle |> Option.defaultValue chart_meta.DifficultyName,
             15.0f,
-            bounds.Left + 7f,
+            bounds.Left + 12f,
             bounds.Top + 65.0f,
             Colors.text_subheading
         )

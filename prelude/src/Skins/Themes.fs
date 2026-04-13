@@ -115,6 +115,7 @@ module Theme =
         "play-button-hover"
         "options-button-hover"
         "quit-button-hover"
+        "menu-button-background"
     |]
 
     let SOUNDS =
