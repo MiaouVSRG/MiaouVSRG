@@ -8,6 +8,7 @@ open Prelude.Gameplay.Replays
 open Prelude.Gameplay.Scoring
 open Interlude.Web.Server.Domain.Core
 open Interlude.Web.Server.Domain.Services
+open Interlude.Web.Server.Domain
 
 module Scores =
 
@@ -43,52 +44,24 @@ module Scores =
             Some (existing_lb.Length + 1)
         else
             None
-
-    let submit
+            
+    let proceed
         (
             user_id: int64,
-            chart_id: string,
-            replay_untrusted_string: string,
             rate: Rate,
+            mod_ranked_status: ModStatus,
+            accuracy: float,
+            chart_id: string,
+            timestamp: int64,
             mods: ModState,
-            timestamp: int64
-        ) =
-        async {
-
-            if rate < 0.5f<rate> || rate > 2.0f<rate> then
-                return ScoreUploadOutcome.Failed
-            else
-
-            match ModState.check mods with
-            | Error message ->
-                Logging.Error "Mod validation failed from user #%i: %s" user_id message
-                return ScoreUploadOutcome.Failed
-            | Ok ModStatus.Offline
-            | Ok ModStatus.Unstored -> return ScoreUploadOutcome.Failed
-            | Ok mod_ranked_status ->
-
-            match! Backbeat.Charts.fetch.RequestAsync(chart_id) with
-            | None -> return ScoreUploadOutcome.Unranked
-            | Some chart ->
-
-            match Replay.decompress_string_untrusted (chart.LastNote - chart.FirstNote) replay_untrusted_string with
-            | Error message ->
-                Logging.Error "Replay decompression failed from user #%i: %s" user_id message
-                return ScoreUploadOutcome.Failed
-            | Ok replay ->
-
+            judgement_counts: int array,
+            combo_breaks: int,
+            replay: ReplayData
+        ): ScoreUploadOutcome =
             let is_ranked = rate >= 1.0f<rate> && mod_ranked_status = ModStatus.Ranked
-
-            let mod_chart = ModState.apply mods chart
-
             let ruleset = Backbeat.rulesets.[Score.PRIMARY_RULESET]
 
-            let scoring =
-                ScoreProcessor.run ruleset chart.Keys (StoredReplay replay) mod_chart.Notes rate
-
-            let accuracy = scoring.Accuracy
-
-            if accuracy >= 0.7 then
+            if accuracy >= 0.85 then // < 85% is counted as a fail in-game, we don't store failed scores
                 let score: Score =
                     Score.create (
                         user_id,
@@ -98,27 +71,61 @@ module Scores =
                         mods,
                         is_ranked,
                         accuracy,
-                        Grade.calculate ruleset.Grades scoring.Accuracy,
-                        Lamp.calculate ruleset.Lamps scoring.JudgementCounts scoring.ComboBreaks
+                        Grade.calculate ruleset.Grades accuracy,
+                        Lamp.calculate ruleset.Lamps judgement_counts combo_breaks
                     )
-
+            
                 match new_leaderboard_position score with
                 | Some p ->
                     let replay_id =
                         (user_id, chart_id, timestamp, replay)
                         |> Replay.create
                         |> Replay.save_leaderboard
-
+                
                     let score_id = Score.save (score.WithReplay replay_id)
-                    Logging.Debug "Saved score %i with replay %i (#%i)" score_id replay_id p
-                    return ScoreUploadOutcome.Ranked (Some p)
+                    Logging.Info "Saved score %i with replay %i (#%i)" score_id replay_id p
+                    ScoreUploadOutcome.Ranked (Some p)
                 | None ->
-                    Score.save score |> Logging.Debug "Saved score %i"
-                    return ScoreUploadOutcome.Ranked None
-
+                    Score.save score |> Logging.Info "Saved score %i, score not updated in leaderboard"
+                    ScoreUploadOutcome.Ranked None
+            
             else
+            ScoreUploadOutcome.Ranked None
 
-                return ScoreUploadOutcome.Unranked
+    let submit
+        (
+            user_id: int64,
+            chart_id: string,
+            replay: ReplayData,
+            rate: Rate,
+            mods: ModState,
+            timestamp: int64,
+            accuracy: float,
+            judgement_counts: int array,
+            combo_breaks: int
+        ) =
+        async {
+
+            match ModState.check mods with
+            | Error message ->
+                Logging.Error "Mod validation failed from user #%i: %s" user_id message
+                return ScoreUploadOutcome.Failed
+            | Ok ModStatus.Offline
+            | Ok ModStatus.Unstored -> return ScoreUploadOutcome.Failed
+            | Ok mod_ranked_status ->
+
+            match Backbeat.Charts.fetch_new(chart_id) with
+            | None ->
+                let chart: New.Chart =
+                    {
+                        ChartId = chart_id
+                        DownloadLink = "test"
+                        Source = "osu!"
+                    }
+                        
+                New.Charts.add (chart.FormatSource()) |> ignore
+                return proceed (user_id, rate, mod_ranked_status, accuracy, chart_id, timestamp, mods, judgement_counts, combo_breaks, replay)
+            | Some _ -> return proceed (user_id, rate, mod_ranked_status, accuracy, chart_id, timestamp, mods, judgement_counts, combo_breaks, replay)
         }
 
     let get_leaderboard_details (chart_id: string) =

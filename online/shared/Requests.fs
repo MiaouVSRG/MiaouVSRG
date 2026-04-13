@@ -2,6 +2,9 @@
 
 open Percyqaz.Data
 open Prelude
+open Prelude.Charts
+open Prelude.Gameplay.Replays
+open Prelude.Gameplay.Scoring
 open Prelude.Mods
 open Interlude.Web.Shared.API
 
@@ -80,10 +83,13 @@ module Charts =
             type Request =
                 {
                     ChartId: string
-                    Replay: string
+                    Replay: ReplayData
                     Rate: Rate
                     Mods: ModState
                     Timestamp: int64
+                    Accuracy: float
+                    JudgementCounts: int array
+                    ComboBreaks: int
                 }
 
             [<Json.AutoCodec>]
@@ -500,6 +506,8 @@ module Players =
             let post (request: Request, callback: bool option -> unit) =
                 Client.post<Request> (snd ROUTE, request, callback)
 
+open Players.Profile.View
+
 module Friends =
 
     /// requires login token as Authorization header
@@ -656,3 +664,61 @@ module Stats =
 
             let get (keys: int, sort: Sort, callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE + "?sort=" + sort.ToString() + "&keys=" + keys.ToString(), callback)
+                
+module New =
+    module Charts =
+        module Add =
+            let ROUTE = (POST, "/v2/chart")
+            
+            [<Json.AutoCodec>]
+            type Request = {
+                ChartId: string
+                DownloadLink: string
+                Source: string
+            }
+
+            let post (request: Request, callback: bool option -> unit) =
+                Client.post<Request> (snd ROUTE, request, callback)
+                
+module Web =
+    
+    let MAIN_ENDPOINT = "/web"
+    
+    module User =
+        module Search =
+            let ROUTE = (GET, MAIN_ENDPOINT + "/user")
+            
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Username: string
+                    Country: string // TODO: how ?
+                    Followers: int
+                    Level: int64
+                }
+            
+            let get (name: string, callback: Response option -> unit) =
+                Client.get<Response> (snd ROUTE + "?name=" + name, callback)
+                
+    module Leaderboard =
+        let ROUTE = (GET, MAIN_ENDPOINT + "/leaderboard")
+        
+        [<Json.AutoCodec>]
+        type LeaderboardUser =
+            {
+                Username: string
+                Country: string
+                Level: int64
+                Playcount: float
+                Accuracy: float
+                Rating: int
+            }
+        
+        [<Json.AutoCodec>]
+        type Response =
+            {
+                Leaderboard: LeaderboardUser array
+            }
+            
+        let get(callback: Response option -> unit) =
+            Client.get<Response> (snd ROUTE, callback)

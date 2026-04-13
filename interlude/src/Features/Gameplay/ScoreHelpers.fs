@@ -3,6 +3,7 @@
 open Percyqaz.Common
 open Percyqaz.Flux.Windowing
 open Prelude
+open Prelude.Calculator.KeymodeSkillBreakdown
 open Prelude.Mods
 open Prelude.Gameplay.Replays
 open Prelude.Gameplay.Scoring
@@ -32,12 +33,16 @@ module Gameplay =
 
     let upload_score (score_info: ScoreInfo) =
         Charts.Scores.Save.post (
+            // TODO: Make score_info.Scoring Jsonable
             ({
                 ChartId = score_info.ChartMeta.Hash
-                Replay = score_info.Replay |> Replay.compress_string
+                Replay = score_info.Replay
                 Rate = score_info.Rate
                 Mods = score_info.Mods
                 Timestamp = score_info.TimePlayed
+                Accuracy = score_info.Accuracy
+                JudgementCounts = score_info.Scoring.JudgementCounts
+                ComboBreaks = score_info.Scoring.ComboBreaks
             }),
             (function
                 | None -> Logging.Error "Error submitting score (%s on %s)" (score_info.Ruleset.FormatAccuracy score_info.Accuracy) score_info.ChartMeta.Title

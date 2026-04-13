@@ -193,8 +193,17 @@ module Backbeat =
             match Domain.Backbeat.Songs.chart_and_song_by_id hash with
             | Some (_, chart, song) -> Some (chart, song)
             | None -> None
+            
+        let by_hash_new (hash: string) =
+            match Domain.New.Charts.get_chart_by_id hash with
+            | Some chart -> Some chart
+            | None -> None
 
         open Prelude.Charts
+        
+        let fetch_new (chart_id: string) =
+            by_hash_new chart_id
+            
 
         let fetch =
             let cache = Dictionary<string, Chart>()

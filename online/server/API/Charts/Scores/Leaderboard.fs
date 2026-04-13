@@ -7,6 +7,7 @@ open Interlude.Web.Shared.Requests
 open Interlude.Web.Server.API
 open Interlude.Web.Server.Domain.Core
 open Interlude.Web.Server.Domain.Services
+open Interlude.Web.Server.Domain
 
 module Leaderboard =
 
@@ -25,7 +26,7 @@ module Leaderboard =
 
             let chart_id = query_params.["chart"].[0].ToUpper()
 
-            match Backbeat.Charts.by_hash chart_id with
+            match New.Charts.get_chart_by_id chart_id with
             | Some _ ->
                 let info = Scores.get_leaderboard_details chart_id
 

@@ -1,10 +1,4 @@
-@font-face {
-    font-family: 'akrobatblack';
-    src: url('akrobat-black-webfont.woff2') format('woff2'),
-         url('akrobat-black-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
+
 
 :root {
     --shadow-1: #050308;
@@ -15,7 +9,7 @@
     --cyan: #f082ff4d;
     --cyan-2: #e47aff;
     --cyan-accent: #43e1ef;
-    --cyan-shadow: #2fc949;
+    --cyan-shadow: #0fffff;
     --cyan-shadow-2a: #084251AA;
     --cyan-shadow-0a: #08425100;
     --cyan-shadow-dark: #042125;
@@ -30,9 +24,221 @@
     --red-shadow: #6e190d;
     --yellow-accent: #ffe670;
 }
+.PFP-PLACEHOLDER{
+    position: relative;
+    top:1px;
+    left:1px;
+    border-radius: 40px;
+    width:200px;
+    height:200px;
+    z-index: 1;
+}
+
+.lvltxt{
+    text-shadow: 1px 1px 2px black;
+    position: relative;
+    z-index: 1;
+    bottom:32.5rem;
+    left:29.7rem;
+    font-size: 1.5rem;
+    width:5rem;
+    text-align: center;
+
+}
+
+.lvlframe{
+    position:relative;
+    bottom:20rem;
+    left:26rem;
+
+}
+
+.lvlnumber{
+    text-shadow: 1px 1px 2px black;
+    position: relative;
+    z-index: 1;
+    bottom:25.5rem;
+    left:29.7rem;
+    font-size: 3rem;
+    width:5rem;
+    text-align: center;
+
+}
+
+.tokens{
+    position: relative;
+    z-index: 3;
+    height: 2rem;
+    width: 2rem;
+
+}
+
+.tokensnumber{
+
+    font-size: 1.5rem;
+    text-align: right;
+}
+
+.shopkart{
+    position: relative;
+    z-index: 3;
+    height: 2rem;
+    width: 2rem;
+    right:4.5rem;
+    bottom: 4px;
+}
+
+
+
+.shopkarthoversvg:hover .shopkarthover{
+    stroke:#FFE670FF;
+    transition: 0.2s;
+
+}
+
+
+.tokensbg{
+    padding-top: 2.5px;
+    padding-right: 5px;
+    position:relative;
+    right:3.8rem;
+    background-color: #20B2B479;
+    border-radius:10px;
+    width: 7.5rem;
+    height: 2.5rem;
+
+}
+
+
+.username{
+    text-shadow: 1px 1px 2px black;
+    position: relative;
+    z-index: 1;
+    top:-11rem;
+    left:13.5rem;
+    font-size: 3rem;
+    width:30rem;
+
+}
+
+.friends{
+    position: relative;
+    background-color: #20b2b4;
+    border-radius:10px;
+    width:4rem;
+    height:2.5rem;
+    top:-12rem;
+    left:13.5rem;
+
+}
+
+.friends:hover{
+    background-color: #dc6dfd;
+    cursor:pointer;
+}
+
+.friends-count{
+    position:relative;
+    text-align:right;
+    margin-right:7px;
+    top:7px;
+
+
+}
+
+.countryflag{
+  position: relative;
+    z-index: 100;
+    top:-11rem;
+    left:13.5rem;
+    font-size: 2rem;
+    border-radius: 5px
+
+
+}
+
+.profilesettingslogo{
+    position:relative;
+    z-index: 2;
+    left:36.5rem;
+    bottom:18.5rem;
+    width:30px;
+    height:30px;
+
+
+}
+
+.profilesettingslogo:hover{
+    cursor: pointer;
+}
+
+.heart{
+    position:relative;
+    z-index: 2;
+    left:13.7rem;
+    bottom:14.1rem;
+    width:25px;
+    height:25px;
+
+}
+
+.connasse{
+    position:relative;
+    bottom:37rem;
+    left:45rem;
+    width:230px;
+    height:200px;
+
+}
+
+
+.connasse2{
+    position:relative;
+    bottom:49.7rem;
+    right:20rem;
+    width:230px;
+    height:200px;
+
+}
+
+.loginsuccess{
+    position:relative;
+    margin:auto;
+    width:600px;
+    height:600px;
+
+}
+
+.marchepa{
+    z-index: 3;
+    position:relative;
+    margin:auto;
+    width:900px;
+    height:550px;
+
+}
+
+.aaaaa{
+    position: absolute;
+    z-index: 2;
+    top:0;
+    left:0;
+    font-size: 3rem;
+    width:30rem;
+}
+
+.flames{
+    position:absolute;
+    z-index: 1;
+    top:0rem;
+    width:140rem;
+    LEFT:0rem;
+
+
+}
 
 .akrobat {
-    font-family: 'Fredoka One', cursive;
+    font-family: 'Fredoka One';
     color: white;
 }
 
@@ -101,7 +307,7 @@ li {
 }
 
 .background-2 {
-    background-color: var(--cyan-shadow);
+    background-color: var(--shadow-1);
 }
 
 .background-3 {
@@ -113,6 +319,20 @@ li {
     border-radius: 5px;
     border: 5px solid var(--cyan-accent);
     box-shadow: var(--shadow-2-3a) 5px 5px 0;
+    backdrop-filter: blur(7px);
+}
+
+.userframe {
+    background-color: var(--cyan);
+    border-radius: 5px;
+    border: 5px solid var(--cyan-accent);
+    box-shadow: var(--shadow-2-3a) 5px 5px 0;
+    height: 13.7rem;
+    width: 40rem;
+    padding-top: 0.2rem;
+    padding-left: 0.2rem;
+    backdrop-filter: blur(7px);
+
 }
 
 .frame-darker {
@@ -130,6 +350,8 @@ li {
 }
 
 .frame-red {
+    position: relative;
+    z-index: 1000;
     background-color: var(--red);
     border-radius: 5px;
     border: 5px solid var(--red-accent);
@@ -144,6 +366,7 @@ li {
 .footer {
     background-color: var(--cyan);
     border-top: 5px solid var(--cyan-accent);
+
 }
 
 .overlay {
@@ -191,3 +414,38 @@ a:hover {
 
 
 
+@keyframes wobble-hor-bottom {
+    0%,
+    100% {
+        -webkit-transform: translateX(0%);
+        transform: translateX(0%);
+        -webkit-transform-origin: 500% 50%;
+        transform-origin: 50% 50%;
+    }
+    15% {
+        -webkit-transform: translateX(-30px) rotate(-6deg);
+        transform: translateX(-30px) rotate(-6deg);
+    }
+    30% {
+        -webkit-transform: translateX(15px) rotate(6deg);
+        transform: translateX(15px) rotate(6deg);
+    }
+    45% {
+        -webkit-transform: translateX(-15px) rotate(-3.6deg);
+        transform: translateX(-15px) rotate(-3.6deg);
+    }
+    60% {
+        -webkit-transform: translateX(9px) rotate(2.4deg);
+        transform: translateX(9px) rotate(2.4deg);
+    }
+    75% {
+        -webkit-transform: translateX(-6px) rotate(-1.2deg);
+        transform: translateX(-6px) rotate(-1.2deg);
+    }
+}
+
+.wobble-hor-bottom {
+
+    -webkit-animation: wobble-hor-bottom 3s ;
+    animation: wobble-hor-bottom 3s  infinite;
+}

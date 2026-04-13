@@ -14,13 +14,19 @@ open Prelude
 module HttpResponseExtensions =
 
     type HttpResponse with
-        member this.ReplyJson<'T>(data: 'T) =
-            this.MakeGetResponse(JSON.ToString data, "application/json") |> ignore
+        member this.ReplyJson<'T>(data: 'T, ?code: int) =
+            this.Clear()
+                .SetBegin(if code.IsSome then code.Value else 200)
+                .SetHeader("Access-Control-Allow-Origin", "*")
+                .SetHeader("Content-Type", "application/json")
+                .SetBody(JSON.ToString data)
+            |> ignore
 
         member this.ReplyRedirect(url: string) =
             this.Clear()
                 .SetBegin(303)
                 .SetHeader("Location", url)
+                .SetHeader("Access-Control-Allow-Origin", "*")
                 .SetBody()
             |> ignore
 
@@ -29,6 +35,7 @@ module HttpResponseExtensions =
                 .SetBegin(code)
                 .SetHeader("Cache-Control", "no-cache, no-store")
                 .SetHeader("Content-Type", "text/plain; charset=UTF-8")
+                .SetHeader("Access-Control-Allow-Origin", "*")
                 .SetBody(reason)
             |> ignore
 
@@ -206,26 +213,19 @@ module API =
             )
 
         let internal post_return<'T, 'U> (route: string, payload: 'T, callback: 'U option -> unit) : unit =
-
-            Logging.Info "Trying to POST %s" route
             let handle_response (response: HttpResponseMessage) =
-                Logging.Info "oui y'a une réponse"
                 if response.IsSuccessStatusCode then
-                    Logging.Info "en plus c'est un succès"
                     match response.Content.ReadAsStream() |> fun s -> JSON.FromStream(route, s) with
                     | Ok res -> callback (Some res)
                     | Error err ->
-                        Logging.Error "Error reading post %s: %s" route err.Message
                         callback None
                 else
-                    Logging.Info "non pas de réponse"
                     callback None
 
             queue.Request(
                 fun client ->
                     async {
                         try
-                            Logging.Info "jsp gros"
                             let request = new HttpRequestMessage(HttpMethod.Post, route)
                             request.Content <-
                                 new StringContent(
@@ -235,12 +235,8 @@ module API =
                                 )
                             let! response = send_retry client request
                             handle_response response
-                        // with
-                        // | :? HttpRequestException -> Logging.Error "Y'a un soucis là"
-                        // | :? OperationCanceledException -> Logging.Error "Y'a un soucis 2 là"
-                        // | :? AggregateException -> callback None
-                        // | ex -> Logging.Error "%A" ex
-                        with ex -> Logging.Error "%A" ex
+                        with
+                        | :? AggregateException -> callback None
                     }
                 , ignore
             )

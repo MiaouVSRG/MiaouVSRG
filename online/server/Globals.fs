@@ -65,6 +65,7 @@ module internal DatabaseRef =
 
     let mutable core_db = Unchecked.defaultof<Database>
     let mutable backbeat_db = Unchecked.defaultof<Database>
+    let mutable new_db = Unchecked.defaultof<Database>
 
 module Discord =
 
