@@ -177,11 +177,11 @@ type private OptionsPageFooter() as this =
     let content =
         NavigationContainer.Row()
             .With(
-                InlaidButton(%"menu.back", Menu.Back)
+                InlaidButton(%"menu.back", Menu.Back, ButtonType.Default)
                     .Icon(Icons.ARROW_LEFT_CIRCLE)
                     .Position(Position.SliceB(HEIGHT).SliceY(InlaidButton.HEIGHT).SliceL(10.0f, 180.0f)),
 
-                InlaidButton(%"noteskin.edit", SkinActions.edit_or_extract_noteskin)
+                InlaidButton(%"noteskin.edit", SkinActions.edit_or_extract_noteskin, ButtonType.Default)
                     .Icon(Icons.IMAGE)
                     .Position(
                         Position
@@ -194,7 +194,7 @@ type private OptionsPageFooter() as this =
 
                 InlaidButton(%"hud.edit", fun () ->
                     SkinActions.edit_hud ignore
-                )
+                ,ButtonType.Default)
                     .Icon(Icons.ZAP)
                     .Position(
                         Position

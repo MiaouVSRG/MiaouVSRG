@@ -61,12 +61,21 @@ type RulesetSwitcher(setting: Setting<string>) =
     override this.Init(parent: Widget) =
         this
             .Add(
-                AngledButton(
+                InlaidButton(
                     (fun () -> Rulesets.current.Name),
                     (fun () -> this.ToggleDropdown()),
-                    Palette.MAIN_100
+                    ButtonType.CustomSprite "ruleset-button",
+                    (10.0f, 13.0f),
+                    (fun () ->
+                        match Rulesets.current.Name.ToUpper() with
+                        | "EASY" -> Colors.green_accent
+                        | "NORMAL" -> Colors.blue_accent
+                        | "HARD" -> Colors.red_accent
+                        | "INSANE" -> Colors.black
+                        | _ -> Colors.TRANSPARENT
+                     ),
+                    NoHover = true
                 )
-                    .LeanRight(false)
                     .Hotkey("ruleset_switch"),
                 dropdown_wrapper
             )

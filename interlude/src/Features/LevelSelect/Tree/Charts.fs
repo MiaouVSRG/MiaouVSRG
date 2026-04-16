@@ -172,7 +172,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             if is_multi_selected then Colors.grey_2.O2a alpha else Palette.color (alpha, 1.0f, 0.4f)
 
         let stripe_length = CHART_LEFT_MARGIN * hover_animation.Value
-        let play_button_texture = if this.Selected then Content.Texture "menu-button-background-hover" else Content.Texture "menu-button-background"
+        let play_button_texture = if this.Selected then Content.Texture "chart-selection-background-hover" else Content.Texture "chart-selection-background"
         
         let r = Rect.FromSize(
             

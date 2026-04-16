@@ -17,7 +17,7 @@ open Interlude.Features.Online
 open Interlude.Features.OptionsMenu
 open Interlude.Features.LevelSelect
         
-type private MenuButton(sprite: Sprite, on_click: unit -> unit, r: Rect, position: Position, focused_sprite: Sprite option) =
+type private MenuButton(texture: Sprite, on_click: unit -> unit, r: Rect, position: Position, focused_texture: Sprite option) =
     inherit
         SlideContainer(
             NodeType.Button(fun () ->
@@ -29,14 +29,7 @@ type private MenuButton(sprite: Sprite, on_click: unit -> unit, r: Rect, positio
     override this.Init(parent) =
         this
             .With(
-                MouseListener().Button(this),
-                Text("")
-                    .Align(Alignment.CENTER)
-                    .Color(fun () ->
-                        if this.Focused then Colors.text_yellow_2
-                        else Colors.text
-                    )
-                    .Position(Position.ShrinkY(7.0f).ShrinkB(10.0f).ShrinkPercentT(0.2f))
+                MouseListener().Button(this)
             )
             .Position(position)
             .Hide()
@@ -48,10 +41,17 @@ type private MenuButton(sprite: Sprite, on_click: unit -> unit, r: Rect, positio
         Style.hover.Play()
 
     override this.Draw() =
-        Render.sprite r Colors.white sprite
+        let q = r |> _.AsQuad
+        Render.tex_quad
+            q
+            Colors.white.AsQuad
+            (Sprite.pick_texture (0,0) texture)
         // Percyqaz I love you for implementing this
-        if this.Focused && focused_sprite.IsSome then
-            Render.sprite r Colors.white focused_sprite.Value
+        if this.Focused && focused_texture.IsSome then
+            Render.tex_quad
+                q
+                Colors.white.AsQuad
+                (Sprite.pick_texture (0,0) focused_texture.Value)
         
         base.Draw()
         
@@ -95,8 +95,8 @@ type MainMenuScreen() =
         MenuButton(
             play_button_texture,
             play_action,
-            Rect.FromSize(750.0f, 420.0f, 400.0f, 400.0f),
-            Position.Box(0.0f, 0.5f, 730.0f, -80.0f, 450.0f, 100.0f),
+            Rect.FromSize(750.0f, 420.0f, 390.0f, 120.0f),
+            Position.Box(0.0f, 0.5f, 745.0f, -128.0f, 390.0f, 120.0f),
             Some play_button_hover_texture
         )
 
@@ -104,8 +104,8 @@ type MainMenuScreen() =
         MenuButton(
             options_button_texture,
             (fun () -> OptionsPage().Show()),
-            Rect.FromSize(750.0f, 595.0f, 400.0f, 400.0f),
-            Position.Box(0.0f, 0.5f, 730.0f, 95.0f, 450.0f, 100.0f),
+            Rect.FromSize(750.0f, 595.0f, 390.0f, 120.0f),
+            Position.Box(0.0f, 0.5f, 745.0f, 47.0f, 390.0f, 120.0f),
             Some options_button_hover_texture
         )
 
@@ -116,8 +116,8 @@ type MainMenuScreen() =
                 if Screen.back Transitions.UnderLogo then
                     Screen.logo.MoveCenter ()
             ),
-            Rect.FromSize(750.0f, 770.0f, 400.0f, 400.0f),
-            Position.Box(0.0f, 0.5f, 730.0f, 270.0f, 450.0f, 100.0f),
+            Rect.FromSize(750.0f, 770.0f, 390.0f, 120.0f),
+            Position.Box(0.0f, 0.5f, 745.0f, 222.0f, 390.0f, 120.0f),
             Some quit_button_hover_texture
         )
 
@@ -175,7 +175,7 @@ type MainMenuScreen() =
         splash_text <- choose_splash ()
         Screen.logo.MoveMenu()
         Background.dim 0.0f
-        Toolbar.show ()
+        Toolbar.show (true, true)
         Song.on_finish <-
             SongFinishAction.Custom (fun () ->
                 LevelSelect.random_chart ()
@@ -200,6 +200,7 @@ type MainMenuScreen() =
         if next <> ScreenType.SplashScreen then
             Screen.logo.MoveOffscreen()
 
+        Toolbar.hide ()
         splash_fade.Target <- 0.0f
         splash_fade.Snap()
         play_button.Hide()

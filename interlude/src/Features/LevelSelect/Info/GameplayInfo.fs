@@ -33,10 +33,10 @@ type GameplayInfo() =
                     ts <- info.SaveData.LastPlayed
                     t <- text ts
                 t
-        mod_string <- ModState.format (SelectedChart.rate.Value, SelectedChart.selected_mods.Value)
+        mod_string <- ModState.mods_format SelectedChart.selected_mods.Value
         mod_status <- info.WithMods.Status
 
-    static member HEIGHT = 230.0f
+    static member HEIGHT = 200.0f
 
     override this.Init(parent) =
         SelectedChart.on_chart_change_finished.Add refresh
@@ -54,7 +54,6 @@ type GameplayInfo() =
 
         let play_info = this.Bounds.SliceT(90.0f, 40.0f).ShrinkX(15.0f)
         Text.fill_b (Style.font, mod_string + (if SelectedChart.autoplay then ", AP" else ""), play_info, Colors.text, Alignment.LEFT)
-        Text.fill_b (Style.font, last_played(), play_info, Colors.text, Alignment.RIGHT)
         if mod_status <> ModStatus.Ranked then
             let text, color =
                 match mod_status with
@@ -65,12 +64,11 @@ type GameplayInfo() =
             let x = Text.measure(Style.font, mod_string) * play_info.Height * 0.6f + 10.0f
             Text.fill_b (Style.font, text, play_info.ShrinkL(x).ShrinkY(2.0f), color, Alignment.LEFT)
 
-        let chart_info = this.Bounds.SliceT(130.0f, 30.0f).ShrinkX(15.0f)
-        Text.fill_b (Style.font, (match SelectedChart.CACHE_DATA with Some chart_meta -> chart_meta.DifficultyName | None -> ""), chart_info.SlicePercentL 0.5f, Colors.text_subheading, Alignment.LEFT)
+        let chart_info = this.Bounds.SliceT(100.0f, 30.0f).ShrinkX(15.0f)
         Text.fill_b (Style.font, notecounts, chart_info, Colors.text_subheading, Alignment.RIGHT)
 
-        let three_icon_infos = this.Bounds.SliceT(155.0f, 70.0f).ShrinkX(15.0f)
-        Text.fill_b (Style.font, sprintf "%s %.2f" Icons.HEART rating, three_icon_infos, (Colors.white, Difficulty.color rating), Alignment.LEFT)
+        let three_icon_infos = this.Bounds.SliceT(125.0f, 70.0f).ShrinkX(30.0f)
+        Text.fill_b (Style.font, sprintf "x%.2f" SelectedChart.rate.Value, three_icon_infos, Colors.text, Alignment.LEFT)
         Text.fill_b (Style.font, SelectedChart.FMT_BPM, three_icon_infos, Colors.text, Alignment.CENTER)
         Text.fill_b (Style.font, SelectedChart.FMT_DURATION, three_icon_infos, Colors.text, Alignment.RIGHT)
 

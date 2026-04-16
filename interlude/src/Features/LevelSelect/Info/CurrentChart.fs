@@ -1,5 +1,6 @@
 ﻿namespace Interlude.Features.LevelSelect
 
+open Interlude.Content
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.UI
 open Prelude
@@ -11,7 +12,12 @@ type CurrentChart() =
 
     override this.Draw() =
 
-        Render.rect (this.Bounds.ShrinkX(10.0f).ShrinkT(10.0f)) Colors.shadow_2.O2
+        let q = this.Bounds.ShrinkX(10.0f).ShrinkT(10.0f) |> _.AsQuad
+        let chart_namebox_texture = Content.Texture "chart-namebox"
+        Render.tex_quad
+            q
+            Color.White.AsQuad
+            (Sprite.pick_texture (0,0) chart_namebox_texture)
 
         let title_text =
             match SelectedChart.CACHE_DATA with

@@ -2,6 +2,7 @@ namespace Prelude.Skins.Themes
 
 open System.IO
 open System.IO.Compression
+open Percyqaz.Common
 open Percyqaz.Data
 open Prelude
 open Prelude.Skins
@@ -109,14 +110,32 @@ module Theme =
         "rain"
         "logo"
         "cursor"
+        
+        // MAIN MENU
         "play-button"
         "options-button"
         "quit-button"
         "play-button-hover"
         "options-button-hover"
         "quit-button-hover"
-        "menu-button-background"
-        "menu-button-background-hover"
+        
+        // DEFAULTS
+        "default-button"
+        "default-button-hover"
+        "default-button-bottomrounded"
+        "default-button-bottomrounded-hover"
+        
+        // LEVEL SELECT SCREEN
+        "chart-selection-background"
+        "chart-selection-background-hover"
+        "chart-description"
+        "chart-description-nopb"
+        "chart-namebox"
+        "preview-button"
+        "preview-button-hover"
+        "mods-button"
+        "mods-button-hover"
+        "ruleset-button"
     |]
 
     let SOUNDS =

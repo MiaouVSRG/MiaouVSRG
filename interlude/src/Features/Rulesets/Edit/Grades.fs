@@ -17,7 +17,7 @@ type EditGradePage(ruleset: Setting<Ruleset>, id: int) =
 
     member this.SaveChanges() =
         let new_grades = ruleset.Value.Grades |> Array.copy
-        new_grades.[id] <- { Name = name.Value.Trim(); Color = color.Value; Accuracy = System.Math.Round(float acc_required.Value, 6) }
+        new_grades.[id] <- { Name = name.Value.Trim(); Color = color.Value; Accuracy = System.Math.Round(float acc_required.Value, 6); TextureName = None}
         ruleset.Set
             { ruleset.Value with
                 Grades =
@@ -81,6 +81,7 @@ type EditGradesPage(ruleset: Setting<Ruleset>) =
                 Name = "???"
                 Color = Color.White
                 Accuracy = 0.0
+                TextureName = None
             }
         ruleset.Set { ruleset.Value with Grades = ruleset.Value.Grades |> Array.append [| new_grade |] }
         GameThread.defer refresh

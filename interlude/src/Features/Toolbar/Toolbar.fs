@@ -1,5 +1,6 @@
 namespace Interlude.Features.Toolbar
 
+open Percyqaz.Common
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.Audio
 open Percyqaz.Flux.Input
@@ -12,13 +13,10 @@ open Interlude.Options
 open Interlude.Features.Import
 open Interlude.Features.Gameplay
 open Interlude.Features.Stats
-open Interlude.Features.Wiki
 open Interlude.Features.OptionsMenu
 open Interlude.Features.OptionsMenu.Library
 open Interlude.Features.Printerlude
 open Interlude.Features.Online
-
-open System.Drawing
 
 type Toolbar() =
     inherit Widget(NodeType.None)
@@ -29,6 +27,8 @@ type Toolbar() =
     let mutable collapsed_by_user = false
 
     let container = Container(NodeType.None)
+    let bottom_only_container = Container(NodeType.None)
+    let top_only_container = Container(NodeType.None)
 
     let volume_when_hidden =
         VolumeSlider()
@@ -48,17 +48,19 @@ type Toolbar() =
             let level =
                 System.Math.Min((Audio.waveform.[i] + 0.01f) * Toolbar.slideout_amount.Value * 0.4f, HEIGHT)
 
-            Render.rect
-                (Rect.FromSize(bounds.Left + float32 i * s + 2.5f, bounds.Top, s - 5.0f, level))
-                (Palette.color (int level + 70, 1.0f, 0.5f))
+            if Toolbar.draw_top then
+                Render.rect
+                    (Rect.FromSize(bounds.Left + float32 i * s + 2.5f, bounds.Top, s - 5.0f, level))
+                    (Palette.color (int level + 70, 1.0f, 0.5f))
 
-            Render.rect
-                (Rect.FromSize(bounds.Right - (float32 i + 1.0f) * s + 2.5f, bounds.Bottom - level, s - 5.0f, level))
-                (Palette.color (int level + 70, 1.0f, 0.5f))
+            if Toolbar.draw_bottom then
+                Render.rect
+                    (Rect.FromSize(bounds.Right - (float32 i + 1.0f) * s + 2.5f, bounds.Bottom - level, s - 5.0f, level))
+                    (Palette.color (int level + 70, 1.0f, 0.5f))
 
     let import_status_fade = Animation.Fade 0.0f
     let import_button =
-        InlaidButton(%"menu.import", fun () -> ImportsPage().Show())
+        InlaidButton(%"menu.import", (fun () -> ImportsPage().Show()), ButtonType.BottomRounded)
             .Icon(Icons.DOWNLOAD)
             .Hotkey("import")
             .With(
@@ -67,50 +69,57 @@ type Toolbar() =
             )
 
     override this.Init(parent: Widget) =
-        container
+        bottom_only_container
             // Bottom right info
             .With(
-                Text(Updates.version)
+                Text("Updates.version")
                     .Align(Alignment.RIGHT)
                     .Position(Position.SliceR(5.0f, 300.0f).SliceB(HEIGHT).SlicePercentT(0.5f)),
 
                 Text(fun () -> System.DateTime.Now.ToString())
                     .Align(Alignment.RIGHT)
-                    .Position(Position.SliceR(5.0f, 300.0f).SliceB(HEIGHT).SlicePercentB(0.5f)),
-
-                UpdateButton()
-                    .Position(Position.Box(1.0f, 1.0f, -600.0f, -HEIGHT, 300.0f, HEIGHT))
-                    .Conditional(fun () -> Updates.update_available)
+                    .Position(Position.SliceR(5.0f, 300.0f).SliceB(HEIGHT).SlicePercentB(0.5f))
             )
             // Bottom left back/jukebox
             .With(
-                InlaidButton(%"menu.back", fun () -> Screen.back Transitions.UnderLogo |> ignore)
-                    .Icon(Icons.ARROW_LEFT_CIRCLE)
-                    .Position(Position.SliceL(Style.PADDING * 2.0f, BUTTON_WIDTH).SliceB(HEIGHT).SliceY(InlaidButton.HEIGHT)),
-
-                Jukebox()
-                    .Position(Position.SliceB(HEIGHT).SlicePercentL(0.4f).ShrinkL(BUTTON_WIDTH + Style.PADDING * 4.0f).SliceY(InlaidButton.HEIGHT)),
 
                 VolumeSlider()
                     .Position(Position.ShrinkY(HEIGHT))
             )
-            // Top buttons (quick, options, etc)
+            // Hotkey behaviours when toolbar isn't hidden
+            .Add(
+                HotkeyListener("reload_content", fun () ->
+                    if not (Dialog.exists()) then
+                        Themes.reload_current ()
+                        Skins.load()
+                        Rulesets.load()
+                        SelectedChart.recolor ()
+                        Notifications.action_feedback (Icons.CHECK, %"notification.reload_content", "")
+                ),
+
+                HotkeyListener("preset1", fun () -> load_preset 1),
+                HotkeyListener("preset2", fun () -> load_preset 2),
+                HotkeyListener("preset3", fun () -> load_preset 3)
+            )
+        
+        top_only_container
             .With(
-                InlaidButton(Icons.MENU, fun () -> QuickMenuPage().Show())
-                    .Position(Position.SliceT(InlaidButton.HEIGHT).ShrinkL(10.0f).SliceL(HEIGHT))
+                InlaidButton(%"menu.back", (fun () -> Screen.back Transitions.UnderLogo |> ignore), ButtonType.BottomRounded)
+                    .Icon(Icons.ARROW_LEFT_CIRCLE)
+                    .Position(Position.SliceT(InlaidButton.HEIGHT).SliceL(Style.PADDING * 2.0f, BUTTON_WIDTH).SliceY(InlaidButton.HEIGHT))
                     .Help(Help.Info("menu.quick").Hotkey("quick_menu")),
 
                 FlowContainer.LeftToRight<Widget>(BUTTON_WIDTH)
                     .Spacing(Style.PADDING * 2.0f)
                     .DisableNavigation()
-                    .Position(Position.SliceT(InlaidButton.HEIGHT).ShrinkL(HEIGHT + Style.PADDING * 4.0f))
+                    .Position(Position.SliceT(InlaidButton.HEIGHT).ShrinkL(HEIGHT + Style.PADDING + BUTTON_WIDTH))
                     .With(
-                        InlaidButton(%"menu.options", fun () -> OptionsPage().Show())
+                        InlaidButton(%"menu.options", (fun () -> OptionsPage().Show()), ButtonType.BottomRounded)
                             .Icon(Icons.SETTINGS),
 
                         import_button,
 
-                        InlaidButton(%"menu.stats", fun () -> StatsPage().Show())
+                        InlaidButton(%"menu.stats", (fun () -> StatsPage().Show()), ButtonType.BottomRounded)
                             .Icon(Icons.TRENDING_UP)
                             .Hotkey("stats")
 
@@ -119,6 +128,74 @@ type Toolbar() =
                         //     .Hotkey("wiki")
                         //     .Conditional(fun () -> Screen.current_type = ScreenType.MainMenu)
                     ),
+                    
+                Jukebox()
+                    .Position(Position.SliceT(HEIGHT - 20.0f).SlicePercentL(0.4f).ShrinkL(BUTTON_WIDTH + Style.PADDING * 4.0f).TranslateX(800.0f).SliceY(InlaidButton.HEIGHT)),
+
+                NetworkStatus()
+                    .Position(Position.SliceT(HEIGHT).SliceR(300.0f))
+            )
+            // Hotkey behaviours when toolbar isn't hidden
+            .Add(
+                HotkeyListener("reload_content", fun () ->
+                    if not (Dialog.exists()) then
+                        Themes.reload_current ()
+                        Skins.load()
+                        Rulesets.load()
+                        SelectedChart.recolor ()
+                        Notifications.action_feedback (Icons.CHECK, %"notification.reload_content", "")
+                ),
+
+                HotkeyListener("preset1", fun () -> load_preset 1),
+                HotkeyListener("preset2", fun () -> load_preset 2),
+                HotkeyListener("preset3", fun () -> load_preset 3)
+            )
+        
+        container
+            // Bottom right info
+            .With(
+                Text("Updates.version")
+                    .Align(Alignment.RIGHT)
+                    .Position(Position.SliceR(5.0f, 300.0f).SliceB(HEIGHT).SlicePercentT(0.5f)),
+
+                Text(fun () -> System.DateTime.Now.ToString())
+                    .Align(Alignment.RIGHT)
+                    .Position(Position.SliceR(5.0f, 300.0f).SliceB(HEIGHT).SlicePercentB(0.5f))
+            )
+            // Bottom left back/jukebox
+            .With(
+
+                VolumeSlider()
+                    .Position(Position.ShrinkY(HEIGHT))
+            )
+            .With(
+                InlaidButton(%"menu.back", (fun () -> Screen.back Transitions.UnderLogo |> ignore), ButtonType.BottomRounded)
+                    .Icon(Icons.ARROW_LEFT_CIRCLE)
+                    .Position(Position.SliceT(InlaidButton.HEIGHT).SliceL(Style.PADDING * 2.0f, BUTTON_WIDTH).SliceY(InlaidButton.HEIGHT))
+                    .Help(Help.Info("menu.quick").Hotkey("quick_menu")),
+
+                FlowContainer.LeftToRight<Widget>(BUTTON_WIDTH)
+                    .Spacing(Style.PADDING * 2.0f)
+                    .DisableNavigation()
+                    .Position(Position.SliceT(InlaidButton.HEIGHT).ShrinkL(HEIGHT + Style.PADDING + BUTTON_WIDTH))
+                    .With(
+                        InlaidButton(%"menu.options", (fun () -> OptionsPage().Show()), ButtonType.BottomRounded)
+                            .Icon(Icons.SETTINGS),
+
+                        import_button,
+
+                        InlaidButton(%"menu.stats", (fun () -> StatsPage().Show()), ButtonType.BottomRounded)
+                            .Icon(Icons.TRENDING_UP)
+                            .Hotkey("stats")
+
+                        // InlaidButton(%"menu.wiki", WikiBrowserPage.Show)
+                        //     .Icon(Icons.BOOK_OPEN)
+                        //     .Hotkey("wiki")
+                        //     .Conditional(fun () -> Screen.current_type = ScreenType.MainMenu)
+                    ),
+                    
+                Jukebox()
+                    .Position(Position.SliceT(HEIGHT - 20.0f).SlicePercentL(0.4f).ShrinkL(BUTTON_WIDTH + Style.PADDING * 4.0f).TranslateX(800.0f).SliceY(InlaidButton.HEIGHT)),
 
                 NetworkStatus()
                     .Position(Position.SliceT(HEIGHT).SliceR(300.0f))
@@ -154,23 +231,27 @@ type Toolbar() =
                 this.Parent.Bounds.Expand(0.0f, HEIGHT * 2.0f)
 
         volume_when_hidden.Init(this)
-        container.Init(this)
+        bottom_only_container.Init(this)
+        top_only_container.Init(this)
 
     override this.Draw() =
-        if Toolbar.hidden then
+        if Toolbar.hidden || not Toolbar.draw_bottom then
             volume_when_hidden.Draw()
-        else
-            Render.rect (this.Bounds.SliceT HEIGHT) !*Palette.TRANSPARENT
-            Render.rect (this.Bounds.SliceB HEIGHT) !*Palette.TRANSPARENT
+            
+        if Toolbar.slideout_amount.Value > 0.01f then draw_waveform this.Bounds
 
-            if Toolbar.slideout_amount.Value > 0.01f then draw_waveform this.Bounds
+        if Toolbar.draw_top then
+            top_only_container.Draw()
+            Render.rect (this.Bounds.SliceT HEIGHT) Color.Transparent
+                
+        if Toolbar.draw_bottom then
+            bottom_only_container.Draw()
+            Render.rect (this.Bounds.SliceB HEIGHT) Color.Transparent
 
-            container.Draw()
+        if import_status_fade.Value > 0.005f then
+            TaskTracking.draw (this.Bounds.ShrinkY(HEIGHT).SlicePercentL(0.4f).Shrink(20.0f), import_status_fade.Value)
 
-            if import_status_fade.Value > 0.005f then
-                TaskTracking.draw (this.Bounds.ShrinkY(HEIGHT).SlicePercentL(0.4f).Shrink(20.0f), import_status_fade.Value)
-
-            Terminal.draw ()
+        Terminal.draw ()
 
     override this.Update(elapsed_ms, moved) =
         if Screen.current_type <> ScreenType.SplashScreen then
@@ -218,10 +299,15 @@ type Toolbar() =
                 else
                     this.Parent.Bounds.Expand(0.0f, HEIGHT * 2.0f)
 
-        if Toolbar.hidden then
+        // The volume slider is shown only when the bottom is drawn
+        if Toolbar.hidden || not Toolbar.draw_bottom then
             volume_when_hidden.Update(elapsed_ms, moved)
-        else
-            container.Update(elapsed_ms, moved)
+            
+        if Toolbar.draw_bottom then
+            bottom_only_container.Update(elapsed_ms, moved)
+            
+        if Toolbar.draw_top then
+            top_only_container.Update(elapsed_ms, moved)
 
     override this.Position
         with set _ = failwith "Position cannot be set for toolbar"

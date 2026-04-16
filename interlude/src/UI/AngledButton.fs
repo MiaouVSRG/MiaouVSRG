@@ -1,13 +1,16 @@
 ﻿namespace Interlude.UI
 
 open System.Drawing
+open System.Linq
 open System.Runtime.CompilerServices
+open Interlude.Content
 open Percyqaz.Common
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.UI
+open Prelude.Skins.Themes.Theme
 
-type AngledButton(label_func: unit -> string, on_click: unit -> unit, background_color: unit -> Color) as this =
+type AngledButton(label_func: unit -> string, on_click: unit -> unit, background_color: unit -> Color, ?background_texture_name: string) as this =
     inherit
         Container(
             NodeType.Button(fun () ->
@@ -24,7 +27,9 @@ type AngledButton(label_func: unit -> string, on_click: unit -> unit, background
     new (label: string, on_click: unit -> unit, background_color: unit -> Color) = AngledButton(K label, on_click, background_color)
 
     new (label_func: unit -> string, on_click: unit -> unit, background_color: PaletteColor) = AngledButton(label_func, on_click, !%background_color)
+    new (label_func: unit -> string, on_click: unit -> unit, background_sprite: string) = AngledButton(label_func, on_click, !%Palette.TRANSPARENT, background_sprite)
     new (label: string, on_click: unit -> unit, background_color: PaletteColor) = AngledButton(K label, on_click, !%background_color)
+    new (label: string, on_click: unit -> unit, background_sprite: string) = AngledButton(K label, on_click, !%Palette.TRANSPARENT, background_sprite)
 
     new (label_func: unit -> string, on_click: unit -> unit, background_color: Color) = AngledButton(label_func, on_click, K background_color)
     new (label: string, on_click: unit -> unit, background_color: Color) = AngledButton(K label, on_click, K background_color)
@@ -43,6 +48,19 @@ type AngledButton(label_func: unit -> string, on_click: unit -> unit, background
             (this.Bounds.Right, this.Bounds.Bottom)
             (this.Bounds.Left - (if this.LeanLeft then AngledButton.LEAN_AMOUNT else 0.0f), this.Bounds.Bottom)
             (background_color())
+            
+        if background_texture_name.IsSome then
+            let background_texture =
+                if this.Focused && TEXTURES.Contains(background_texture_name.Value + "-hover") then
+                    Content.Texture (background_texture_name.Value + "-hover")
+                else
+                    Content.Texture background_texture_name.Value
+            
+            let q = this.Bounds |> _.AsQuad
+            Render.tex_quad
+                q
+                Colors.white.AsQuad
+                (Sprite.pick_texture (0,0) background_texture)
 
         Text.fill_b (
             Style.font,

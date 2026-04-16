@@ -18,17 +18,30 @@ module Toolbar =
     let HEIGHT = 70.0f
     let slideout_amount = Animation.Fade 1.0f
     let mutable hidden = false
+    let mutable draw_top = false
+    let mutable draw_bottom = false
+    let mutable was_draw_bottom = false
+    let mutable was_draw_top = false
     let mutable cursor_hidden = false
     let mutable was_hidden = false
 
-    let hide () : unit = hidden <- true
-    let show () : unit = hidden <- false
+    let hide () : unit =
+        hidden <- true
+    let show (top: bool, bottom: bool) : unit =
+        was_draw_bottom <- draw_bottom
+        was_draw_top <- draw_top
+        draw_top <- top
+        draw_bottom <- bottom
+        hidden <- false
 
     let hide_cursor() : unit = cursor_hidden <- true
     let show_cursor() : unit = cursor_hidden <- false
 
     let moving () : bool =
         was_hidden <> hidden || slideout_amount.Moving
+        
+    let drawing_changed () : bool =
+        was_draw_bottom <> draw_bottom || was_draw_top <> draw_top
 
     let mutable screenshot_queued = false
     let take_screenshot_internal () : unit =
@@ -98,16 +111,25 @@ module Screen =
             with set _ = failwith "Not permitted"
 
         override this.Update(elapsed_ms, moved) =
-            let moved = moved || Toolbar.moving ()
+            let moved = moved || Toolbar.moving () || Toolbar.drawing_changed ()
 
             if moved then
                 this.Bounds <-
                     if Toolbar.hidden then
                         Render.bounds()
                     else
-                        Render.bounds().Shrink(0.0f, Toolbar.HEIGHT * Toolbar.slideout_amount.Value)
+                        if Toolbar.draw_bottom && Toolbar.draw_top then
+                            Render.bounds().Shrink(0.0f, Toolbar.HEIGHT * Toolbar.slideout_amount.Value)
+                        elif Toolbar.draw_top then
+                            Render.bounds().ShrinkT(Toolbar.HEIGHT * Toolbar.slideout_amount.Value)
+                        else
+                            Render.bounds().ShrinkB(Toolbar.HEIGHT * Toolbar.slideout_amount.Value)
 
                 this.VisibleBounds <- Render.bounds()
+                
+            if Toolbar.drawing_changed() then
+                Toolbar.was_draw_bottom <- Toolbar.draw_bottom
+                Toolbar.was_draw_top <- Toolbar.draw_top
 
             current.Update(elapsed_ms, moved)
 

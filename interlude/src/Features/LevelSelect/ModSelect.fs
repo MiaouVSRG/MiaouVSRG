@@ -1,5 +1,6 @@
 ﻿namespace Interlude.Features.LevelSelect
 
+open Interlude.Content
 open Percyqaz.Common
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.UI
@@ -215,10 +216,11 @@ type private ModSelectPage(change_rate: Rate -> unit) =
 
 type ModSelect(change_rate: Rate -> unit) =
     inherit
-        AngledButton(
+        InlaidButton(
             sprintf "%s %s" Icons.ZAP (%"levelselect.mods"),
             (fun () -> ModSelectPage(change_rate).Show()),
-            (fun () -> Palette.color (100, 0.5f, 0.0f)),
+            ButtonType.CustomSprite "mods-button",
+            (10.0f, 13.0f),
             Hotkey = "mods"
         )
 

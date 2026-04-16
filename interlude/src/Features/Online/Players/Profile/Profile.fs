@@ -142,7 +142,8 @@ type private Profile() =
                     %"online.players.profile.mutual_friend"
                 else
                     %"online.players.profile.remove_friend"),
-            remove_friend
+            remove_friend,
+            ButtonType.Default
         )
             .Icon(
                 if data.IsMutualFriend then
@@ -162,7 +163,8 @@ type private Profile() =
             .Conditional(fun () -> data.IsFriend)
         |+ InlaidButton(
             %"online.players.profile.add_friend",
-            add_friend
+            add_friend,
+            ButtonType.Default
         )
             .Icon(Icons.USER_PLUS)
             .TextColor(Colors.text_green_2)
@@ -172,7 +174,8 @@ type private Profile() =
         // Profile settings
         |+ InlaidButton(
             %"profile_settings",
-            (fun () -> ProfileSettingsPage(data, profile_color).Show())
+            (fun () -> ProfileSettingsPage(data, profile_color).Show()),
+            ButtonType.Default
         )
             .Icon(Icons.SETTINGS)
             .Position(Position.ShrinkR(40.0f).SliceT(InlaidButton.HEIGHT).SliceR(300.0f))
@@ -184,7 +187,8 @@ type private Profile() =
             (fun () ->
                 Network.lobby.Value.InvitePlayer(data.Username)
                 Notifications.action_feedback (Icons.SEND, %"notification.lobby_invite_sent", data.Username)
-            )
+            ),
+            ButtonType.Default
         )
             .Icon(Icons.SEND)
             .Position(Position.ShrinkR(380.0f).SliceT(InlaidButton.HEIGHT).SliceR(300.0f))

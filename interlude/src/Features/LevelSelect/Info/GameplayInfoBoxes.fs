@@ -30,6 +30,7 @@ type GameplayInfoBoxes() =
         base.Init parent
 
     override this.Draw() =
+        let base_color = Colors.TRANSPARENT
         match save_data with
         | Some save_data when save_data.PersonalBests.ContainsKey Rulesets.current_hash ->
 
@@ -61,7 +62,7 @@ type GameplayInfoBoxes() =
             let accuracy_bounds = this.Bounds.SliceR(PERSONAL_BESTS_WIDTH).SlicePercentR(0.5f).ShrinkL(10.0f)
             match accuracy with
             | Some (acc, rate, timestamp, color) ->
-                Render.rect accuracy_bounds Colors.shadow_2.O2
+                Render.rect accuracy_bounds base_color
                 let time_ago = System.DateTimeOffset.UtcNow - Timestamp.to_datetimeoffset timestamp
                 Text.fill_b (Style.font, Rulesets.current.FormatAccuracy acc, accuracy_bounds.SliceT(50.0f).Shrink(10.0f, 0.0f), (color, Colors.shadow_2), Alignment.CENTER)
                 Text.fill_b (Style.font, sprintf "(%.2fx)  •  %s" rate (format_timespan time_ago), accuracy_bounds.SliceB(30.0f).Shrink(10.0f, 0.0f).Translate(0.0f, -8.0f), (color, Colors.shadow_2), Alignment.CENTER)
@@ -70,7 +71,7 @@ type GameplayInfoBoxes() =
             let lamp_bounds = this.Bounds.SliceR(PERSONAL_BESTS_WIDTH).SlicePercentL(0.5f).ShrinkL(10.0f)
             match lamp with
             | Some (lamp, rate, timestamp, color) ->
-                Render.rect lamp_bounds Colors.shadow_2.O2
+                Render.rect lamp_bounds base_color
                 let time_ago = System.DateTimeOffset.UtcNow - Timestamp.to_datetimeoffset timestamp
                 Text.fill_b (Style.font, Rulesets.current.LampName lamp, lamp_bounds.SliceT(50.0f).Shrink(10.0f, 0.0f), (color, Colors.shadow_2), Alignment.CENTER)
                 Text.fill_b (Style.font, sprintf "(%.2fx)  •  %s" rate (format_timespan time_ago), lamp_bounds.SliceB(30.0f).Shrink(10.0f, 0.0f).Translate(0.0f, -8.0f), (color, Colors.shadow_2), Alignment.CENTER)
@@ -78,12 +79,12 @@ type GameplayInfoBoxes() =
 
         | _ ->
             let no_pb_bounds = this.Bounds.SliceR(PERSONAL_BESTS_WIDTH).ShrinkL(10.0f)
-            Render.rect no_pb_bounds Colors.shadow_2.O2
+            Render.rect no_pb_bounds base_color
             Text.fill_b (Style.font, %"levelselect.no_personal_best", no_pb_bounds.SliceT(50.0f).Shrink(10.0f, 0.0f), Colors.text_greyout, Alignment.CENTER)
             Text.fill_b (Style.font, %"levelselect.no_personal_best.subtitle", no_pb_bounds.SliceB(30.0f).Shrink(10.0f, 0.0f).Translate(0.0f, -8.0f), Colors.text_greyout, Alignment.CENTER)
 
         let pattern_bounds = this.Bounds.ShrinkR(PERSONAL_BESTS_WIDTH)
-        Render.rect pattern_bounds Colors.shadow_2.O2
+        Render.rect pattern_bounds base_color
 
         Text.fill_b (
             Style.font,

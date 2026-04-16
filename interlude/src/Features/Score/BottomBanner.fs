@@ -38,7 +38,8 @@ type RulesetSwitcher(setting: Setting<string>, set_ruleset_direct: Ruleset -> un
             .Add(
                 InlaidButton(
                     (fun () -> score_info.Ruleset.Name),
-                    (fun () -> this.ToggleDropdown())
+                    (fun () -> this.ToggleDropdown()),
+                    ButtonType.Default
                 )
                     .Hotkey("ruleset_switch")
                     .HoverText(%"score.switch_ruleset"),
@@ -99,12 +100,14 @@ type BottomBanner(score_info: ScoreInfo, played_just_now: bool, graph: ScoreGrap
             .With(
                 InlaidButton(%"score.graph.settings", fun () ->
                     ScoreGraphSettingsPage(score_info.WithMods.Keys, graph.ApplyColumnFilter).Show()
+                , ButtonType.Default
                 )
                     .Icon(Icons.EDIT_2)
                     .Position(Position.GridX(1, 4, 30.0f)),
 
                 InlaidButton(%"score.chart_actions", fun () ->
                     ScoreChartContextMenu(score_info).Show()
+                , ButtonType.Default
                 )
                     .Icon(Icons.SETTINGS)
                     .Hotkey("context_menu")
@@ -112,6 +115,7 @@ type BottomBanner(score_info: ScoreInfo, played_just_now: bool, graph: ScoreGrap
 
                 InlaidButton(%"score.watch_replay", fun () ->
                     Gameplay.watch_replay(score_info)
+                , ButtonType.Default
                 )
                     .Icon(Icons.FILM)
                     .Position(Position.GridX(3, 4, 30.0f)),

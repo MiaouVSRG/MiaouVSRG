@@ -74,7 +74,7 @@ type IPlayScreen(info: LoadedChartInfo, pacemaker_info: PacemakerState, scoring:
         Background.dim 0.7f
 
         if next <> ScreenType.Score then
-            Toolbar.show ()
+            Toolbar.show (true, false)
 
         if next <> ScreenType.Play then
             WindowThread.defer WindowThread.enable_windows_key

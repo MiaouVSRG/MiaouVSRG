@@ -1,5 +1,6 @@
 ﻿namespace Interlude.Features.Score
 
+open Percyqaz.Common
 open Percyqaz.Flux.Windowing
 open Percyqaz.Flux.UI
 open Percyqaz.Flux.Graphics
@@ -123,7 +124,7 @@ type ScoreScreen(score_info: ScoreInfo, results: ImprovementFlags * SessionXPGai
         (graph :> System.IDisposable).Dispose()
         on_ruleset_changed.Dispose()
         // Sounds.get("score-screen").Stop()
-        Toolbar.show ()
+        Toolbar.show (true, false)
 
     override this.OnBack() =
         if Network.lobby.IsSome then

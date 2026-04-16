@@ -294,15 +294,15 @@
     <Compile Include="Features\Multiplayer\Lobby\Players.fs" />
     <Compile Include="Features\Multiplayer\Lobby\Chat.fs" />
     <Compile Include="Features\Multiplayer\Lobby\LobbyScreen.fs" />
-    <Compile Include="Features\MainMenu\LoadingScreen.fs" />
-    <Compile Include="Features\MainMenu\ConfirmQuitPage.fs" />
-    <Compile Include="Features\MainMenu\MainMenuScreen.fs" />
     <Compile Include="Features\Printerlude\Terminal.fs" />
     <Compile Include="Features\Printerlude\Printerlude.fs" />
     <Compile Include="Features\Toolbar\Jukebox.fs" />
     <Compile Include="Features\Toolbar\NetworkStatus.fs" />
     <Compile Include="Features\Toolbar\UpdateButton.fs" />
     <Compile Include="Features\Toolbar\Toolbar.fs" />
+    <Compile Include="Features\MainMenu\LoadingScreen.fs" />
+    <Compile Include="Features\MainMenu\ConfirmQuitPage.fs" />
+    <Compile Include="Features\MainMenu\MainMenuScreen.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

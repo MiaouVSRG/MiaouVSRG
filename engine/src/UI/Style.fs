@@ -22,6 +22,7 @@ module Colors =
     let text = white, shadow_1
     let text_subheading = grey_1, shadow_2
     let text_greyout = grey_2, shadow_2
+    let text_witheout = Color.White, shadow_2
 
     let green_accent = Color.FromArgb 0xFF_43ef70
     let green = Color.FromArgb 0xFF_1d9d4b

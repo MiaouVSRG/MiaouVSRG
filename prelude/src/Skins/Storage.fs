@@ -402,7 +402,7 @@ type Storage(storage: StorageType) =
                         Path.Combine(f, Path.Combine path, sprintf "%s.json" name)
                     )
                 Ok(columns, rows, true)
-            | Embedded _ -> Error "Legacy texture detected in embedded assets"
+            | Embedded _ -> Error "Legacy texture detected in embedded assets. Maybe you forgot to add '[1x1]' in your file name ?"
         else
 
         match

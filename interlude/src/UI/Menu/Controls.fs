@@ -28,6 +28,30 @@ type PageTextEntry(name: string, setting: Setting<string>) =
                         else Colors.grey_2
             )
         )
+        
+type PageOptionTextEntry(name: string, setting: Setting<string option>) =
+    inherit
+        PageSetting(
+            name,
+            let entry =
+                let formatted_setting = Setting.simple (if setting.Value.IsSome then setting.Value.Value else "")
+                { new TextEntry(formatted_setting, "none", false) with
+                    override this.OnFocus by_mouse =
+                        base.OnFocus by_mouse
+                        Style.hover.Play()
+                }
+
+            entry
+            |+ Frame(
+                Position = Position.DEFAULT.Shrink(-15.0f, 0.0f),
+                Fill = K Color.Transparent,
+                Border =
+                    fun () ->
+                        if entry.Selected then Colors.pink_accent
+                        elif entry.Focused then Colors.yellow_accent
+                        else Colors.grey_2
+            )
+        )
 
 type OptionsMenuButton(label: string, on_click: unit -> unit) =
     inherit

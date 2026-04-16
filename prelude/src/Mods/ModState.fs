@@ -85,7 +85,16 @@ module ModState =
                 |> in_priority_order
                 |> Seq.map (fun (id, m, state) -> m.Shorthand state)
                 |> List.ofSeq)
-        )
+            )
+        
+    let mods_format (mods: ModState) : string =
+        String.Join(
+            ", ",
+            (mods
+                |> in_priority_order
+                |> Seq.map (fun (id, m, state) -> m.Shorthand state)
+                |> List.ofSeq)
+            )
 
     let check (mods: ModState) : Result<ModStatus, string> =
         try

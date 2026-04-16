@@ -72,32 +72,6 @@ type LevelSelectScreen() =
                             .ShrinkR((TOP_BAR_HEIGHT - AngledButton.HEIGHT - SearchBox.HEIGHT - Style.PADDING) * 0.5f)
                     )
                     .Help(Help.Info("levelselect.search", "search")),
-                    
-                DropdownMenu(
-                    {
-                        Items = [
-                            (fun() -> this.ApplyKeymodeFilter(1)), " 1K"
-                            (fun() -> this.ApplyKeymodeFilter(2)), " 2K"
-                            (fun() -> this.ApplyKeymodeFilter(3)), " 3K"
-                            (fun() -> this.ApplyKeymodeFilter(4)), " 4K"
-                            (fun() -> this.ApplyKeymodeFilter(5)), " 5K"
-                            (fun() -> this.ApplyKeymodeFilter(6)), " 6K"
-                            (fun() -> this.ApplyKeymodeFilter(7)), " 7K"
-                            (fun() -> this.ApplyKeymodeFilter(8)), " 8K"
-                            (fun() -> this.ApplyKeymodeFilter(9)), " 9K"
-                            (fun() -> this.ApplyKeymodeFilter(10)), "10K"
-                        ]
-                    }   
-                ).Position(
-                        Position
-                            .SliceT(TOP_BAR_HEIGHT)
-                            .ShrinkB(AngledButton.HEIGHT)
-                            .SliceY(SearchBox.HEIGHT)
-                            .ShrinkPercentL(0.4f)
-                            .ShrinkL(1075.0f)
-                            .ShrinkR((TOP_BAR_HEIGHT - AngledButton.HEIGHT - SearchBox.HEIGHT - Style.PADDING) * 0.5f)
-                            .TranslateX(-950.0f)
-                ),
 
                 InfoPanel()
                     .Position(Position.ShrinkT(TOP_BAR_HEIGHT + 5.0f).SlicePercentL(INFO_SCREEN_SPLIT)),
@@ -245,36 +219,13 @@ type LevelSelectScreen() =
 
         Tree.draw (this.Bounds.Top + TOP_BAR_HEIGHT, this.Bounds.Bottom)
 
-        let w = this.Bounds.Width * INFO_SCREEN_SPLIT
-
-        let {
-                Rect.Left = left
-                Top = top
-                Right = right
-            } =
-            this.Bounds
-
-        Render.quad_points_c
-            (left, top)
-            (left + w + TOP_BAR_HEIGHT * 0.5f, top)
-            (left + w, top + TOP_BAR_HEIGHT)
-            (left, top + TOP_BAR_HEIGHT)
-            (Quad.gradient_top_to_bottom (!*Palette.MAIN_100) (!*Palette.DARK_100))
-
-        Render.quad_points
-            (left + w + TOP_BAR_HEIGHT * 0.5f, top)
-            (right, top)
-            (right, top + TOP_BAR_HEIGHT)
-            (left + w, top + TOP_BAR_HEIGHT)
-            Colors.shadow_2.O2
-
-        Render.rect (this.Bounds.SliceT(TOP_BAR_HEIGHT).BorderB(5.0f)) (!*Palette.MAIN)
-
         base.Draw()
 
     override this.OnEnter(_: ScreenType) =
         LevelSelect.exit_gameplay()
         Song.on_finish <- SongFinishAction.LoopFromPreview
+        
+        Toolbar.show(true, false)
 
         Tree.refresh ()
         DiscordRPC.in_menus ("Choosing a song")
