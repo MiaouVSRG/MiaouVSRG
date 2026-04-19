@@ -136,6 +136,28 @@ module Theme =
         "mods-button"
         "mods-button-hover"
         "ruleset-button"
+        "leaderboard-score"
+        "leaderboard-score-hover"
+        "leaderboard-first-button"
+        "leaderboard-first-button-hover"
+        "leaderboard-sort-button"
+        "leaderboard-sort-button-hover"
+        "leaderboard-filter-button"
+        "leaderboard-filter-button-hover"
+        "searchbar"
+        "map-group"
+        "map-group-hover"
+        
+        // SCORE SCREEN
+        "score-screen"
+        
+        // RANKS
+        "pass"
+        "clear"
+        "clearplus"
+        "overclear"
+        "overclearplus"
+        "perfect"
     |]
 
     let SOUNDS =

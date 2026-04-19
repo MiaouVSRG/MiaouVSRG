@@ -1,8 +1,7 @@
 namespace Prelude.Gameplay.Rulesets
 
-open Percyqaz.Common
+open System.Diagnostics.Tracing
 open Prelude
-open Prelude.Gameplay.Rulesets
 
 module Defaults = 
     let EASY = 
@@ -46,41 +45,49 @@ module Defaults =
                         Name = "FAIL"
                         Accuracy = 0.0
                         Color = Color.FromArgb(255, 0, 0)
+                        TextureName = None
                     }
                     {
                         Name = "FAIL"
                         Accuracy = 0.7
                         Color = Color.FromArgb(255, 0, 0)
+                        TextureName = None
                     }
                     {
-                        Name = "EASY PASS"
+                        Name = "PASS"
                         Accuracy = 0.85
                         Color = Color.FromArgb(182, 96, 0)
+                        TextureName = None
                     }
                     {
-                        Name = "EASY CLEAR"
+                        Name = "CLEAR"
                         Accuracy = 0.9
                         Color = Color.FromArgb(0, 255, 100)
+                        TextureName = None
                     }
                     {
-                        Name = "EASY CLEAR+"
+                        Name = "CLEAR+"
                         Accuracy = 0.95
                         Color = Color.FromArgb(246, 234, 128)
+                        TextureName = None
                     }
                     {
-                        Name = "EASY OVERCLEAR"
+                        Name = "OVERCLEAR"
                         Accuracy = 0.97
                         Color = Color.FromArgb(255, 108, 255)
+                        TextureName = None
                     }
                     {
-                        Name = "EASY OVERCLEAR+"
+                        Name = "OVERCLEAR+"
                         Accuracy = 0.99
                         Color = Color.FromArgb(102, 255, 255)
+                        TextureName = None
                     }
                     {
-                        Name = "EASY PERFECT"
+                        Name = "PERFECT"
                         Accuracy = 1
                         Color = Color.FromArgb(255, 255, 255)
+                        TextureName = None
                     }
                 |]
             Lamps =
@@ -89,16 +96,6 @@ module Defaults =
                         Name = "FC"
                         Requirement = LampRequirement.ComboBreaksAtMost 0
                         Color = Color.FromArgb(0, 255, 160)
-                    }
-                    {
-                        Name = "SS"
-                        Requirement = LampRequirement.JudgementAtMost (2, 0)
-                        Color = Color.FromArgb(255, 255, 160)
-                    }
-                    {
-                        Name = "MILL"
-                        Requirement = LampRequirement.JudgementAtMost (1, 0)
-                        Color = Color.FromArgb(160, 255, 255)
                     }
                 |]
             Accuracy = AccuracyPoints.PointsPerJudgement([| 1.0; 1.0; 2.0/3.0; 2.0/9.0 |])
@@ -152,41 +149,49 @@ module Defaults =
                         Name = "FAIL"
                         Accuracy = 0.0
                         Color = Color.FromArgb(255, 0, 0)
+                        TextureName = None
                     }
                     {
                         Name = "FAIL"
                         Accuracy = 0.7
                         Color = Color.FromArgb(255, 0, 0)
+                        TextureName = None
                     }
                     {
-                        Name = "NORMAL PASS"
+                        Name = "PASS"
                         Accuracy = 0.85
                         Color = Color.FromArgb(182, 96, 0)
+                        TextureName = None
                     }
                     {
-                        Name = "NORMAL CLEAR"
+                        Name = "CLEAR"
                         Accuracy = 0.9
                         Color = Color.FromArgb(0, 255, 100)
+                        TextureName = None
                     }
                     {
-                        Name = "NORMAL CLEAR+"
+                        Name = "CLEAR+"
                         Accuracy = 0.95
                         Color = Color.FromArgb(246, 234, 128)
+                        TextureName = None
                     }
                     {
-                        Name = "NORMAL OVERCLEAR"
+                        Name = "OVERCLEAR"
                         Accuracy = 0.97
                         Color = Color.FromArgb(255, 108, 255)
+                        TextureName = None
                     }
                     {
-                        Name = "NORMAL OVERCLEAR+"
+                        Name = "OVERCLEAR+"
                         Accuracy = 0.99
                         Color = Color.FromArgb(102, 255, 255)
+                        TextureName = None
                     }
                     {
-                        Name = "NORMAL PERFECT"
+                        Name = "PERFECT"
                         Accuracy = 1
                         Color = Color.FromArgb(255, 255, 255)
+                        TextureName = None
                     }
                 |]
             Lamps =
@@ -195,16 +200,6 @@ module Defaults =
                         Name = "FC"
                         Requirement = LampRequirement.ComboBreaksAtMost 0
                         Color = Color.FromArgb(0, 255, 160)
-                    }
-                    {
-                        Name = "SS"
-                        Requirement = LampRequirement.JudgementAtMost (2, 0)
-                        Color = Color.FromArgb(255, 255, 160)
-                    }
-                    {
-                        Name = "MILL"
-                        Requirement = LampRequirement.JudgementAtMost (1, 0)
-                        Color = Color.FromArgb(160, 255, 255)
                     }
                 |]
             Accuracy = AccuracyPoints.PointsPerJudgement([| 1.0; 1.0; 2.0/3.0; 2.0/9.0 |])
@@ -258,41 +253,49 @@ module Defaults =
                         Name = "FAIL"
                         Accuracy = 0.0
                         Color = Color.FromArgb(255, 0, 0)
+                        TextureName = None
                     }
                     {
                         Name = "FAIL"
                         Accuracy = 0.7
                         Color = Color.FromArgb(255, 0, 0)
+                        TextureName = None
                     }
                     {
-                        Name = "HARD PASS"
+                        Name = "PASS"
                         Accuracy = 0.85
                         Color = Color.FromArgb(182, 96, 0)
+                        TextureName = None
                     }
                     {
-                        Name = "HARD CLEAR"
+                        Name = "CLEAR"
                         Accuracy = 0.9
                         Color = Color.FromArgb(0, 255, 100)
+                        TextureName = None
                     }
                     {
-                        Name = "HARD CLEAR+"
+                        Name = "CLEAR+"
                         Accuracy = 0.95
                         Color = Color.FromArgb(246, 234, 128)
+                        TextureName = None
                     }
                     {
-                        Name = "HARD OVERCLEAR"
+                        Name = "OVERCLEAR"
                         Accuracy = 0.97
                         Color = Color.FromArgb(255, 108, 255)
+                        TextureName = None
                     }
                     {
-                        Name = "HARD OVERCLEAR+"
+                        Name = "OVERCLEAR+"
                         Accuracy = 0.99
                         Color = Color.FromArgb(102, 255, 255)
+                        TextureName = None
                     }
                     {
-                        Name = "HARD PERFECT"
+                        Name = "PERFECT"
                         Accuracy = 1
                         Color = Color.FromArgb(255, 255, 255)
+                        TextureName = None
                     }
                 |]
             Lamps =
@@ -301,16 +304,6 @@ module Defaults =
                         Name = "FC"
                         Requirement = LampRequirement.ComboBreaksAtMost 0
                         Color = Color.FromArgb(0, 255, 160)
-                    }
-                    {
-                        Name = "SS"
-                        Requirement = LampRequirement.JudgementAtMost (2, 0)
-                        Color = Color.FromArgb(255, 255, 160)
-                    }
-                    {
-                        Name = "MILL"
-                        Requirement = LampRequirement.JudgementAtMost (1, 0)
-                        Color = Color.FromArgb(160, 255, 255)
                     }
                 |]
             Accuracy = AccuracyPoints.PointsPerJudgement([| 1.0; 1.0; 2.0/3.0; 2.0/9.0 |])
@@ -323,14 +316,14 @@ module Defaults =
             Formatting = { DecimalPlaces = DecimalPlaces.TWO }
         }
 
-    let INSANE = 
+    let STRICT = 
         let MARV_TIMING : GameplayTime = 11.5f<ms / rate>
         let PERFECT_TIMING : GameplayTime = 32.5f<ms / rate>
         let GREAT_TIMING : GameplayTime = 56.5f<ms / rate>
         let MISS_TIMING : GameplayTime = 121.5f<ms / rate>
         {
-            Name = sprintf "INSANE"
-            Description = "INSANE Scoring System based on osu!mania OD10 judgements"
+            Name = sprintf "STRICT"
+            Description = "STRICT Scoring System based on osu!mania OD10 judgements"
             Judgements =
                 [|
                     {
@@ -364,41 +357,49 @@ module Defaults =
                         Name = "FAIL"
                         Accuracy = 0.0
                         Color = Color.FromArgb(255, 0, 0)
+                        TextureName = None
                     }
                     {
                         Name = "FAIL"
                         Accuracy = 0.7
                         Color = Color.FromArgb(255, 0, 0)
+                        TextureName = None
                     }
                     {
-                        Name = "INSANE PASS"
+                        Name = "PASS"
                         Accuracy = 0.85
                         Color = Color.FromArgb(182, 96, 0)
+                        TextureName = None
                     }
                     {
-                        Name = "INSANE CLEAR"
+                        Name = "CLEAR"
                         Accuracy = 0.9
                         Color = Color.FromArgb(0, 255, 100)
+                        TextureName = None
                     }
                     {
-                        Name = "INSANE CLEAR+"
+                        Name = "CLEAR+"
                         Accuracy = 0.95
                         Color = Color.FromArgb(246, 234, 128)
+                        TextureName = None
                     }
                     {
-                        Name = "INSANE OVERCLEAR"
+                        Name = "OVERCLEAR"
                         Accuracy = 0.97
                         Color = Color.FromArgb(255, 108, 255)
+                        TextureName = None
                     }
                     {
-                        Name = "INSANE OVERCLEAR+"
+                        Name = "OVERCLEAR+"
                         Accuracy = 0.99
                         Color = Color.FromArgb(102, 255, 255)
+                        TextureName = None
                     }
                     {
-                        Name = "INSANE PERFECT"
+                        Name = "PERFECT"
                         Accuracy = 1
                         Color = Color.FromArgb(255, 255, 255)
+                        TextureName = None
                     }
                 |]
             Lamps =
@@ -407,16 +408,6 @@ module Defaults =
                         Name = "FC"
                         Requirement = LampRequirement.ComboBreaksAtMost 0
                         Color = Color.FromArgb(0, 255, 160)
-                    }
-                    {
-                        Name = "SS"
-                        Requirement = LampRequirement.JudgementAtMost (2, 0)
-                        Color = Color.FromArgb(255, 255, 160)
-                    }
-                    {
-                        Name = "MILL"
-                        Requirement = LampRequirement.JudgementAtMost (1, 0)
-                        Color = Color.FromArgb(160, 255, 255)
                     }
                 |]
             Accuracy = AccuracyPoints.PointsPerJudgement([| 1.0; 1.0; 2.0/3.0; 2.0/9.0 |])

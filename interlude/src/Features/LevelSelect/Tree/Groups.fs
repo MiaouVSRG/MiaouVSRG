@@ -1,6 +1,7 @@
 ﻿namespace Interlude.Features.LevelSelect
 
 open System.Linq
+open Percyqaz.Common
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.UI
@@ -12,6 +13,7 @@ open Interlude.Content
 type private GroupItem(tree_ctx: TreeContext, name: string, items: ResizeArray<ChartItem>, group_ctx: LibraryGroupContext) =
     inherit TreeItem(tree_ctx)
 
+    let mutable focused: bool = false
     let display_name = if group_ctx = LibraryGroupContext.Likes then  %"library.likes" else name
 
     let charts_as_seq = items |> Seq.map (fun i -> i.Chart, i.Context)
@@ -78,26 +80,12 @@ type private GroupItem(tree_ctx: TreeContext, name: string, items: ResizeArray<C
 
     /// Only called if this group can be seen on screen
     member private this.DrawCulled(bounds: Rect) : unit =
+        let group_tex = if focused then Content.Texture "map-group-hover" else Content.Texture "map-group"
 
-        let color, bg_color =
-            match tree_ctx.MultiSelection with
-            | Some s when s.GroupAmountSelected(name, group_ctx, charts_as_seq) <> AmountSelected.None ->
-                Colors.grey_2.O2, Colors.shadow_2.O2
-            | _ ->
-            match special_color with
-            | Some (fg, bg) -> if this.Selected then fg.O3, bg else fg.O2, bg.O2
-            | None ->
-                if this.Selected then
-                    Palette.color (120, 0.7f + select_animation.Value * 0.3f, select_animation.Value * 0.3f),
-                    Palette.color (255, 0.2f, 0.0f)
-                else
-                    Palette.color (100, 0.7f, 0.0f),
-                    Palette.color (255, 0.2f, 0.0f)
-
-        Render.rect (bounds.Translate(10.0f, 10.0f)) bg_color
-        Background.draw (bounds, (Color.FromArgb(40, 40, 40)), 1.5f)
-
-        Render.rect bounds color
+        Render.tex_quad
+            (bounds |> _.AsQuad)
+            Color.White.AsQuad
+            (Sprite.pick_texture (0,0) group_tex)
 
         match tree_ctx.MultiSelection with
         | Some s ->
@@ -111,7 +99,7 @@ type private GroupItem(tree_ctx: TreeContext, name: string, items: ResizeArray<C
             Text.fill_b (Style.font, label, bounds.Shrink(65.0f, 5.0f), Colors.text_subheading, Alignment.RIGHT)
         | None ->
             Text.fill_b (Style.font, display_name, bounds.Shrink(15.0f, 5.0f).ShrinkR(100.0f), Colors.text, Alignment.LEFT)
-            Text.fill_b (Style.font, label, bounds.Shrink(15.0f, 5.0f), Colors.text_subheading, Alignment.RIGHT)
+            Text.fill_b (Style.font, label, bounds.Shrink(15.0f, 5.0f).ShrinkR(5.0f), Colors.text_subheading, Alignment.RIGHT)
 
     member this.Draw(this_top: float32, tree_top: float32, tree_bottom: float32) : float32 =
         let next_top = this.IfVisible(this_top, tree_top, tree_bottom, this.DrawCulled)
@@ -148,6 +136,7 @@ type private GroupItem(tree_ctx: TreeContext, name: string, items: ResizeArray<C
     /// Only called if the group can be seen on screen
     member private this.UpdateCulled(tree_top: float32, bounds: Rect) : unit =
         if Mouse.hover(bounds) then
+            focused <- true
 
             if this.LeftClicked(tree_top) then
                 if MULTI_SELECT_KEY.Held() then
@@ -171,6 +160,8 @@ type private GroupItem(tree_ctx: TreeContext, name: string, items: ResizeArray<C
                 | LibraryGroupContext.Table _ -> ()
                 | LibraryGroupContext.Pack _
                 | LibraryGroupContext.None -> GroupContextMenu.ConfirmDelete(items |> Seq.map (fun (x: ChartItem) -> x.Chart), group_ctx, false)
+        else
+            focused <- false
 
     member this.Update(this_top: float32, tree_top: float32, tree_bottom: float32, elapsed_ms: float) : float32 =
         if last_cached_flag < tree_ctx.CacheFlag then

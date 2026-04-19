@@ -159,7 +159,7 @@ type private Profile() =
                 else
                     Colors.text_red_2
             )
-            .Position(Position.ShrinkR(40.0f).SliceT(InlaidButton.HEIGHT).SliceR(300.0f))
+            .Position(Position.ShrinkR(40.0f).SliceT(InlaidButton.HEIGHT_BOTTOM_ROUNDED).SliceR(300.0f))
             .Conditional(fun () -> data.IsFriend)
         |+ InlaidButton(
             %"online.players.profile.add_friend",
@@ -168,7 +168,7 @@ type private Profile() =
         )
             .Icon(Icons.USER_PLUS)
             .TextColor(Colors.text_green_2)
-            .Position(Position.ShrinkR(40.0f).SliceT(InlaidButton.HEIGHT).SliceR(300.0f))
+            .Position(Position.ShrinkR(40.0f).SliceT(InlaidButton.HEIGHT_BOTTOM_ROUNDED).SliceR(300.0f))
             .Conditional(fun () -> not data.IsFriend && data.Username <> Network.credentials.Username)
 
         // Profile settings
@@ -178,7 +178,7 @@ type private Profile() =
             ButtonType.Default
         )
             .Icon(Icons.SETTINGS)
-            .Position(Position.ShrinkR(40.0f).SliceT(InlaidButton.HEIGHT).SliceR(300.0f))
+            .Position(Position.ShrinkR(40.0f).SliceT(InlaidButton.HEIGHT_BOTTOM_ROUNDED).SliceR(300.0f))
             .Conditional(fun () -> data.Username = Network.credentials.Username && has_colors)
 
         // Invite button
@@ -191,7 +191,7 @@ type private Profile() =
             ButtonType.Default
         )
             .Icon(Icons.SEND)
-            .Position(Position.ShrinkR(380.0f).SliceT(InlaidButton.HEIGHT).SliceR(300.0f))
+            .Position(Position.ShrinkR(380.0f).SliceT(InlaidButton.HEIGHT_BOTTOM_ROUNDED).SliceR(300.0f))
             .Conditional(fun () -> Network.lobby.IsSome && data.Username <> Network.credentials.Username && (not (Network.lobby.Value.Players.ContainsKey data.Username)))
         :> Widget
 

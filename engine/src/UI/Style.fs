@@ -35,6 +35,14 @@ module Colors =
     let cyan_shadow = Color.FromArgb 0xFF_084251
     let text_cyan = cyan_accent, cyan_shadow
     let text_cyan_2 = cyan_accent, shadow_1
+    
+    // TODO: Replace this by Colors in Rulesets.json file
+    let purple_judgement = Color.FromArgb(153, 230, 39, 245)
+    let cyan_judgement = Color.FromArgb(153, 0, 182, 182)
+    let green_judgement = Color.FromArgb(153, 0, 255, 118)
+    let red_judgement = Color.FromArgb(153, 255, 0, 20)
+    
+    
 
     let red_accent = Color.FromArgb 0xFF_ef5d57
     let red = Color.FromArgb 0xFF_9c3736

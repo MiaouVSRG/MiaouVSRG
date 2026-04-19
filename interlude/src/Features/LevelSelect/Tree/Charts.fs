@@ -1,11 +1,14 @@
 ﻿namespace Interlude.Features.LevelSelect
 
+open System
+open System.Linq
 open Percyqaz.Common
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.UI
 open Percyqaz.Flux.UI.Selection
 open Prelude
+open Prelude.Calculator
 open Prelude.Data.User
 open Prelude.Data.Library
 open Interlude.Content
@@ -13,6 +16,7 @@ open Interlude.UI
 open Interlude.Options
 open Interlude.Features.Gameplay
 open Interlude.Features.Collections
+open Prelude.Skins.Themes.Theme
 
 [<Struct>]
 type PersonalBestCached =
@@ -33,6 +37,9 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
     let mutable grade_or_accuracy: PersonalBestCached option = None
     let mutable lamp: PersonalBestCached option = None
     let mutable markers = ""
+    
+    let TEXT_MARGIN = 60.0f
+    let TEXT_MARGIN_NO_PB = 12.0f
 
     let get_pb (bests: PersonalBests<'T>) (rate: Rate) =
         match PersonalBests.get_best_above rate bests with
@@ -161,6 +168,26 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
                 (data.Color, Color.Black),
                 0.5f
             )
+            
+    member private this.DrawRank(bounds: Rect, data: PersonalBestCached, pos: float32, accent: Color): unit =
+        if TEXTURES.Contains(data.Text.ToLower().Replace("+", "plus")) then
+            let sprite = Content.Texture (data.Text.ToLower().Replace("+", "plus"))
+            let r = bounds.SliceX(50.0f).TranslateX(-pos).SliceY(50.0f)
+            
+            Render.tex_quad
+                (r |> _.AsQuad)
+                Color.White.AsQuad
+                (Sprite.pick_texture (0,0) sprite)
+        else
+            Text.draw_aligned_b (
+                Style.font,
+                data.Text,
+                20.0f,
+                bounds.Right - pos,
+                bounds.Top + 20.0f,
+                (data.Color, Color.Black),
+                0.5f
+            )
 
     /// Only called if this chart can be seen on screen
     member private this.DrawCulled(bounds: Rect) : unit =
@@ -172,7 +199,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             if is_multi_selected then Colors.grey_2.O2a alpha else Palette.color (alpha, 1.0f, 0.4f)
 
         let stripe_length = CHART_LEFT_MARGIN * hover_animation.Value
-        let play_button_texture = if this.Selected then Content.Texture "chart-selection-background-hover" else Content.Texture "chart-selection-background"
+        let chart_selection_background_texture = if this.Selected then Content.Texture "chart-selection-background-hover" else Content.Texture "chart-selection-background"
         
         let r = Rect.FromSize(
             
@@ -188,11 +215,12 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
         Render.tex_quad
             q
             Color.White.AsQuad
-            (Sprite.pick_texture (0,0) play_button_texture)
+            (Sprite.pick_texture (0,0) chart_selection_background_texture)
 
         if personal_bests.IsSome then
-            this.DrawPersonalBests(r, grade_or_accuracy.Value, 290.0f, accent_color)
-            this.DrawPersonalBests(r, lamp.Value, 165.0f, accent_color)
+            this.DrawRank(r, grade_or_accuracy.Value, 390.0f, accent_color)
+            
+        let get_text_margin = if personal_bests.IsSome then TEXT_MARGIN else TEXT_MARGIN_NO_PB
 
         // draw text
         Text.draw_b (
@@ -205,9 +233,9 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             ),
             23.0f,
             (if this.Selected then
-                bounds.Left - CHART_SELECTED_PADDING + 12.0f
+                bounds.Left - CHART_SELECTED_PADDING + get_text_margin
             else
-                bounds.Left - stripe_length + 12.0f),
+                bounds.Left - stripe_length + get_text_margin),
             bounds.Top,
             if this.Selected then Colors.text_yellow_2 else Colors.text
         )
@@ -217,11 +245,36 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             sprintf "%s  •  %s" (if options.TreeShowNativeText.Value then chart_meta.ArtistNative |> Option.defaultValue chart_meta.Artist else chart_meta.Artist) chart_meta.Creator,
             18.0f,
             (if this.Selected then
-                bounds.Left - CHART_SELECTED_PADDING + 12.0f
+                bounds.Left - CHART_SELECTED_PADDING + get_text_margin
             else
-                bounds.Left - stripe_length + 12.0f),
+                bounds.Left - stripe_length + get_text_margin),
             bounds.Top + 34.0f,
             Colors.text_subheading
+        )
+        
+        // Drawing the star before the text because of the HAPPYMASS font (which adds an automatic bottom margin to every char)
+        Text.draw_b (
+            Style.font,
+            Icons.STAR,
+            36.0f,
+            (if this.Selected then
+                bounds.Right - CHART_SELECTED_PADDING - get_text_margin - 300.0f
+            else
+                bounds.Right - stripe_length - get_text_margin - 350.0f),
+            bounds.Top + ((bounds.Bottom - bounds.Top) / 4.0f) - 5.0f,
+            (Colors.white, Difficulty.color chart_meta.Rating)
+        )
+        
+        Text.draw_b (
+            Style.font,
+            $"{Math.Round(chart_meta.Rating |> float, 2)}",
+            36.0f,
+            (if this.Selected then
+                bounds.Right - CHART_SELECTED_PADDING - get_text_margin - 250.0f
+            else
+                bounds.Right - stripe_length - get_text_margin - 300.0f),
+            bounds.Top + ((bounds.Bottom - bounds.Top) / 4.0f),
+            (Colors.white, Difficulty.color chart_meta.Rating)
         )
 
         Text.draw_b (
@@ -229,9 +282,9 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             chart_meta.Subtitle |> Option.defaultValue chart_meta.DifficultyName,
             15.0f,
             (if this.Selected then
-                bounds.Left - CHART_SELECTED_PADDING + 12.0f
+                bounds.Left - CHART_SELECTED_PADDING + get_text_margin
             else
-                bounds.Left - stripe_length + 12.0f),
+                bounds.Left - stripe_length + get_text_margin),
             bounds.Top + 65.0f,
             Colors.text_subheading
         )

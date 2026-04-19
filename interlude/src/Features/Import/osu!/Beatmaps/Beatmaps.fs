@@ -141,8 +141,6 @@ type BeatmapBrowserPage() =
                 SearchBox(search_text, fun (query: string) ->
                     GameThread.defer (fun () -> begin_search query)
                 )
-                    .Fill(Colors.cyan.O3)
-                    .Border(Colors.cyan_accent)
                     .TextColor(Colors.text_cyan)
                     .Position(Position.SliceT(SearchBox.HEIGHT))
                     .With(LoadingIndicator.Border(fun () -> loading)),

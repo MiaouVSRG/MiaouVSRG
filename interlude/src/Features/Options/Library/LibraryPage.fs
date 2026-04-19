@@ -115,7 +115,7 @@ type LibraryPage() =
                     LibraryPage.Imports().Pos(0, 2, PageWidth.Full),
                     LibraryPage.ManageCollections().Pos(2, 2, PageWidth.Full),
                     LibraryPage.ManageTables().Pos(4, 2, PageWidth.Full),
-                    LibraryPage.ManageRulesets().Pos(6, 2, PageWidth.Full),
+                    // LibraryPage.ManageRulesets().Pos(6, 2, PageWidth.Full),
                     LibraryPage.LevelSelectOptions().Pos(9, 2, PageWidth.Full),
                     LibraryPage.RecachePatterns().Pos(11, 2, PageWidth.Full),
                     LibraryPage.RecalculateScores().Pos(13, 2, PageWidth.Full),

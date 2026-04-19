@@ -106,13 +106,15 @@ type Toolbar() =
             .With(
                 InlaidButton(%"menu.back", (fun () -> Screen.back Transitions.UnderLogo |> ignore), ButtonType.BottomRounded)
                     .Icon(Icons.ARROW_LEFT_CIRCLE)
-                    .Position(Position.SliceT(InlaidButton.HEIGHT).SliceL(Style.PADDING * 2.0f, BUTTON_WIDTH).SliceY(InlaidButton.HEIGHT))
+                    .Position(Position.SliceT(InlaidButton.HEIGHT_BOTTOM_ROUNDED).SliceL(Style.PADDING * 2.0f, BUTTON_WIDTH).SliceY(InlaidButton.
+                                                                                                                                        HEIGHT_BOTTOM_ROUNDED
+                                  ))
                     .Help(Help.Info("menu.quick").Hotkey("quick_menu")),
 
                 FlowContainer.LeftToRight<Widget>(BUTTON_WIDTH)
                     .Spacing(Style.PADDING * 2.0f)
                     .DisableNavigation()
-                    .Position(Position.SliceT(InlaidButton.HEIGHT).ShrinkL(HEIGHT + Style.PADDING + BUTTON_WIDTH))
+                    .Position(Position.SliceT(InlaidButton.HEIGHT_BOTTOM_ROUNDED).ShrinkL(HEIGHT + Style.PADDING + BUTTON_WIDTH))
                     .With(
                         InlaidButton(%"menu.options", (fun () -> OptionsPage().Show()), ButtonType.BottomRounded)
                             .Icon(Icons.SETTINGS),
@@ -130,7 +132,9 @@ type Toolbar() =
                     ),
                     
                 Jukebox()
-                    .Position(Position.SliceT(HEIGHT - 20.0f).SlicePercentL(0.4f).ShrinkL(BUTTON_WIDTH + Style.PADDING * 4.0f).TranslateX(800.0f).SliceY(InlaidButton.HEIGHT)),
+                    .Position(Position.SliceT(HEIGHT - 20.0f).SlicePercentL(0.4f).ShrinkL(BUTTON_WIDTH + Style.PADDING * 4.0f).TranslateX(800.0f).SliceY(InlaidButton.
+                                                                                                                                                             HEIGHT_BOTTOM_ROUNDED
+                                  )),
 
                 NetworkStatus()
                     .Position(Position.SliceT(HEIGHT).SliceR(300.0f))
@@ -171,13 +175,15 @@ type Toolbar() =
             .With(
                 InlaidButton(%"menu.back", (fun () -> Screen.back Transitions.UnderLogo |> ignore), ButtonType.BottomRounded)
                     .Icon(Icons.ARROW_LEFT_CIRCLE)
-                    .Position(Position.SliceT(InlaidButton.HEIGHT).SliceL(Style.PADDING * 2.0f, BUTTON_WIDTH).SliceY(InlaidButton.HEIGHT))
+                    .Position(Position.SliceT(InlaidButton.HEIGHT_BOTTOM_ROUNDED).SliceL(Style.PADDING * 2.0f, BUTTON_WIDTH).SliceY(InlaidButton.
+                                                                                                                                        HEIGHT_BOTTOM_ROUNDED
+                                  ))
                     .Help(Help.Info("menu.quick").Hotkey("quick_menu")),
 
                 FlowContainer.LeftToRight<Widget>(BUTTON_WIDTH)
                     .Spacing(Style.PADDING * 2.0f)
                     .DisableNavigation()
-                    .Position(Position.SliceT(InlaidButton.HEIGHT).ShrinkL(HEIGHT + Style.PADDING + BUTTON_WIDTH))
+                    .Position(Position.SliceT(InlaidButton.HEIGHT_BOTTOM_ROUNDED).ShrinkL(HEIGHT + Style.PADDING + BUTTON_WIDTH))
                     .With(
                         InlaidButton(%"menu.options", (fun () -> OptionsPage().Show()), ButtonType.BottomRounded)
                             .Icon(Icons.SETTINGS),
@@ -195,7 +201,9 @@ type Toolbar() =
                     ),
                     
                 Jukebox()
-                    .Position(Position.SliceT(HEIGHT - 20.0f).SlicePercentL(0.4f).ShrinkL(BUTTON_WIDTH + Style.PADDING * 4.0f).TranslateX(800.0f).SliceY(InlaidButton.HEIGHT)),
+                    .Position(Position.SliceT(HEIGHT - 20.0f).SlicePercentL(0.4f).ShrinkL(BUTTON_WIDTH + Style.PADDING * 4.0f).TranslateX(800.0f).SliceY(InlaidButton.
+                                                                                                                                                             HEIGHT_BOTTOM_ROUNDED
+                                  )),
 
                 NetworkStatus()
                     .Position(Position.SliceT(HEIGHT).SliceR(300.0f))

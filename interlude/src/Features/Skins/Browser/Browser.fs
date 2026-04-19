@@ -34,8 +34,6 @@ type SkinsBrowserPage() =
             )
             .With(
                 SearchBox(fun query -> noteskin_items.Filter <- GroupDisplay.Filter query)
-                    .Fill(Colors.cyan.O3)
-                    .Border(Colors.cyan_accent)
                     .TextColor(Colors.text_cyan)
                     .Position(Position.SliceT(SearchBox.HEIGHT))
                     .With(LoadingIndicator.Border(fun () -> loading)),

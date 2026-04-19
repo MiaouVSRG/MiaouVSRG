@@ -45,8 +45,7 @@ type Scoreboard(display: Setting<InfoPanelMode>) =
         | _ -> K true
 
     let scores_list =
-        FlowContainer.Vertical<LocalScoreCard>(50.0f)
-            .Spacing(Style.PADDING)
+        FlowContainer.Vertical<LocalScoreCard>(75.0f, Spacing = Style.PADDING * 3.0f)
 
     do
         LocalScores.score_loaded.Add (fun score_info -> score_info |> LocalScoreCard |> scores_list.Add; count <- count + 1)
@@ -81,21 +80,20 @@ type Scoreboard(display: Setting<InfoPanelMode>) =
 
         this
             .Add(
-                AngledButton(
+                InlaidButton(
                     %"levelselect.info.scoreboard",
                     (fun () -> display.Set InfoPanelMode.Online),
-                    Palette.MAIN_100
+                    ButtonType.CustomSprite "leaderboard-first-button"
                 )
                     .Hotkey("scoreboard_storage")
-                    .LeanLeft(false)
                     .Position(
                         Position
-                            .SliceT(AngledButton.HEIGHT)
-                            .GridX(1, 3, AngledButton.LEAN_AMOUNT)
+                            .SliceT(50.0f)
+                            .GridX(1, 3)
                     )
                     .Help(Help.Info("levelselect.info.mode", "scoreboard_storage")),
 
-                AngledButton(
+                InlaidButton(
                     (fun () ->
                         Icons.CHEVRONS_UP + " " +
                         match sort.Value with
@@ -104,17 +102,17 @@ type Scoreboard(display: Setting<InfoPanelMode>) =
                         | _ -> %"levelselect.info.scoreboard.sort.time"
                     ),
                     cycle_sort,
-                    Palette.DARK_100
+                    ButtonType.CustomSprite "leaderboard-sort-button"
                 )
                     .Hotkey("scoreboard_sort")
                     .Position(
                         Position
-                            .SliceT(AngledButton.HEIGHT)
-                            .GridX(2, 3, AngledButton.LEAN_AMOUNT)
+                            .SliceT(50.0f)
+                            .GridX(2, 3)
                     )
                     .Help(Help.Info("levelselect.info.scoreboard.sort", "scoreboard_sort")),
 
-                AngledButton(
+                InlaidButton(
                     (fun () ->
                         Icons.FILTER + " " +
                         match filter.Value with
@@ -123,19 +121,18 @@ type Scoreboard(display: Setting<InfoPanelMode>) =
                         | _ -> %"levelselect.info.scoreboard.filter.none"
                     ),
                     cycle_filter,
-                    Palette.MAIN_100
+                    ButtonType.CustomSprite "leaderboard-filter-button"
                 )
                     .Hotkey("scoreboard_filter")
-                    .LeanRight(false)
                     .Position(
                         Position
-                            .SliceT(AngledButton.HEIGHT)
-                            .GridX(3, 3, AngledButton.LEAN_AMOUNT)
+                            .SliceT(50.0f)
+                            .GridX(3, 3)
                     )
                     .Help(Help.Info("levelselect.info.scoreboard.filter", "scoreboard_filter")),
 
                 ScrollContainer(scores_list)
-                    .Position(Position.ShrinkT(AngledButton.HEIGHT)),
+                    .Position(Position.ShrinkT(AngledButton.HEIGHT).ShrinkB(20.0f).SliceL(460.0f)),
 
                 HotkeyListener(
                     "scoreboard",

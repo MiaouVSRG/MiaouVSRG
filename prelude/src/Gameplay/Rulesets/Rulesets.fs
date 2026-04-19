@@ -1,6 +1,7 @@
 ﻿namespace Prelude.Gameplay.Rulesets
 
 open System
+open Percyqaz.Common
 open Percyqaz.Data
 open Prelude
 
@@ -25,6 +26,10 @@ type Grade =
         Name: string
         Accuracy: float
         Color: Color
+        
+        // The name of the texture to be loaded, if any.
+        // The texture has to be inside the "Textures" folder of the theme.
+        TextureName: string option 
     }
 
 // Lamps are awarded at the end of the score as a summarising "tag" to indicate certain accomplishments
@@ -169,7 +174,7 @@ type Ruleset =
         else if i >= this.Lamps.Length then "??"
         else this.Lamps.[i].Name
     member this.LampColor (i: int) : Color =
-        if i < 0 || i >= this.Grades.Length then
+        if i < 0 || i >= this.Lamps.Length then
             Color.White
         else
             this.Lamps.[i].Color

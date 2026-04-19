@@ -41,7 +41,7 @@ type ImportsPage() =
                     ImportsPage.GetTables().Pos(6, 2, PageWidth.Full),
                     ImportsPage.ImportOsuSkins().Pos(9, 2, PageWidth.Full),
 
-                    PageButton(%"rulesets", fun () -> SelectRulesetPage().Show()).Pos(12, 2, PageWidth.Full),
+                    // PageButton(%"rulesets", fun () -> SelectRulesetPage().Show()).Pos(12, 2, PageWidth.Full),
                     PageButton(%"library.tables", fun () -> SelectTablePage(ignore).Show()).Pos(14, 2, PageWidth.Full)
                 )
 

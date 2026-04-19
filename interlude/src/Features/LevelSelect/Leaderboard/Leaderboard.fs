@@ -1,5 +1,6 @@
 ﻿namespace Interlude.Features.LevelSelect
 
+open Interlude.Content
 open Percyqaz.Common
 open Percyqaz.Flux.UI
 open Prelude
@@ -70,49 +71,44 @@ type Leaderboard(display: Setting<InfoPanelMode>) =
         Gameplay.leaderboard_rank_changed.Add (fun _ -> scores_list.Clear(); count <- 0)
 
         this
-        |+ AngledButton(
+        |+ InlaidButton(
             %"levelselect.info.leaderboard",
             (fun () -> display.Set InfoPanelMode.Patterns),
-            Palette.MAIN_100
+            ButtonType.CustomSprite "leaderboard-first-button"
         )
             .Hotkey("scoreboard_storage")
-            .LeanLeft(false)
             .Position(
                 Position
-                    .SliceT(AngledButton.HEIGHT)
-                    .GridX(1, 3, AngledButton.LEAN_AMOUNT)
+                    .SliceT(50.0f)
+                    .GridX(1, 3)
             )
             .Help(Help.Info("levelselect.info.mode", "scoreboard_storage"))
-        |+ AngledButton(
+        |+ InlaidButton(
             Icons.CHEVRONS_UP + " " + %"levelselect.info.scoreboard.sort.accuracy",
             ignore,
-            Palette.DARK_100
+            ButtonType.CustomSprite "leaderboard-sort-button"
         )
             .Hotkey("scoreboard_sort")
-            .Disabled()
             .Position(
                 Position
-                    .SliceT(AngledButton.HEIGHT)
-                    .GridX(2, 3, AngledButton.LEAN_AMOUNT)
+                    .SliceT(50.0f)
+                    .GridX(2, 3)
             )
             .Help(Help.Info("levelselect.info.scoreboard.sort", "scoreboard_sort"))
-        |+ AngledButton(
+        |+ InlaidButton(
             Icons.FILTER + " " + %"levelselect.info.scoreboard.filter.none",
             ignore,
-            Palette.MAIN_100
+            ButtonType.CustomSprite "leaderboard-filter-button"
         )
             .Hotkey("scoreboard_filter")
-            .Disabled()
-            .LeanRight(false)
             .Position(
                 Position
-                    .SliceT(AngledButton.HEIGHT)
-                    .GridX(3, 3, AngledButton.LEAN_AMOUNT)
+                    .SliceT(50.0f)
+                    .GridX(3, 3)
             )
             .Help(Help.Info("levelselect.info.scoreboard.filter", "scoreboard_filter"))
         |+ ScrollContainer(scores_list)
-            .Margin(Style.PADDING)
-            .Position(Position.ShrinkT(50.0f))
+            .Position(Position.ShrinkT(50.0f).SliceL(370.0f))
         |+ HotkeyListener("scoreboard", fun () ->
             if scores_list.Focused then
                 Selection.clear ()

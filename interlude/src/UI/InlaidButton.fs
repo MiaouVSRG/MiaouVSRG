@@ -12,6 +12,8 @@ open Percyqaz.Flux.UI
 open Prelude.Skins.Themes.Theme
 
 type ButtonType =
+    /// No Sprite is applied to the button
+    | Transparent
     /// Button with rounded corners only at the bottom
     | BottomRounded
     /// Button with rounded corners
@@ -28,7 +30,10 @@ type InlaidButton(label_func: unit -> string, on_click: unit -> unit, button_typ
             )
         )
 
-    static member HEIGHT = 55.0f
+    static member HEIGHT_BOTTOM_ROUNDED = 55.0f
+    static member WIDTH_BOTTOM_ROUNDED = 180.0f
+    static member HEIGHT = 70.0f
+    static member WIDTH = 200.0f
 
     new (label: string, on_click: unit -> unit, button_type: ButtonType) = InlaidButton(K label, on_click, button_type)
     new (label: string, on_click: unit -> unit, button_type: ButtonType, custom_text_shrink: float32 * float32) = InlaidButton(K label, on_click, button_type, custom_text_shrink)
@@ -64,25 +69,30 @@ type InlaidButton(label_func: unit -> string, on_click: unit -> unit, button_typ
             | Default -> "default-button"
             | BottomRounded -> "default-button-bottomrounded"
             | CustomSprite tex_name -> tex_name
+            | Transparent -> ""
 
-        let button_texture =
-            if this.Focused && TEXTURES.Contains(button_texture_name + "-hover") then
-                Content.Texture (button_texture_name + "-hover")
+        let button_texture = 
+            if button_texture_name = "" then
+                None
             else
-                Content.Texture button_texture_name
+                if this.Focused && TEXTURES.Contains(button_texture_name + "-hover") then
+                    Some (Content.Texture (button_texture_name + "-hover"))
+                else
+                    Some (Content.Texture button_texture_name)
         
         let q = this.Bounds |> _.AsQuad
         
         if color_func.IsSome then
-            let q = this.Bounds.SliceL(254.0f).SliceT(InlaidButton.HEIGHT + 15.0f) |> _.AsQuad
+            let q = this.Bounds.SliceL(254.0f).SliceT(InlaidButton.HEIGHT_BOTTOM_ROUNDED + 15.0f) |> _.AsQuad
             Render.quad q (color_func.Value())
         
-        Render.tex_quad q Colors.white.AsQuad (Sprite.pick_texture (0,0) button_texture)
+        if button_texture.IsSome then
+            Render.tex_quad q Colors.white.AsQuad (Sprite.pick_texture (0,0) button_texture.Value)
 
         let text =
             if this.Focused && not this.NoHover then
-                if this.HoverIcon = "" then this.HoverText
-                else sprintf "%s %s" this.HoverIcon this.HoverText
+                if this.HoverIcon = "" then label_func()
+                else sprintf "%s %s" this.HoverIcon (label_func())
             elif this.Icon = "" then label_func()
             else sprintf "%s %s" this.Icon (label_func())
 
@@ -90,7 +100,7 @@ type InlaidButton(label_func: unit -> string, on_click: unit -> unit, button_typ
             Style.font,
             text,
             (match custom_text_shrink with
-                | Some shrink -> this.Bounds.Shrink(fst shrink, snd shrink).TranslateY(5.0f)
+                | Some shrink -> this.Bounds.Shrink(fst shrink, snd shrink)
                 | None -> this.Bounds.Shrink(10.0f, 5.0f)
              ),
             (if this.Focused then

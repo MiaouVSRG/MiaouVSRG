@@ -138,31 +138,37 @@ module OsuMania =
                         Name = "D"
                         Accuracy = 0.0
                         Color = Color.FromArgb(255, 80, 80)
+                        TextureName = None
                     }
                     {
                         Name = "C"
                         Accuracy = 0.7
                         Color = Color.FromArgb(255, 80, 255)
+                        TextureName = None
                     }
                     {
                         Name = "B"
                         Accuracy = 0.8
                         Color = Color.FromArgb(0, 80, 255)
+                        TextureName = None
                     }
                     {
                         Name = "A"
                         Accuracy = 0.9
                         Color = Color.FromArgb(0, 255, 100)
+                        TextureName = None
                     }
                     {
                         Name = "S"
                         Accuracy = 0.95
                         Color = Color.FromArgb(246, 234, 128)
+                        TextureName = None
                     }
                     {
                         Name = "SS"
                         Accuracy = 1.0
                         Color = Color.FromArgb(255, 255, 160)
+                        TextureName = None
                     }
                 |]
             Lamps =

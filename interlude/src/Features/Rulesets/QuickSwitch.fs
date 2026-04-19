@@ -25,10 +25,10 @@ module RulesetSwitcher =
                 |> Array.ofSeq
             let dropdown_items =
                 seq {
-                    yield (
-                        (fun () -> SelectRulesetPage().Show()),
-                        %"rulesets"
-                    )
+                    // yield (
+                    //     (fun () -> SelectRulesetPage().Show()),
+                    //     %"rulesets"
+                    // )
                     for name, items in groups do
                         if items.Length < 3 then
                             for (id, rs) in items do
@@ -64,14 +64,14 @@ type RulesetSwitcher(setting: Setting<string>) =
                 InlaidButton(
                     (fun () -> Rulesets.current.Name),
                     (fun () -> this.ToggleDropdown()),
-                    ButtonType.CustomSprite "ruleset-button",
+                    ButtonType.CustomSprite "ruleset-button", 
                     (10.0f, 13.0f),
                     (fun () ->
                         match Rulesets.current.Name.ToUpper() with
-                        | "EASY" -> Colors.green_accent
-                        | "NORMAL" -> Colors.blue_accent
-                        | "HARD" -> Colors.red_accent
-                        | "INSANE" -> Colors.black
+                        | "EASY" -> Colors.green_judgement
+                        | "NORMAL" -> Colors.cyan_judgement
+                        | "HARD" -> Colors.red_judgement
+                        | "STRICT" -> Colors.purple_judgement
                         | _ -> Colors.TRANSPARENT
                      ),
                     NoHover = true

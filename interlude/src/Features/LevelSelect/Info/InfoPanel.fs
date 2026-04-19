@@ -49,7 +49,7 @@ type InfoPanel() =
                 main_display,
 
                 GameplayInfo()
-                    .Position(Position.SliceB(InlaidButton.HEIGHT + 20.0f, GameplayInfo.HEIGHT)),
+                    .Position(Position.SliceB(InlaidButton.HEIGHT_BOTTOM_ROUNDED + 20.0f, GameplayInfo.HEIGHT)),
 
                 InlaidButton(
                     sprintf "%s %s" Icons.EYE %"levelselect.preview", 
@@ -60,7 +60,7 @@ type InfoPanel() =
                     .Hotkey("preview")
                     .Position(
                         Position
-                            .SliceB(InlaidButton.HEIGHT + 20.0f)
+                            .SliceB(InlaidButton.HEIGHT_BOTTOM_ROUNDED + 20.0f)
                             .GridX(1, 3, 0.0f)
                     )
                     .Help(Help.Info("levelselect.preview", "preview")),
@@ -68,7 +68,7 @@ type InfoPanel() =
                 ModSelect(change_rate)
                     .Position(
                         Position
-                            .SliceB(InlaidButton.HEIGHT + 20.0f)
+                            .SliceB(InlaidButton.HEIGHT_BOTTOM_ROUNDED + 20.0f)
                             .GridX(2, 3, 0.0f)
                     )
                     .Help(Help.Info("levelselect.mods", "mods")),
@@ -76,7 +76,7 @@ type InfoPanel() =
                 RulesetSwitcher(options.SelectedRuleset)
                     .Position(
                         Position 
-                            .SliceB(InlaidButton.HEIGHT + 20.0f)
+                            .SliceB(InlaidButton.HEIGHT_BOTTOM_ROUNDED + 20.0f)
                             .GridX(3, 3, 0.0f)
                     )
                     .Help(Help.Info("levelselect.rulesets", "ruleset_switch"))

@@ -1,9 +1,11 @@
 ﻿namespace Interlude.Features.Score
 
+open System.Linq
 open Percyqaz.Common
 open Percyqaz.Flux.Windowing
 open Percyqaz.Flux.UI
 open Percyqaz.Flux.Graphics
+open Prelude
 open Prelude.Gameplay.Scoring
 open Prelude.Data.User
 open Prelude.Data.User.Stats
@@ -11,6 +13,7 @@ open Interlude.Content
 open Interlude.UI
 open Interlude.Features.Gameplay
 open Interlude.Features.Online
+open Prelude.Skins.Themes.Theme
 
 #nowarn "3370"
 
@@ -63,10 +66,20 @@ type ScoreScreen(score_info: ScoreInfo, results: ImprovementFlags * SessionXPGai
             refresh
         )
             .Position(Position.SlicePercentB(0.35f))
+            
+    member private this.DrawRank(bounds: Rect, data: string): unit =
+        if TEXTURES.Contains(data.ToLower().Replace("+", "plus")) then
+            let sprite = Content.Texture (data.ToLower().Replace("+", "plus"))
+            let r = bounds.SliceX(400.0f).TranslateX(730.0f).SliceY(400.0f).TranslateY(-150.0f)
+            
+            Render.tex_quad
+                (r |> _.AsQuad)
+                Color.White.AsQuad
+                (Sprite.pick_texture (0,0) sprite)
 
     override this.Init(parent: Widget) =
         this
-        |+ Results(
+        |+ GameDetails(
             grade,
             lamp,
             personal_bests,
@@ -74,27 +87,18 @@ type ScoreScreen(score_info: ScoreInfo, results: ImprovementFlags * SessionXPGai
             stats,
             score_info
         )
-            .Position(
-                { Position.DEFAULT with
-                    Left = 0.35f %+ 0.0f
-                    Top = 0.0f %+ 175.0f
-                    Bottom = 0.65f %+ 0.0f
-                }
-            )
+            .Position(Position.SliceT(260.0f).TranslateY(165.0f).SliceL(410.0f))
+        |+ PlayerRating(
+            score_info
+        )
+            .Position(Position.SliceT(170.0f).SliceR(365.0f).TranslateY(660.0f).TranslateX(-70.0f))
         |+ TopBanner(score_info)
             .Position(Position.SliceT(180.0f))
-        |+ Sidebar(
+        |+ MiddleBox(
             stats,
             score_info
         )
-            .Position(
-                {
-                    Left = 0.0f %+ 20.0f
-                    Top = 0.0f %+ 215.0f
-                    Right = 0.35f %- 0.0f
-                    Bottom = 1.0f %- 70.0f
-                }
-            )
+            .Position(Position.SliceT(580.0f).TranslateY(246.0f).SliceR(885.0f).TranslateX(-540.0f))
         |+ bottom_info
         |* Confetti()
 
@@ -139,5 +143,13 @@ type ScoreScreen(score_info: ScoreInfo, results: ImprovementFlags * SessionXPGai
 
         // Render.rect (bottom_info.Bounds.ShrinkT 5.0f) (Palette.color (127, 0.5f, 0.0f))
         // Render.rect (bottom_info.Bounds.SliceT 5.0f) Colors.white.O2
+        let grade_name = score_info.Ruleset.GradeName (!grade).Grade
+        this.DrawRank(this.Bounds, grade_name)
+        
+        let tex = Content.Texture "score-screen"
+        Render.tex_quad
+            (this.Bounds |> _.AsQuad)
+            Colors.white.AsQuad
+            (Sprite.pick_texture (0,0) tex)
 
         base.Draw()

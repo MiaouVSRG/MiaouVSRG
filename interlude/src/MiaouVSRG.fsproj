@@ -125,13 +125,14 @@
     <Compile Include="Features\Score\Username.fs" />
     <Compile Include="Features\Score\Utils.fs" />
     <Compile Include="Features\Score\TopBanner.fs" />
-    <Compile Include="Features\Score\Sidebar.fs" />
+    <Compile Include="Features\Score\MiddleBox.fs" />
     <Compile Include="Features\Score\SessionScore.fs" />
     <Compile Include="Features\Score\Graph.fs" />
-    <Compile Include="Features\Score\Results.fs" />
+    <Compile Include="Features\Score\GameDetails.fs" />
     <Compile Include="Features\Score\ChartActions.fs" />
     <Compile Include="Features\Score\BottomBanner.fs" />
     <Compile Include="Features\Score\Confetti.fs" />
+    <Compile Include="Features\Score\PlayerRating.fs" />
     <Compile Include="Features\Score\ScoreScreen.fs" />
     <Compile Include="Features\Import\TaskTracking.fs" />
     <Compile Include="Features\Import\osu!\Skins.fs" />
@@ -245,7 +246,6 @@
     <Compile Include="Features\LevelSelect\Shared.fs" />
     <Compile Include="Features\LevelSelect\Filters.fs" />
     <Compile Include="Features\LevelSelect\LevelSelectOptions.fs" />
-    <Compile Include="Features\LevelSelect\LibraryView.fs" />
     <Compile Include="Features\LevelSelect\ContextMenus\ChartContextMenus.fs" />
     <Compile Include="Features\LevelSelect\ContextMenus\GroupContextMenus.fs" />
     <Compile Include="Features\LevelSelect\ContextMenus\BulkActionsMenus.fs" />
@@ -255,6 +255,7 @@
     <Compile Include="Features\LevelSelect\Tree\Charts.fs" />
     <Compile Include="Features\LevelSelect\Tree\Groups.fs" />
     <Compile Include="Features\LevelSelect\Tree\Tree.fs" />
+    <Compile Include="Features\LevelSelect\LibraryView.fs" />
     <Compile Include="Features\LevelSelect\Preview.fs" />
     <Compile Include="Features\LevelSelect\ModSelect.fs" />
     <Compile Include="Features\LevelSelect\Scoreboard\LocalScores.fs" />

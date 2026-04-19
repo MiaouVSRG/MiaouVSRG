@@ -85,7 +85,6 @@ type BottomBanner(score_info: ScoreInfo, played_just_now: bool, graph: ScoreGrap
             |* HotkeyListener("select", Gameplay.continue_endless_mode >> ignore)
 
         this
-        |+ graph
         |+ Text(Updates.version + "  : :  www.miaouvsrg.com")
             .Color(Colors.text_subheading)
             .Align(Alignment.CENTER)

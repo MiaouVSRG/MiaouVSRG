@@ -117,7 +117,7 @@ type private BeatmapImportCard(data: MinoBeatmapSet) as this =
 
         Text.fill_b (
             Style.font,
-            data.artist + "  •  " + data.creator,
+            data.artist + " - " + data.creator,
             this.Bounds.SliceB(45.0f).Shrink(10.0f, 5.0f),
             Colors.text_subheading,
             Alignment.LEFT

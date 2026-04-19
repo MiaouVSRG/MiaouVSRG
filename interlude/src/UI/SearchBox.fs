@@ -2,7 +2,9 @@
 
 open System
 open System.Runtime.CompilerServices
+open Interlude.Content
 open Percyqaz.Common
+open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.UI
 open Percyqaz.Flux.Windowing
@@ -12,7 +14,7 @@ open Prelude.Data.Library
 // todo: consider composition over inheriting the framecontainer!
 // todo: reconsider fragile composition with TextColor on TextEntry
 type SearchBox(query_text: Setting<string>, callback: string -> unit) as this =
-    inherit FrameContainer(NodeType.Container(fun _ -> Some this.TextEntry))
+    inherit Container(NodeType.Container(fun _ -> Some this.TextEntry))
     let search_timer = new Diagnostics.Stopwatch()
 
     let text_entry =
@@ -22,7 +24,7 @@ type SearchBox(query_text: Setting<string>, callback: string -> unit) as this =
             true
         )
 
-    static member HEIGHT = 60.0f
+    static member HEIGHT = 50.0f
 
     new(callback: string -> unit) = SearchBox(Setting.simple "", callback)
     new(query_text: Setting<string>, callback: FilteredSearch -> unit) = SearchBox(query_text, (fun (query: string) -> callback (FilterParts.parse query |> FilteredSearch.Build)))
@@ -43,22 +45,6 @@ type SearchBox(query_text: Setting<string>, callback: string -> unit) as this =
                 else
                     this.TextColor()
 
-        this.Fill <-
-            let existing = this.Fill
-            fun () ->
-                if this.TextEntry.Selected then
-                    Colors.yellow_accent.O1
-                else
-                    existing()
-
-        this.Border <-
-            let existing = this.Border
-            fun () ->
-                if this.TextEntry.Selected then
-                    Colors.yellow_accent
-                else
-                    existing()
-
         this
             .Add(
                 text_entry
@@ -75,6 +61,17 @@ type SearchBox(query_text: Setting<string>, callback: string -> unit) as this =
             )
 
         base.Init parent
+        
+    override this.Draw() =
+        let sprite = Content.Texture "searchbar"
+        let q = this.Bounds |> _.AsQuad
+        
+        Render.tex_quad
+            q
+            Color.White.AsQuad
+            (Sprite.pick_texture (0,0) sprite)
+            
+        base.Draw()
 
     override this.Update(elapsed_ms, moved) =
         base.Update(elapsed_ms, moved)

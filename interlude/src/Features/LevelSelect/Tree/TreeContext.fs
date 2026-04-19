@@ -23,7 +23,7 @@ module TreeConstants =
     let [<Literal>] CHART_SELECTED_PADDING = 50.0f
     let [<Literal>] CHART_SPACING = Style.PADDING
     let [<Literal>] GROUP_HEIGHT = 55.0f
-    let [<Literal>] GROUP_SPACING = Style.PADDING * 4.0f
+    let [<Literal>] GROUP_SPACING = Style.PADDING * 6.0f
 
     let [<Literal>] GROUP_ITEM_LEFT_SPLIT = 0.55f
 

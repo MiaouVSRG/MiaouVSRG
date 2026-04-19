@@ -1,6 +1,7 @@
 ﻿namespace Percyqaz.Flux.Graphics
 
 open System
+open System.Globalization
 open System.IO
 open SixLabors.Fonts
 open SixLabors.ImageSharp
@@ -391,7 +392,9 @@ module Text =
 
         width
 
-    let draw_b (font: SpriteFont, text: string, scale: float32, x: float32, y: float32, (fg: Drawing.Color, bg: Drawing.Color)) : unit =
+    let draw_b (font: SpriteFont, _text: string, scale: float32, x: float32, y: float32, (fg: Drawing.Color, bg: Drawing.Color)) : unit =
+        // Currently not supported by a lot of fonts
+        let text = _text.Replace("•", "-")
 
         let level, scale_mult =
             let l1 = scale / font.BaseScale
@@ -408,6 +411,10 @@ module Text =
 
         for char in text.AsSpan() do
 
+            // Due to font specifications, we have to draw differently the Icons (PrivateUse chars) and the text
+            // For some fonts, the text is drawn under the Icon, for others the text is drawn over the Icon
+            let private_use = Char.GetUnicodeCategory char = UnicodeCategory.PrivateUse
+
             if char = ' ' then
                 x <- x + font.SpaceWidth * scale
             elif Char.IsHighSurrogate char then
@@ -422,7 +429,11 @@ module Text =
                 let s = char_lookup code
                 let w = float32 s.Width * scale_mult
                 let h = float32 s.Height * scale_mult
-                let r = Rect.FromSize(x, y, w, h)
+                let r =
+                    if private_use then
+                        Rect.FromSize(x, y, w, h)
+                    else
+                        Rect.FromSize(x, y - (0.25f * scale), w, h)
 
                 if (bg: Drawing.Color).A <> 0uy then
                     Render.tex_quad

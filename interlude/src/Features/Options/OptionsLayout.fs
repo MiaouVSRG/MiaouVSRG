@@ -76,8 +76,6 @@ type private OptionsPageHeader(current_tab: Setting<OptionsTab>) as this =
             if query = "" then current_tab.Set State.recent_tab
             else current_tab.Set (OptionsTab.SearchResults <| SearchResults.get query)
         )
-            .Fill(Colors.cyan.O3)
-            .Border(Colors.cyan_accent)
             .TextColor(Colors.text_cyan)
             .KeyboardAutoSelect()
             .Position(
@@ -179,14 +177,14 @@ type private OptionsPageFooter() as this =
             .With(
                 InlaidButton(%"menu.back", Menu.Back, ButtonType.Default)
                     .Icon(Icons.ARROW_LEFT_CIRCLE)
-                    .Position(Position.SliceB(HEIGHT).SliceY(InlaidButton.HEIGHT).SliceL(10.0f, 180.0f)),
+                    .Position(Position.SliceB(HEIGHT).SliceY(InlaidButton.HEIGHT_BOTTOM_ROUNDED).SliceL(10.0f, 180.0f)),
 
                 InlaidButton(%"noteskin.edit", SkinActions.edit_or_extract_noteskin, ButtonType.Default)
                     .Icon(Icons.IMAGE)
                     .Position(
                         Position
                             .SliceB(HEIGHT)
-                            .SliceY(InlaidButton.HEIGHT)
+                            .SliceY(InlaidButton.HEIGHT_BOTTOM_ROUNDED)
                             .ShrinkPercentR(0.5f)
                             .ShrinkL(210.0f)
                             .GridX(1, 2, 20.0f)
@@ -199,7 +197,7 @@ type private OptionsPageFooter() as this =
                     .Position(
                         Position
                             .SliceB(HEIGHT)
-                            .SliceY(InlaidButton.HEIGHT)
+                            .SliceY(InlaidButton.HEIGHT_BOTTOM_ROUNDED)
                             .ShrinkPercentR(0.5f)
                             .ShrinkL(210.0f)
                             .GridX(2, 2, 20.0f)

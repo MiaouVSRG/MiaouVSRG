@@ -63,81 +63,97 @@ module Wife3 =
                         Name = "D"
                         Accuracy = 0.0
                         Color = Color.Red
+                        TextureName = None
                     }
                     {
                         Name = "C"
                         Accuracy = 0.6
                         Color = Color.Purple
+                        TextureName = None
                     }
                     {
                         Name = "B"
                         Accuracy = 0.7
                         Color = Color.Blue
+                        TextureName = None
                     }
                     {
                         Name = "A"
                         Accuracy = 0.8
                         Color = Color.Lime
+                        TextureName = None
                     }
                     {
                         Name = "A."
                         Accuracy = 0.85
                         Color = Color.Lime
+                        TextureName = None
                     }
                     {
                         Name = "A:"
                         Accuracy = 0.9
                         Color = Color.Lime
+                        TextureName = None
                     }
                     {
                         Name = "AA"
                         Accuracy = 0.93
                         Color = Color.Lime
+                        TextureName = None
                     }
                     {
                         Name = "AA."
                         Accuracy = 0.965
                         Color = Color.Lime
+                        TextureName = None
                     }
                     {
                         Name = "AA:"
                         Accuracy = 0.99
                         Color = Color.Lime
+                        TextureName = None
                     }
                     {
                         Name = "AAA"
                         Accuracy = 0.997
                         Color = Color.Gold
+                        TextureName = None
                     }
                     {
                         Name = "AAA."
                         Accuracy = 0.998
                         Color = Color.Gold
+                        TextureName = None
                     }
                     {
                         Name = "AAA:"
                         Accuracy = 0.999
                         Color = Color.Gold
+                        TextureName = None
                     }
                     {
                         Name = "AAAA"
                         Accuracy = 0.99955
                         Color = Color.Cyan
+                        TextureName = None
                     }
                     {
                         Name = "AAAA."
                         Accuracy = 0.9997
                         Color = Color.Cyan
+                        TextureName = None
                     }
                     {
                         Name = "AAAA:"
                         Accuracy = 0.9998
                         Color = Color.Cyan
+                        TextureName = None
                     }
                     {
                         Name = "AAAAA"
                         Accuracy = 0.999935
                         Color = Color.White
+                        TextureName = None
                     }
                 |]
             Lamps =

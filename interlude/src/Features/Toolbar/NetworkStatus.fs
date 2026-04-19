@@ -21,7 +21,7 @@ type NetworkStatus() as this =
         base.Init parent
 
     override this.Draw() =
-        let area = this.Bounds.ShrinkX(30.0f).SliceT(InlaidButton.HEIGHT)
+        let area = this.Bounds.ShrinkX(30.0f).SliceT(InlaidButton.HEIGHT_BOTTOM_ROUNDED)
 
         let text, color =
             match Network.status with

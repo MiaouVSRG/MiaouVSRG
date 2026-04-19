@@ -72,56 +72,67 @@ module SC =
                         Name = "D"
                         Accuracy = 0.0
                         Color = Color.FromArgb(200, 163, 155)
+                        TextureName = None
                     }
                     {
                         Name = "C-"
                         Accuracy = 0.89995
                         Color = Color.FromArgb(194, 162, 182)
+                        TextureName = None
                     }
                     {
                         Name = "C"
                         Accuracy = 0.90995
                         Color = Color.FromArgb(202, 153, 183)
+                        TextureName = None
                     }
                     {
                         Name = "B-"
                         Accuracy = 0.91995
                         Color = Color.FromArgb(163, 190, 207)
+                        TextureName = None
                     }
                     {
                         Name = "B"
                         Accuracy = 0.92995
                         Color = Color.FromArgb(149, 193, 220)
+                        TextureName = None
                     }
                     {
                         Name = "A-"
                         Accuracy = 0.93995
                         Color = Color.FromArgb(148, 210, 180)
+                        TextureName = None
                     }
                     {
                         Name = "A"
                         Accuracy = 0.94995
                         Color = Color.FromArgb(134, 227, 183)
+                        TextureName = None
                     }
                     {
                         Name = "A+"
                         Accuracy = 0.95995
                         Color = Color.FromArgb(127, 231, 139)
+                        TextureName = None
                     }
                     {
                         Name = "S-"
                         Accuracy = 0.96995
                         Color = Color.FromArgb(237, 205, 140)
+                        TextureName = None
                     }
                     {
                         Name = "S"
                         Accuracy = 0.97995
                         Color = Color.FromArgb(246, 234, 128)
+                        TextureName = None
                     }
                     {
                         Name = "S+"
                         Accuracy = 0.98995
                         Color = Color.FromArgb(235, 200, 220)
+                        TextureName = None
                     }
                 |]
             Lamps =

@@ -92,8 +92,6 @@ type HotkeysPage() =
                         || p.AsText.Equals(query, System.StringComparison.InvariantCultureIgnoreCase)
                     | _ -> false
             )
-                .Fill(Colors.cyan.O3)
-                .Border(Colors.cyan_accent)
                 .TextColor(Colors.text_cyan)
                 .KeyboardAutoSelect()
                 .Position(Position.SliceT(40.0f, SearchBox.HEIGHT).Shrink(PAGE_MARGIN_X, 0.0f).SliceR(500.0f))
