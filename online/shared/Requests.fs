@@ -689,12 +689,52 @@ module Web =
             let ROUTE = (GET, MAIN_ENDPOINT + "/user")
             
             [<Json.AutoCodec>]
-            type Response =
+            type Stats =
+                {
+                    GlobalRanking: int
+                    CountryRanking: int
+                    PlayerRating: float
+                    Completion: string
+                }
+                
+            [<Json.AutoCodec>]
+            type GradeCountInfo =
+                {
+                    Pass: int
+                    Clear: int
+                    ClearPlus: int
+                    Overclear: int
+                    OverclearPlus: int
+                    Perfect: int
+                }
+                
+            [<Json.AutoCodec>]
+            type GradeCount =
+                {
+                    Easy: GradeCountInfo
+                    Normal: GradeCountInfo
+                    Hard: GradeCountInfo
+                    Strict: GradeCountInfo
+                }
+            
+            [<Json.AutoCodec>]
+            type ProfileInfo =
                 {
                     Username: string
                     Country: string // TODO: how ?
                     Followers: int
                     Level: int64
+                    StatsGlobal: Stats
+                    Stats4K: Stats
+                    Stats7K: Stats
+                    Playtime: string
+                    GradeCount: GradeCount
+                }
+            
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    ProfileInfo: ProfileInfo
                 }
             
             let get (name: string, callback: Response option -> unit) =

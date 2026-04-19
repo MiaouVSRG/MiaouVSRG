@@ -22,7 +22,7 @@ module Rulesets =
     let DEFAULT_ID = "normal"
 
     // Other rulesets that have to be loaded but not selected by default
-    let OTHER_RULESETS = [EASY; HARD; INSANE]
+    let OTHER_RULESETS = [EASY; HARD; STRICT ]
 
     let mutable private initialised = false
     let private loaded = Dictionary<string, Ruleset>()

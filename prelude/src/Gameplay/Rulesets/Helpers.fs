@@ -15,8 +15,8 @@ module DefaultRulesets =
     let HARD = Defaults.HARD
     let HARD_HASH = Ruleset.hash HARD
 
-    let INSANE = Defaults.STRICT
-    let INSANE_HASH = Ruleset.hash INSANE
+    let STRICT = Defaults.STRICT
+    let STRICT_HASH = Ruleset.hash STRICT
 
     // let a default ruleset, that will be used everywhere in code : 
     // - Performance calculation

@@ -410,3 +410,47 @@ module Score =
 
     let wipe_leaderboard (chart_id: string) =
         WIPE_LEADERBOARD.Execute chart_id core_db |> expect
+        
+        
+    type ScoreByUserIdModel =
+        {
+            Id: int64
+            ChartId: string
+            TimePlayed: int64
+            Rate: float32
+            Mods: ModState
+            Accuracy: float
+            Grade: int
+            Lamp: int
+            ReplayId: int option
+        }
+        
+    let BY_USER_ID: Query<int64, ScoreByUserIdModel> =
+        {
+            SQL =
+                """
+            SELECT Id, ChartId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp, ReplayId FROM scores2
+            WHERE UserId = @UserId
+            ORDER BY Accuracy DESC -- Best plays first
+            """
+            Parameters = [ "@UserId", SqliteType.Integer, 8 ]
+            FillParameters = fun p user_id -> p.Int64 user_id
+            Read =
+                (fun r ->
+                    {
+                        Id = r.Int64
+                        ChartId = r.String
+                        TimePlayed = r.Int64
+                        Rate = r.Float32
+                        Mods = r.Json JSON
+                        Accuracy = r.Float64
+                        Grade = r.Int32
+                        Lamp = r.Int32
+                        ReplayId = r.Int32Option
+                    }
+                )
+        }
+        
+    let by_user_id(user_id: int64) =
+        Logging.Debug "ouais %i" user_id
+        BY_USER_ID.Execute user_id core_db |> expect

@@ -77,3 +77,27 @@ module Charts =
         
     let get_chart_by_id (id: string) : Chart option =
         GET_BY_ID.Execute id new_db |> expect |> Array.tryExactlyOne
+        
+    let private GET_SOME: Query<int64, Chart> =
+        {
+            SQL =
+                """
+                SELECT Id, DownloadLink, Source FROM charts
+                LIMIT @limit;
+                """
+            Parameters = [
+                "@limit", SqliteType.Integer, 8
+            ]
+            FillParameters = fun p int -> p.Int64 int
+            Read =
+                (fun r ->
+                {
+                    ChartId = r.String
+                    DownloadLink = r.String
+                    Source = r.String
+                }
+            )
+        }
+        
+    let get_all =
+        GET_SOME.Execute 50000000 new_db |> expect

@@ -7,6 +7,7 @@ open Percyqaz.Flux.UI
 open Prelude
 open Prelude.Data
 open Interlude.UI
+open Interlude.Web.Shared.Requests
 
 type BeatmapStatusToggle =
     static member Create(label: string, status: int, color: Color, statuses: Setting<Set<int>>) =
