@@ -90,6 +90,8 @@ module Charts =
                     Accuracy: float
                     JudgementCounts: int array
                     ComboBreaks: int
+                    BeatmapsetId: int option
+                    Keymode: int
                 }
 
             [<Json.AutoCodec>]
@@ -729,6 +731,15 @@ module Web =
                     Stats7K: Stats
                     Playtime: string
                     GradeCount: GradeCount
+                    Avatar: string
+                    Banner: string
+                    Playcount: int
+                    TotalHits: int
+                    OsuCompletion: string
+                    EtternaCompletion: string
+                    O2JamCompletion: string
+                    BMSCompletion: string
+                    HitAccuracy: string
                 }
             
             [<Json.AutoCodec>]

@@ -2,13 +2,13 @@
 
 open Percyqaz.Common
 open Prelude
-open Prelude.Charts
 open Prelude.Mods
 open Prelude.Gameplay.Replays
 open Prelude.Gameplay.Scoring
 open Interlude.Web.Server.Domain.Core
 open Interlude.Web.Server.Domain.Services
 open Interlude.Web.Server.Domain
+open Prelude.Gameplay.Rulesets
 
 module Scores =
 
@@ -102,7 +102,9 @@ module Scores =
             timestamp: int64,
             accuracy: float,
             judgement_counts: int array,
-            combo_breaks: int
+            combo_breaks: int,
+            beatmapset_id: int option,
+            keymode: int
         ) =
         async {
 
@@ -119,8 +121,9 @@ module Scores =
                 let chart: New.Chart =
                     {
                         ChartId = chart_id
-                        DownloadLink = "test"
-                        Source = "osu!"
+                        DownloadLink = if beatmapset_id.IsSome then sprintf "https://catboy.best/d/%in" beatmapset_id.Value else "not implemented"
+                        Source = if beatmapset_id.IsSome then "osu!" else "none"
+                        Keymode = keymode
                     }
                         
                 New.Charts.add (chart.FormatSource()) |> ignore

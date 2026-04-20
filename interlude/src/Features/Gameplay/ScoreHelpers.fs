@@ -4,6 +4,7 @@ open Percyqaz.Common
 open Percyqaz.Flux.Windowing
 open Prelude
 open Prelude.Calculator.KeymodeSkillBreakdown
+open Prelude.Charts
 open Prelude.Mods
 open Prelude.Gameplay.Replays
 open Prelude.Gameplay.Scoring
@@ -32,6 +33,11 @@ module Gameplay =
     let leaderboard_rank_changed = leaderboard_rank_changed_ev.Publish
 
     let upload_score (score_info: ScoreInfo) =
+        let mutable beatmapsetid = None
+        for origin in score_info.ChartMeta.Origins do
+            match origin with
+            | ChartOrigin.Osu c_origin -> beatmapsetid <- Some c_origin.BeatmapSetId
+            | _ -> beatmapsetid <- None
         Charts.Scores.Save.post (
             // TODO: Make score_info.Scoring Jsonable
             ({
@@ -43,6 +49,8 @@ module Gameplay =
                 Accuracy = score_info.Accuracy
                 JudgementCounts = score_info.Scoring.JudgementCounts
                 ComboBreaks = score_info.Scoring.ComboBreaks
+                BeatmapsetId = beatmapsetid
+                Keymode = score_info.Chart.Keys
             }),
             (function
                 | None -> Logging.Error "Error submitting score (%s on %s)" (score_info.Ruleset.FormatAccuracy score_info.Accuracy) score_info.ChartMeta.Title

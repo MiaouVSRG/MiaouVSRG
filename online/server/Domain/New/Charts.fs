@@ -10,6 +10,7 @@ type Chart =
         ChartId: string
         DownloadLink: string
         Source: string
+        Keymode: int
     }
     member this.FormatSource() = {
         this with Source = if this.Source.Equals("osu!") || this.Source.Equals("Etterna") || this.Source.Equals("BMS") || this.Source.Equals("o2jam") then this.Source else "none"
@@ -23,7 +24,8 @@ module Charts =
             CREATE TABLE charts (
                 Id TEXT PRIMARY KEY NOT NULL,
                 DownloadLink TEXT NOT NULL,
-                Source TEXT NOT NULL
+                Source TEXT NOT NULL,
+                Keymode INTEGER NOT NULL
             );
             """
         }
@@ -32,8 +34,8 @@ module Charts =
         {
             SQL =
                 """
-            INSERT INTO charts (Id, DownloadLink, Source)
-            VALUES (@ChartId, @DownloadLink, @Source)
+            INSERT INTO charts (Id, DownloadLink, Source, Keymode)
+            VALUES (@ChartId, @DownloadLink, @Source, @Keymode)
             RETURNING Id;
             """
             Parameters =
@@ -41,12 +43,14 @@ module Charts =
                     "@ChartId", SqliteType.Text, -1
                     "@DownloadLink", SqliteType.Text, -1
                     "@Source", SqliteType.Text, -1
+                    "@Keymode", SqliteType.Integer, 8
                 ]
             FillParameters =
                 (fun p chart ->
                     p.String chart.ChartId
                     p.String chart.DownloadLink
                     p.String chart.Source
+                    p.Int64 chart.Keymode
                 )
             Read = fun r -> r.String
         }
@@ -58,7 +62,7 @@ module Charts =
         {
             SQL =
                 """
-                SELECT Id, DownloadLink, Source FROM charts
+                SELECT Id, DownloadLink, Source, Keymode FROM charts
                 WHERE Id = @ChartId;
                 """
             Parameters = [
@@ -71,6 +75,7 @@ module Charts =
                     ChartId = r.String
                     DownloadLink = r.String
                     Source = r.String
+                    Keymode = r.Int32
                 }
             )
         }
@@ -82,7 +87,7 @@ module Charts =
         {
             SQL =
                 """
-                SELECT Id, DownloadLink, Source FROM charts
+                SELECT Id, DownloadLink, Source, Keymode FROM charts
                 LIMIT @limit;
                 """
             Parameters = [
@@ -95,9 +100,35 @@ module Charts =
                     ChartId = r.String
                     DownloadLink = r.String
                     Source = r.String
+                    Keymode = r.Int32
                 }
             )
         }
         
     let get_all =
         GET_SOME.Execute 50000000 new_db |> expect
+        
+    let private GET_BY_SOURCE: Query<string, Chart> =
+        {
+            SQL =
+                """
+                SELECT Id, DownloadLink, Source, Keymode FROM charts
+                WHERE Source = @Source;
+                """
+            Parameters = [
+                "@Source", SqliteType.Text, -1
+            ]
+            FillParameters = fun p string -> p.String string
+            Read =
+                (fun r ->
+                {
+                    ChartId = r.String
+                    DownloadLink = r.String
+                    Source = r.String
+                    Keymode = r.Int32
+                }
+            )
+        }
+        
+    let rec get_by_source(source: string) =
+        GET_BY_SOURCE.Execute source new_db |> expect

@@ -69,7 +69,7 @@ type MiddleBox(stats: ScoreScreenStats ref, score_info: ScoreInfo) =
                 Style.font,
                 sprintf "%i" judgement_counts.[i],
                 60.0f,
-                (if will_wrap then this.Bounds.Right - 220.0f else this.Bounds.Left + 230.0f),
+                (if i = 3 || i = 0 then this.Bounds.Right - 220.0f else this.Bounds.Left + 230.0f),
                 this.Bounds.Top - 50.0f + 130.0f * column_position,
                 Colors.text
             )

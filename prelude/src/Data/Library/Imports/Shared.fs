@@ -4,6 +4,7 @@ open System
 open System.IO
 open System.Text.RegularExpressions
 open Percyqaz.Common
+open Prelude
 open Prelude.Charts
 open Prelude.Formats
 open Prelude.Formats.Osu

@@ -27,6 +27,7 @@ module Add =
                 ChartId = (query_params["chartId"][0]).ToUpper()
                 DownloadLink = query_params["downloadLink"][0]
                 Source = query_params["source"][0]
+                Keymode = query_params["keymode"][0] |> int
             }
             
             match Charts.get_chart_by_id chart.ChartId with

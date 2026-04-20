@@ -1,15 +1,12 @@
 ﻿namespace Interlude.Features.LevelSelect
 
 open Interlude.Content
-open Percyqaz.Common
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.UI
-open Prelude
 open Prelude.Data.User
 open Interlude.UI
 open Interlude.Features.Score
-open Interlude.Web.Shared.Requests
 
 type private OnlineScoreCard(score: LeaderboardScore, score_info: ScoreInfo) =
     inherit

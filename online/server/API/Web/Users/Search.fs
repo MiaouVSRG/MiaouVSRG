@@ -34,18 +34,34 @@ module Search =
                 let stats = Stats.get_or_default user_id
                 let scores = Score.by_user_id user_id
                 let all_charts = Charts.get_all
+                let osu_charts = Charts.get_by_source "osu!"
+                let etterna_charts = Charts.get_by_source "Etterna"
+                let o2Jam_charts = Charts.get_by_source "o2Jam"
+                let bms_charts = Charts.get_by_source "BMS"
                 
-                let get_completion(scores: Score.ScoreByUserIdModel array, charts: Chart array): float32 =
+                let mutable total_acc = 0.0
+                for score in scores do
+                    total_acc <- score.Accuracy * 100.0
+                let average_acc = total_acc / float scores.Length
+                
+                let get_completion(scores: Score.ScoreByUserIdModel array, charts: Chart array, keymode: int option): float32 =
+                    let new_charts =
+                        if keymode.IsSome then
+                            charts |> Array.filter(fun chart -> chart.Keymode = keymode.Value)
+                        else
+                            charts
+                            
                     let already_played: string array = Array.create scores.Length ""
                     let mutable played_maps = 0.0f
                     
                     for i in 0 .. scores.Length - 1 do
                         let score = scores[i]
-                        if not (already_played.Contains(score.ChartId)) then
+                        
+                        if not (already_played.Contains(score.ChartId)) && (new_charts |> Array.map(_.ChartId) |> Array.contains score.ChartId) then
                             already_played.SetValue(score.ChartId, i)
                             played_maps <- played_maps + 1.0f
                             
-                    played_maps / float32 charts.Length
+                    played_maps / float32 new_charts.Length
                 
                 let get_user_grades (ruleset: Ruleset, scores: Score.ScoreByUserIdModel array): GradeCountInfo =
                     let already_played: (string * float32) array = Array.create scores.Length ("", 0.0f)
@@ -102,7 +118,14 @@ module Search =
                 let hard_grades = get_user_grades(HARD, scores)
                 let strict_grades = get_user_grades(STRICT, scores)
                 
-                let completion_percent = sprintf "%.2f%%" (get_completion(scores, all_charts) * 100.0f)
+                let completion_percent_global = sprintf "%.2f%%" (get_completion(scores, all_charts, None) * 100.0f)
+                let completion_percent_4k = sprintf "%.2f%%" (get_completion(scores, all_charts, Some 4) * 100.0f)
+                let completion_percent_7k = sprintf "%.2f%%" (get_completion(scores, all_charts, Some 7) * 100.0f)
+                
+                let completion_osu = sprintf "%.2f%%" (get_completion(scores, osu_charts, None) * 100.0f)
+                let completion_etterna = sprintf "%.2f%%" (get_completion(scores, etterna_charts, None) * 100.0f)
+                let completion_o2jam = sprintf "%.2f%%" (get_completion(scores, o2Jam_charts, None) * 100.0f)
+                let completion_bms = sprintf "%.2f%%" (get_completion(scores, bms_charts, None) * 100.0f)
                 
                 let profile_info: ProfileInfo = {
                     Username = db_user.Username
@@ -113,19 +136,19 @@ module Search =
                         GlobalRanking = rank_4k
                         CountryRanking = 0
                         PlayerRating = Math.Round(float (max rating_7k rating_4k), 2)
-                        Completion = completion_percent
+                        Completion = completion_percent_global
                     }
                     Stats4K = {
                         GlobalRanking = rank_4k
                         CountryRanking = 0
                         PlayerRating = Math.Round(float rating_4k, 2)
-                        Completion = completion_percent
+                        Completion = completion_percent_4k
                     }
                     Stats7K = {
                         GlobalRanking = rank_7k
                         CountryRanking = 0
                         PlayerRating = Math.Round(float rating_7k, 2)
-                        Completion = completion_percent
+                        Completion = completion_percent_7k
                     }
                     Playtime = format_long_time stats.Playtime
                     GradeCount = {
@@ -134,6 +157,15 @@ module Search =
                         Hard = hard_grades
                         Strict = strict_grades
                     }
+                    Avatar = "https://a.ppy.sh/25261784?1764839996.jpeg"
+                    Banner = "https://assets.ppy.sh/user-profile-covers/25261784/4337e6766860ef2203e32c4c16b7f5c7c552a72d1522aadf2b1af10e726a21a1.jpeg"
+                    Playcount = scores.Length
+                    TotalHits = stats.NotesHit
+                    OsuCompletion = completion_osu
+                    EtternaCompletion = completion_etterna
+                    O2JamCompletion = completion_o2jam
+                    BMSCompletion = completion_bms
+                    HitAccuracy = sprintf "%.2f%%" average_acc
                 }
                 
                 let res: Response = {
