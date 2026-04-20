@@ -90,8 +90,6 @@ module Charts =
                     Accuracy: float
                     JudgementCounts: int array
                     ComboBreaks: int
-                    BeatmapsetId: int option
-                    Keymode: int
                 }
 
             [<Json.AutoCodec>]

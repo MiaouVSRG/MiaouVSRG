@@ -122,7 +122,7 @@ module Scores =
                     {
                         ChartId = chart_id
                         DownloadLink = if beatmapset_id.IsSome then sprintf "https://catboy.best/d/%in" beatmapset_id.Value else "not implemented"
-                        Source = if beatmapset_id.IsSome then "osu!" else "none"
+                        Source = "osu!" //if beatmapset_id.IsSome then "osu!" else "none"
                         Keymode = keymode
                     }
                         
