@@ -1,6 +1,7 @@
 ﻿namespace Interlude.Web.Shared.Requests
 
 open Percyqaz.Data
+open Percyqaz.Data.Json.Codecs
 open Prelude
 open Prelude.Charts
 open Prelude.Gameplay.Replays
@@ -90,8 +91,6 @@ module Charts =
                     Accuracy: float
                     JudgementCounts: int array
                     ComboBreaks: int
-                    BeatmapsetId: int option
-                    Keymode: int
                 }
 
             [<Json.AutoCodec>]

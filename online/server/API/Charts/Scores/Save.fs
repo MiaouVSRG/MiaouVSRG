@@ -22,14 +22,14 @@ module Save =
         async {
             let user_id, _ = authorize headers
             
-            if body.Contains("Keymode") then // New API request has this attribute
+            if body.Contains("Accuracy") then // New API request has this attribute
                 match JSON.FromString body with
                 | Error e -> raise (BadRequestException None)
                 | Ok(request: Request) ->
 
                 let chart_id = request.ChartId.ToUpper()
 
-                match! Scores.submit (user_id, chart_id, request.Replay, request.Rate, request.Mods, request.Timestamp, request.Accuracy, request.JudgementCounts, request.ComboBreaks, request.BeatmapsetId, request.Keymode) with
+                match! Scores.submit (user_id, chart_id, request.Replay, request.Rate, request.Mods, request.Timestamp, request.Accuracy, request.JudgementCounts, request.ComboBreaks, None, None) with
                 | Scores.ScoreUploadOutcome.Failed -> raise (BadRequestException None)
                 | Scores.ScoreUploadOutcome.Unranked -> response.ReplyJson<Response>(None)
                 | Scores.ScoreUploadOutcome.Ranked(new_position) ->

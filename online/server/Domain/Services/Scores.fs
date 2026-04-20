@@ -104,7 +104,7 @@ module Scores =
             judgement_counts: int array,
             combo_breaks: int,
             beatmapset_id: int option,
-            keymode: int
+            keymode: int option
         ) =
         async {
 
@@ -123,7 +123,7 @@ module Scores =
                         ChartId = chart_id
                         DownloadLink = if beatmapset_id.IsSome then sprintf "https://catboy.best/d/%in" beatmapset_id.Value else "not implemented"
                         Source = if beatmapset_id.IsSome then "osu!" else "none"
-                        Keymode = keymode
+                        Keymode = if keymode.IsSome then keymode.Value else 0
                     }
                         
                 New.Charts.add (chart.FormatSource()) |> ignore
