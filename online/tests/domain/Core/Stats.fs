@@ -8,7 +8,7 @@ module Stats =
 
     [<Test>]
     let Stats_RoundTrip () =
-        let user_id = User.create ("StatsRoundTrip", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("StatsRoundTrip", 0uL) |> User.save_new
 
         let stats : Stats =
             {
@@ -34,7 +34,7 @@ module Stats =
 
     [<Test>]
     let Stats_Idempotence () =
-        let user_id = User.create ("StatsIdempotence", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("StatsIdempotence", 0uL) |> User.save_new
 
         let stats : Stats =
             {
@@ -62,7 +62,7 @@ module Stats =
 
     [<Test>]
     let Stats_DoesntExist () =
-        let user_id = User.create ("StatsDoesntExist", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("StatsDoesntExist", 0uL) |> User.save_new
 
         let result = Stats.get user_id
         let result_or_default = Stats.get_or_default user_id
@@ -71,7 +71,7 @@ module Stats =
 
     [<Test>]
     let Stats_Leaderboards () =
-        let user_id = User.create ("StatsLeaderboard", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("StatsLeaderboard", 0uL) |> User.save_new
 
         let stats : Stats =
             {
@@ -105,7 +105,7 @@ module Stats =
 
     [<Test>]
     let Stats_Rankings () =
-        let user_id = User.create ("StatsRankings", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("StatsRankings", 0uL) |> User.save_new
 
         let stats : Stats =
             {
@@ -150,7 +150,7 @@ module MonthlyStats =
 
     [<Test>]
     let MonthlyStats_RoundTrip () =
-        let user_id = User.create ("MonthlyStatsRoundTrip", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("MonthlyStatsRoundTrip", 0uL) |> User.save_new
 
         let stats : MonthlyStats =
             {
@@ -173,7 +173,7 @@ module MonthlyStats =
 
     [<Test>]
     let MonthlyStats_Idempotence () =
-        let user_id = User.create ("MonthlyStatsIdempotence", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("MonthlyStatsIdempotence", 0uL) |> User.save_new
 
         let stats : MonthlyStats =
             {
@@ -198,7 +198,7 @@ module MonthlyStats =
 
     [<Test>]
     let MonthlyStats_DoesntExist () =
-        let user_id = User.create ("MonthlyStatsDoesntExist", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("MonthlyStatsDoesntExist", 0uL) |> User.save_new
 
         let result = MonthlyStats.get 1 user_id
         let result_or_default = MonthlyStats.get_or_default 1 user_id
@@ -207,7 +207,7 @@ module MonthlyStats =
 
     [<Test>]
     let MonthlyStats_Leaderboards () =
-        let user_id = User.create ("MonthlyStatsLeaderboard", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("MonthlyStatsLeaderboard", 0uL) |> User.save_new
 
         let stats : MonthlyStats =
             {
@@ -253,8 +253,8 @@ module MonthlyStats =
 
     [<Test>]
     let MonthlyStats_Rankings () =
-        let user_id = User.create ("MonthlyStatsRankings", 0uL) |> User.save_new
-        let user_id2 = User.create ("MonthlyStatsRankings2", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("MonthlyStatsRankings", 0uL) |> User.save_new
+        let user_id2 = User.create_with_discord ("MonthlyStatsRankings2", 0uL) |> User.save_new
 
         let stats : MonthlyStats =
             {

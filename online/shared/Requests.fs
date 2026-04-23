@@ -749,6 +749,30 @@ module Web =
             let get (name: string, callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE + "?name=" + name, callback)
                 
+        module Login =
+            let ROUTE = (POST, MAIN_ENDPOINT + "/user/login")
+            
+            [<Json.AutoCodec>]
+            type Request = {
+                Username: string
+                Password: string
+            }
+
+            let post (request: Request, callback: bool option -> unit) =
+                Client.post<Request> (snd ROUTE, request, callback)
+                
+        module Register =
+            let ROUTE = (POST, MAIN_ENDPOINT + "/user/register")
+            
+            [<Json.AutoCodec>]
+            type Request = {
+                Username: string
+                Password: string
+            }
+            
+            let post (request: Request, callback: bool option -> unit) =
+                Client.post<Request> (snd ROUTE, request, callback)
+                
     module Leaderboard =
         let ROUTE = (GET, MAIN_ENDPOINT + "/leaderboard")
         

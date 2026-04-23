@@ -20,7 +20,7 @@ module Scores =
 
     [<Test>]
     let RecentScore_RoundTrip () =
-        let user_id = User.create ("RecentScoreRoundTrip", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("RecentScoreRoundTrip", 0uL) |> User.save_new
 
         let score =
             Score.create (user_id, CRESCENT_MOON, TIMEPLAYED, 1.0f<rate>, Map.empty, true, 0.98, 1, 3)
@@ -42,8 +42,8 @@ module Scores =
     let Leaderboard_RoundTripWithReplays () =
         Score.wipe_leaderboard CRESCENT_MOON |> printfn "Clearing %i scores + replays to set up test"
 
-        let user1_id = User.create ("LeaderboardRoundTripWithReplayA", 0uL) |> User.save_new
-        let user2_id = User.create ("LeaderboardRoundTripWithReplayB", 0uL) |> User.save_new
+        let user1_id = User.create_with_discord ("LeaderboardRoundTripWithReplayA", 0uL) |> User.save_new
+        let user2_id = User.create_with_discord ("LeaderboardRoundTripWithReplayB", 0uL) |> User.save_new
 
         let replayA =
             Replay.create (user1_id, CRESCENT_MOON, TIMEPLAYED, CRESCENT_MOON_REPLAY_DATA)
@@ -98,7 +98,7 @@ module Scores =
         Score.wipe_leaderboard CRESCENT_MOON |> printfn "Clearing %i scores + replays to set up test"
 
         let user_id =
-            User.create ("LeaderboardRoundTripMultipleScoresWorstFirst", 0uL)
+            User.create_with_discord ("LeaderboardRoundTripMultipleScoresWorstFirst", 0uL)
             |> User.save_new
 
         let replayA =
@@ -147,7 +147,7 @@ module Scores =
         Score.wipe_leaderboard CRESCENT_MOON |> printfn "Clearing %i scores + replays to set up test"
 
         let user_id =
-            User.create ("LeaderboardRoundTripMultipleScoresBestFirst", 0uL)
+            User.create_with_discord ("LeaderboardRoundTripMultipleScoresBestFirst", 0uL)
             |> User.save_new
 
         let replayB =
@@ -186,7 +186,7 @@ module Scores =
     [<Test>]
     let LeaderboardScore_RoundTripMultipleScoresWorstFirst () =
         let user_id =
-            User.create ("LeaderboardScoreRoundTripMultipleScoresWorstFirst", 0uL)
+            User.create_with_discord ("LeaderboardScoreRoundTripMultipleScoresWorstFirst", 0uL)
             |> User.save_new
 
         let replayA =
@@ -229,7 +229,7 @@ module Scores =
     [<Test>]
     let LeaderboardScore_RoundTripMultipleScoresBestFirst () =
         let user_id =
-            User.create ("LeaderboardScoreRoundTripMultipleScoresBestFirst", 0uL)
+            User.create_with_discord ("LeaderboardScoreRoundTripMultipleScoresBestFirst", 0uL)
             |> User.save_new
 
         let replayB =
@@ -263,7 +263,7 @@ module Scores =
 
     [<Test>]
     let RoundTrips_ById () =
-        let user_id = User.create ("RoundTripsById", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("RoundTripsById", 0uL) |> User.save_new
 
         let replayA =
             Replay.create (user_id, CRESCENT_MOON, TIMEPLAYED, CRESCENT_MOON_REPLAY_DATA)
@@ -319,7 +319,7 @@ module Scores =
 
     [<Test>]
     let AggregateGrades () =
-        let user_id = User.create ("AggregateGrades", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("AggregateGrades", 0uL) |> User.save_new
 
         let mutable time = TIMEPLAYED
 
@@ -368,7 +368,7 @@ module Scores =
 
     [<Test>]
     let AggregateScores () =
-        let user_id = User.create ("AggregateScores", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("AggregateScores", 0uL) |> User.save_new
 
         let mutable time = TIMEPLAYED
 

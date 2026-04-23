@@ -19,7 +19,7 @@ module Replays =
 
     [<Test>]
     let Persistent_RoundTrip () =
-        let user_id = User.create ("PersistentRoundTrip", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("PersistentRoundTrip", 0uL) |> User.save_new
 
         let replay =
             Replay.create (user_id, CRESCENT_MOON, TIMEPLAYED, CRESCENT_MOON_REPLAY_DATA)
@@ -32,7 +32,7 @@ module Replays =
 
     [<Test>]
     let Leaderboard_RoundTrip () =
-        let user_id = User.create ("LeaderboardRoundTrip", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("LeaderboardRoundTrip", 0uL) |> User.save_new
 
         let replay =
             Replay.create (user_id, CRESCENT_MOON, TIMEPLAYED, CRESCENT_MOON_REPLAY_DATA)
@@ -45,7 +45,7 @@ module Replays =
 
     [<Test>]
     let Persistent_Idempotent () =
-        let user_id = User.create ("PersistentIdempotent", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("PersistentIdempotent", 0uL) |> User.save_new
 
         let replay =
             Replay.create (user_id, CRESCENT_MOON, TIMEPLAYED, CRESCENT_MOON_REPLAY_DATA)
@@ -59,7 +59,7 @@ module Replays =
 
     [<Test>]
     let Leaderboard_Idempotent () =
-        let user_id = User.create ("LeaderboardIdempotent", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("LeaderboardIdempotent", 0uL) |> User.save_new
 
         let replay =
             Replay.create (user_id, CRESCENT_MOON, TIMEPLAYED, CRESCENT_MOON_REPLAY_DATA)
@@ -73,7 +73,7 @@ module Replays =
 
     [<Test>]
     let Leaderboard_AutomaticDelete () =
-        let user_id = User.create ("LeaderboardAutomaticDelete", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("LeaderboardAutomaticDelete", 0uL) |> User.save_new
 
         let replay =
             Replay.create (user_id, CRESCENT_MOON, TIMEPLAYED, CRESCENT_MOON_REPLAY_DATA)
@@ -93,7 +93,7 @@ module Replays =
     [<Test>]
     let Leaderboard_IdempotentAutomaticDelete () =
         let user_id =
-            User.create ("LeaderboardIdempotentAutomaticDelete", 0uL) |> User.save_new
+            User.create_with_discord ("LeaderboardIdempotentAutomaticDelete", 0uL) |> User.save_new
 
         let replayA =
             Replay.create (user_id, CRESCENT_MOON, TIMEPLAYED, CRESCENT_MOON_REPLAY_DATA)
@@ -115,7 +115,7 @@ module Replays =
     [<Test>]
     let Leaderboard_PersistentNoAutomaticDelete () =
         let user_id =
-            User.create ("LeaderboardPersistentNoAutomaticDelete", 0uL) |> User.save_new
+            User.create_with_discord ("LeaderboardPersistentNoAutomaticDelete", 0uL) |> User.save_new
 
         let replayA =
             Replay.create (user_id, CRESCENT_MOON, TIMEPLAYED, CRESCENT_MOON_REPLAY_DATA)

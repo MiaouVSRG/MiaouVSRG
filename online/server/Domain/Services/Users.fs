@@ -66,7 +66,7 @@ module Users =
                 | Some _ -> Error "Username is taken!"
                 | None ->
 
-                let user = User.create (username, discord_id)
+                let user = User.create_with_discord (username, discord_id)
                 let id = User.save_new user
 
                 Logging.Info "New user '%s' registered with id %i to discord id %i" username id discord_id

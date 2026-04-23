@@ -27,7 +27,7 @@ module Dummy =
                 match User.by_username username with
                 | Some(id, u) -> u.AuthToken
                 | None ->
-                    let user = User.create (username, 0uL)
+                    let user = User.create_with_discord (username, 0uL)
                     User.save_new user |> ignore
                     user.AuthToken
 

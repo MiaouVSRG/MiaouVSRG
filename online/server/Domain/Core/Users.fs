@@ -6,6 +6,7 @@ open Percyqaz.Common
 open Prelude
 open Percyqaz.Data.Sqlite
 open Interlude.Web.Server
+open BCrypt.Net
 
 type Badge = string
 
@@ -32,12 +33,13 @@ module Badge =
 type User =
     {
         Username: string
-        DiscordId: uint64
+        DiscordId: uint64 // TODO: make it optional for website login
         DateSignedUp: int64
         LastLogin: int64
         AuthToken: string
         Badges: Set<Badge>
         Color: int32
+        Password: string option
     }
 
 module User =
@@ -55,6 +57,7 @@ module User =
                     Column.Text("AuthToken")
                     Column.Text("Badges")
                     Column.Integer("Color")
+                    Column.Text("Password").Nullable
                 ]
         }
 
@@ -62,7 +65,7 @@ module User =
         RandomNumberGenerator.GetBytes(27)
         |> Convert.ToBase64String
 
-    let create (username, discord_id) =
+    let create_with_discord (username, discord_id) =
         {
             Username = username
             DiscordId = discord_id
@@ -71,6 +74,20 @@ module User =
             AuthToken = generate_auth_token ()
             Badges = Set.empty
             Color = Badge.DEFAULT_COLOR
+            Password = None
+        }
+        
+    let create_with_password (username: string, password: string) =
+        let salt = BCrypt.GenerateSalt()
+        {
+            Username = username
+            DiscordId = uint64 0
+            DateSignedUp = Timestamp.now()
+            LastLogin = 0L
+            AuthToken = generate_auth_token()
+            Badges = Set.empty
+            Color = Badge.DEFAULT_COLOR
+            Password = Some (BCrypt.HashPassword(password, salt))
         }
 
     let private SAVE_NEW: NonQuery<User> =
@@ -85,6 +102,7 @@ module User =
                     "@AuthToken", SqliteType.Text, -1
                     "@Badges", SqliteType.Text, -1
                     "@Color", SqliteType.Integer, 8
+                    "@Password", SqliteType.Text, -1
                 ]
             FillParameters =
                 (fun p user ->
@@ -95,6 +113,7 @@ module User =
                     p.String user.AuthToken
                     p.Json JSON user.Badges
                     p.Int32 user.Color
+                    p.StringOption user.Password
                 )
         }
 
@@ -117,6 +136,7 @@ module User =
                         AuthToken = r.String
                         Badges = r.Json JSON
                         Color = r.Int32
+                        Password = r.StringOption
                     }
                 )
         }
@@ -141,6 +161,7 @@ module User =
                         AuthToken = r.String
                         Badges = r.Json JSON
                         Color = r.Int32
+                        Password = r.StringOption
                     }
                 )
         }
@@ -169,6 +190,7 @@ module User =
                             AuthToken = r.String
                             Badges = r.Json JSON
                             Color = r.Int32
+                            Password = r.StringOption
                         }
                     )
             }
@@ -191,6 +213,7 @@ module User =
                         AuthToken = r.String
                         Badges = r.Json JSON
                         Color = r.Int32
+                        Password = r.StringOption
                     }
                 )
         }
@@ -214,6 +237,7 @@ module User =
                         AuthToken = r.String
                         Badges = r.Json JSON
                         Color = r.Int32
+                        Password = r.StringOption
                     }
                 )
         }
@@ -237,6 +261,7 @@ module User =
                         AuthToken = r.String
                         Badges = r.Json JSON
                         Color = r.Int32
+                        Password = r.StringOption
                     }
                 )
         }
@@ -264,6 +289,7 @@ module User =
                         AuthToken = r.String
                         Badges = r.Json JSON
                         Color = r.Int32
+                        Password = r.StringOption
                     }
                 )
         }

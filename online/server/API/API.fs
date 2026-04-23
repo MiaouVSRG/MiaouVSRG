@@ -65,6 +65,8 @@ module API =
         
         // WEBSITE REQUESTS
         add_endpoint Web.User.Search.ROUTE Web.Users.Search.handle
+        add_endpoint Web.User.Login.ROUTE Web.Users.Login.handle
+        add_endpoint Web.User.Register.ROUTE Web.Users.Register.handle
         add_endpoint Web.Leaderboard.ROUTE Web.Leaderboard.handle
 
     let handle_request

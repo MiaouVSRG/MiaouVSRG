@@ -10,9 +10,9 @@ module Friends =
 
     [<Test>]
     let Basic_RoundTrip () =
-        let id1 = User.create ("BasicRoundTripFriendA", 0uL) |> User.save_new
-        let id2 = User.create ("BasicRoundTripFriendB", 0uL) |> User.save_new
-        let id3 = User.create ("BasicRoundTripFriendC", 0uL) |> User.save_new
+        let id1 = User.create_with_discord ("BasicRoundTripFriendA", 0uL) |> User.save_new
+        let id2 = User.create_with_discord ("BasicRoundTripFriendB", 0uL) |> User.save_new
+        let id3 = User.create_with_discord ("BasicRoundTripFriendC", 0uL) |> User.save_new
 
         Assert.AreEqual(OK, Friends.add (id1, id2))
         Assert.AreEqual(OK, Friends.add (id1, id3))
@@ -28,9 +28,9 @@ module Friends =
 
     [<Test>]
     let Relations () =
-        let id1 = User.create ("RelationsFriendA", 0uL) |> User.save_new
-        let id2 = User.create ("RelationsFriendB", 0uL) |> User.save_new
-        let id3 = User.create ("RelationsFriendC", 0uL) |> User.save_new
+        let id1 = User.create_with_discord ("RelationsFriendA", 0uL) |> User.save_new
+        let id2 = User.create_with_discord ("RelationsFriendB", 0uL) |> User.save_new
+        let id3 = User.create_with_discord ("RelationsFriendC", 0uL) |> User.save_new
 
         Assert.AreEqual(OK, Friends.add (id1, id2))
         Assert.AreEqual(OK, Friends.add (id1, id3))
@@ -47,7 +47,7 @@ module Friends =
 
     [<Test>]
     let CannotFriendSelf () =
-        let id1 = User.create ("CannotFriendSelf", 0uL) |> User.save_new
+        let id1 = User.create_with_discord ("CannotFriendSelf", 0uL) |> User.save_new
         Assert.AreEqual(FriendRelation.None, Friends.relation (id1, id1))
 
         match Friends.add(id1, id1) with
@@ -58,8 +58,8 @@ module Friends =
 
     [<Test>]
     let Remove () =
-        let id1 = User.create ("RemoveFriendA", 0uL) |> User.save_new
-        let id2 = User.create ("RemoveFriendB", 0uL) |> User.save_new
+        let id1 = User.create_with_discord ("RemoveFriendA", 0uL) |> User.save_new
+        let id2 = User.create_with_discord ("RemoveFriendB", 0uL) |> User.save_new
 
         Friends.add (id1, id2) |> ignore
         Friends.remove (id1, id2)
@@ -68,8 +68,8 @@ module Friends =
 
     [<Test>]
     let Remove_Idempotent () =
-        let id1 = User.create ("RemoveFriendIdempotentA", 0uL) |> User.save_new
-        let id2 = User.create ("RemoveFriendIdempotentB", 0uL) |> User.save_new
+        let id1 = User.create_with_discord ("RemoveFriendIdempotentA", 0uL) |> User.save_new
+        let id2 = User.create_with_discord ("RemoveFriendIdempotentB", 0uL) |> User.save_new
 
         Friends.add (id1, id2) |> ignore
         Friends.remove (id1, id2)
@@ -84,8 +84,8 @@ module Friends =
 
     [<Test>]
     let Add_Idempotent () =
-        let id1 = User.create ("AddFriendIdempotentA", 0uL) |> User.save_new
-        let id2 = User.create ("AddFriendIdempotentB", 0uL) |> User.save_new
+        let id1 = User.create_with_discord ("AddFriendIdempotentA", 0uL) |> User.save_new
+        let id2 = User.create_with_discord ("AddFriendIdempotentB", 0uL) |> User.save_new
 
         Assert.AreEqual(OK, Friends.add (id1, id2))
         Assert.AreEqual(OK, Friends.add (id1, id2))
@@ -98,9 +98,9 @@ module Friends =
 
     [<Test>]
     let List () =
-        let id1 = User.create ("FriendListA", 0uL) |> User.save_new
-        let id2 = User.create ("FriendListB", 0uL) |> User.save_new
-        let id3 = User.create ("FriendListC", 0uL) |> User.save_new
+        let id1 = User.create_with_discord ("FriendListA", 0uL) |> User.save_new
+        let id2 = User.create_with_discord ("FriendListB", 0uL) |> User.save_new
+        let id3 = User.create_with_discord ("FriendListC", 0uL) |> User.save_new
 
         Assert.AreEqual(OK, Friends.add (id1, id2))
         Assert.AreEqual(OK, Friends.add (id1, id3))
@@ -110,7 +110,7 @@ module Friends =
 
     [<Test>]
     let Add_NonExistentUser () =
-        let user_id = User.create ("AddNonExistentFriend", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("AddNonExistentFriend", 0uL) |> User.save_new
 
         Assert.Throws(fun () -> Friends.add (user_id, 32767) |> ignore) |> printfn "%O"
         Assert.Throws(fun () -> Friends.add (32767, user_id) |> ignore) |> printfn "%O"
@@ -118,7 +118,7 @@ module Friends =
 
     [<Test>]
     let Remove_NonExistentUser () =
-        let user_id = User.create ("RemoveNonExistentFriend", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("RemoveNonExistentFriend", 0uL) |> User.save_new
 
         Assert.Throws(fun () -> Friends.remove (user_id, 32767)) |> printfn "%O"
         Assert.Throws(fun () -> Friends.remove (32767, user_id)) |> printfn "%O"
@@ -126,13 +126,13 @@ module Friends =
 
     [<Test>]
     let FriendLimit () =
-        let user_id = User.create ("FriendLimitMain", 0uL) |> User.save_new
+        let user_id = User.create_with_discord ("FriendLimitMain", 0uL) |> User.save_new
 
         for i = 1 to Friends.MAX_FRIENDS do
-            let friend_id = User.create (sprintf "FriendLimit%i" i, 0uL) |> User.save_new
+            let friend_id = User.create_with_discord (sprintf "FriendLimit%i" i, 0uL) |> User.save_new
             Assert.AreEqual(OK, Friends.add(user_id, friend_id))
 
-        let friend_id = User.create (sprintf "FriendLimitMax", 0uL) |> User.save_new
+        let friend_id = User.create_with_discord (sprintf "FriendLimitMax", 0uL) |> User.save_new
         match Friends.add(user_id, friend_id) with
         | Ok() -> Assert.Fail()
         | Error reason -> Assert.Pass(reason)

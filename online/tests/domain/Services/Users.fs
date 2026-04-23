@@ -12,10 +12,10 @@ module Users =
 
     [<Test>]
     let DeleteUser_FullCleanup () =
-        let user = User.create ("DeleteUser", 999999uL)
+        let user = User.create_with_discord ("DeleteUser", 999999uL)
         let user_id = User.save_new user
 
-        let user2_id = User.create ("DeleteUserFriend", 0uL) |> User.save_new
+        let user2_id = User.create_with_discord ("DeleteUserFriend", 0uL) |> User.save_new
         Friends.add(user_id, user2_id) |> ignore
         Friends.add(user2_id, user_id) |> ignore
 

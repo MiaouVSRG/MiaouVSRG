@@ -66,11 +66,14 @@
     <Compile Include="API\Stats\Sync.fs" />
     <Compile Include="API\New\Charts\Add.fs" />
     <Compile Include="API\Web\Users\Search.fs" />
+    <Compile Include="API\Web\Users\Login.fs" />
+    <Compile Include="API\Web\Users\Register.fs" />
     <Compile Include="API\Web\Leaderboard.fs" />
     <Compile Include="API\API.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
     <PackageReference Include="Discord.Net" Version="3.15.0" />
     <PackageReference Include="NetCoreServer" Version="8.0.7" />
   </ItemGroup>

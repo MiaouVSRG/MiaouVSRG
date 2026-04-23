@@ -19,7 +19,7 @@ module Scores =
 
     [<Test>]
     let ScoreSubmission_HappyPath () =
-        let user = User.create ("ScoreSubmissionHappyPath", 999999uL)
+        let user = User.create_with_discord ("ScoreSubmissionHappyPath", 999999uL)
         let user_id = User.save_new user
 
         let result =
@@ -37,7 +37,7 @@ module Scores =
 
     [<Test>]
     let ScoreSubmission_FakeData () =
-        let user = User.create ("ScoreSubmissionFakeData", 999999uL)
+        let user = User.create_with_discord ("ScoreSubmissionFakeData", 999999uL)
         let user_id = User.save_new user
 
         let result =
@@ -55,7 +55,7 @@ module Scores =
 
     [<Test>]
     let ScoreSubmission_BadModCombo () =
-        let user = User.create ("ScoreSubmissionBadModCombo", 999999uL)
+        let user = User.create_with_discord ("ScoreSubmissionBadModCombo", 999999uL)
         let user_id = User.save_new user
 
         let result =
@@ -82,10 +82,10 @@ module Scores =
     [<Test>]
     let LeaderboardPosition_2Of3 () =
 
-        let user1 = User.create ("LeaderboardPosition2Of3A", 999999uL)
+        let user1 = User.create_with_discord ("LeaderboardPosition2Of3A", 999999uL)
         let user_id1 = User.save_new user1
 
-        let user2 = User.create ("LeaderboardPosition2Of3B", 999999uL)
+        let user2 = User.create_with_discord ("LeaderboardPosition2Of3B", 999999uL)
         let user_id2 = User.save_new user2
 
         Score.create (user_id1, "LeaderboardPosition2Of3", Timestamp.now(), 1.0f<rate>, Map.empty, true, 0.97, 3, 2)
@@ -106,7 +106,7 @@ module Scores =
 
         for i = 0 to Score.LEADERBOARD_SIZE - 1 do
 
-            let user = User.create (sprintf "LeaderboardPositionFull_%i" i, 999999uL)
+            let user = User.create_with_discord (sprintf "LeaderboardPositionFull_%i" i, 999999uL)
             let user_id = User.save_new user
 
             Score.create (user_id, "LeaderboardPositionFull", Timestamp.now(), 1.0f<rate>, Map.empty, true, 0.97, 3, 2)
@@ -123,7 +123,7 @@ module Scores =
 
         for i = 0 to Score.LEADERBOARD_SIZE - 2 do
 
-            let user = User.create (sprintf "LeaderboardPositionLastPlace_%i" i, 999999uL)
+            let user = User.create_with_discord (sprintf "LeaderboardPositionLastPlace_%i" i, 999999uL)
             let user_id = User.save_new user
 
             Score.create (user_id, "LeaderboardPositionLastPlace", Timestamp.now(), 1.0f<rate>, Map.empty, true, 0.97, 3, 2)
@@ -137,10 +137,10 @@ module Scores =
 
     [<Test>]
     let LeaderboardPosition_OldScoreBetter () =
-        let user1 = User.create ("LeaderboardPositionOldScoreBetterA", 999999uL)
+        let user1 = User.create_with_discord ("LeaderboardPositionOldScoreBetterA", 999999uL)
         let user_id1 = User.save_new user1
 
-        let user2 = User.create ("LeaderboardPositionOldScoreBetterB", 999999uL)
+        let user2 = User.create_with_discord ("LeaderboardPositionOldScoreBetterB", 999999uL)
         let user_id2 = User.save_new user2
 
         Score.create (user_id1, "LeaderboardPositionOldScoreBetter", Timestamp.now(), 1.0f<rate>, Map.empty, true, 0.97, 3, 2)
@@ -158,10 +158,10 @@ module Scores =
 
     [<Test>]
     let LeaderboardPosition_NewScoreBetter () =
-        let user1 = User.create ("LeaderboardPositionNewScoreBetterA", 999999uL)
+        let user1 = User.create_with_discord ("LeaderboardPositionNewScoreBetterA", 999999uL)
         let user_id1 = User.save_new user1
 
-        let user2 = User.create ("LeaderboardPositionNewScoreBetterB", 999999uL)
+        let user2 = User.create_with_discord ("LeaderboardPositionNewScoreBetterB", 999999uL)
         let user_id2 = User.save_new user2
 
         Score.create (user_id1, "LeaderboardPositionNewScoreBetter", Timestamp.now(), 1.0f<rate>, Map.empty, true, 0.97, 3, 2)
