@@ -60,8 +60,11 @@ module Search =
                         if not (already_played.Contains(score.ChartId)) && (new_charts |> Array.map(_.ChartId) |> Array.contains score.ChartId) then
                             already_played.SetValue(score.ChartId, i)
                             played_maps <- played_maps + 1.0f
-                            
-                    played_maps / float32 new_charts.Length
+                       
+                    if played_maps > 0.0f then     
+                        played_maps / float32 new_charts.Length
+                    else
+                        0.0f
                 
                 let get_user_grades (ruleset: Ruleset, scores: Score.ScoreByUserIdModel array): GradeCountInfo =
                     let already_played: (string * float32) array = Array.create scores.Length ("", 0.0f)
