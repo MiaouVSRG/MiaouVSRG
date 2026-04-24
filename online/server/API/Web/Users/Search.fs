@@ -76,8 +76,14 @@ module Search =
                     let mutable perfect_scores = 0
                     for i in 0 .. scores.Length - 1 do
                         let score = scores[i]
+                        
+                        let chart = Charts.get_chart_by_id(score.ChartId)
+                        let ranked =
+                            if chart.IsSome then
+                                chart.Value.IsRanked()
+                            else false
                             
-                        if not (already_played.Contains((score.ChartId, score.Rate))) then
+                        if ranked && not (already_played.Contains((score.ChartId, score.Rate))) then
                             already_played.SetValue((score.ChartId, score.Rate), i)
                             match ruleset.GradeName score.Grade with
                             | "PASS" -> pass_scores <- pass_scores + 1

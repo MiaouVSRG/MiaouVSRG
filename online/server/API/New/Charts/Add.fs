@@ -109,6 +109,7 @@ module Add =
                                     Keymode = keymode.Value
                                     Difficulty = bms_diff
                                     Title = title
+                                    Ranked = 0
                                 }
                                 
                                 let res = Charts.add db_chart
@@ -129,6 +130,7 @@ module Add =
                         Keymode = query_params["keymode"][0] |> int
                         Difficulty = query_params["difficulty"][0]
                         Title = query_params["title"][0]
+                        Ranked = 0
                     }
                     
                     match Charts.get_chart_by_id chart.ChartId with

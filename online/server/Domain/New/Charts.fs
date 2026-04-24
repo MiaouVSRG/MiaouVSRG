@@ -13,10 +13,13 @@ type Chart =
         Keymode: int
         Title: string
         Difficulty: string
+        Ranked: int
     }
     member this.FormatSource() = {
         this with Source = if this.Source.Equals("osu!") || this.Source.Equals("Etterna") || this.Source.Equals("BMS") || this.Source.Equals("o2jam") then this.Source else "none"
     }
+    
+    member this.IsRanked() = this.Ranked = 1
 
 module Charts =
     let internal CREATE_TABLE: NonQuery<unit> =
@@ -29,7 +32,8 @@ module Charts =
                 Source TEXT NOT NULL,
                 Keymode INTEGER NOT NULL,
                 Difficulty TEXT NOT NULL,
-                Title TEXT NOT NULL
+                Title TEXT NOT NULL,
+                Ranked INTEGER NOT NULL
             );
             """
         }
@@ -38,8 +42,8 @@ module Charts =
         {
             SQL =
                 """
-            INSERT INTO charts (Id, DownloadLink, Source, Keymode, Difficulty, Title)
-            VALUES (@ChartId, @DownloadLink, @Source, @Keymode, @Difficulty, @Title)
+            INSERT INTO charts (Id, DownloadLink, Source, Keymode, Difficulty, Title, Ranked)
+            VALUES (@ChartId, @DownloadLink, @Source, @Keymode, @Difficulty, @Title, @Ranked)
             RETURNING Id;
             """
             Parameters =
@@ -50,6 +54,7 @@ module Charts =
                     "@Keymode", SqliteType.Integer, 8
                     "@Difficulty", SqliteType.Text, -1
                     "@Title", SqliteType.Text, -1
+                    "@Ranked", SqliteType.Integer, 8
                 ]
             FillParameters =
                 (fun p chart ->
@@ -59,6 +64,7 @@ module Charts =
                     p.Int64 chart.Keymode
                     p.String chart.Difficulty
                     p.String chart.Title
+                    p.Int32 chart.Ranked
                 )
             Read = fun r -> r.String
         }
@@ -70,7 +76,7 @@ module Charts =
         {
             SQL =
                 """
-                SELECT Id, DownloadLink, Source, Keymode, Difficulty, Title FROM charts
+                SELECT Id, DownloadLink, Source, Keymode, Difficulty, Title, Ranked FROM charts
                 WHERE Id = @ChartId;
                 """
             Parameters = [
@@ -86,6 +92,7 @@ module Charts =
                     Keymode = r.Int32
                     Difficulty = r.String
                     Title = r.String
+                    Ranked = r.Int32
                 }
             )
         }
@@ -97,7 +104,7 @@ module Charts =
         {
             SQL =
                 """
-                SELECT Id, DownloadLink, Source, Keymode, Difficulty, Title FROM charts
+                SELECT Id, DownloadLink, Source, Keymode, Difficulty, Title, Ranked FROM charts
                 LIMIT @limit;
                 """
             Parameters = [
@@ -113,6 +120,7 @@ module Charts =
                     Keymode = r.Int32
                     Difficulty = r.String
                     Title = r.String
+                    Ranked = r.Int32
                 }
             )
         }
@@ -124,7 +132,7 @@ module Charts =
         {
             SQL =
                 """
-                SELECT Id, DownloadLink, Source, Keymode, Difficulty, Title FROM charts
+                SELECT Id, DownloadLink, Source, Keymode, Difficulty, Title, Ranked FROM charts
                 WHERE Source = @Source;
                 """
             Parameters = [
@@ -140,6 +148,7 @@ module Charts =
                     Keymode = r.Int32
                     Difficulty = r.String
                     Title = r.String
+                    Ranked = r.Int32
                 }
             )
         }
