@@ -6,6 +6,7 @@ open Interlude.Web.Server.API
 open Interlude.Web.Server.Domain.Core
 open Interlude.Web.Server.Domain.Core.Score
 open Interlude.Web.Server.Domain.New
+open Interlude.Web.Server.Domain.Services
 open Interlude.Web.Shared
 open Interlude.Web.Shared.Requests.Web.User.Completion
 open NetCoreServer
@@ -41,10 +42,12 @@ module Completion =
                             best_score <- score
                             passed <- true
                     
-                    if passed then        
+                    if passed then
+                        let ruleset = Backbeat.rulesets[Score.PRIMARY_RULESET]
                         let score_stat = {
                             Accuracy = best_score.Accuracy
                             Rate = best_score.Rate
+                            Grade = ruleset.GradeName best_score.Grade
                         }
                         let chart_info: ChartInfo = {
                             ChartId = chart.ChartId

@@ -795,6 +795,7 @@ module Web =
             type UserScoreStat = {
                 Accuracy: float
                 Rate: float32
+                Grade: string
             }
             
             [<Json.AutoCodec>]
