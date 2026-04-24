@@ -44,6 +44,7 @@ module Completion =
                     if passed then        
                         let score_stat = {
                             Accuracy = best_score.Accuracy
+                            Rate = best_score.Rate
                         }
                         let chart_info: ChartInfo = {
                             ChartId = chart.ChartId
