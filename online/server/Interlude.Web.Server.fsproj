@@ -68,6 +68,7 @@
     <Compile Include="API\Web\Users\Search.fs" />
     <Compile Include="API\Web\Users\Login.fs" />
     <Compile Include="API\Web\Users\Register.fs" />
+    <Compile Include="API\Web\Users\Completion.fs" />
     <Compile Include="API\Web\Leaderboard.fs" />
     <Compile Include="API\API.fs" />
     <Compile Include="Program.fs" />

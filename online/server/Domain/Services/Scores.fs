@@ -126,6 +126,7 @@ module Scores =
                         Keymode = keymode
                         Difficulty = "not implemented yet"
                         Title = "not implemented yet"
+                        Ranked = 0
                     }
                         
                 New.Charts.add (chart.FormatSource()) |> ignore

@@ -425,6 +425,19 @@ module Score =
             ReplayId: int option
         }
         
+    let create_default_score_by_user_id =
+        {
+            Id = int64 0
+            ChartId = ""
+            TimePlayed = int64 0
+            Rate = 0.0f
+            Mods = Map.empty
+            Accuracy = 0.0
+            Grade = 0
+            Lamp = 0
+            ReplayId = None
+        }
+        
     let BY_USER_ID: Query<int64, ScoreByUserIdModel> =
         {
             SQL =

@@ -776,6 +776,35 @@ module Web =
             let post (request: Request, callback: bool option -> unit) =
                 Client.post<Request> (snd ROUTE, request, callback)
                 
+        module Completion =
+            let ROUTE = (GET, MAIN_ENDPOINT + "/user/completion")
+            
+            [<Json.AutoCodec>]
+            type ChartInfo =
+                {
+                    ChartId: string
+                    DownloadLink: string
+                    Source: string
+                    Keymode: int
+                    Title: string
+                    Difficulty: string
+                    Ranked: int
+                }
+                
+            [<Json.AutoCodec>]
+            type UserScoreStat = {
+                Accuracy: float
+            }
+            
+            [<Json.AutoCodec>]
+            type Response = {
+                Passed: (ChartInfo * UserScoreStat) array
+                Skipped: ChartInfo array
+            }
+            
+            let get (name: string, callback: Response option -> unit) =
+                Client.get<Response> (snd ROUTE + "?name=" + name, callback)
+                
     module Leaderboard =
         let ROUTE = (GET, MAIN_ENDPOINT + "/leaderboard")
         
