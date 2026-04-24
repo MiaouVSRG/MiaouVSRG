@@ -124,6 +124,8 @@ module Scores =
                         DownloadLink = if beatmapset_id.IsSome then sprintf "https://catboy.best/d/%in" beatmapset_id.Value else "not implemented"
                         Source = "osu!" //if beatmapset_id.IsSome then "osu!" else "none"
                         Keymode = keymode
+                        Difficulty = "not implemented yet"
+                        Title = "not implemented yet"
                     }
                         
                 New.Charts.add (chart.FormatSource()) |> ignore

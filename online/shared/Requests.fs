@@ -675,6 +675,9 @@ module New =
                 ChartId: string
                 DownloadLink: string
                 Source: string
+                Keymode: int
+                Title: string
+                Difficulty: string
             }
 
             let post (request: Request, callback: bool option -> unit) =
