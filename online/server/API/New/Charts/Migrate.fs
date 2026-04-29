@@ -42,7 +42,9 @@ module Migrate =
                 
                 let new_chart =
                     if beatmap.IsSome then
-                        {chart with ImageLink = chart.DownloadLink.Replace("./", "cdn.miaouvsrg.com/").Replace(filename, (find_background_file beatmap.Value.Events))}
+                        {chart with
+                            ImageLink = chart.DownloadLink.Replace("./", "https://cdn.miaouvsrg.com/").Replace(filename, (find_background_file beatmap.Value.Events))
+                        }
                     else
                         chart
                 
