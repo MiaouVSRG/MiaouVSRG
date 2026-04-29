@@ -38,6 +38,13 @@ module Gameplay =
             match origin with
             | ChartOrigin.Osu c_origin -> beatmapsetid <- Some c_origin.BeatmapSetId
             | _ -> beatmapsetid <- None
+            
+        let format_duration (chart_meta: ChartMeta option) =
+            match chart_meta with
+            | Some chart_meta -> chart_meta.Length
+            | None -> 0.0f<ms>
+            |> fun x -> (x / 1000.0f / 60.0f |> int, (x / 1000f |> int) % 60)
+            |> fun (x, y) -> sprintf "%s %i:%02i" Icons.CLOCK x y
         Charts.Scores.Save.post (
             // TODO: Make score_info.Scoring Jsonable
             ({
@@ -50,6 +57,12 @@ module Gameplay =
                 JudgementCounts = score_info.Scoring.JudgementCounts
                 ComboBreaks = score_info.Scoring.ComboBreaks
                 BeatmapsetId = beatmapsetid
+                Source = score_info.ChartMeta.Source
+                Title = score_info.ChartMeta.Title
+                Difficulty = score_info.ChartMeta.Rating
+                DifficultyName = score_info.ChartMeta.DifficultyName
+                Length = format_duration (Some score_info.ChartMeta)
+                ImageLink = "not available"
                 Keymode = score_info.Chart.Keys
             }),
             (function

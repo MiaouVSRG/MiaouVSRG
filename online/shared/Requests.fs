@@ -90,6 +90,14 @@ module Charts =
                     Accuracy: float
                     JudgementCounts: int array
                     ComboBreaks: int
+                    BeatmapsetId: int option
+                    Source: string option
+                    Title: string
+                    Difficulty: float32
+                    DifficultyName: string
+                    Length: string
+                    ImageLink: string
+                    Keymode: int
                 }
 
             [<Json.AutoCodec>]
@@ -683,6 +691,17 @@ module New =
             let post (request: Request, callback: bool option -> unit) =
                 Client.post<Request> (snd ROUTE, request, callback)
                 
+        module Migrate =
+            let ROUTE = (GET, "/v2/migrate")
+            
+            [<Json.AutoCodec>]
+            type Response = {
+                Success: bool
+            }
+            
+            let get(callback: Response option -> unit) =
+                Client.get<Response> (snd ROUTE, callback)
+                
 module Web =
     
     let MAIN_ENDPOINT = "/web"
@@ -787,8 +806,11 @@ module Web =
                     Source: string
                     Keymode: int
                     Title: string
-                    Difficulty: string
+                    Difficulty: float32
                     Ranked: int
+                    DifficultyName: string
+                    Length: string
+                    Background: string
                 }
                 
             [<Json.AutoCodec>]
@@ -799,10 +821,14 @@ module Web =
             }
             
             [<Json.AutoCodec>]
-            type Response = {
-                Passed: (ChartInfo * UserScoreStat) array
-                Skipped: ChartInfo array
+            type CompletionCard = {
+                Passed: bool
+                ChartInfo: ChartInfo
+                Score: UserScoreStat option
             }
+            
+            [<Json.AutoCodec>]
+            type Response = CompletionCard array
             
             let get (name: string, callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE + "?name=" + name, callback)

@@ -104,7 +104,13 @@ module Scores =
             judgement_counts: int array,
             combo_breaks: int,
             beatmapset_id: int option,
-            keymode: int
+            keymode: int,
+            source: string option,
+            title: string,
+            diff: float32,
+            diffname: string,
+            length: string,
+            imagelink: string
         ) =
         async {
 
@@ -116,17 +122,20 @@ module Scores =
             | Ok ModStatus.Unstored -> return ScoreUploadOutcome.Failed
             | Ok mod_ranked_status ->
 
-            match Backbeat.Charts.fetch_new(chart_id) with
+            match New.Charts.get_chart_by_id chart_id with
             | None ->
                 let chart: New.Chart =
                     {
                         ChartId = chart_id
-                        DownloadLink = if beatmapset_id.IsSome then sprintf "https://catboy.best/d/%in" beatmapset_id.Value else "not implemented"
-                        Source = "osu!" //if beatmapset_id.IsSome then "osu!" else "none"
+                        DownloadLink = if beatmapset_id.IsSome then sprintf "https://catboy.best/d/%in" beatmapset_id.Value else "not available"
+                        Source = if source.IsSome then source.Value else "none"
                         Keymode = keymode
-                        Difficulty = "not implemented yet"
-                        Title = "not implemented yet"
+                        Difficulty = diff
+                        Title = title
                         Ranked = 0
+                        DifficultyName = diffname
+                        Length = length
+                        ImageLink = imagelink
                     }
                         
                 New.Charts.add (chart.FormatSource()) |> ignore

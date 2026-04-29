@@ -65,6 +65,7 @@
     <Compile Include="API\Stats\Fetch.fs" />
     <Compile Include="API\Stats\Sync.fs" />
     <Compile Include="API\New\Charts\Add.fs" />
+    <Compile Include="API\New\Charts\Migrate.fs" />
     <Compile Include="API\Web\Users\Search.fs" />
     <Compile Include="API\Web\Users\Login.fs" />
     <Compile Include="API\Web\Users\Register.fs" />

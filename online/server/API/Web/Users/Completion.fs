@@ -10,9 +10,11 @@ open Interlude.Web.Server.Domain.Services
 open Interlude.Web.Shared
 open Interlude.Web.Shared.Requests.Web.User.Completion
 open NetCoreServer
+open Percyqaz.Common
+open Prelude.Charts
+open Prelude.Formats.Osu
 
 module Completion =
-    
     let handle
         (
             body: string,
@@ -25,12 +27,16 @@ module Completion =
             require_query_parameter query_params "name"
             
             let user_name = query_params["name"][0]
+            let limit =
+                if not (query_params.ContainsKey "limit") then
+                    None
+                else
+                    Some (int (query_params["limit"][0]))
             
             match User.by_username user_name with
             | Some (user_id, db_user) ->
-                let mutable user_completion: (ChartInfo * UserScoreStat) array = Array.Empty()
-                let mutable not_passed: ChartInfo array = Array.Empty()
-                let charts = Charts.get_all |> Array.filter(_.IsRanked())
+                let mutable user_completion: CompletionCard array = Array.Empty()
+                let charts = Charts.get_all_ranked
                 let scores = Score.by_user_id user_id
                 
                 for chart in charts do
@@ -42,6 +48,18 @@ module Completion =
                             best_score <- score
                             passed <- true
                     
+                    let chart_info: ChartInfo = {
+                        ChartId = chart.ChartId
+                        DownloadLink = chart.DownloadLink
+                        Source = chart.Source
+                        Keymode = chart.Keymode
+                        Title = chart.Title
+                        Difficulty = chart.Difficulty
+                        Ranked = chart.Ranked
+                        DifficultyName = chart.DifficultyName
+                        Length = chart.Length
+                        Background = chart.ImageLink
+                    }
                     if passed then
                         let ruleset = Backbeat.rulesets[Score.PRIMARY_RULESET]
                         let score_stat = {
@@ -49,35 +67,50 @@ module Completion =
                             Rate = best_score.Rate
                             Grade = ruleset.GradeName best_score.Grade
                         }
-                        let chart_info: ChartInfo = {
-                            ChartId = chart.ChartId
-                            DownloadLink = chart.DownloadLink
-                            Source = chart.Source
-                            Keymode = chart.Keymode
-                            Title = chart.Title
-                            Difficulty = chart.Difficulty
-                            Ranked = chart.Ranked
+                        let card = {
+                            Passed = passed
+                            ChartInfo = chart_info
+                            Score = Some score_stat
                         }
-                        user_completion <- user_completion.Append ((chart_info, score_stat)) |> _.ToArray()
+                        user_completion <- user_completion.Append card |> _.ToArray()
                     else
-                        let chart_info: ChartInfo = {
-                            ChartId = chart.ChartId
-                            DownloadLink = chart.DownloadLink
-                            Source = chart.Source
-                            Keymode = chart.Keymode
-                            Title = chart.Title
-                            Difficulty = chart.Difficulty
-                            Ranked = chart.Ranked
+                        let card = {
+                            Passed = passed
+                            ChartInfo = chart_info
+                            Score = None
                         }
-                        not_passed <- not_passed.Append(chart_info) |> _.ToArray()
-                            
-                            
-                let res: Response = {
-                    Passed = user_completion
-                    Skipped = not_passed
-                }
+                        user_completion <- user_completion.Append(card) |> _.ToArray()
+                          
+                if limit.IsSome then
+                    // Try to send 50% of user passed maps and 50% of user not passed maps
+                    let passed_scores = user_completion |> Array.filter(_.Passed)
+                    let failed_scores = user_completion |> Array.filter(fun c -> not c.Passed)
+                    let mutable filtered_passed_scores = Array.Empty()
+                    let mutable filtered_failed_scores = Array.Empty()
+                    let passed_scores_limit = limit.Value / 2
+                    
+                    if passed_scores.Length > passed_scores_limit then
+                        for i in 0..passed_scores_limit - 1 do
+                            filtered_passed_scores <- filtered_passed_scores.Append(passed_scores[i]) |> _.ToArray()
+                    else
+                        filtered_passed_scores <- passed_scores
+                    
+                    let failed_scores_limit =
+                        if passed_scores.Length > passed_scores_limit then
+                            limit.Value / 2
+                        else
+                            limit.Value - passed_scores.Length
+                    
+                    for i in 0..failed_scores_limit - 1 do
+                        filtered_failed_scores <- filtered_failed_scores.Append(failed_scores[i]) |> _.ToArray()
+                    
+                    let res: Response = Array.concat [filtered_passed_scores;filtered_failed_scores]
+                    response.ReplyJson(res)
                 
-                response.ReplyJson(res)
+                else    
+                    let res: Response = user_completion
+                    
+                    response.ReplyJson(res)
             | None ->
                 response.ReplyError(404, "User not found !")
         }
