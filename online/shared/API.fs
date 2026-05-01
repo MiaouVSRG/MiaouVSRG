@@ -29,6 +29,15 @@ module HttpResponseExtensions =
                 .SetHeader("Access-Control-Allow-Origin", "*")
                 .SetBody()
             |> ignore
+            
+        member this.ReplyFile(file: byte array, filename: string) =
+            this.Clear()
+                .SetBegin(200)
+                .SetHeader("Access-Control-Allow-Origin", "*")
+                .SetHeader("Content-Type", "application/octet-stream")
+                .SetHeader("Content-Disposition", $"attachment; filename=\"{filename}\"")
+                .SetBody(file)
+            |> ignore
 
         member this.ReplyError(code: int, reason: string) =
             this.Clear()

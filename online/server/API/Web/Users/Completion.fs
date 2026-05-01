@@ -1,6 +1,8 @@
 ﻿namespace Interlude.Web.Server.API.Web.Users
 
 open System
+open System.IO
+open System.IO.Compression
 open System.Linq
 open Interlude.Web.Server.API
 open Interlude.Web.Server.Domain.Core

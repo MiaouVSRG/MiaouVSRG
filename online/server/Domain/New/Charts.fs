@@ -19,6 +19,7 @@ type Chart =
         DifficultyName: string
         Length: string // Will format this as string so no conversion is really needed
         ImageLink: string
+        Path: string // Relative path to access the map in the server
     }
     member this.FormatSource() = {
         this with Source = if this.Source.Equals("osu!") || this.Source.Equals("Etterna") || this.Source.Equals("BMS") || this.Source.Equals("o2jam") then this.Source else "none"
@@ -41,7 +42,8 @@ module Charts =
                 Ranked INTEGER NOT NULL,
                 DifficultyName TEXT NOT NULL,
                 Length TEXT NOT NULL,
-                ImageLink TEXT NOT NULL
+                ImageLink TEXT NOT NULL,
+                Path TEXT NOT NULL
             );
             """
         }
@@ -50,8 +52,8 @@ module Charts =
         {
             SQL =
                 """
-            INSERT INTO charts (Id, DownloadLink, Source, Keymode, Difficulty, Title, Ranked, DifficultyName, Length, ImageLink)
-            VALUES (@ChartId, @DownloadLink, @Source, @Keymode, @Difficulty, @Title, @Ranked, @DifficultyName, @Length, @ImageLink)
+            INSERT INTO charts (Id, DownloadLink, Source, Keymode, Difficulty, Title, Ranked, DifficultyName, Length, ImageLink, Path)
+            VALUES (@ChartId, @DownloadLink, @Source, @Keymode, @Difficulty, @Title, @Ranked, @DifficultyName, @Length, @ImageLink, @Path)
             RETURNING Id;
             """
             Parameters =
@@ -66,6 +68,7 @@ module Charts =
                     "@DifficultyName", SqliteType.Text, -1
                     "@Length", SqliteType.Text, -1
                     "@ImageLink", SqliteType.Text, -1
+                    "@Path", SqliteType.Text, -1
                 ]
             FillParameters =
                 (fun p chart ->
@@ -79,6 +82,7 @@ module Charts =
                     p.String chart.DifficultyName
                     p.String chart.Length
                     p.String chart.ImageLink
+                    p.String chart.Path
                 )
             Read = fun r -> r.String
         }
@@ -90,7 +94,7 @@ module Charts =
         {
             SQL =
                 """
-                SELECT Id, DownloadLink, Source, Keymode, Difficulty, Title, Ranked, DifficultyName, Length, ImageLink FROM charts
+                SELECT Id, DownloadLink, Source, Keymode, Difficulty, Title, Ranked, DifficultyName, Length, ImageLink, Path FROM charts
                 WHERE Id = @ChartId;
                 """
             Parameters = [
@@ -110,6 +114,7 @@ module Charts =
                     DifficultyName = r.String
                     Length = r.String
                     ImageLink = r.String
+                    Path = r.String
                 }
             )
         }
@@ -121,7 +126,7 @@ module Charts =
         {
             SQL =
                 """
-                SELECT Id, DownloadLink, Source, Keymode, Difficulty, Title, Ranked, DifficultyName, Length, ImageLink FROM charts
+                SELECT Id, DownloadLink, Source, Keymode, Difficulty, Title, Ranked, DifficultyName, Length, ImageLink, Path FROM charts
                 LIMIT @limit;
                 """
             Parameters = [
@@ -141,6 +146,7 @@ module Charts =
                     DifficultyName = r.String
                     Length = r.String
                     ImageLink = r.String
+                    Path = r.String
                 }
             )
         }
@@ -155,7 +161,7 @@ module Charts =
         {
             SQL =
                 """
-                SELECT Id, DownloadLink, Source, Keymode, Difficulty, Title, Ranked, DifficultyName, Length, ImageLink FROM charts
+                SELECT Id, DownloadLink, Source, Keymode, Difficulty, Title, Ranked, DifficultyName, Length, ImageLink, Path FROM charts
                 WHERE Ranked = 1
                 LIMIT @limit;
                 """
@@ -176,6 +182,7 @@ module Charts =
                     DifficultyName = r.String
                     Length = r.String
                     ImageLink = r.String
+                    Path = r.String
                 }
             )
         }
@@ -190,7 +197,7 @@ module Charts =
         {
             SQL =
                 """
-                SELECT Id, DownloadLink, Source, Keymode, Difficulty, Title, Ranked, DifficultyName, Length, ImageLink FROM charts
+                SELECT Id, DownloadLink, Source, Keymode, Difficulty, Title, Ranked, DifficultyName, Length, ImageLink, Path FROM charts
                 WHERE Source = @Source;
                 """
             Parameters = [
@@ -210,6 +217,7 @@ module Charts =
                     DifficultyName = r.String
                     Length = r.String
                     ImageLink = r.String
+                    Path = r.String
                 }
             )
         }
@@ -231,7 +239,8 @@ module Charts =
                     Ranked = @Ranked,
                     DifficultyName = @DifficultyName,
                     Length = @Length,
-                    ImageLink  = @ImageLink
+                    ImageLink  = @ImageLink,
+                    Path = @Path
                 WHERE Id = @chartId;
             """
             Parameters =
@@ -246,6 +255,7 @@ module Charts =
                     "@DifficultyName", SqliteType.Text, -1
                     "@Length", SqliteType.Text, -1
                     "@ImageLink", SqliteType.Text, -1
+                    "@Path", SqliteType.Text, -1
                 ]
             FillParameters =
                 (fun p (chart_id, chart) ->
@@ -259,6 +269,7 @@ module Charts =
                     p.String chart.DifficultyName
                     p.String chart.Length
                     p.String chart.ImageLink
+                    p.String chart.Path
                 )
         }
         

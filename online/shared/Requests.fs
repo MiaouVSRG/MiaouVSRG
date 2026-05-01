@@ -702,6 +702,17 @@ module New =
             let get(callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE, callback)
                 
+        module Download =
+            let ROUTE = (GET, "/v2/download")
+            
+            // TODO: Remove the requirement of having a response callback
+            // This is not necessary here as only a file is returned
+            [<Json.AutoCodec>]
+            type Response = byte array // A file is a sequence of bytes
+            
+            let get (id: string, callback: Response option -> unit) =
+                Client.get<Response> (snd ROUTE + "?id=" + id, callback)
+                
 module Web =
     
     let MAIN_ENDPOINT = "/web"

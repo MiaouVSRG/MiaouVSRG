@@ -136,6 +136,7 @@ module Scores =
                         DifficultyName = diffname
                         Length = length
                         ImageLink = imagelink
+                        Path = ""
                     }
                         
                 New.Charts.add (chart.FormatSource()) |> ignore

@@ -89,6 +89,7 @@ module Add =
                         // let downloadLink = $"./maps/BMS/{realfolder}/{realfilename}"
                         // let downloadLink = $"./maps/O2Jam/{cat}/{realfolder}/{realfilename}"
                         let downloadLink = $"./maps/osu/{realfolder}/{realfilename}"
+                        let path = $"./maps/osu/{realfolder}/"
                         let source = "osu!"
                         let title = beatmap.Metadata.Title
                         
@@ -157,6 +158,7 @@ module Add =
                                     DifficultyName = diffname
                                     Length = length
                                     ImageLink = downloadLink.Replace(realfilename, background_file)
+                                    Path = path
                                 }
                                 
                                 let res = Charts.add db_chart
@@ -175,7 +177,7 @@ module Add =
                     
                     let chart: Chart = {
                         ChartId = (query_params["chartId"][0]).ToUpper()
-                        DownloadLink = query_params["downloadLink"][0]
+                        DownloadLink = ""
                         Source = query_params["source"][0]
                         Keymode = query_params["keymode"][0] |> int
                         Difficulty = query_params["difficulty"][0] |> float32
@@ -183,7 +185,8 @@ module Add =
                         Ranked = 0
                         DifficultyName = query_params["diffname"][0]
                         Length = query_params["length"][0]
-                        ImageLink = query_params["image"][0]
+                        ImageLink = ""
+                        Path = ""
                     }
                     
                     match Charts.get_chart_by_id chart.ChartId with

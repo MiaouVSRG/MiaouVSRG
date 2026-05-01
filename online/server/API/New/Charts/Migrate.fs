@@ -36,14 +36,11 @@ module Migrate =
                         Logging.Error $"Error with chart {chart.Title} : {e}"
                         success <- false
                         None
-                        
-                let filename = chart.DownloadLink.Split("/").Last()
-                        
                 
                 let new_chart =
                     if beatmap.IsSome then
                         {chart with
-                            ImageLink = chart.DownloadLink.Replace("./", "https://cdn.miaouvsrg.com/").Replace(filename, (find_background_file beatmap.Value.Events))
+                            DownloadLink = $"https://api.miaouvsrg.com/v2/download?id={chart.ChartId}"
                         }
                     else
                         chart
