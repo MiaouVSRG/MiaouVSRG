@@ -2,9 +2,11 @@
 
 open System.IO
 open System.IO.Compression
+open Percyqaz.Common
 open Prelude
 open Prelude.Charts
 open Prelude.Formats.Osu
+open Newtonsoft.Json
 
 type OsuExportOptions =
     {
@@ -155,8 +157,110 @@ module OsuExport =
             Objects = notes_to_hitobjects chart.Notes chart.Keys
             Timing = convert_timing_points chart.BPM chart.SV (Chart.find_most_common_bpm chart)
         }
+        
+type DefaultExportChart =
+    {
+        Chart: Chart
+        ChartMeta: ChartMeta
+    }
 
 module Exports =
+    
+    /// <summary>
+    /// DEPRECATED - .miaou file is just a rename of the .osz file for now
+    /// 
+    /// <p> Creates a .miaou file. </p>
+    /// .miaou files are archives that contains :
+    ///  <ul>
+    /// <li> the chartdata.json file (all the Chart and ChartMeta content) </li>
+    /// <li> the bg file </li>
+    /// <li> the audio file </li>
+    /// </ul>
+    /// </summary>
+    let create_default (chart: Chart) (chart_meta: ChartMeta) (export_folder: string) =
+        // let archive_file_name = chart_meta.Title + "[" + chart_meta.DifficultyName + "].miaou" // default file name extension
+        // let archive_file_path = Path.Combine(export_folder, archive_file_name)
+        // let export_chart: DefaultExportChart = {Chart=chart;ChartMeta=chart_meta}
+        //
+        // let json_settings = JsonSerializerSettings()
+        // json_settings.Formatting <- Formatting.Indented // TODO: Remove this (generated file is ~10x larger with this setting)
+        //
+        // let chart_data = JsonConvert.SerializeObject(export_chart, json_settings)
+        //
+        // use fs = File.Open(archive_file_path, FileMode.Create)
+        // use archive = new ZipArchive(fs, ZipArchiveMode.Create, false)
+        //
+        // do
+        //     let chart_data_file_path = Path.Combine(export_folder, "chartdata.json")
+        //     use sw = new StreamWriter(chart_data_file_path)
+        //     sw.WriteLine chart_data
+        //     sw.Close()
+        //     
+        //     archive.CreateEntryFromFile(chart_data_file_path, "chartdata.json") |> ignore
+        //     
+        //     File.Delete(chart_data_file_path) // Delete the chartdata.json file created
+        //     
+        // do
+        //     match chart_meta.Background.Path with
+        //     | Some bg_path when File.Exists(bg_path) ->
+        //         use fs = File.Open(bg_path, FileMode.Open)
+        //         let bg_file_entry = archive.CreateEntry("bg")
+        //         use bg_file_stream = bg_file_entry.Open()
+        //         fs.CopyTo(bg_file_stream)
+        //     | _ -> ()
+        //
+        // do
+        //     match chart_meta.Audio.Path with
+        //     | Some audio_path when File.Exists(audio_path) ->
+        //         use fs =
+        //             File.Open(audio_path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite)
+        //         let audio_file_entry = archive.CreateEntry("audio")
+        //         use audio_file_stream = audio_file_entry.Open()
+        //         fs.CopyTo(audio_file_stream)
+        //     | _ -> ()
+        //
+        // Ok()
+        try
+            let archive_file_name = chart_meta.Title + "[" + chart_meta.DifficultyName + "].miaou" // default file name extension
+            let options = {
+                OD = 8.0
+                HP = 8.0
+            }
+            let beatmap = OsuExport.convert options chart chart_meta
+
+            let file_name = beatmap.Filename
+            let archive_path = Path.Combine(export_folder, archive_file_name)
+
+            use fs = File.Open(archive_path, FileMode.Create)
+            use archive = new ZipArchive(fs, ZipArchiveMode.Create, false)
+
+            do
+                let osu_file_entry = archive.CreateEntry(file_name)
+                use osu_file_stream = osu_file_entry.Open()
+                beatmap.ToStream (osu_file_stream, false)
+
+            do
+                match chart_meta.Background.Path with
+                | Some bg_path when File.Exists(bg_path) ->
+                    use fs = File.Open(bg_path, FileMode.Open)
+                    let bg_file_entry = archive.CreateEntry(beatmap.Events |> Seq.pick (function Background(bg, _, _) -> Some bg | _ -> None))
+                    use bg_file_stream = bg_file_entry.Open()
+                    fs.CopyTo(bg_file_stream)
+                | _ -> ()
+
+            do
+                match chart_meta.Audio.Path with
+                | Some audio_path when File.Exists(audio_path) ->
+                    use fs =
+                        File.Open(audio_path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite)
+
+                    let audio_file_entry = archive.CreateEntry(beatmap.General.AudioFilename)
+                    use audio_file_stream = audio_file_entry.Open()
+                    fs.CopyTo(audio_file_stream)
+                | _ -> ()
+            Ok (beatmap, archive_file_name)
+        with err ->
+            Error err
 
     /// Creates an .osz representation of the chart in the given folder `export_folder`
     /// If successful, the exported beatmap data + the filename of the .osz are returned

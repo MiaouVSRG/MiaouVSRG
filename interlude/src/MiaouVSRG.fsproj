@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
     <RepositoryUrl>https://github.com/MiaouVSRG/MiaouVSRG</RepositoryUrl>
     <Version>$([System.DateTime]::Now.tostring("yyyyMMdd"))</Version>
     <AssemblyVersion>0.1.3.1</AssemblyVersion>
@@ -12,7 +13,7 @@
 	<PublishTrimmed>True</PublishTrimmed>
 	<TrimMode>partial</TrimMode>
 	<CETCompat>false</CETCompat>
-	<TargetFramework>net9.0</TargetFramework>
+    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
   <PropertyGroup>
     <Optimize>True</Optimize>
@@ -125,14 +126,13 @@
     <Compile Include="Features\Score\Username.fs" />
     <Compile Include="Features\Score\Utils.fs" />
     <Compile Include="Features\Score\TopBanner.fs" />
-    <Compile Include="Features\Score\MiddleBox.fs" />
+    <Compile Include="Features\Score\Sidebar.fs" />
     <Compile Include="Features\Score\SessionScore.fs" />
     <Compile Include="Features\Score\Graph.fs" />
-    <Compile Include="Features\Score\GameDetails.fs" />
+    <Compile Include="Features\Score\Results.fs" />
     <Compile Include="Features\Score\ChartActions.fs" />
     <Compile Include="Features\Score\BottomBanner.fs" />
     <Compile Include="Features\Score\Confetti.fs" />
-    <Compile Include="Features\Score\PlayerRating.fs" />
     <Compile Include="Features\Score\ScoreScreen.fs" />
     <Compile Include="Features\Import\TaskTracking.fs" />
     <Compile Include="Features\Import\osu!\Skins.fs" />
@@ -246,6 +246,7 @@
     <Compile Include="Features\LevelSelect\Shared.fs" />
     <Compile Include="Features\LevelSelect\Filters.fs" />
     <Compile Include="Features\LevelSelect\LevelSelectOptions.fs" />
+    <Compile Include="Features\LevelSelect\LibraryView.fs" />
     <Compile Include="Features\LevelSelect\ContextMenus\ChartContextMenus.fs" />
     <Compile Include="Features\LevelSelect\ContextMenus\GroupContextMenus.fs" />
     <Compile Include="Features\LevelSelect\ContextMenus\BulkActionsMenus.fs" />
@@ -255,7 +256,6 @@
     <Compile Include="Features\LevelSelect\Tree\Charts.fs" />
     <Compile Include="Features\LevelSelect\Tree\Groups.fs" />
     <Compile Include="Features\LevelSelect\Tree\Tree.fs" />
-    <Compile Include="Features\LevelSelect\LibraryView.fs" />
     <Compile Include="Features\LevelSelect\Preview.fs" />
     <Compile Include="Features\LevelSelect\ModSelect.fs" />
     <Compile Include="Features\LevelSelect\Scoreboard\LocalScores.fs" />
@@ -295,15 +295,15 @@
     <Compile Include="Features\Multiplayer\Lobby\Players.fs" />
     <Compile Include="Features\Multiplayer\Lobby\Chat.fs" />
     <Compile Include="Features\Multiplayer\Lobby\LobbyScreen.fs" />
+    <Compile Include="Features\MainMenu\LoadingScreen.fs" />
+    <Compile Include="Features\MainMenu\ConfirmQuitPage.fs" />
+    <Compile Include="Features\MainMenu\MainMenuScreen.fs" />
     <Compile Include="Features\Printerlude\Terminal.fs" />
     <Compile Include="Features\Printerlude\Printerlude.fs" />
     <Compile Include="Features\Toolbar\Jukebox.fs" />
     <Compile Include="Features\Toolbar\NetworkStatus.fs" />
     <Compile Include="Features\Toolbar\UpdateButton.fs" />
     <Compile Include="Features\Toolbar\Toolbar.fs" />
-    <Compile Include="Features\MainMenu\LoadingScreen.fs" />
-    <Compile Include="Features\MainMenu\ConfirmQuitPage.fs" />
-    <Compile Include="Features\MainMenu\MainMenuScreen.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

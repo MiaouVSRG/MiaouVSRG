@@ -1,5 +1,6 @@
 ﻿namespace Interlude.Features.LevelSelect
 
+open Percyqaz.Common
 open Percyqaz.Flux.UI
 open Prelude
 open Prelude.Data.Library
@@ -160,7 +161,7 @@ type ChartContextMenu(chart_meta: ChartMeta, context: LibraryContext) =
             )
                 .Icon(Icons.TARGET)
                 .Hotkey("practice_mode")
-            |* PageButton.Once(%"chart.export_osz", fun () ->
+            |+ PageButton.Once(%"chart.export_osz", fun () ->
                 match SelectedChart.CHART, SelectedChart.WITH_MODS with
                 | Some c, Some m ->
                     OsuExportOptionsPage(
@@ -169,6 +170,30 @@ type ChartContextMenu(chart_meta: ChartMeta, context: LibraryContext) =
                         function
                         | true -> OsuExport.export_chart_with_mods m chart_meta
                         | false -> OsuExport.export_chart_without_mods c chart_meta
+                    )
+                        .Show()
+                | _ -> ()
+            )
+                .Icon(Icons.UPLOAD)
+            |* PageButton.Once(%"chart.export.default", fun () ->
+                
+                // If we do not have a modded chart, already load the export process and do not show the "apply mods" menu
+                if SelectedChart.CHART.IsSome // There is a chart
+                   && (not SelectedChart.WITH_MODS.IsSome // but not a modded one (check if with_mods exists)
+                       || (SelectedChart.WITH_MODS.IsSome // but not a modded one (check if the mods map is empty)
+                           && SelectedChart.WITH_MODS.Value.ModsApplied.IsEmpty)) then
+                    
+                    let c = SelectedChart.CHART.Value
+                    DefaultExport.export_chart_without_mods c chart_meta
+                
+                match SelectedChart.CHART, SelectedChart.WITH_MODS with
+                | Some c, Some m ->
+                    DefaultExportOptionsPage(
+                        %"chart.export.default",
+                        m.ModsApplied,
+                        function
+                        | true -> DefaultExport.export_chart_with_mods m chart_meta
+                        | false -> DefaultExport.export_chart_without_mods c chart_meta
                     )
                         .Show()
                 | _ -> ()
