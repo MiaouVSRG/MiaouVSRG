@@ -92,7 +92,8 @@ module Utilities =
         match s with
         | ".osz"
         | ".qp"
-        | ".zip" -> Some s
+        | ".zip"
+        | ".miaou" -> Some s
         | _ -> None
 
     let (|SongFolder|_|) (path: string) =
