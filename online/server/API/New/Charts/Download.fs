@@ -31,7 +31,7 @@ module Download =
                     // 422: not processable
                     response.ReplyError(422, "Chart is not stored in the server")
                 else
-                    let output = $"{chart_id}.osz"
+                    let output = $"{chart.Value.Title}.miaou"
                     ZipFile.CreateFromDirectory(chart.Value.Path, $"./{output}")
                     let file = File.ReadAllBytes($"./{output}")
                     response.ReplyFile(file, output)

@@ -29,21 +29,11 @@ module Migrate =
             
             for chart in charts do
                 Logging.Debug $"Migrating {chart.Title}..."
-                let beatmap =
-                    match Beatmap.FromFile chart.DownloadLink with
-                    | Ok beatmap -> Some beatmap
-                    | Error e ->
-                        Logging.Error $"Error with chart {chart.Title} : {e}"
-                        success <- false
-                        None
                 
                 let new_chart =
-                    if beatmap.IsSome then
-                        {chart with
-                            DownloadLink = $"https://api.miaouvsrg.com/v2/download?id={chart.ChartId}"
-                        }
-                    else
-                        chart
+                    {chart with
+                        DownloadLink = $"https://beta.api.miaouvsrg.com/v2/download?id={chart.ChartId}"
+                    }
                 
                 Charts.update chart.ChartId new_chart |> ignore
             
