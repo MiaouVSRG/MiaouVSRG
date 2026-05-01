@@ -1,323 +1,323 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
-    <RepositoryUrl>https://github.com/MiaouVSRG/MiaouVSRG</RepositoryUrl>
-    <Version>$([System.DateTime]::Now.tostring("yyyyMMdd"))</Version>
-    <AssemblyVersion>0.1.3.1</AssemblyVersion>
-    <FileVersion>0.1.3.1</FileVersion>
-    <Authors>MiaouVSRG</Authors>
-    <RunPostBuildEvent>1</RunPostBuildEvent>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <DebugType>embedded</DebugType>
-	<PublishTrimmed>True</PublishTrimmed>
-	<TrimMode>partial</TrimMode>
-	<CETCompat>false</CETCompat>
-    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
-  </PropertyGroup>
-  <PropertyGroup>
-    <Optimize>True</Optimize>
-    <Tailcalls>True</Tailcalls>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
-  </PropertyGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Locale\en_GB.txt" />
-    <EmbeddedResource Include="Resources\icon.png" />
-    <EmbeddedResource Include="Resources\miaoum.zip" />
-    <EmbeddedResource Include="Resources\CrashSplashes.txt" />
-    <EmbeddedResource Include="Resources\MenuSplashes.txt" />
-    <EmbeddedResource Include="Resources\default.zip" />
-    <Compile Include="Utils.fs" />
-    <Compile Include="Content\Sprites.fs" />
-    <Compile Include="Content\Sounds.fs" />
-    <Compile Include="Content\Rulesets.fs" />
-    <Compile Include="Content\Themes.fs" />
-    <Compile Include="Content\Skins.fs" />
-    <Compile Include="Content\Tables.fs" />
-    <Compile Include="Content\Data.fs" />
-    <Compile Include="Content\Init.fs" />
-    <Compile Include="Content\Backbeat.fs" />
-    <Compile Include="Options\Hotkeys.fs" />
-    <Compile Include="Options\Window.fs" />
-    <Compile Include="Options\Options.fs" />
-    <Compile Include="Options\Presets.fs" />
-    <Compile Include="UI\Icons.fs" />
-    <Compile Include="UI\Animations.fs" />
-    <Compile Include="UI\Callouts.fs" />
-    <Compile Include="UI\Notifications.fs" />
-    <Compile Include="UI\Loaders.fs" />
-    <Compile Include="UI\AngledButton.fs" />
-    <Compile Include="UI\InlaidButton.fs" />
-    <Compile Include="UI\TabButtons.fs" />
-    <Compile Include="UI\TextEntry.fs" />
-    <Compile Include="UI\NumberEntry.fs" />
-    <Compile Include="UI\SearchBox.fs" />
-    <Compile Include="UI\Dropdowns.fs" />
-    <Compile Include="UI\Web.fs" />
-    <Compile Include="UI\Timeline.fs" />
-    <Compile Include="UI\Help.fs" />
-    <Compile Include="UI\Screen\Logo.fs" />
-    <Compile Include="UI\Screen\Background.fs" />
-    <Compile Include="UI\Screen\Transitions.fs" />
-    <Compile Include="UI\Screen\Screen.fs" />
-    <Compile Include="UI\Menu\VolumeSlider.fs" />
-    <Compile Include="UI\Menu\Layout.fs" />
-    <Compile Include="UI\Menu\Slider.fs" />
-    <Compile Include="UI\Menu\Selector.fs" />
-    <Compile Include="UI\Menu\Checkbox.fs" />
-    <Compile Include="UI\Menu\PageSetting.fs" />
-    <Compile Include="UI\Menu\PageButton.fs" />
-    <Compile Include="UI\Menu\Controls.fs" />
-    <Compile Include="UI\Menu\Menu.fs" />
-    <Compile Include="UI\Menu\ColorPicker.fs" />
-    <Compile Include="Features\Wiki\MarkdownUI.fs" />
-    <Compile Include="Features\Wiki\State.fs" />
-    <Compile Include="Features\Wiki\WikiBrowserPage.fs" />
-    <Compile Include="Features\Online\Credentials.fs" />
-    <Compile Include="Features\Online\LobbyState.fs" />
-    <Compile Include="Features\Online\Network.fs" />
-    <Compile Include="Features\Online\DiscordRPC.fs" />
-    <Compile Include="Features\Online\RegisterPage.fs" />
-    <Compile Include="Features\Online\LoginPage.fs" />
-    <Compile Include="Features\Online\Players\Sidebar\Shared.fs" />
-    <Compile Include="Features\Online\Players\Sidebar\Online.fs" />
-    <Compile Include="Features\Online\Players\Sidebar\Friends.fs" />
-    <Compile Include="Features\Online\Players\Sidebar\Search.fs" />
-    <Compile Include="Features\Online\Players\Sidebar\Sidebar.fs" />
-    <Compile Include="Features\Online\Players\Profile\Settings.fs" />
-    <Compile Include="Features\Online\Players\Profile\RecentScores.fs" />
-    <Compile Include="Features\Online\Players\Profile\Profile.fs" />
-    <Compile Include="Features\Online\Players\PlayerListPage.fs" />
-    <Compile Include="Features\Online\Updates.fs" />
-    <Compile Include="Features\Export\Osz.fs" />
-    <Compile Include="Features\Rulesets\Create\SCRulesetPage.fs" />
-    <Compile Include="Features\Rulesets\Create\OsuRulesetPage.fs" />
-    <Compile Include="Features\Rulesets\Create\QuaverRulesetPage.fs" />
-    <Compile Include="Features\Rulesets\Create\WifeRulesetPage.fs" />
-    <Compile Include="Features\Rulesets\Create\AddRulesetsPage.fs" />
-    <Compile Include="Features\Rulesets\Edit\Judgements.fs" />
-    <Compile Include="Features\Rulesets\Edit\Windows.fs" />
-    <Compile Include="Features\Rulesets\Edit\Accuracy.fs" />
-    <Compile Include="Features\Rulesets\Edit\Mechanics.fs" />
-    <Compile Include="Features\Rulesets\Edit\Grades.fs" />
-    <Compile Include="Features\Rulesets\Edit\Lamps.fs" />
-    <Compile Include="Features\Rulesets\Edit\RulesetEditorPage.fs" />
-    <Compile Include="Features\Rulesets\SelectRulesetPage.fs" />
-    <Compile Include="Features\Rulesets\QuickSwitch.fs" />
-    <Compile Include="Features\Gameplay\SelectedChart.fs" />
-    <Compile Include="Features\Gameplay\ScoreHelpers.fs" />
-    <Compile Include="Features\Tables\Browser\DownloadMenu.fs" />
-    <Compile Include="Features\Tables\Browser\Tables.fs" />
-    <Compile Include="Features\Tables\ChooseLevel.fs" />
-    <Compile Include="Features\Tables\Suggestions.fs" />
-    <Compile Include="Features\Tables\SelectTablePage.fs" />
-    <Compile Include="Features\Pacemaker\State.fs" />
-    <Compile Include="Features\Pacemaker\PacemakerOptionsPage.fs" />
-    <Compile Include="Features\Collections\Actions.fs" />
-    <Compile Include="Features\Collections\CreateFolderPage.fs" />
-    <Compile Include="Features\Collections\EditFolderPage.fs" />
-    <Compile Include="Features\Collections\CreatePlaylistPage.fs" />
-    <Compile Include="Features\Collections\EditPlaylistPage.fs" />
-    <Compile Include="Features\Collections\SelectCollectionsPage.fs" />
-    <Compile Include="Features\Play\PlayState.fs" />
-    <Compile Include="Features\Play\LocalOffset.fs" />
-    <Compile Include="Features\Score\Username.fs" />
-    <Compile Include="Features\Score\Utils.fs" />
-    <Compile Include="Features\Score\TopBanner.fs" />
-    <Compile Include="Features\Score\MiddleBox.fs" />
-    <Compile Include="Features\Score\SessionScore.fs" />
-    <Compile Include="Features\Score\Graph.fs" />
-    <Compile Include="Features\Score\GameDetails.fs" />
-    <Compile Include="Features\Score\ChartActions.fs" />
-    <Compile Include="Features\Score\BottomBanner.fs" />
-    <Compile Include="Features\Score\Confetti.fs" />
-    <Compile Include="Features\Score\PlayerRating.fs" />
-    <Compile Include="Features\Score\ScoreScreen.fs" />
-    <Compile Include="Features\Import\TaskTracking.fs" />
-    <Compile Include="Features\Import\osu!\Skins.fs" />
-    <Compile Include="Features\Import\osu!\Replays.fs" />
-    <Compile Include="Features\Import\osu!\Beatmaps\Mino.fs" />
-    <Compile Include="Features\Import\osu!\Beatmaps\Components.fs" />
-    <Compile Include="Features\Import\osu!\Beatmaps\Beatmaps.fs" />
-    <Compile Include="Features\Import\Etterna\Skins.fs" />
-    <Compile Include="Features\Import\Etterna\EtternaOnline.fs" />
-    <Compile Include="Features\Import\Etterna\Components.fs" />
-    <Compile Include="Features\Import\Etterna\PackBrowser.fs" />
-    <Compile Include="Features\Import\ConfirmUnlinkedImportPage.fs" />
-    <Compile Include="Features\Import\FileDrop.fs" />
-    <Compile Include="Features\Mounts\MountActions.fs" />
-    <Compile Include="Features\Mounts\CreateMountPage.fs" />
-    <Compile Include="Features\Mounts\EditMountPage.fs" />
-    <Compile Include="Features\Mounts\MountDisplay.fs" />
-    <Compile Include="Features\Stats\Sync.fs" />
-    <Compile Include="Features\Stats\PlayCount.fs" />
-    <Compile Include="Features\Stats\Skillsets\BreakdownGraph.fs" />
-    <Compile Include="Features\Stats\Skillsets\Breakdown.fs" />
-    <Compile Include="Features\Stats\Skillsets\TimelineGraph.fs" />
-    <Compile Include="Features\Stats\Skillsets\Timeline.fs" />
-    <Compile Include="Features\Stats\Skillsets\Overview.fs" />
-    <Compile Include="Features\Stats\Sessions\SessionTime.fs" />
-    <Compile Include="Features\Stats\Sessions\ScoreList.fs" />
-    <Compile Include="Features\Stats\Sessions\Activity.fs" />
-    <Compile Include="Features\Stats\Sessions\SessionPanel.fs" />
-    <Compile Include="Features\Stats\Sessions\Sessions.fs" />
-    <Compile Include="Features\Stats\Overall\OverallHeader.fs" />
-    <Compile Include="Features\Stats\Overall\OverallTime.fs" />
-    <Compile Include="Features\Stats\Overall\Overall.fs" />
-    <Compile Include="Features\Stats\Leaderboards\Keymodes.fs" />
-    <Compile Include="Features\Stats\Leaderboards\Activity.fs" />
-    <Compile Include="Features\Stats\Leaderboards\Leaderboards.fs" />
-    <Compile Include="Features\Stats\StatsPage.fs" />
-    <Compile Include="Features\Play\StartOverlay.fs" />
-    <Compile Include="Features\Play\FailOverlay.fs" />
-    <Compile Include="Features\Play\Lanecover.fs" />
-    <Compile Include="Features\Play\Explosions.fs" />
-    <Compile Include="Features\Play\ColumnLighting.fs" />
-    <Compile Include="Features\Play\Playfield.fs" />
-    <Compile Include="Features\Play\DifficultyOverlay.fs" />
-    <Compile Include="Features\Play\Shared.fs" />
-    <Compile Include="Features\Skins\Elements\Accuracy.fs" />
-    <Compile Include="Features\Skins\Elements\ErrorBar.fs" />
-    <Compile Include="Features\Skins\Elements\Judgement.fs" />
-    <Compile Include="Features\Skins\Elements\EarlyLate.fs" />
-    <Compile Include="Features\Skins\Elements\Combo.fs" />
-    <Compile Include="Features\Skins\Elements\ProgressPie.fs" />
-    <Compile Include="Features\Skins\Elements\SkipButton.fs" />
-    <Compile Include="Features\Skins\Elements\Pacemaker.fs" />
-    <Compile Include="Features\Skins\Elements\JudgementCounter.fs" />
-    <Compile Include="Features\Skins\Elements\MultiplayerScoreTracker.fs" />
-    <Compile Include="Features\Skins\Elements\RateMods.fs" />
-    <Compile Include="Features\Skins\Elements\BPM.fs" />
-    <Compile Include="Features\Skins\Elements\InputMeter.fs" />
-    <Compile Include="Features\Skins\Elements\KeysPerSecond.fs" />
-    <Compile Include="Features\Skins\Elements\CustomImage.fs" />
-    <Compile Include="Features\Play\PlayScreen.fs" />
-    <Compile Include="Features\Play\MultiplayerScreen.fs" />
-    <Compile Include="Features\Play\Spectate\SpectateControls.fs" />
-    <Compile Include="Features\Play\Spectate\SpectateScreen.fs" />
-    <Compile Include="Features\Play\Replay\ReplayState.fs" />
-    <Compile Include="Features\Play\Replay\HitOverlay.fs" />
-    <Compile Include="Features\Play\Replay\InputOverlay.fs" />
-    <Compile Include="Features\Play\Replay\ReplayControls.fs" />
-    <Compile Include="Features\Play\Replay\ReplayScreen.fs" />
-    <Compile Include="Features\Play\Practice\PracticeState.fs" />
-    <Compile Include="Features\Play\Practice\PracticeControls.fs" />
-    <Compile Include="Features\Play\Practice\Practice.fs" />
-    <Compile Include="Features\Skins\Elements.fs" />
-    <Compile Include="Features\Skins\Preview.fs" />
-    <Compile Include="Features\Skins\Problems.fs" />
-    <Compile Include="Features\Skins\Textures\TextureEditGrid.fs" />
-    <Compile Include="Features\Skins\Textures\TextureActions.fs" />
-    <Compile Include="Features\Skins\Textures\EditTexturePage.fs" />
-    <Compile Include="Features\Skins\Textures\TextureList.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\ElementPreview.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\Accuracy.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\ErrorBar.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\Judgement.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\EarlyLate.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\Combo.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\ProgressPie.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\SkipButton.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\Pacemaker.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\JudgementCounter.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\RateMods.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\BPM.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\InputMeter.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\KeysPerSecond.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\CustomImage.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration.fs" />
-    <Compile Include="Features\Skins\EditHUD\Previews\Previews.fs" />
-    <Compile Include="Features\Skins\EditHUD\Previews\SelectElement.fs" />
-    <Compile Include="Features\Skins\EditHUD\Positioning.fs" />
-    <Compile Include="Features\Skins\EditHUD\HUDOptions.fs" />
-    <Compile Include="Features\Skins\EditHUD\AnchorPage.fs" />
-    <Compile Include="Features\Skins\EditHUD\EditorControls.fs" />
-    <Compile Include="Features\Skins\EditHUD\EditHUD.fs" />
-    <Compile Include="Features\Skins\EditNoteskin\Playfield.fs" />
-    <Compile Include="Features\Skins\EditNoteskin\HoldNotes.fs" />
-    <Compile Include="Features\Skins\EditNoteskin\Notes.fs" />
-    <Compile Include="Features\Skins\EditNoteskin\Receptors.fs" />
-    <Compile Include="Features\Skins\EditNoteskin\EditNoteskinPage.fs" />
-    <Compile Include="Features\Skins\Browser\Thumbnails.fs" />
-    <Compile Include="Features\Skins\Browser\Components.fs" />
-    <Compile Include="Features\Skins\Browser\Browser.fs" />
-    <Compile Include="Features\Skins\SelectSkin.fs" />
-    <Compile Include="Features\LevelSelect\Shared.fs" />
-    <Compile Include="Features\LevelSelect\Filters.fs" />
-    <Compile Include="Features\LevelSelect\LevelSelectOptions.fs" />
-    <Compile Include="Features\LevelSelect\LibraryView.fs" />
-    <Compile Include="Features\LevelSelect\ContextMenus\ChartContextMenus.fs" />
-    <Compile Include="Features\LevelSelect\ContextMenus\GroupContextMenus.fs" />
-    <Compile Include="Features\LevelSelect\ContextMenus\BulkActionsMenus.fs" />
-    <Compile Include="Features\LevelSelect\ContextMenus\ScoreContextMenu.fs" />
-    <Compile Include="Features\LevelSelect\Tree\MultiSelect.fs" />
-    <Compile Include="Features\LevelSelect\Tree\TreeContext.fs" />
-    <Compile Include="Features\LevelSelect\Tree\Charts.fs" />
-    <Compile Include="Features\LevelSelect\Tree\Groups.fs" />
-    <Compile Include="Features\LevelSelect\Tree\Tree.fs" />
-    <Compile Include="Features\LevelSelect\Preview.fs" />
-    <Compile Include="Features\LevelSelect\ModSelect.fs" />
-    <Compile Include="Features\LevelSelect\Scoreboard\LocalScores.fs" />
-    <Compile Include="Features\LevelSelect\Scoreboard\LocalScoreCard.fs" />
-    <Compile Include="Features\LevelSelect\Scoreboard\Scoreboard.fs" />
-    <Compile Include="Features\LevelSelect\Leaderboard\OnlineScores.fs" />
-    <Compile Include="Features\LevelSelect\Leaderboard\OnlineScoreCard.fs" />
-    <Compile Include="Features\LevelSelect\Leaderboard\Leaderboard.fs" />
-    <Compile Include="Features\LevelSelect\Info\CurrentChart.fs" />
-    <Compile Include="Features\LevelSelect\Info\GameplayInfoBoxes.fs" />
-    <Compile Include="Features\LevelSelect\Info\GameplayInfo.fs" />
-    <Compile Include="Features\LevelSelect\Info\Patterns.fs" />
-    <Compile Include="Features\LevelSelect\Info\InfoPanel.fs" />
-    <Compile Include="Features\LevelSelect\LevelSelectScreen.fs" />
-    <Compile Include="Features\Options\System\HotkeysPage.fs" />
-    <Compile Include="Features\Options\System\PerformanceSettingsPage.fs" />
-    <Compile Include="Features\Options\System\AudioPage.fs" />
-    <Compile Include="Features\Options\System\WindowSettings.fs" />
-    <Compile Include="Features\Options\System\SystemPage.fs" />
-    <Compile Include="Features\Options\Gameplay\LanecoverPage.fs" />
-    <Compile Include="Features\Options\Gameplay\GameplayBindsPage.fs" />
-    <Compile Include="Features\Options\Gameplay\GameplayPage.fs" />
-    <Compile Include="Features\Options\Library\ImportsPage.fs" />
-    <Compile Include="Features\Options\Library\LibraryPage.fs" />
-    <Compile Include="Features\Options\Search\Search.fs" />
-    <Compile Include="Features\Options\Search\SearchResults.fs" />
-    <Compile Include="Features\Options\Presets\EditPresetPage.fs" />
-    <Compile Include="Features\Options\Presets\PresetControls.fs" />
-    <Compile Include="Features\Options\OptionsLayout.fs" />
-    <Compile Include="Features\Options\OptionsPage.fs" />
-    <Compile Include="Features\Options\QuickMenuPage.fs" />
-    <Compile Include="Features\Multiplayer\LobbySelect\Create.fs" />
-    <Compile Include="Features\Multiplayer\LobbySelect\Invites.fs" />
-    <Compile Include="Features\Multiplayer\LobbySelect\List.fs" />
-    <Compile Include="Features\Multiplayer\LobbySelect\LobbySelect.fs" />
-    <Compile Include="Features\Multiplayer\Lobby\Chart.fs" />
-    <Compile Include="Features\Multiplayer\Lobby\Players.fs" />
-    <Compile Include="Features\Multiplayer\Lobby\Chat.fs" />
-    <Compile Include="Features\Multiplayer\Lobby\LobbyScreen.fs" />
-    <Compile Include="Features\MainMenu\LoadingScreen.fs" />
-    <Compile Include="Features\MainMenu\ConfirmQuitPage.fs" />
-    <Compile Include="Features\MainMenu\MainMenuScreen.fs" />
-    <Compile Include="Features\Printerlude\Terminal.fs" />
-    <Compile Include="Features\Printerlude\Printerlude.fs" />
-    <Compile Include="Features\Toolbar\Jukebox.fs" />
-    <Compile Include="Features\Toolbar\NetworkStatus.fs" />
-    <Compile Include="Features\Toolbar\UpdateButton.fs" />
-    <Compile Include="Features\Toolbar\Toolbar.fs" />
-    <Compile Include="Startup.fs" />
-    <Compile Include="Program.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="DiscordRichPresence" Version="1.2.1.24" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="9.0.201" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\engine\src\Percyqaz.Flux.fsproj" />
-    <ProjectReference Include="..\..\libraries\Percyqaz.Shell\src\Percyqaz.Shell.fsproj" />
-    <ProjectReference Include="..\..\online\shared\Interlude.Web.Shared.fsproj" />
-    <ProjectReference Include="..\..\prelude\src\Prelude.fsproj" />
-  </ItemGroup>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <RepositoryUrl>https://github.com/MiaouVSRG/MiaouVSRG</RepositoryUrl>
+        <Version>$([System.DateTime]::Now.tostring("yyyyMMdd"))</Version>
+        <AssemblyVersion>0.1.3.1</AssemblyVersion>
+        <FileVersion>0.1.3.1</FileVersion>
+        <Authors>MiaouVSRG</Authors>
+        <RunPostBuildEvent>1</RunPostBuildEvent>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <DebugType>embedded</DebugType>
+        <PublishTrimmed>True</PublishTrimmed>
+        <TrimMode>partial</TrimMode>
+        <CETCompat>false</CETCompat>
+        <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+    </PropertyGroup>
+    <PropertyGroup>
+        <Optimize>True</Optimize>
+        <Tailcalls>True</Tailcalls>
+    </PropertyGroup>
+    <PropertyGroup>
+        <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+    </PropertyGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\Locale\en_GB.txt"/>
+        <EmbeddedResource Include="Resources\icon.png"/>
+        <EmbeddedResource Include="Resources\miaoum.zip"/>
+        <EmbeddedResource Include="Resources\CrashSplashes.txt"/>
+        <EmbeddedResource Include="Resources\MenuSplashes.txt"/>
+        <EmbeddedResource Include="Resources\default.zip"/>
+        <Compile Include="Utils.fs"/>
+        <Compile Include="Content\Sprites.fs"/>
+        <Compile Include="Content\Sounds.fs"/>
+        <Compile Include="Content\Rulesets.fs"/>
+        <Compile Include="Content\Themes.fs"/>
+        <Compile Include="Content\Skins.fs"/>
+        <Compile Include="Content\Tables.fs"/>
+        <Compile Include="Content\Data.fs"/>
+        <Compile Include="Content\Init.fs"/>
+        <Compile Include="Content\Backbeat.fs"/>
+        <Compile Include="Options\Hotkeys.fs"/>
+        <Compile Include="Options\Window.fs"/>
+        <Compile Include="Options\Options.fs"/>
+        <Compile Include="Options\Presets.fs"/>
+        <Compile Include="UI\Icons.fs"/>
+        <Compile Include="UI\Animations.fs"/>
+        <Compile Include="UI\Callouts.fs"/>
+        <Compile Include="UI\Notifications.fs"/>
+        <Compile Include="UI\Loaders.fs"/>
+        <Compile Include="UI\AngledButton.fs"/>
+        <Compile Include="UI\InlaidButton.fs"/>
+        <Compile Include="UI\TabButtons.fs"/>
+        <Compile Include="UI\TextEntry.fs"/>
+        <Compile Include="UI\NumberEntry.fs"/>
+        <Compile Include="UI\SearchBox.fs"/>
+        <Compile Include="UI\Dropdowns.fs"/>
+        <Compile Include="UI\Web.fs"/>
+        <Compile Include="UI\Timeline.fs"/>
+        <Compile Include="UI\Help.fs"/>
+        <Compile Include="UI\Screen\Logo.fs"/>
+        <Compile Include="UI\Screen\Background.fs"/>
+        <Compile Include="UI\Screen\Transitions.fs"/>
+        <Compile Include="UI\Screen\Screen.fs"/>
+        <Compile Include="UI\Menu\VolumeSlider.fs"/>
+        <Compile Include="UI\Menu\Layout.fs"/>
+        <Compile Include="UI\Menu\Slider.fs"/>
+        <Compile Include="UI\Menu\Selector.fs"/>
+        <Compile Include="UI\Menu\Checkbox.fs"/>
+        <Compile Include="UI\Menu\PageSetting.fs"/>
+        <Compile Include="UI\Menu\PageButton.fs"/>
+        <Compile Include="UI\Menu\Controls.fs"/>
+        <Compile Include="UI\Menu\Menu.fs"/>
+        <Compile Include="UI\Menu\ColorPicker.fs"/>
+        <Compile Include="Features\Wiki\MarkdownUI.fs"/>
+        <Compile Include="Features\Wiki\State.fs"/>
+        <Compile Include="Features\Wiki\WikiBrowserPage.fs"/>
+        <Compile Include="Features\Online\Credentials.fs"/>
+        <Compile Include="Features\Online\LobbyState.fs"/>
+        <Compile Include="Features\Online\Network.fs"/>
+        <Compile Include="Features\Online\DiscordRPC.fs"/>
+        <Compile Include="Features\Online\RegisterPage.fs"/>
+        <Compile Include="Features\Online\LoginPage.fs"/>
+        <Compile Include="Features\Online\Players\Sidebar\Shared.fs"/>
+        <Compile Include="Features\Online\Players\Sidebar\Online.fs"/>
+        <Compile Include="Features\Online\Players\Sidebar\Friends.fs"/>
+        <Compile Include="Features\Online\Players\Sidebar\Search.fs"/>
+        <Compile Include="Features\Online\Players\Sidebar\Sidebar.fs"/>
+        <Compile Include="Features\Online\Players\Profile\Settings.fs"/>
+        <Compile Include="Features\Online\Players\Profile\RecentScores.fs"/>
+        <Compile Include="Features\Online\Players\Profile\Profile.fs"/>
+        <Compile Include="Features\Online\Players\PlayerListPage.fs"/>
+        <Compile Include="Features\Online\Updates.fs"/>
+        <Compile Include="Features\Export\Osz.fs"/>
+        <Compile Include="Features\Rulesets\Create\SCRulesetPage.fs"/>
+        <Compile Include="Features\Rulesets\Create\OsuRulesetPage.fs"/>
+        <Compile Include="Features\Rulesets\Create\QuaverRulesetPage.fs"/>
+        <Compile Include="Features\Rulesets\Create\WifeRulesetPage.fs"/>
+        <Compile Include="Features\Rulesets\Create\AddRulesetsPage.fs"/>
+        <Compile Include="Features\Rulesets\Edit\Judgements.fs"/>
+        <Compile Include="Features\Rulesets\Edit\Windows.fs"/>
+        <Compile Include="Features\Rulesets\Edit\Accuracy.fs"/>
+        <Compile Include="Features\Rulesets\Edit\Mechanics.fs"/>
+        <Compile Include="Features\Rulesets\Edit\Grades.fs"/>
+        <Compile Include="Features\Rulesets\Edit\Lamps.fs"/>
+        <Compile Include="Features\Rulesets\Edit\RulesetEditorPage.fs"/>
+        <Compile Include="Features\Rulesets\SelectRulesetPage.fs"/>
+        <Compile Include="Features\Rulesets\QuickSwitch.fs"/>
+        <Compile Include="Features\Gameplay\SelectedChart.fs"/>
+        <Compile Include="Features\Gameplay\ScoreHelpers.fs"/>
+        <Compile Include="Features\Tables\Browser\DownloadMenu.fs"/>
+        <Compile Include="Features\Tables\Browser\Tables.fs"/>
+        <Compile Include="Features\Tables\ChooseLevel.fs"/>
+        <Compile Include="Features\Tables\Suggestions.fs"/>
+        <Compile Include="Features\Tables\SelectTablePage.fs"/>
+        <Compile Include="Features\Pacemaker\State.fs"/>
+        <Compile Include="Features\Pacemaker\PacemakerOptionsPage.fs"/>
+        <Compile Include="Features\Collections\Actions.fs"/>
+        <Compile Include="Features\Collections\CreateFolderPage.fs"/>
+        <Compile Include="Features\Collections\EditFolderPage.fs"/>
+        <Compile Include="Features\Collections\CreatePlaylistPage.fs"/>
+        <Compile Include="Features\Collections\EditPlaylistPage.fs"/>
+        <Compile Include="Features\Collections\SelectCollectionsPage.fs"/>
+        <Compile Include="Features\Play\PlayState.fs"/>
+        <Compile Include="Features\Play\LocalOffset.fs"/>
+        <Compile Include="Features\Score\Username.fs"/>
+        <Compile Include="Features\Score\Utils.fs"/>
+        <Compile Include="Features\Score\TopBanner.fs"/>
+        <Compile Include="Features\Score\MiddleBox.fs"/>
+        <Compile Include="Features\Score\SessionScore.fs"/>
+        <Compile Include="Features\Score\Graph.fs"/>
+        <Compile Include="Features\Score\GameDetails.fs"/>
+        <Compile Include="Features\Score\ChartActions.fs"/>
+        <Compile Include="Features\Score\BottomBanner.fs"/>
+        <Compile Include="Features\Score\Confetti.fs"/>
+        <Compile Include="Features\Score\PlayerRating.fs"/>
+        <Compile Include="Features\Score\ScoreScreen.fs"/>
+        <Compile Include="Features\Import\TaskTracking.fs"/>
+        <Compile Include="Features\Import\osu!\Skins.fs"/>
+        <Compile Include="Features\Import\osu!\Replays.fs"/>
+        <Compile Include="Features\Import\osu!\Beatmaps\Mino.fs"/>
+        <Compile Include="Features\Import\osu!\Beatmaps\Components.fs"/>
+        <Compile Include="Features\Import\osu!\Beatmaps\Beatmaps.fs"/>
+        <Compile Include="Features\Import\Etterna\Skins.fs"/>
+        <Compile Include="Features\Import\Etterna\EtternaOnline.fs"/>
+        <Compile Include="Features\Import\Etterna\Components.fs"/>
+        <Compile Include="Features\Import\Etterna\PackBrowser.fs"/>
+        <Compile Include="Features\Import\ConfirmUnlinkedImportPage.fs"/>
+        <Compile Include="Features\Import\FileDrop.fs"/>
+        <Compile Include="Features\Mounts\MountActions.fs"/>
+        <Compile Include="Features\Mounts\CreateMountPage.fs"/>
+        <Compile Include="Features\Mounts\EditMountPage.fs"/>
+        <Compile Include="Features\Mounts\MountDisplay.fs"/>
+        <Compile Include="Features\Stats\Sync.fs"/>
+        <Compile Include="Features\Stats\PlayCount.fs"/>
+        <Compile Include="Features\Stats\Skillsets\BreakdownGraph.fs"/>
+        <Compile Include="Features\Stats\Skillsets\Breakdown.fs"/>
+        <Compile Include="Features\Stats\Skillsets\TimelineGraph.fs"/>
+        <Compile Include="Features\Stats\Skillsets\Timeline.fs"/>
+        <Compile Include="Features\Stats\Skillsets\Overview.fs"/>
+        <Compile Include="Features\Stats\Sessions\SessionTime.fs"/>
+        <Compile Include="Features\Stats\Sessions\ScoreList.fs"/>
+        <Compile Include="Features\Stats\Sessions\Activity.fs"/>
+        <Compile Include="Features\Stats\Sessions\SessionPanel.fs"/>
+        <Compile Include="Features\Stats\Sessions\Sessions.fs"/>
+        <Compile Include="Features\Stats\Overall\OverallHeader.fs"/>
+        <Compile Include="Features\Stats\Overall\OverallTime.fs"/>
+        <Compile Include="Features\Stats\Overall\Overall.fs"/>
+        <Compile Include="Features\Stats\Leaderboards\Keymodes.fs"/>
+        <Compile Include="Features\Stats\Leaderboards\Activity.fs"/>
+        <Compile Include="Features\Stats\Leaderboards\Leaderboards.fs"/>
+        <Compile Include="Features\Stats\StatsPage.fs"/>
+        <Compile Include="Features\Play\StartOverlay.fs"/>
+        <Compile Include="Features\Play\FailOverlay.fs"/>
+        <Compile Include="Features\Play\Lanecover.fs"/>
+        <Compile Include="Features\Play\Explosions.fs"/>
+        <Compile Include="Features\Play\ColumnLighting.fs"/>
+        <Compile Include="Features\Play\Playfield.fs"/>
+        <Compile Include="Features\Play\DifficultyOverlay.fs"/>
+        <Compile Include="Features\Play\Shared.fs"/>
+        <Compile Include="Features\Skins\Elements\Accuracy.fs"/>
+        <Compile Include="Features\Skins\Elements\ErrorBar.fs"/>
+        <Compile Include="Features\Skins\Elements\Judgement.fs"/>
+        <Compile Include="Features\Skins\Elements\EarlyLate.fs"/>
+        <Compile Include="Features\Skins\Elements\Combo.fs"/>
+        <Compile Include="Features\Skins\Elements\ProgressPie.fs"/>
+        <Compile Include="Features\Skins\Elements\SkipButton.fs"/>
+        <Compile Include="Features\Skins\Elements\Pacemaker.fs"/>
+        <Compile Include="Features\Skins\Elements\JudgementCounter.fs"/>
+        <Compile Include="Features\Skins\Elements\MultiplayerScoreTracker.fs"/>
+        <Compile Include="Features\Skins\Elements\RateMods.fs"/>
+        <Compile Include="Features\Skins\Elements\BPM.fs"/>
+        <Compile Include="Features\Skins\Elements\InputMeter.fs"/>
+        <Compile Include="Features\Skins\Elements\KeysPerSecond.fs"/>
+        <Compile Include="Features\Skins\Elements\CustomImage.fs"/>
+        <Compile Include="Features\Play\PlayScreen.fs"/>
+        <Compile Include="Features\Play\MultiplayerScreen.fs"/>
+        <Compile Include="Features\Play\Spectate\SpectateControls.fs"/>
+        <Compile Include="Features\Play\Spectate\SpectateScreen.fs"/>
+        <Compile Include="Features\Play\Replay\ReplayState.fs"/>
+        <Compile Include="Features\Play\Replay\HitOverlay.fs"/>
+        <Compile Include="Features\Play\Replay\InputOverlay.fs"/>
+        <Compile Include="Features\Play\Replay\ReplayControls.fs"/>
+        <Compile Include="Features\Play\Replay\ReplayScreen.fs"/>
+        <Compile Include="Features\Play\Practice\PracticeState.fs"/>
+        <Compile Include="Features\Play\Practice\PracticeControls.fs"/>
+        <Compile Include="Features\Play\Practice\Practice.fs"/>
+        <Compile Include="Features\Skins\Elements.fs"/>
+        <Compile Include="Features\Skins\Preview.fs"/>
+        <Compile Include="Features\Skins\Problems.fs"/>
+        <Compile Include="Features\Skins\Textures\TextureEditGrid.fs"/>
+        <Compile Include="Features\Skins\Textures\TextureActions.fs"/>
+        <Compile Include="Features\Skins\Textures\EditTexturePage.fs"/>
+        <Compile Include="Features\Skins\Textures\TextureList.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\ElementPreview.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\Accuracy.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\ErrorBar.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\Judgement.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\EarlyLate.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\Combo.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\ProgressPie.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\SkipButton.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\Pacemaker.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\JudgementCounter.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\RateMods.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\BPM.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\InputMeter.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\KeysPerSecond.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\CustomImage.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Previews\Previews.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Previews\SelectElement.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Positioning.fs"/>
+        <Compile Include="Features\Skins\EditHUD\HUDOptions.fs"/>
+        <Compile Include="Features\Skins\EditHUD\AnchorPage.fs"/>
+        <Compile Include="Features\Skins\EditHUD\EditorControls.fs"/>
+        <Compile Include="Features\Skins\EditHUD\EditHUD.fs"/>
+        <Compile Include="Features\Skins\EditNoteskin\Playfield.fs"/>
+        <Compile Include="Features\Skins\EditNoteskin\HoldNotes.fs"/>
+        <Compile Include="Features\Skins\EditNoteskin\Notes.fs"/>
+        <Compile Include="Features\Skins\EditNoteskin\Receptors.fs"/>
+        <Compile Include="Features\Skins\EditNoteskin\EditNoteskinPage.fs"/>
+        <Compile Include="Features\Skins\Browser\Thumbnails.fs"/>
+        <Compile Include="Features\Skins\Browser\Components.fs"/>
+        <Compile Include="Features\Skins\Browser\Browser.fs"/>
+        <Compile Include="Features\Skins\SelectSkin.fs"/>
+        <Compile Include="Features\LevelSelect\Shared.fs"/>
+        <Compile Include="Features\LevelSelect\Filters.fs"/>
+        <Compile Include="Features\LevelSelect\LevelSelectOptions.fs"/>
+        <Compile Include="Features\LevelSelect\ContextMenus\ChartContextMenus.fs"/>
+        <Compile Include="Features\LevelSelect\ContextMenus\GroupContextMenus.fs"/>
+        <Compile Include="Features\LevelSelect\ContextMenus\BulkActionsMenus.fs"/>
+        <Compile Include="Features\LevelSelect\ContextMenus\ScoreContextMenu.fs"/>
+        <Compile Include="Features\LevelSelect\Tree\MultiSelect.fs"/>
+        <Compile Include="Features\LevelSelect\Tree\TreeContext.fs"/>
+        <Compile Include="Features\LevelSelect\Tree\Charts.fs"/>
+        <Compile Include="Features\LevelSelect\Tree\Groups.fs"/>
+        <Compile Include="Features\LevelSelect\Tree\Tree.fs"/>
+        <Compile Include="Features\LevelSelect\LibraryView.fs"/>
+        <Compile Include="Features\LevelSelect\Preview.fs"/>
+        <Compile Include="Features\LevelSelect\ModSelect.fs"/>
+        <Compile Include="Features\LevelSelect\Scoreboard\LocalScores.fs"/>
+        <Compile Include="Features\LevelSelect\Scoreboard\LocalScoreCard.fs"/>
+        <Compile Include="Features\LevelSelect\Scoreboard\Scoreboard.fs"/>
+        <Compile Include="Features\LevelSelect\Leaderboard\OnlineScores.fs"/>
+        <Compile Include="Features\LevelSelect\Leaderboard\OnlineScoreCard.fs"/>
+        <Compile Include="Features\LevelSelect\Leaderboard\Leaderboard.fs"/>
+        <Compile Include="Features\LevelSelect\Info\CurrentChart.fs"/>
+        <Compile Include="Features\LevelSelect\Info\GameplayInfoBoxes.fs"/>
+        <Compile Include="Features\LevelSelect\Info\GameplayInfo.fs"/>
+        <Compile Include="Features\LevelSelect\Info\Patterns.fs"/>
+        <Compile Include="Features\LevelSelect\Info\InfoPanel.fs"/>
+        <Compile Include="Features\LevelSelect\LevelSelectScreen.fs"/>
+        <Compile Include="Features\Options\System\HotkeysPage.fs"/>
+        <Compile Include="Features\Options\System\PerformanceSettingsPage.fs"/>
+        <Compile Include="Features\Options\System\AudioPage.fs"/>
+        <Compile Include="Features\Options\System\WindowSettings.fs"/>
+        <Compile Include="Features\Options\System\SystemPage.fs"/>
+        <Compile Include="Features\Options\Gameplay\LanecoverPage.fs"/>
+        <Compile Include="Features\Options\Gameplay\GameplayBindsPage.fs"/>
+        <Compile Include="Features\Options\Gameplay\GameplayPage.fs"/>
+        <Compile Include="Features\Options\Library\ImportsPage.fs"/>
+        <Compile Include="Features\Options\Library\LibraryPage.fs"/>
+        <Compile Include="Features\Options\Search\Search.fs"/>
+        <Compile Include="Features\Options\Search\SearchResults.fs"/>
+        <Compile Include="Features\Options\Presets\EditPresetPage.fs"/>
+        <Compile Include="Features\Options\Presets\PresetControls.fs"/>
+        <Compile Include="Features\Options\OptionsLayout.fs"/>
+        <Compile Include="Features\Options\OptionsPage.fs"/>
+        <Compile Include="Features\Options\QuickMenuPage.fs"/>
+        <Compile Include="Features\Multiplayer\LobbySelect\Create.fs"/>
+        <Compile Include="Features\Multiplayer\LobbySelect\Invites.fs"/>
+        <Compile Include="Features\Multiplayer\LobbySelect\List.fs"/>
+        <Compile Include="Features\Multiplayer\LobbySelect\LobbySelect.fs"/>
+        <Compile Include="Features\Multiplayer\Lobby\Chart.fs"/>
+        <Compile Include="Features\Multiplayer\Lobby\Players.fs"/>
+        <Compile Include="Features\Multiplayer\Lobby\Chat.fs"/>
+        <Compile Include="Features\Multiplayer\Lobby\LobbyScreen.fs"/>
+        <Compile Include="Features\Printerlude\Terminal.fs"/>
+        <Compile Include="Features\Printerlude\Printerlude.fs"/>
+        <Compile Include="Features\Toolbar\Jukebox.fs"/>
+        <Compile Include="Features\Toolbar\NetworkStatus.fs"/>
+        <Compile Include="Features\Toolbar\UpdateButton.fs"/>
+        <Compile Include="Features\Toolbar\Toolbar.fs"/>
+        <Compile Include="Features\MainMenu\LoadingScreen.fs"/>
+        <Compile Include="Features\MainMenu\ConfirmQuitPage.fs"/>
+        <Compile Include="Features\MainMenu\MainMenuScreen.fs"/>
+        <Compile Include="Startup.fs"/>
+        <Compile Include="Program.fs"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="DiscordRichPresence" Version="1.2.1.24"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Update="FSharp.Core" Version="9.0.201"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\engine\src\Percyqaz.Flux.fsproj"/>
+        <ProjectReference Include="..\..\libraries\Percyqaz.Shell\src\Percyqaz.Shell.fsproj"/>
+        <ProjectReference Include="..\..\online\shared\Interlude.Web.Shared.fsproj"/>
+        <ProjectReference Include="..\..\prelude\src\Prelude.fsproj"/>
+    </ItemGroup>
 </Project>
