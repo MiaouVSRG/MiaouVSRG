@@ -126,13 +126,14 @@
     <Compile Include="Features\Score\Username.fs" />
     <Compile Include="Features\Score\Utils.fs" />
     <Compile Include="Features\Score\TopBanner.fs" />
-    <Compile Include="Features\Score\Sidebar.fs" />
+    <Compile Include="Features\Score\MiddleBox.fs" />
     <Compile Include="Features\Score\SessionScore.fs" />
     <Compile Include="Features\Score\Graph.fs" />
-    <Compile Include="Features\Score\Results.fs" />
+    <Compile Include="Features\Score\GameDetails.fs" />
     <Compile Include="Features\Score\ChartActions.fs" />
     <Compile Include="Features\Score\BottomBanner.fs" />
     <Compile Include="Features\Score\Confetti.fs" />
+    <Compile Include="Features\Score\PlayerRating.fs" />
     <Compile Include="Features\Score\ScoreScreen.fs" />
     <Compile Include="Features\Import\TaskTracking.fs" />
     <Compile Include="Features\Import\osu!\Skins.fs" />
