@@ -1,0 +1,205 @@
+{
+    "AccuracyDotExtraSpacing": 0,
+    "AccuracyEnabled": true,
+    "AccuracyFontSpacing": 0,
+    "AccuracyGradeColors": true,
+    "AccuracyPercentExtraSpacing": 0,
+    "AccuracyPosition": {
+        "Bottom": [120, 0],
+        "Left": [-100, 0.5],
+        "RelativeToPlayfield": true,
+        "Right": [100, 0.5],
+        "Top": [40, 0]
+    },
+    "AccuracyShowName": true,
+    "AccuracyUseFont": false,
+    "BPMMeterEnabled": false,
+    "BPMMeterPosition": {
+        "Bottom": [-10, 1],
+        "Left": [-100, 0.5],
+        "RelativeToPlayfield": true,
+        "Right": [100, 0.5],
+        "Top": [-40, 1]
+    },
+    "ComboEnabled": true,
+    "ComboFontSpacing": 0,
+    "ComboGrowth": 0.01,
+    "ComboLampColors": true,
+    "ComboPop": 5,
+    "ComboPosition": {
+        "Bottom": [-5, 0.5],
+        "Left": [-100, 0.5],
+        "RelativeToPlayfield": true,
+        "Right": [100, 0.5],
+        "Top": [-65, 0.5]
+    },
+    "ComboUseFont": false,
+    "CustomImageEnabled": false,
+    "CustomImageFrameTime": 200,
+    "CustomImagePosition": {
+        "Bottom": [400, 0],
+        "Left": [-100, 0.5],
+        "RelativeToPlayfield": true,
+        "Right": [100, 0.5],
+        "Top": [200, 0]
+    },
+    "EarlyLateMeterDuration": 200,
+    "EarlyLateMeterEarlyColor": [255, 52, 79, 235],
+    "EarlyLateMeterEarlyText": "Early",
+    "EarlyLateMeterEnabled": true,
+    "EarlyLateMeterFrameTime": 20,
+    "EarlyLateMeterLateColor": [255, 235, 52, 52],
+    "EarlyLateMeterLateText": "Late",
+    "EarlyLateMeterPosition": {
+        "Bottom": [90, 0.5],
+        "Left": [-123, 0.5],
+        "RelativeToPlayfield": true,
+        "Right": [133, 0.5],
+        "Top": [55, 0.5]
+    },
+    "EarlyLateMeterUseTexture": false,
+    "InputMeterColumnPadding": 0.25,
+    "InputMeterEnabled": false,
+    "InputMeterInputColor": [127, 255, 255, 255],
+    "InputMeterInputFadeDistance": 100,
+    "InputMeterJudgementColors": false,
+    "InputMeterKeyColor": [127, 255, 255, 255],
+    "InputMeterKeyFadeTime": 300,
+    "InputMeterKeybindColor": [127, 0, 0, 0],
+    "InputMeterPosition": {
+        "Bottom": [-100, 1],
+        "Left": [30, 1],
+        "RelativeToPlayfield": true,
+        "Right": [200, 1],
+        "Top": [-400, 1]
+    },
+    "InputMeterScrollDownwards": false,
+    "InputMeterScrollSpeed": 0.75,
+    "InputMeterShowInputs": true,
+    "InputMeterShowKeybinds": false,
+    "JudgementCounterColonExtraSpacing": 0,
+    "JudgementCounterCustomDisplay": [],
+    "JudgementCounterDotExtraSpacing": 0,
+    "JudgementCounterEnabled": false,
+    "JudgementCounterFadeTime": 200,
+    "JudgementCounterFontSpacing": 0,
+    "JudgementCounterOpacity": 0.5,
+    "JudgementCounterPopAmount": 0.5,
+    "JudgementCounterPosition": {
+        "Bottom": [-20, 1],
+        "Left": [20, 0],
+        "RelativeToPlayfield": false,
+        "Right": [120, 0],
+        "Top": [-320, 1]
+    },
+    "JudgementCounterShowLabels": false,
+    "JudgementCounterShowRatio": false,
+    "JudgementCounterTextScale": 0.7,
+    "JudgementCounterUseFont": false,
+    "JudgementMeterCustomDisplay": [[4, [{
+        "Texture": 0
+    }, {
+        "Texture": 1
+    }, {
+        "Texture": 2
+    }, {
+        "Texture": 3
+    }]]],
+    "JudgementMeterDuration": 300,
+    "JudgementMeterEnabled": true,
+    "JudgementMeterFrameTime": 50,
+    "JudgementMeterIgnorePerfect": false,
+    "JudgementMeterPosition": {
+        "Bottom": [175, 0.5],
+        "Left": [-554, 0.5],
+        "RelativeToPlayfield": true,
+        "Right": [524, 0.5],
+        "Top": [-385, 0.5]
+    },
+    "JudgementMeterPrioritiseLower": false,
+    "JudgementMeterUseBuiltInAnimation": true,
+    "JudgementMeterUseTexture": true,
+    "KeysPerSecondMeterEnabled": false,
+    "KeysPerSecondMeterPosition": {
+        "Bottom": [0, 1],
+        "Left": [30, 1],
+        "RelativeToPlayfield": true,
+        "Right": [200, 1],
+        "Top": [-100, 1]
+    },
+    "KeysPerSecondMeterShowAverage": false,
+    "KeysPerSecondMeterShowMax": false,
+    "KeysPerSecondMeterShowTotal": false,
+    "MultiplayerScoreTrackerPosition": {
+        "Bottom": [-150, 0.5],
+        "Left": [50, 1],
+        "RelativeToPlayfield": true,
+        "Right": [250, 1],
+        "Top": [-185, 0.5]
+    },
+    "PacemakerPosition": {
+        "Bottom": [-150, 0.5],
+        "Left": [-128, 0.5],
+        "RelativeToPlayfield": true,
+        "Right": [128, 0.5],
+        "Top": [-185, 0.5]
+    },
+    "ProgressMeterBackgroundColor": [100, 20, 20, 20],
+    "ProgressMeterColonExtraSpacing": 0,
+    "ProgressMeterColor": [100, 220, 220, 220],
+    "ProgressMeterEnabled": true,
+    "ProgressMeterFontSpacing": 0,
+    "ProgressMeterLabel": "None",
+    "ProgressMeterLabelSize": 0.4,
+    "ProgressMeterPercentExtraSpacing": 0,
+    "ProgressMeterPosition": {
+        "Bottom": [140, 0],
+        "Left": [120, 0.5],
+        "RelativeToPlayfield": true,
+        "Right": [180, 0.5],
+        "Top": [50, 0]
+    },
+    "ProgressMeterUseFont": false,
+    "RateModMeterEnabled": false,
+    "RateModMeterPosition": {
+        "Bottom": [-40, 1],
+        "Left": [-100, 0.5],
+        "RelativeToPlayfield": true,
+        "Right": [100, 0.5],
+        "Top": [-70, 1]
+    },
+    "RateModMeterShowMods": true,
+    "SkipButtonBackground": {
+        "AlignmentX": 0.5,
+        "AlignmentY": 0.5,
+        "Enable": false,
+        "Scale": 1.1
+    },
+    "SkipButtonPosition": {
+        "Bottom": [230, 0.5],
+        "Left": [-200, 0.5],
+        "RelativeToPlayfield": true,
+        "Right": [200, 0.5],
+        "Top": [130, 0.5]
+    },
+    "TimingDisplayEnabled": true,
+    "TimingDisplayFadeTime": 1000,
+    "TimingDisplayGuideThickness": 1,
+    "TimingDisplayHalfScaleReleases": true,
+    "TimingDisplayMovingAverageColor": [255, 0, 255, 255],
+    "TimingDisplayMovingAverageSensitivity": 0.75,
+    "TimingDisplayMovingAverageType": "None",
+    "TimingDisplayPosition": {
+        "Bottom": [25, 0.5],
+        "Left": [-300, 0.5],
+        "RelativeToPlayfield": true,
+        "Right": [300, 0.5],
+        "Top": [10, 0.5]
+    },
+    "TimingDisplayReleasesExtraHeight": 5,
+    "TimingDisplayRotation": "Normal",
+    "TimingDisplayShowGuide": true,
+    "TimingDisplayShowNonJudgements": true,
+    "TimingDisplayThickness": 5,
+    "TimingDisplayWindowsOpacity": 0
+}

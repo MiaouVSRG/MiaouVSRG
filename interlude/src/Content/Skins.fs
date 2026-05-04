@@ -253,8 +253,8 @@ module Skins =
 
     let private DEFAULT_HUD_META =
         {
-            Name = "User"
-            Author = "MiaouVSRG"
+            Name = "miaoum"
+            Author = "Kyun"
             Editor = None
         }
     let private DEFAULT_HUD_FOLDER = "User"
@@ -382,6 +382,12 @@ module Skins =
         // fallback HUD
         if not (loaded_skins.ContainsKey DEFAULT_HUD_FOLDER) then
 
+            if not (Directory.Exists(Path.Combine(get_game_folder "Skins", "User", "HUD", "hud.json"))) then
+                Logging.Debug "directory does not exists, creating it"
+                ZipFile.ExtractToDirectory(
+                    "miaoumhud.zip" |> Utils.get_resource_stream,
+                    Path.Combine(get_game_folder "Skins", "User", "HUD")
+                )
             let hud, skin = Skin.CreateDefault DEFAULT_HUD_META (Path.Combine(get_game_folder "Skins", "User"))
             loaded_skins.Add(DEFAULT_HUD_FOLDER, LoadedSkin.Create skin)
             loaded_huds.Add(DEFAULT_HUD_FOLDER, { Metadata = skin.Metadata; HUD = hud; Textures = None })
