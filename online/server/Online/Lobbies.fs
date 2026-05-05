@@ -251,6 +251,9 @@ module Lobby =
                                 user_error player "Lobby no longer exists"
 
                             let lobby = lobbies.[lobby_id]
+                            
+                            if lobby.Players.Count >= lobby.Settings.MaxPlayers then
+                                user_error player "Lobby is full"
 
                             if lobby.Players |> Seq.exists(fun p -> p.Value.Username = username) then
                                 malice player "Joined lobby twice"
