@@ -2,6 +2,7 @@
 
 module Layout =
 
+    // TODO: A player can use the right hand for the spacebar in odd keymodes !
     let keys_on_left_hand (keymode: int) =
         match keymode with
         | 3 -> 2

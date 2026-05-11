@@ -1,6 +1,7 @@
 ﻿namespace Prelude.Calculator
 
 open Prelude
+open Prelude.Calculator.NoteDifficulty
 open Prelude.Charts
 
 [<Struct>]
@@ -23,16 +24,26 @@ module Strain =
     let STRAIN_SCALE = 0.01626f
     let STRAIN_TIME_CAP = 200.0f<ms / rate>
 
+    // Depending on the time elapsed (delta), the row difficulty (input) & the current remaining strain (value),
+    // calculate the remaining strain
     let strain_func (half_life: float32<ms / rate>) =
+        // "The strain will lose 50% of its value when {half_life} time is reached"
         let DECAY_RATE = log 0.5f / half_life
 
         fun (value: float32) (input: float32) (delta: GameplayTime) ->
             let decay = exp (DECAY_RATE * min STRAIN_TIME_CAP delta)
             let time_cap_decay = if delta > STRAIN_TIME_CAP then exp (DECAY_RATE * (delta - STRAIN_TIME_CAP)) else 1.0f
             let a = value * time_cap_decay
+            
+            // input is squared : the higher the difficulty the higher the stamina is drained
             let b = input * input * STRAIN_SCALE
+            
+            // Progressive 
             b - (b - a) * decay
 
+    // Logic behind those values :
+    // small half-life for bursts as they don't last much and are probably harder than the other parts of the chart
+    // high half-life for stamina because it is probably a 2min+ JS/HS chart that will take much longer to lose stamina
     let strain_burst = strain_func 1575.0f<ms / rate>
     let strain_stamina = strain_func 60000.0f<ms / rate>
 
@@ -116,6 +127,55 @@ module Strain =
                         else
                             last_note_in_column.[k] <- right_hand_burst, right_hand_stamina, offset
                             strain.[k] <- right_hand_burst * 0.875f + right_hand_stamina * 0.125f
+
+                yield { Strains = strain; Left = left_hand_burst, left_hand_stamina; Right = right_hand_burst, right_hand_stamina }
+        }
+        |> Array.ofSeq
+        
+    let calculate_hand_strains_by_rows (rate: Rate, notes: TimeArray<NoteRow>) (row_difficulty: RowDifficulty array) : RowStrainV2 array =
+        let keys = notes.[0].Data.Length
+        let hand_split = Layout.keys_on_left_hand keys
+
+        let last_note_in_column = Array.init<_> keys (fun _ -> 0.0f, 0.0f, 0.0f<ms>)
+
+        seq {
+            for i = 0 to notes.Length - 1 do
+                let { Time = offset; Data = _ } = notes[i]
+                
+                let strain = Array.zeroCreate<float32> 2
+                
+                let right_hand_difficulty = row_difficulty[i].RightHand.Total
+                let left_hand_difficulty = row_difficulty[i].LeftHand.Total
+                
+                let previous_right_burst, previous_right_stamina, _ = last_note_in_column[1]
+                let previous_left_burst, previous_left_stamina, previous_time = last_note_in_column[0]
+                
+                let left_hand_burst = strain_burst previous_left_burst left_hand_difficulty ((offset - previous_time) / rate)
+                let left_hand_stamina = strain_stamina previous_left_stamina left_hand_difficulty ((offset - previous_time) / rate)
+
+                let right_hand_burst = strain_burst previous_right_burst right_hand_difficulty ((offset - previous_time) / rate)
+                let right_hand_stamina = strain_stamina previous_right_stamina right_hand_difficulty ((offset - previous_time) / rate)
+
+                let left =
+                    left_hand_burst * 0.875f
+                    + left_hand_stamina * 0.125f
+
+                let right =
+                    right_hand_burst * 0.875f
+                    + right_hand_stamina * 0.125f
+
+                last_note_in_column[0] <-
+                    left_hand_burst,
+                    left_hand_stamina,
+                    offset
+
+                last_note_in_column[1] <-
+                    right_hand_burst,
+                    right_hand_stamina,
+                    offset
+
+                strain[0] <- left
+                strain[1] <- right
 
                 yield { Strains = strain; Left = left_hand_burst, left_hand_stamina; Right = right_hand_burst, right_hand_stamina }
         }

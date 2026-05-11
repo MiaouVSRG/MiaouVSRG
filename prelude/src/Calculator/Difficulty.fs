@@ -11,6 +11,9 @@ type Difficulty =
         Variety: float32 array
         Hands: RowStrainV2 array
         Overall: float32
+        HandsV2: RowStrainV2 array
+        OverallV2: float32
+        RowDifficulty: RowDifficulty array
     }
 
 module Difficulty =
@@ -49,6 +52,11 @@ module Difficulty =
         let physical_data = Strain.calculate_finger_strains (rate, notes) note_data
         let hands = Strain.calculate_hand_strains (rate, notes) note_data
         let physical = weighted_overall_difficulty (physical_data |> Seq.map _.StrainV1Notes |> Seq.concat |> Seq.filter (fun x -> x > 0.0f))
+        
+        // NEW RATING (experimental)
+        let data_v2 = NoteDifficulty.calculate_row_ratings (rate, notes)
+        let hands_v2 = Strain.calculate_hand_strains_by_rows (rate, notes) data_v2
+        let physical_v2 = weighted_overall_difficulty (hands_v2 |> Seq.map _.Strains |> Seq.concat |> Seq.filter (fun x -> x > 0.0f))
 
         {
             NoteDifficulty = note_data
@@ -56,6 +64,9 @@ module Difficulty =
             Variety = variety
             Hands = hands
             Overall = if Single.IsFinite physical then physical else 0.0f
+            HandsV2 = hands_v2
+            OverallV2 = if Single.IsFinite physical_v2 then physical_v2 else 0.0f
+            RowDifficulty = data_v2
         }
 
     let calculate = calculate_uncached |> cached

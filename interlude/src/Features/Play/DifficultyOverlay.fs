@@ -11,6 +11,7 @@ open Prelude.Calculator
 open Interlude.Options
 open Interlude.Features.Gameplay
 open Interlude.Features.Play
+open Prelude.Mods.Inverse
 
 type DifficultyGraph =
     {
@@ -49,6 +50,10 @@ type DifficultyOverlay(chart: ModdedChart, playfield: Playfield, difficulty: Dif
     let draw_label (bounds: Rect) (value: float32) (color: Color) =
         Render.rect bounds Colors.shadow_2.O3
         Text.fill_b(Style.font, sprintf "%.2f" value, bounds.Shrink(10.0f, 5.0f), (color, Colors.shadow_2), Alignment.CENTER)
+    
+    let draw_string_label (bounds: Rect) (value: string) (color: Color) =
+        Render.rect bounds Colors.shadow_2.O3
+        Text.fill_b(Style.font, value, bounds.Shrink(10.0f, 5.0f), (color, Colors.shadow_2), Alignment.CENTER)
 
     let draw_row (now: Time) (index: int) =
         let centre =
@@ -65,29 +70,46 @@ type DifficultyOverlay(chart: ModdedChart, playfield: Playfield, difficulty: Dif
 
                 draw_label
                     (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentL(0.5f).Shrink(5.0f))
-                    difficulty.NoteDifficulty.[index].[k].SL
+                    // difficulty.NoteDifficulty.[index].[k].SL
+                    difficulty.RowDifficulty[index].LeftHand.Total
                     Colors.cyan_accent
                 draw_label
                     (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentR(0.5f).Shrink(5.0f))
-                    difficulty.NoteDifficulty.[index].[k].SR
+                    // difficulty.NoteDifficulty.[index].[k].SR
+                    difficulty.RowDifficulty[index].RightHand.Total
                     Colors.cyan_accent
 
-                draw_label
+                draw_string_label
                     (note_box.ShrinkPercentB(0.5f).SlicePercentB(0.6f).Shrink(5.0f))
-                    difficulty.NoteDifficulty.[index].[k].J
+                    // difficulty.NoteDifficulty.[index].[k].J
+                    $"%.2f{difficulty.RowDifficulty[index].Total} (%.2f{difficulty.NoteDifficulty.[index].[k].Total})"
                     Colors.green_accent
-                draw_label
+                draw_string_label
                     (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentL(0.5f).TranslateY(playfield.ColumnWidth * 0.3f).Shrink(5.0f))
-                    difficulty.Strains.[index].NotesV1.[k]
+                    // difficulty.Strains.[index].NotesV1.[k]
+                    $"%.2f{difficulty.RowDifficulty[index].Jack} (%.2f{difficulty.NoteDifficulty.[index].[k].J})"
                     Colors.pink_accent
                 draw_label
                     (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentR(0.5f).TranslateY(playfield.ColumnWidth * 0.3f).Shrink(5.0f))
-                    difficulty.Strains.[index].StrainV1Notes.[k]
+                    // difficulty.Strains.[index].StrainV1Notes.[k]
+                    difficulty.RowDifficulty[index].ChordJack
                     Colors.red_accent
+                    
+                draw_label
+                    (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentR(0.5f).TranslateY(playfield.ColumnWidth * 0.6f).Shrink(5.0f))
+                    // difficulty.Strains.[index].StrainV1Notes.[k]
+                    difficulty.RowDifficulty[index].Stream
+                    Colors.red_accent
+                    
                 draw_label
                     (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentL(0.5f).TranslateY(playfield.ColumnWidth * 0.6f).Shrink(5.0f))
-                    (accuracy_timeline.[index] * 100.0f)
-                    Colors.white
+                    // difficulty.Strains.[index].StrainV1Notes.[k]
+                    difficulty.RowDifficulty[index].Chord
+                    Colors.red_accent
+                // draw_label
+                //     (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentL(0.5f).TranslateY(playfield.ColumnWidth * 0.6f).Shrink(5.0f))
+                //     (accuracy_timeline.[index] * 100.0f)
+                //     Colors.white
 
     let graph (data: (float32 * int) array) : DifficultyGraph =
         let max_y = if data.Length > 0 then data |> Seq.map snd |> Seq.max |> float32 else 1.0f
@@ -193,7 +215,7 @@ type DifficultyOverlay(chart: ModdedChart, playfield: Playfield, difficulty: Dif
             draw_row now peek
             peek <- peek + 1
 
-        Text.draw(Style.font, sprintf "Performance rating: %.2f" performance_rating, 20.0f, 200.0f, 170.0f, Colors.white)
+        Text.draw(Style.font, sprintf "Performance rating: %.2f / %.2f (%.2f v2)" performance_rating difficulty.Overall difficulty.OverallV2, 20.0f, 200.0f, 170.0f, Colors.white)
         draw_performance_data 200.0f Colors.red performance_notes
         Text.draw(Style.font, "^^ Note ratings | Strain ratings vv", 20.0f, 200.0f, 370.0f, Colors.white)
         draw_performance_data 400.0f Colors.blue performance_strains
@@ -209,10 +231,14 @@ type DifficultyOverlay(chart: ModdedChart, playfield: Playfield, difficulty: Dif
         draw_note_data 400.0f Colors.blue note_strains
         Text.draw(Style.font, "Experimental strain, not used yet", 20.0f, this.Bounds.Right - 400.0f, 570.0f, Colors.white)
         draw_octaves 600.0f
-        let (burst, stamina) = difficulty.Hands.[seek].Right in
+        let (burst, stamina) = difficulty.HandsV2.[seek].Right in
             Text.draw(Style.font, sprintf "R: %.0f | %.0f" burst stamina, 20.0f, this.Bounds.Right - 200.0f, 770.0f, Colors.white)
-        let (burst, stamina) = difficulty.Hands.[seek].Left in
+        let (burst, stamina) = difficulty.HandsV2.[seek].Left in
             Text.draw(Style.font, sprintf "L: %.0f | %.0f" burst stamina, 20.0f, this.Bounds.Right - 400.0f, 770.0f, Colors.white)
+        let (burst, stamina) = difficulty.Hands.[seek].Right in
+            Text.draw(Style.font, sprintf "R: %.0f | %.0f" burst stamina, 20.0f, this.Bounds.Right - 200.0f, 870.0f, Colors.white)
+        let (burst, stamina) = difficulty.Hands.[seek].Left in
+            Text.draw(Style.font, sprintf "L: %.0f | %.0f" burst stamina, 20.0f, this.Bounds.Right - 400.0f, 870.0f, Colors.white)
 
     override this.Update (elapsed_ms, moved) =
         base.Update(elapsed_ms, moved)

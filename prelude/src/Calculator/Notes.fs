@@ -1,7 +1,9 @@
 ﻿namespace Prelude.Calculator
 
 open System
+open Percyqaz.Common
 open Prelude
+open Prelude.Calculator
 open Prelude.Charts
 
 [<Struct>]
@@ -10,6 +12,32 @@ type NoteDifficulty =
         mutable J: float32
         mutable SL: float32
         mutable SR: float32
+    }
+
+[<Struct>]
+type HandDifficulty =
+    {
+        mutable Row: NoteRow
+        
+        mutable Stream: float32
+        mutable Jack: float32
+        mutable Chord: float32
+        mutable ChordJack: float32
+    }
+
+[<Struct>]
+type RowDifficulty =
+    {
+        mutable Time: Time
+        mutable Row: NoteRow
+        
+        mutable Stream: float32
+        mutable Jack: float32
+        mutable Chord: float32
+        mutable ChordJack: float32
+        
+        mutable LeftHand: HandDifficulty
+        mutable RightHand: HandDifficulty
     }
 
 module NoteDifficulty =
@@ -101,6 +129,165 @@ module NoteDifficulty =
                     last_note_in_column.[k] <- time
 
         data
+    
+    let calculate_row_ratings (rate: Rate, rows: TimeArray<NoteRow>): RowDifficulty array =
+        
+        let data = Array.zeroCreate rows.Length
+        
+        let keys = rows[0].Data.Length
+        
+        let mutable last_note_in_column: TimeArray<NoteType> = Array.zeroCreate keys
+        
+        // TODO: take hands in consideration
+        let is_left_hand col keys = col < keys / 2
+        
+        // Handle odd keys :
+        // For 7K we do not want the spacebar to be counted as right hand nor left hand, because it depends on the player's choice.
+        // Instead, we will count the middle key (potentially spacebar) as a special key
+        let is_right_hand col keys = if keys % 2 = 1 then col > keys / 2 else col >= keys / 2
+        
+        let has_middle_col keys = keys % 2 = 1
+        
+        let row_difficulty (previous_item: TimeItem<NoteRow> option, current_item: TimeItem<NoteRow>, next_item: TimeItem<NoteRow>) =
+            // for each note in the row, we will set a probability for the note to be in part of a specific pattern.
+            // Then, the note's score will be based on the current pattern calculation for the note, multiplied by the probability
+            
+            // So, a note with a jack score of 250, a stream score of 130 and a LN score of 12
+            // with a jack probability of 0.8, a stream probability of 0.1 and a LN probability of 0.2 will have a note of
+            // 250*0.8 + 130*0.1 + 12*02 = 213.4
+            // Pattern detection will work as follows :
+            
+            // JACK DETECTION :
+            // If the previous row has a rice note in the same column as the current note analyzed, then the current note is likely a jack
+            // If the delta between previous_time & current_time AND the delta between current_time & next_time are likely the same (+-20bpm), then the current note is likely in the middle of a jack pattern
+            // If there is only one note considered as a jack in the row, then we will count the note as a classic jack
+            // If there is more than one note considered as a jack in the row, and the next / previous row has different column positions, then we will count the note as a chordjack
+            // If there is more than one note considered as a jack in the row, and the next / previous row has the same column positions, then we will count the note as a classic jack
+            // Since the first condition has to be checked for the note to be considered as a jack, trills won't be counted as jack patterns, to prevent abuse
+            
+            // STREAM DETECTION :
+            // If the previous row has a rice note at the right / left column of the current note, then the current note is likely a stream
+            // If the delta between previous_time & current_time AND the delta between current_time & next_time are likely the same (+-20bpm), then the current note is likely in the middle of a stream pattern
+            // If there is more than one note considered as a stream in the row, it means that there is a multiple stream pattern
+            // If there is only one note considered as a stream in the row, and there is more than one note in the row, then we will count the notes in the row as a jumpstream/handstream
+            //    Else we will count the note as a stream
+            
+            let previous_time = if previous_item.IsSome then previous_item.Value.Time else 0.0f<ms>
+            let current_row = current_item.Data
+            let chord_size = (current_row |> Array.filter(fun note -> note <> NoteType.NOTHING)).Length
+            
+            let time_delta = (current_item.Time - previous_time) / rate
+            let stream = if float32 time_delta = 0.0f then 0.0f else 200.0f / float32 time_delta
+            
+            
+            // JACKS
+            let mutable jack_count = 0
+            let mutable jack = 0.0f
+            for i = 0 to current_row.Length - 1 do
+                if (current_row[i] = NoteType.NORMAL || current_row[i] = NoteType.HOLDHEAD) then
+                    let delta = (current_item.Time - last_note_in_column[i].Time) / rate
+                    if delta < 150.0f<ms/rate> then
+                        jack_count <- jack_count + 1
+                        jack <- jack + ms_to_jack_bpm delta
+                    last_note_in_column[i] <- {Time = current_item.Time; Data = current_row[i]}
+            
+            let chord_diff =
+                match chord_size with
+                | 1 -> 0.0f
+                | 2 -> 2.0f
+                | 3 -> 5.0f
+                | 4 -> 7.5f
+                | x -> float32 x * 2.25f // TODO: Change from linear to logarithmic ?
+                
+            let chordjack = if jack_count > keys / 2 then chord_diff * float32 jack_count * 0.5f else 0.0f
+            
+            (current_item.Time, current_row, stream, jack, chordjack, chord_diff)
+            
+        
+        for i = 0 to rows.Length - 1 do
+            if i <> 0 then
+                let previous_row = rows[i - 1]
+                let row = rows[i]
+                let time, fullrow, stream, jack, chordjack, chord_diff = row_difficulty(Some previous_row, row)
+                data[i].Time <- time
+                data[i].Row <- fullrow
+                data[i].Stream <- stream
+                data[i].Jack <- jack
+                data[i].ChordJack <- chordjack
+                data[i].Chord <- chord_diff
+                
+                let left_hand_row = Array.zeroCreate (keys / 2)
+                let prev_left_hand_row = Array.zeroCreate (keys / 2)
+                let right_hand_row = Array.zeroCreate (keys - (keys / 2))
+                let prev_right_hand_row = Array.zeroCreate (keys - (keys / 2))
+                
+                for k = 0 to keys - 1 do
+                    if is_left_hand k keys then
+                        left_hand_row[k] <- row.Data[k]
+                        prev_left_hand_row[k] <- previous_row.Data[k]
+                    else
+                        right_hand_row[k % (right_hand_row.Length - 1)] <- row.Data[k]
+                        prev_right_hand_row[k % (right_hand_row.Length - 1)] <- previous_row.Data[k]
+                        
+                let _, _, stream, jack, chordjack, chord_diff = row_difficulty(Some {Time = previous_row.Time; Data = prev_left_hand_row}, {Time = row.Time; Data = left_hand_row})
+                data[i].LeftHand <-
+                    {
+                        Jack = jack
+                        Stream = stream
+                        Chord = chord_diff
+                        ChordJack = chordjack
+                        Row = left_hand_row
+                    }
+                
+                let _, _, stream, jack, chordjack, chord_diff = row_difficulty(Some {Time = previous_row.Time; Data = prev_right_hand_row}, {Time = row.Time; Data = right_hand_row})
+                data[i].RightHand <-
+                    {
+                        Jack = jack
+                        Stream = stream
+                        Chord = chord_diff
+                        ChordJack = chordjack
+                        Row = right_hand_row
+                    }
+            else
+                let row = rows[i]
+                let time, fullrow, stream, jack, chordjack, chord_diff = row_difficulty(None, row)
+                data[i].Time <- time
+                data[i].Row <- fullrow
+                data[i].Stream <- stream
+                data[i].Jack <- jack
+                data[i].ChordJack <- chordjack
+                data[i].Chord <- chord_diff
+                
+                let left_hand_row = Array.zeroCreate (keys / 2)
+                let right_hand_row = Array.zeroCreate (keys - (keys / 2))
+                
+                for k = 0 to keys - 1 do
+                    if is_left_hand k keys then
+                        left_hand_row[k] <- row.Data[k]
+                    else
+                        right_hand_row[k % (right_hand_row.Length - 1)] <- row.Data[k]
+                        
+                let _, _, stream, jack, chordjack, chord_diff = row_difficulty(None, {Time = row.Time; Data = left_hand_row})
+                data[i].LeftHand <-
+                    {
+                        Jack = jack
+                        Stream = stream
+                        Chord = chord_diff
+                        ChordJack = chordjack
+                        Row = left_hand_row
+                    }
+                
+                let _, _, stream, jack, chordjack, chord_diff = row_difficulty(None, {Time = row.Time; Data = right_hand_row})
+                data[i].RightHand <-
+                    {
+                        Jack = jack
+                        Stream = stream
+                        Chord = chord_diff
+                        ChordJack = chordjack
+                        Row = right_hand_row
+                    }
+            
+        data
 
     let OHTNERF = 3.0f
     let STREAM_SCALE = 6f
@@ -113,6 +300,98 @@ module NoteDifficulty =
             MathF.Pow(note.J, OHTNERF),
             1.0f / OHTNERF
         )
+        
+    
+    let V2OHTNERF = 3.0f
+    let V2STREAM_SCALE = 5.0f
+    let V2STREAM_POW = 0.55f
+    let V2CHORD_SCALE = 1.25f
+    let V2CHORD_POW = 0.9f
+    let V2CHORDJACK_SCALE = 0.85f
+    let V2CHORDJACK_POW = 1.0f
+    let V2HAND_SCALE = 0.65f
+    
+    let total_row_difficulty (row: RowDifficulty) : float32 =
+
+        //----------------------------------------
+        // COMPONENTS
+        //----------------------------------------
+
+        let stream =
+            V2STREAM_SCALE
+            * (row.Stream ** V2STREAM_POW)
+
+        let chord =
+            V2CHORD_SCALE
+            * (row.Chord ** V2CHORD_POW)
+
+        let chordjack =
+            V2CHORDJACK_SCALE
+            * (row.ChordJack ** V2CHORDJACK_POW)
+
+        //----------------------------------------
+        // HAND BALANCE
+        //----------------------------------------
+
+        // let hand_balance =
+        //     1.0f
+        //     + abs(row.LeftHand.Total - row.RightHand.Total)
+        //         * V2HAND_SCALE
+        //         * 0.01f
+
+        //----------------------------------------
+        // FINAL
+        //----------------------------------------
+
+        MathF.Pow(
+
+            MathF.Pow(stream, V2OHTNERF)
+            + MathF.Pow(row.Jack, V2OHTNERF)
+            + MathF.Pow(chord, V2OHTNERF)
+            + MathF.Pow(chordjack, V2OHTNERF),
+
+            1.0f / V2OHTNERF
+
+        ) // * hand_balance
+        
+    let total_hand_difficulty (row: HandDifficulty) : float32 =
+
+        //----------------------------------------
+        // COMPONENTS
+        //----------------------------------------
+
+        let stream =
+            V2STREAM_SCALE
+            * (row.Stream ** V2STREAM_POW)
+
+        let chord =
+            V2CHORD_SCALE
+            * (row.Chord ** V2CHORD_POW)
+
+        let chordjack =
+            V2CHORDJACK_SCALE
+            * (row.ChordJack ** V2CHORDJACK_POW)
+
+        //----------------------------------------
+        // FINAL
+        //----------------------------------------
+
+        MathF.Pow(
+
+            MathF.Pow(stream, V2OHTNERF)
+            + MathF.Pow(row.Jack, V2OHTNERF)
+            + MathF.Pow(chord, V2OHTNERF)
+            + MathF.Pow(chordjack, V2OHTNERF),
+
+            1.0f / V2OHTNERF
+
+        ) // * hand_balance
 
 type NoteDifficulty with
     member this.Total = NoteDifficulty.total this
+    
+type RowDifficulty with
+    member this.Total = NoteDifficulty.total_row_difficulty this
+    
+type HandDifficulty with
+    member this.Total = NoteDifficulty.total_hand_difficulty this
