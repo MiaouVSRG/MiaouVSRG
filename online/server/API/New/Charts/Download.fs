@@ -32,9 +32,15 @@ module Download =
                     response.ReplyError(422, "Chart is not stored in the server")
                 else
                     let output = $"{chart.Value.Title}.miaou"
+                    
+                    // Migration from previous api request where files were not deleted
+                    if File.Exists($"./{output}") then
+                        File.Delete($"./{output}")
+                        
                     ZipFile.CreateFromDirectory(chart.Value.Path, $"./{output}")
                     let file = File.ReadAllBytes($"./{output}")
                     response.ReplyFile(file, output)
+                    File.Delete($"./{output}")
             else
                 response.ReplyError(404, "chart not found")
         }

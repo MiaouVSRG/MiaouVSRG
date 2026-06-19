@@ -46,9 +46,9 @@ module Completion =
                     let mutable passed: bool = false
                     let chart_scores = scores |> Array.filter(fun s -> s.ChartId = chart.ChartId)
                     for score in chart_scores do
-                        if score.Accuracy > best_score.Accuracy then
+                        if (score.Accuracy > best_score.Accuracy && score.Rate >= best_score.Rate) || (score.Rate > best_score.Rate) then
                             best_score <- score
-                            passed <- true
+                            if score.Rate >= 1.0f then passed <- true
                     
                     let chart_info: ChartInfo = {
                         ChartId = chart.ChartId
