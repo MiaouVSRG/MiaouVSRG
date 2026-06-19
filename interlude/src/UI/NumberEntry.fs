@@ -49,6 +49,21 @@ type NumberEntry =
         let to_string () = setting.Value.ToString()
 
         NumberEntry.CreateInternal((fun c -> Char.IsAsciiDigit c || c = '-'), to_string, from_string)
+        
+    static member Create(setting: Setting<int, _>, units_label: string) : FrameContainer =
+        let UNITS_LABEL_WIDTH = 150.0f
+        let from_string (text: string) : unit =
+            match Int32.TryParse(text, CultureInfo.InvariantCulture) with
+            | true, v -> setting.Set v
+            | false, _ -> ()
+        let to_string () = setting.Value.ToString()
+
+        NumberEntry.CreateInternal((fun c -> Char.IsAsciiDigit c || c = '-'), to_string, from_string, UNITS_LABEL_WIDTH)
+            .With(
+                Text(units_label)
+                    .Color(Colors.text_subheading)
+                    .Position(Position.SliceR(UNITS_LABEL_WIDTH))
+            )
 
     static member Create(setting: Setting<float, _>) : FrameContainer =
         let from_string (text: string) : unit =

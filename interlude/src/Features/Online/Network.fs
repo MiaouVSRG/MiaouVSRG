@@ -52,6 +52,10 @@ module Network =
     let mutable lobby: Lobby option = None
 
     let credentials = Credentials.Load()
+    
+    let default_socket_port =
+        // Handle beta.online.miaouvsrg.com which has another port 
+        if credentials.Host.StartsWith("beta") then 32768 else 32767
 
     let private target_ip =
         try
@@ -61,7 +65,7 @@ module Network =
             IPAddress.Parse("0.0.0.0")
 
     type NetworkClient() =
-        inherit Client(target_ip, 32767)
+        inherit Client(target_ip, default_socket_port)
 
         override this.OnConnected() =
             GameThread.defer <| fun () -> status <- Connected

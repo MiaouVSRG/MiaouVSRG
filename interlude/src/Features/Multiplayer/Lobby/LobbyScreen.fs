@@ -28,6 +28,7 @@ type LobbySettingsPage(lobby: Lobby) =
     let name = Setting.simple settings.Name
     let host_rotation = Setting.simple settings.HostRotation
     let auto_countdown = Setting.simple settings.AutomaticRoundCountdown
+    let max_players = Setting.simple settings.MaxPlayers
 
     member this.SaveChanges() =
         lobby.ChangeSettings
@@ -35,6 +36,7 @@ type LobbySettingsPage(lobby: Lobby) =
                 Name = name.Value
                 HostRotation = host_rotation.Value
                 AutomaticRoundCountdown = auto_countdown.Value
+                MaxPlayers = max_players.Value
             }
 
     override this.Content() =
@@ -49,7 +51,10 @@ type LobbySettingsPage(lobby: Lobby) =
                     .Pos(3),
                 PageSetting(%"lobby.auto_countdown", Checkbox auto_countdown)
                     .Help(Help.Info("lobby.auto_countdown"))
-                    .Pos(5)
+                    .Pos(5),
+                PageSetting("Max players", NumberEntry.Create(max_players, "players"))
+                    .Help(Help.Info("Number of allowed players to join the lobby"))
+                    .Pos(7)
             )
 
     override this.Title = %"lobby"

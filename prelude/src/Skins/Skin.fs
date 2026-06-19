@@ -78,9 +78,10 @@ type Skin(storage) as this =
             Directory.CreateDirectory hud_path |> ignore
 
         let hud_settings = Path.Combine(hud_path, "hud.json")
+        let mutable need_to_create_default_hud = false
         if File.Exists hud_settings then
             match JSON.FromFile<HudConfig>(hud_settings) with
-            | Ok _ -> ()
+            | Ok _ ->()
             | Error _ ->
 
             Logging.Critical("Your default User HUD's hud.json doesn't parse! Did you make a typo?\nIn future, use the ingame editor to avoid formatting mistakes.")
@@ -88,8 +89,11 @@ type Skin(storage) as this =
 
             if System.Console.ReadLine().Trim().ToLower() <> "reset" then
                 failwith "User chose to crash the game so they can fix their HUD config"
+            
+            need_to_create_default_hud <- true
 
-        JSON.ToFile(hud_settings, true) HudConfig.Default
+        if need_to_create_default_hud then
+            JSON.ToFile(hud_settings, true) HudConfig.Default
 
         let skin_settings = Path.Combine(path, "skin.json")
         if File.Exists skin_settings then

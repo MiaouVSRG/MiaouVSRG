@@ -76,7 +76,7 @@ module Hotkeys =
         Hotkeys.register "reset_mods" (shift Keys.S)
         Hotkeys.register "ruleset_switch" (mk Keys.D)
         Hotkeys.register "native_ruleset" (shift Keys.D)
-        Hotkeys.register "random_chart" (mk Keys.R)
+        Hotkeys.register "random_chart" (mk Keys.F25)
         Hotkeys.register "previous_random_chart" (shift Keys.R)
         Hotkeys.register "autoplay" (ctrl Keys.A)
         Hotkeys.register "reload_content" (Bind.Key(Keys.S, (true, true, true)))

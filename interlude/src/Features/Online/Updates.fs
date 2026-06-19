@@ -115,7 +115,7 @@ module Updates =
     let asset_name =
         match RuntimeInformation.OSArchitecture with
         | Architecture.X64 when OperatingSystem.IsWindows() -> Ok "MiaouVSRG.zip"
-        // | Architecture.X64 when OperatingSystem.IsLinux() -> Ok "MiaouVSRG-linux-x64.zip"   >>> Currently not supported for MiaouVSRG
+        | Architecture.X64 when OperatingSystem.IsLinux() -> Ok "MiaouVSRG-linux-x64.zip"
         | other -> Error other
         
     let private get_release_information (releases: GithubRelease list) : bool * GithubRelease =

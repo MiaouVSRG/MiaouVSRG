@@ -1,5 +1,7 @@
 ﻿namespace Interlude.Features.Multiplayer
 
+open System.Collections.Generic
+open System.Linq
 open Percyqaz.Common
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.Graphics
@@ -18,6 +20,10 @@ type Chat(lobby: Lobby) =
     let MESSAGE_HEIGHT = 40.0f
 
     let current_message = Setting.simple ""
+    
+    // key: username
+    // value : rounds won
+    let player_scores = Dictionary<string, int>()
 
     let chat_msg (sender: string, message: string) : Container =
         let w = Text.measure (Style.font, sender) * 0.6f * MESSAGE_HEIGHT
@@ -64,6 +70,18 @@ type Chat(lobby: Lobby) =
     let game_end_report () =
         let replays = lobby.Replays
         if replays.Keys.Count > 0 then
+            
+            // Update Directory with current players
+            if player_scores.Keys.Count <> replays.Keys.Count then
+                for username in replays.Keys do
+                if not (player_scores.ContainsKey(username)) then
+                    player_scores.Add(username, 0)
+                    
+                for username in player_scores.Keys do
+                    if not(replays.ContainsKey(username)) then
+                        if not (player_scores.Remove(username)) then
+                            Logging.Error "User %s is not in the lobby, but their scores cannot be deleted" username
+            
             add_msg (
                 Text(sprintf "== %s ==" ([lobby.Chart.Value.Title] %> "lobby.results_title"))
                     .Color(Colors.text)
@@ -133,7 +151,38 @@ type Chat(lobby: Lobby) =
                         .Align(Alignment.RIGHT)
 
                 add_msg cmp
+                
+                // Increment the number of won rounds for the current winner
+                match place with
+                | 1 ->
+                    match player_scores.TryGetValue(username) with
+                    | true, v -> player_scores[username] <- v+1
+                    | _ -> ()
+                | _ -> ()
+            
+            add_msg (
+                Text("== CURRENT WINS ==")
+                    .Color(Colors.text)
+                    .Align(Alignment.CENTER)
+            )
+            
+            for username in player_scores.Keys do
+                let current_player_wins =
+                    let container =
+                        { new Container(NodeType.Leaf) with
+                            override this.Draw() =
+                                if this.Focused then
+                                    Render.rect this.Bounds Colors.grey_2.O1
 
+                                base.Draw()
+                        }
+                    
+                    container
+                        |+Text(sprintf "%s : %i" username player_scores[username]).Align(Alignment.LEFT)
+                        
+                add_msg current_player_wins
+                
+            
             add_msg (
                 Text(%"lobby.results_hint")
                     .Color(Colors.text_greyout)
