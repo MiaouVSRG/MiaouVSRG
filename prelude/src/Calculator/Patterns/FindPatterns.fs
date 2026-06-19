@@ -37,7 +37,7 @@ module Patterns =
                 let mean_mspb = d |> List.averageBy _.MsPerBeat
 
                 results.Add {
-                    Pattern = Stream
+                    Pattern = CorePattern.Stream
                     SpecificType = specific_type
                     Mixed = d |> List.forall (fun d -> abs(d.MsPerBeat - mean_mspb) < PATTERN_STABILITY_THRESHOLD) |> not
                     Start = remaining_data.Head.Time

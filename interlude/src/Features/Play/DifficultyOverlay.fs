@@ -67,6 +67,17 @@ type DifficultyOverlay(chart: ModdedChart, playfield: Playfield, difficulty: Dif
         for k = 0 to chart.Keys - 1 do
             if chart.Notes.[index].Data.[k] = NoteType.NORMAL || chart.Notes.[index].Data.[k] = NoteType.HOLDHEAD then
                 let note_box = note_area.SliceL(playfield.ColumnPositions.[k], playfield.ColumnWidth)
+                let get_number_of_notes_per_pattern_detected (column: int) =
+                    let _,_,value = difficulty.RowDifficulty[index].Patterns[column]
+                    value
+                    
+                let get_pattern_probability (column: int) =
+                    let _,prob,_ = difficulty.RowDifficulty[index].Patterns[column]
+                    prob
+                    
+                let get_pattern (column: int) =
+                    let pattern,_,_ = difficulty.RowDifficulty[index].Patterns[column]
+                    pattern
 
                 draw_label
                     (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentL(0.5f).Shrink(5.0f))
@@ -82,30 +93,33 @@ type DifficultyOverlay(chart: ModdedChart, playfield: Playfield, difficulty: Dif
                 draw_string_label
                     (note_box.ShrinkPercentB(0.5f).SlicePercentB(0.6f).Shrink(5.0f))
                     // difficulty.NoteDifficulty.[index].[k].J
-                    $"%.2f{difficulty.RowDifficulty[index].Total} (%.2f{difficulty.NoteDifficulty.[index].[k].Total})"
+                    // $"%.2f{difficulty.RowDifficulty[index].Total} (%.2f{difficulty.NoteDifficulty.[index].[k].Total})"
+                    $"J %.2f{get_pattern_probability(0) * 100.0f}%% ({get_number_of_notes_per_pattern_detected(0)})"
                     Colors.green_accent
                 draw_string_label
-                    (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentL(0.5f).TranslateY(playfield.ColumnWidth * 0.3f).Shrink(5.0f))
+                    (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).TranslateY(playfield.ColumnWidth * 0.3f).Shrink(5.0f))
                     // difficulty.Strains.[index].NotesV1.[k]
-                    $"%.2f{difficulty.RowDifficulty[index].Jack} (%.2f{difficulty.NoteDifficulty.[index].[k].J})"
+                    // $"%.2f{difficulty.RowDifficulty[index].Jack} (%.2f{difficulty.NoteDifficulty.[index].[k].J})"
+                    $"S %.2f{get_pattern_probability(1) * 100.0f}%% ({get_number_of_notes_per_pattern_detected(1)})"
                     Colors.pink_accent
-                draw_label
-                    (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentR(0.5f).TranslateY(playfield.ColumnWidth * 0.3f).Shrink(5.0f))
-                    // difficulty.Strains.[index].StrainV1Notes.[k]
-                    difficulty.RowDifficulty[index].ChordJack
-                    Colors.red_accent
+                // draw_label
+                //     (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentR(0.5f).TranslateY(playfield.ColumnWidth * 0.3f).Shrink(5.0f))
+                //     // difficulty.Strains.[index].StrainV1Notes.[k]
+                //     difficulty.RowDifficulty[index].ChordJack
+                //     Colors.red_accent
                     
-                draw_label
-                    (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentR(0.5f).TranslateY(playfield.ColumnWidth * 0.6f).Shrink(5.0f))
-                    // difficulty.Strains.[index].StrainV1Notes.[k]
-                    difficulty.RowDifficulty[index].Stream
-                    Colors.red_accent
+                // draw_label
+                //     (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentR(0.5f).TranslateY(playfield.ColumnWidth * 0.6f).Shrink(5.0f))
+                //     // difficulty.Strains.[index].StrainV1Notes.[k]
+                //     difficulty.RowDifficulty[index].Stream
+                //     Colors.red_accent
+                //     
+                // draw_label
+                //     (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentL(0.5f).TranslateY(playfield.ColumnWidth * 0.6f).Shrink(5.0f))
+                //     // difficulty.Strains.[index].StrainV1Notes.[k]
+                //     difficulty.RowDifficulty[index].Chord
+                //     Colors.red_accent
                     
-                draw_label
-                    (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentL(0.5f).TranslateY(playfield.ColumnWidth * 0.6f).Shrink(5.0f))
-                    // difficulty.Strains.[index].StrainV1Notes.[k]
-                    difficulty.RowDifficulty[index].Chord
-                    Colors.red_accent
                 // draw_label
                 //     (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentL(0.5f).TranslateY(playfield.ColumnWidth * 0.6f).Shrink(5.0f))
                 //     (accuracy_timeline.[index] * 100.0f)

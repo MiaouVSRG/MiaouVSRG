@@ -66,7 +66,7 @@ module PatternReport =
         let pruned_clusters =
             seq {
                 let clusters = clusters |> Seq.filter (can_be_pruned >> not) |> Array.ofSeq
-                yield! clusters |> Seq.filter (fun x -> x.Pattern = Stream) |> Seq.truncate 3
+                yield! clusters |> Seq.filter (fun x -> x.Pattern = CorePattern.Stream) |> Seq.truncate 3
                 yield! clusters |> Seq.filter (fun x -> x.Pattern = Chordstream) |> Seq.truncate 3
                 yield! clusters |> Seq.filter (fun x -> x.Pattern = Jacks) |> Seq.truncate 3
             }

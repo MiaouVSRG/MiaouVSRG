@@ -6,6 +6,19 @@ open Prelude
 open Prelude.Calculator
 open Prelude.Charts
 
+type DetailedPatternOption = string option
+
+type Pattern = Jack of DetailedPatternOption | Stream of DetailedPatternOption | LN of DetailedPatternOption | Vibro | Empty
+
+module Pattern =
+    let format_pattern pattern =
+        match pattern with
+        | Jack pattern -> if pattern.IsSome then pattern.Value else "Jack"
+        | Stream pattern -> if pattern.IsSome then pattern.Value else "Stream"
+        | LN pattern -> if pattern.IsSome then pattern.Value else "LN"
+        | Vibro -> "Vibro"
+        | Empty -> "None"
+
 [<Struct>]
 type NoteDifficulty =
     {
@@ -19,6 +32,8 @@ type HandDifficulty =
     {
         mutable Row: NoteRow
         
+        mutable Patterns: (Pattern * float32 * int) array
+        
         mutable Stream: float32
         mutable Jack: float32
         mutable Chord: float32
@@ -30,6 +45,8 @@ type RowDifficulty =
     {
         mutable Time: Time
         mutable Row: NoteRow
+        
+        mutable Patterns: (Pattern * float32 * int) array
         
         mutable Stream: float32
         mutable Jack: float32
@@ -148,7 +165,7 @@ module NoteDifficulty =
         
         let has_middle_col keys = keys % 2 = 1
         
-        let row_difficulty (previous_item: TimeItem<NoteRow> option, current_item: TimeItem<NoteRow>, next_item: TimeItem<NoteRow>) =
+        let row_difficulty (previous_item: TimeItem<NoteRow> option, current_item: TimeItem<NoteRow>, next_item: TimeItem<NoteRow> option) =
             // for each note in the row, we will set a probability for the note to be in part of a specific pattern.
             // Then, the note's score will be based on the current pattern calculation for the note, multiplied by the probability
             
@@ -172,11 +189,176 @@ module NoteDifficulty =
             // If there is only one note considered as a stream in the row, and there is more than one note in the row, then we will count the notes in the row as a jumpstream/handstream
             //    Else we will count the note as a stream
             
-            let previous_time = if previous_item.IsSome then previous_item.Value.Time else 0.0f<ms>
-            let current_row = current_item.Data
-            let chord_size = (current_row |> Array.filter(fun note -> note <> NoteType.NOTHING)).Length
+            // There is 4 types of different patterns defined in "Pattern" type
+            let row_patterns = Array.create 4 (Pattern.Empty, 0.0f, 0)
             
-            let time_delta = (current_item.Time - previous_time) / rate
+            let existing_notes = (current_item.Data |> Array.filter (fun note -> note <> NoteType.NOTHING)).Length
+            
+            let has_previous_row = previous_item.IsSome
+            let has_next_row = next_item.IsSome
+            
+            let has_all_rows = has_previous_row && has_next_row
+            
+            // JACK DETECTION :
+            // If the previous row has a rice note in the same column as the current note analyzed, then the current note is likely a jack
+            // If the delta between previous_time & current_time AND the delta between current_time & next_time are likely the same (+-20bpm), then the current note is likely in the middle of a jack pattern
+            // If there is only one note considered as a jack in the row, then we will count the note as a classic jack
+            // If there is more than one note considered as a jack in the row, and the next / previous row has different column positions, then we will count the note as a chordjack
+            // If there is more than one note considered as a jack in the row, and the next / previous row has the same column positions, then we will count the note as a classic jack
+            // Since the first condition has to be checked for the note to be considered as a jack, trills won't be counted as jack patterns, to prevent abuse
+            let is_note_jack (index: int, current_item: TimeItem<NoteRow>, previous_item: TimeItem<NoteRow> option, next_item: TimeItem<NoteRow> option) =
+                let mutable is_jack = false
+                let mutable is_middle_of_jack_pattern = false
+                
+                if current_item.Data[index] <> NoteType.NOTHING then
+                    let has_previous_item = previous_item.IsSome
+                    let has_next_item = next_item.IsSome
+                    
+                    let previous_time_delta = if has_previous_item then (current_item.Time - previous_item.Value.Time) / rate else 0.0f<ms/rate>
+                    let next_time_delta = if has_next_item then (next_item.Value.Time - current_item.Time) / rate else 0.0f<ms/rate>
+                    if (has_previous_item && previous_item.Value.Data[index] = NoteType.NORMAL && current_item.Data[index] = NoteType.NORMAL)
+                       || (has_next_item && current_item.Data[index] = NoteType.NORMAL && next_item.Value.Data[index] = NoteType.NORMAL)
+                    then
+                        is_jack <- true
+                    
+                    let delta_mean = Math.Abs(float(next_time_delta - previous_time_delta))
+                    if is_jack && delta_mean <= 20.0 then
+                        is_middle_of_jack_pattern <- true
+                
+                (is_jack, is_middle_of_jack_pattern)
+
+            let notes_pattern = Array.create current_item.Data.Length (Pattern.Empty, 0.0f)
+            
+            /// Resets the notes_pattern list
+            let reset_notes_pattern () =
+                for column = 0 to current_item.Data.Length - 1 do
+                    notes_pattern[column] <- (Pattern.Empty, 0.0f)
+            
+            for column = 0 to current_item.Data.Length - 1 do
+                let is_jack, is_middle_of_jack_pattern = is_note_jack(column, current_item, previous_item, next_item)
+                let mutable jack_prob = if is_jack then 0.5f else 0.0f
+                if is_middle_of_jack_pattern then jack_prob <- jack_prob + 0.3f
+                
+                if is_jack then notes_pattern[column] <- (Pattern.Jack(None), jack_prob)
+            
+            let jack_notes = (notes_pattern |> Array.map fst |> Array.filter(_.IsJack)).Length
+            
+            for column = 0 to current_item.Data.Length - 1 do
+                let pattern, prob = notes_pattern[column]
+                if pattern.IsJack && jack_notes > 1 then
+                    notes_pattern[column] <- (Pattern.Jack(Some "ChordJack"), prob + 0.2f)
+            
+            let avg_jack_prob = if jack_notes = 0 then 0.0f else (notes_pattern |> Array.map snd |> Array.sum) / float32 existing_notes
+            row_patterns[0] <- (Pattern.Jack(None), avg_jack_prob, jack_notes)
+            
+            // TRILL DETECTION :
+            // JUMPTRILL DETECTION : If the current row has at least two notes on a side and the previous/next row has at least two notes on the other side, then the row is likely a jumptrill
+            // SPLIT TRILL DETECTION : If the current row has at least two notes and the previous/next row has all the other notes, then the row is likely a split trill
+            // ONE HAND TRILL DETECTION : If the current row has only a note on a side and the previous/next row has only another note on the same side, then the row is likely a one hand trill
+            let is_row_trill (current_item: TimeItem<NoteRow>, previous_item: TimeItem<NoteRow> option, next_item: TimeItem<NoteRow> option) =
+                let mutable is_trill = false
+                let mutable is_jumptrill = false
+                let mutable is_split_trill = false
+                let mutable is_one_hand_trill = false
+                let mutable is_middle_of_trill_pattern = false
+                
+                let has_previous_item = previous_item.IsSome
+                let has_next_item = next_item.IsSome
+                
+                let left_hand_note_count (row: NoteRow) = (row |> Array.mapi(fun col el -> el = NoteType.NORMAL && is_left_hand col row.Length) |> Array.filter(fun el -> el = true)).Length
+                let right_hand_note_count (row: NoteRow) = (row |> Array.mapi(fun col el -> el = NoteType.NORMAL && is_right_hand col row.Length) |> Array.filter(fun el -> el = true)).Length
+                
+                let current_left_hand_note_count = left_hand_note_count(current_item.Data)
+                let current_right_hand_note_count = right_hand_note_count(current_item.Data)
+                
+                // jumptrill detection
+                if current_left_hand_note_count >= 2 && (has_previous_item || has_next_item) then
+                    if (has_previous_item && right_hand_note_count(previous_item.Value.Data) >= current_left_hand_note_count) || (has_next_item && right_hand_note_count(next_item.Value.Data) >= current_left_hand_note_count) then
+                        is_trill <- true
+                        is_jumptrill <- true
+                        
+                if current_right_hand_note_count >= 2 && (has_previous_item || has_next_item) then
+                    if (has_previous_item && left_hand_note_count(previous_item.Value.Data) >= current_right_hand_note_count) || (has_next_item && left_hand_note_count(next_item.Value.Data) >= current_right_hand_note_count) then
+                        is_trill <- true
+                        is_jumptrill <- true
+                        
+                if is_trill && has_previous_item && has_next_item then
+                    if left_hand_note_count(previous_item.Value.Data) = left_hand_note_count(next_item.Value.Data) || right_hand_note_count(previous_item.Value.Data) = right_hand_note_count(next_item.Value.Data) then
+                        is_middle_of_trill_pattern <- true
+                
+                // split trill detection
+                // si la row actuelle a au moins 2 notes, et que la row d'après en comporte au moins deux qui ne sont pas sur les mêmes colonnes, alors c'est un split trill
+                let are_notes_on_same_column (first: NoteRow, second: NoteRow) =
+                    for column = 0 to current_item.Data.Length do
+                        
+                
+                if (current_item.Data |> Array.filter(fun note -> note = NoteType.NORMAL)).Length = 2
+                
+            
+            // STREAM DETECTION :
+            // If the previous row has a rice note at the right / left column of the current note, then the current note is likely a stream
+            // If the delta between previous_time & current_time AND the delta between current_time & next_time are likely the same (+-20bpm), then the current note is likely in the middle of a stream pattern
+            // If there is more than one note considered as a stream in the row, it means that there is a multiple stream pattern
+            // If there is only one note considered as a stream in the row, and there is more than one note in the row, then we will count the notes in the row as a jumpstream/handstream
+            //    Else we will count the note as a stream
+            let is_note_stream (index: int, current_item: TimeItem<NoteRow>, previous_item: TimeItem<NoteRow> option, next_item: TimeItem<NoteRow> option) =
+                let mutable is_stream = false
+                let mutable is_middle_of_stream_pattern = false
+                
+                if current_item.Data[index] <> NoteType.NOTHING then
+                    let has_previous_item = previous_item.IsSome
+                    let has_next_item = next_item.IsSome
+                    
+                    let left_note (note_row: NoteRow, index: int) = if index <> 0 then Some note_row[index - 1] else None
+                    let right_note (note_row: NoteRow, index: int) = if index <> note_row.Length - 1 then Some note_row[index + 1] else None
+                    
+                    let left_and_right_notes (note_row: NoteRow, index: int) =
+                        let left = left_note(note_row, index)
+                        let right = right_note(note_row, index)
+                        left, right
+                    
+                    let previous_left_note, previous_right_note = if has_previous_item then left_and_right_notes(previous_item.Value.Data, index) else None, None
+                    let next_left_note, next_right_note = if has_next_item then left_and_right_notes(next_item.Value.Data, index) else None, None
+                    let is_jack, _ = is_note_jack(index, current_item, previous_item, next_item)
+                        
+                    if not is_jack then
+                        if previous_left_note.IsSome || previous_right_note.IsSome || next_left_note.IsSome || next_right_note.IsSome then
+                            is_stream <- true
+                        if (previous_left_note.IsSome && next_right_note.IsSome) || (previous_right_note.IsSome && next_left_note.IsSome) then
+                            is_middle_of_stream_pattern <- true
+                
+                is_stream, is_middle_of_stream_pattern
+            
+            reset_notes_pattern()
+                
+            for column = 0 to current_item.Data.Length - 1 do
+                let is_stream, is_middle_of_stream_pattern = is_note_stream(column, current_item, previous_item, next_item)
+                let mutable stream_prob = if is_stream then 0.5f else 0.0f
+                if is_middle_of_stream_pattern then stream_prob <- stream_prob + 0.3f
+                
+                if is_stream then notes_pattern[column] <- (Pattern.Stream(None), stream_prob)
+            
+            let stream_notes = (notes_pattern |> Array.map fst |> Array.filter(_.IsStream)).Length
+            
+            for column = 0 to current_item.Data.Length - 1 do
+                let pattern, prob = notes_pattern[column]
+                if pattern.IsStream && stream_notes = 1 && current_item.Data.Length > 1 then
+                    notes_pattern[column] <- (Pattern.Stream(Some "JumpStream"), prob + 0.2f)
+            
+            let avg_stream_prob = if stream_notes = 0 then 0.0f else (notes_pattern |> Array.map snd |> Array.sum) / float32 existing_notes
+            row_patterns[1] <- (Pattern.Stream(None), avg_stream_prob, stream_notes)
+            
+            for column = 0 to current_item.Data.Length - 1 do
+                let is_stream, _ = is_note_stream(column, current_item, previous_item, next_item)
+                let is_jack, _ = is_note_jack(column, current_item, previous_item, next_item)
+                
+                Logging.Debug $"{current_item.Time} (column {column}) - {is_jack} {is_stream}"
+             
+                    
+            let time_delta = if has_previous_row then (current_item.Time - previous_item.Value.Time) / rate else 0.0f<ms/rate>
+            let current_row = current_item.Data
+            let chord_size = current_row.Length
+
             let stream = if float32 time_delta = 0.0f then 0.0f else 200.0f / float32 time_delta
             
             
@@ -201,35 +383,48 @@ module NoteDifficulty =
                 
             let chordjack = if jack_count > keys / 2 then chord_diff * float32 jack_count * 0.5f else 0.0f
             
-            (current_item.Time, current_row, stream, jack, chordjack, chord_diff)
+            (current_item.Time, current_row, stream, jack, chordjack, chord_diff, row_patterns)
             
-        
         for i = 0 to rows.Length - 1 do
+            // If we are checking the first row, then we cannot get the previous one !
             if i <> 0 then
+                let has_next_row = i <> rows.Length - 1
                 let previous_row = rows[i - 1]
+                let next_row = if has_next_row then Some rows[i + 1] else None
                 let row = rows[i]
-                let time, fullrow, stream, jack, chordjack, chord_diff = row_difficulty(Some previous_row, row)
+                let time, fullrow, stream, jack, chordjack, chord_diff, patterns = row_difficulty(Some previous_row, row, next_row)
                 data[i].Time <- time
                 data[i].Row <- fullrow
                 data[i].Stream <- stream
                 data[i].Jack <- jack
                 data[i].ChordJack <- chordjack
                 data[i].Chord <- chord_diff
+                data[i].Patterns <- patterns
                 
                 let left_hand_row = Array.zeroCreate (keys / 2)
                 let prev_left_hand_row = Array.zeroCreate (keys / 2)
+                let next_left_hand_row = Array.zeroCreate (keys / 2)
                 let right_hand_row = Array.zeroCreate (keys - (keys / 2))
                 let prev_right_hand_row = Array.zeroCreate (keys - (keys / 2))
+                let next_right_hand_row = Array.zeroCreate (keys - (keys / 2))
                 
                 for k = 0 to keys - 1 do
                     if is_left_hand k keys then
                         left_hand_row[k] <- row.Data[k]
                         prev_left_hand_row[k] <- previous_row.Data[k]
+                        if has_next_row then
+                            next_left_hand_row[k] <- next_row.Value.Data[k]
                     else
                         right_hand_row[k % (right_hand_row.Length - 1)] <- row.Data[k]
                         prev_right_hand_row[k % (right_hand_row.Length - 1)] <- previous_row.Data[k]
+                        if has_next_row then
+                            next_right_hand_row[k % (right_hand_row.Length - 1)] <- next_row.Value.Data[k]
+                         
+                         
+                let next_timerow = if has_next_row then Some {Time = next_row.Value.Time; Data = next_left_hand_row} else None
                         
-                let _, _, stream, jack, chordjack, chord_diff = row_difficulty(Some {Time = previous_row.Time; Data = prev_left_hand_row}, {Time = row.Time; Data = left_hand_row})
+                let _, _, stream, jack, chordjack, chord_diff, patterns = row_difficulty(Some {Time = previous_row.Time; Data = prev_left_hand_row}, {Time = row.Time; Data = left_hand_row}, next_timerow)
+                
                 data[i].LeftHand <-
                     {
                         Jack = jack
@@ -237,9 +432,11 @@ module NoteDifficulty =
                         Chord = chord_diff
                         ChordJack = chordjack
                         Row = left_hand_row
+                        Patterns = patterns
                     }
                 
-                let _, _, stream, jack, chordjack, chord_diff = row_difficulty(Some {Time = previous_row.Time; Data = prev_right_hand_row}, {Time = row.Time; Data = right_hand_row})
+                let next_timerow = if has_next_row then Some {Time = next_row.Value.Time; Data = next_right_hand_row} else None
+                let _, _, stream, jack, chordjack, chord_diff, patterns = row_difficulty(Some {Time = previous_row.Time; Data = prev_right_hand_row}, {Time = row.Time; Data = right_hand_row}, next_timerow)
                 data[i].RightHand <-
                     {
                         Jack = jack
@@ -247,27 +444,34 @@ module NoteDifficulty =
                         Chord = chord_diff
                         ChordJack = chordjack
                         Row = right_hand_row
+                        Patterns = patterns
                     }
             else
                 let row = rows[i]
-                let time, fullrow, stream, jack, chordjack, chord_diff = row_difficulty(None, row)
+                let next_row = rows[i + 1]
+                let time, fullrow, stream, jack, chordjack, chord_diff, patterns = row_difficulty(None, row, Some next_row)
                 data[i].Time <- time
                 data[i].Row <- fullrow
                 data[i].Stream <- stream
                 data[i].Jack <- jack
                 data[i].ChordJack <- chordjack
                 data[i].Chord <- chord_diff
+                data[i].Patterns <- patterns
                 
                 let left_hand_row = Array.zeroCreate (keys / 2)
+                let next_left_hand_row = Array.zeroCreate (keys / 2)
                 let right_hand_row = Array.zeroCreate (keys - (keys / 2))
+                let next_right_hand_row = Array.zeroCreate (keys - (keys / 2))
                 
                 for k = 0 to keys - 1 do
                     if is_left_hand k keys then
                         left_hand_row[k] <- row.Data[k]
+                        next_left_hand_row[k] <- next_row.Data[k]
                     else
                         right_hand_row[k % (right_hand_row.Length - 1)] <- row.Data[k]
+                        next_right_hand_row[k % (right_hand_row.Length - 1)] <- next_row.Data[k]
                         
-                let _, _, stream, jack, chordjack, chord_diff = row_difficulty(None, {Time = row.Time; Data = left_hand_row})
+                let _, _, stream, jack, chordjack, chord_diff, patterns = row_difficulty(None, {Time = row.Time; Data = left_hand_row}, Some {Time = next_row.Time; Data = next_left_hand_row})
                 data[i].LeftHand <-
                     {
                         Jack = jack
@@ -275,9 +479,10 @@ module NoteDifficulty =
                         Chord = chord_diff
                         ChordJack = chordjack
                         Row = left_hand_row
+                        Patterns = patterns
                     }
                 
-                let _, _, stream, jack, chordjack, chord_diff = row_difficulty(None, {Time = row.Time; Data = right_hand_row})
+                let _, _, stream, jack, chordjack, chord_diff, patterns = row_difficulty(None, {Time = row.Time; Data = right_hand_row}, Some {Time = next_row.Time; Data = next_right_hand_row})
                 data[i].RightHand <-
                     {
                         Jack = jack
@@ -285,6 +490,7 @@ module NoteDifficulty =
                         Chord = chord_diff
                         ChordJack = chordjack
                         Row = right_hand_row
+                        Patterns = patterns
                     }
             
         data
