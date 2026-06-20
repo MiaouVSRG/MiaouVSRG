@@ -58,7 +58,7 @@ module Scores =
             combo_breaks: int,
             replay: ReplayData
         ): ScoreUploadOutcome =
-            let is_ranked = rate >= 1.0f<rate> && mod_ranked_status = ModStatus.Ranked
+            let is_ranked = rate >= 0.5f<rate> && mod_ranked_status = ModStatus.Ranked
             let ruleset = Backbeat.rulesets.[Score.PRIMARY_RULESET]
 
             if accuracy >= 0.85 then // < 85% is counted as a fail in-game, we don't store failed scores
