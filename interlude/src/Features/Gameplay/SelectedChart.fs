@@ -36,6 +36,7 @@ type LoadedChartInfo =
         WithMods: ModdedChart
         NotecountsString: string
         Difficulty: Difficulty
+        Rate: Rate
         Patterns: PatternReport
 
         WithColors: ColoredChart
@@ -95,6 +96,7 @@ module SelectedChart =
     let mutable FMT_NOTECOUNTS: string option = None
     let mutable DIFFICULTY: Difficulty option = None
     let mutable PATTERNS: PatternReport option = None
+    let mutable RATE: Rate = 1.0f<rate>
 
     let mutable WITH_COLORS: ColoredChart option = None
 
@@ -111,6 +113,7 @@ module SelectedChart =
             WithMods = WITH_MODS.Value
             NotecountsString = FMT_NOTECOUNTS.Value
             Difficulty = DIFFICULTY.Value
+            Rate = RATE
             Patterns = PATTERNS.Value
 
             WithColors = WITH_COLORS.Value
@@ -200,6 +203,7 @@ module SelectedChart =
                                 DIFFICULTY <- Some rating
                                 PATTERNS <- Some patterns
                                 FMT_NOTECOUNTS <- Some note_counts
+                                RATE <- rate
                                 chart_change_finished.Trigger(create_loaded_chart_info ())
 
                                 if not Song.loading then
@@ -233,6 +237,7 @@ module SelectedChart =
                                 DIFFICULTY <- Some rating
                                 PATTERNS <- Some patterns
                                 FMT_NOTECOUNTS <- Some note_counts
+                                RATE <- rate
 
                                 if is_interrupted_load then
                                     chart_change_finished.Trigger(create_loaded_chart_info ())

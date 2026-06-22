@@ -6,9 +6,9 @@ open Percyqaz.Common
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.UI
-open Percyqaz.Flux.UI.Selection
 open Prelude
 open Prelude.Calculator
+open Prelude.Charts
 open Prelude.Data.User
 open Prelude.Data.Library
 open Interlude.Content
@@ -26,7 +26,7 @@ type PersonalBestCached =
         Details: string
     }
 
-type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: LibraryGroupContext, chart_meta: ChartMeta, library_ctx: LibraryContext) =
+type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: LibraryGroupContext, chart_meta: ChartMeta, library_ctx: LibraryContext, current_rate: Rate) =
     inherit TreeItem(tree_ctx)
 
     let hover_animation = Animation.Fade 0.0f
@@ -37,6 +37,8 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
     let mutable grade_or_accuracy: PersonalBestCached option = None
     let mutable lamp: PersonalBestCached option = None
     let mutable markers = ""
+    let mutable last_rate = 1.0f<rate>
+    let mutable cached_meta = chart_meta
     
     let TEXT_MARGIN = 60.0f
     let TEXT_MARGIN_NO_PB = 12.0f
@@ -191,6 +193,24 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
 
     /// Only called if this chart can be seen on screen
     member private this.DrawCulled(bounds: Rect) : unit =
+        let new_meta =
+            // Do not do complex calculus if we don't need to or if user is dragscrolling (maps go too fast to render without lagging)
+            if current_rate <> last_rate && tree_ctx.DragScrollingAnimationValue < 0.004f then
+                last_rate <- current_rate
+                let cachedChart = tree_ctx.CachedCharts |> List.filter(fun (hash, _) -> hash = chart_meta.Hash) |> List.tryExactlyOne
+                if cachedChart.IsSome then
+                    {cached_meta with Rating = Difficulty.calculate(current_rate, (snd cachedChart.Value).Notes).Overall}
+                else
+                    match ChartDatabase.get_chart chart_meta.Hash Content.Charts with
+                    | Ok chart ->
+                        tree_ctx.CachedCharts <- tree_ctx.CachedCharts.Append((chart_meta.Hash, chart)) |> Seq.toList
+                        {cached_meta with Rating = Difficulty.calculate(current_rate, chart.Notes).Overall}
+                    | Error _ -> cached_meta
+            else
+                cached_meta
+                
+        if new_meta.Rating <> cached_meta.Rating then
+            cached_meta <- new_meta
 
         let is_multi_selected = match tree_ctx.MultiSelection with Some s -> s.Contains(chart_meta, library_ctx) | None -> false
 
@@ -267,7 +287,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
         
         Text.draw_b (
             Style.font,
-            $"{Math.Round(chart_meta.Rating |> float, 2)}",
+            $"{Math.Round(cached_meta.Rating |> float, 2)}",
             36.0f,
             (if this.Selected then
                 bounds.Right - CHART_SELECTED_PADDING - get_text_margin - 250.0f
