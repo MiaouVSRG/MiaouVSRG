@@ -138,7 +138,7 @@ module Printerlude =
         Terminal.add_message @"================================================"
 
         if instance = 0 then
-            ipc_shutdown_token <- Some(IPC.start_server_thread "Interlude" ipc_commands)
+            ipc_shutdown_token <- Some(IPC.start_server_thread "MiaouVSRG" ipc_commands)
 
     let deinit () =
         logging_disposable |> Option.iter (fun d -> d.Dispose())
