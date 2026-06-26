@@ -3,6 +3,7 @@
 open System
 open System.Threading
 open System.IO
+open Interlude.Features.Import
 open Percyqaz.Common
 open Percyqaz.Shell
 open Percyqaz.Shell.Shell
@@ -70,6 +71,12 @@ module Printerlude =
                     |> sprintf "PR for %i%% %.2f" acc
                     |> io.WriteLine
             | None -> ()
+            
+        let download_map(io: IOContext) (hash: string) =
+            GameThread.defer (fun () -> MiaouDirect.download hash)
+            io.WriteLine "Message to download map sent"
+            
+            
 
         let register_commands (ctx: ShellContext) =
             ctx
@@ -98,6 +105,7 @@ module Printerlude =
             ctx
                 .WithIOCommand("version", "Shows info about the current game version", show_version)
                 .WithIOCommand("focus", "Focuses the game window", focus_window)
+                .WithIOCommand("map", "Downloads a chart", "hash", download_map)
 
     let private ms = new MemoryStream()
     let private context_output = new StreamReader(ms)

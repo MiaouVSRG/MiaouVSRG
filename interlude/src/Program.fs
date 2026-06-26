@@ -74,6 +74,14 @@ let main (argv: string array) : int =
     let m = new Mutex(true, "MiaouVSRG")
 
     if argv.Length > 0 then
+        
+        if argv.Length = 1 && argv[0].StartsWith("miaou://") then
+            Shell.IPC.send "MiaouVSRG" "focus" |> ignore
+            let args = argv[0].Replace("miaou://", "").Split("/")
+            let command = args[0]
+            match command with
+            | "map" -> (Shell.IPC.send "MiaouVSRG" (String.concat " " args)) |> ignore
+            | _ -> ()
 
         if m.WaitOne(TimeSpan.Zero, true) then
             printfn "Error: Interlude is not running!"
