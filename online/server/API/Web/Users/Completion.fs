@@ -52,7 +52,7 @@ module Completion =
                     
                     let chart_info: ChartInfo = {
                         ChartId = chart.ChartId
-                        DownloadLink = chart.DownloadLink.Replace("./", "https://cdn.miaouvsrg.com/")
+                        DownloadLink = $"miaou://map/{chart.ChartId}"
                         Source = chart.Source
                         Keymode = chart.Keymode
                         Title = chart.Title
