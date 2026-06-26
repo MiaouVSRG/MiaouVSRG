@@ -43,6 +43,28 @@ let launch (instance: int) : unit =
     let result = Launch.entry_point (Options.load_window_config instance, Updates.version, init, icon)
 
     Startup.deinit (if result = Ok() then Startup.Normal else Startup.InternalCrash) show_crash_splash
+    
+let start_game(m: Mutex, executable_location: string) =
+    launch 0
+    m.ReleaseMutex()
+
+    if Updates.restart_on_exit then
+        m.Dispose()
+
+        if OperatingSystem.IsWindows() then
+            let executable = Path.Combine(executable_location, "MiaouVSRG.exe")
+            let launch_dir = Path.GetDirectoryName executable
+
+            try
+                let _ =
+                    Process.Start(
+                        ProcessStartInfo(executable, WorkingDirectory = launch_dir, UseShellExecute = true)
+                    )
+
+                printfn "Restarting"
+            with err ->
+                printfn "Automatic restart failed :("
+                printfn "%O" err
 
 [<EntryPoint>]
 let main (argv: string array) : int =
@@ -76,6 +98,15 @@ let main (argv: string array) : int =
     if argv.Length > 0 then
         
         if argv.Length = 1 && argv[0].StartsWith("miaou://") then
+            if Process.GetProcessesByName("MiaouVSRG").Length = 0 then
+                start_game(m, executable_location)
+                let mutable started = false
+                while not started do
+                    match Shell.IPC.send "MiaouVSRG" "is alive" with
+                    | Some _ -> started <- true
+                    | None -> ()
+                    
+            printf "yes the game is launched"
             Shell.IPC.send "MiaouVSRG" "focus" |> ignore
             let args = argv[0].Replace("miaou://", "").Split("/")
             let command = args[0]
@@ -93,26 +124,7 @@ let main (argv: string array) : int =
             | None -> printfn "Error: Connection timed out!"
 
     else if m.WaitOne(TimeSpan.Zero, true) then
-        launch 0
-        m.ReleaseMutex()
-
-        if Updates.restart_on_exit then
-            m.Dispose()
-
-            if OperatingSystem.IsWindows() then
-                let executable = Path.Combine(executable_location, "MiaouVSRG.exe")
-                let launch_dir = Path.GetDirectoryName executable
-
-                try
-                    let _ =
-                        Process.Start(
-                            ProcessStartInfo(executable, WorkingDirectory = launch_dir, UseShellExecute = true)
-                        )
-
-                    printfn "Restarting"
-                with err ->
-                    printfn "Automatic restart failed :("
-                    printfn "%O" err
+        start_game(m, executable_location)
 
     elif DEV_MODE then
         let instances = Process.GetProcessesByName "MiaouVSRG" |> Array.length

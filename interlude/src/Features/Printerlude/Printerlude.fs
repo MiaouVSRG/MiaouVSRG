@@ -76,6 +76,9 @@ module Printerlude =
             GameThread.defer (fun () -> MiaouDirect.download hash)
             io.WriteLine "Message to download map sent"
             
+        let is_alive(io: IOContext) =
+            io.WriteLine "I am alive !"
+            
             
 
         let register_commands (ctx: ShellContext) =
@@ -106,6 +109,7 @@ module Printerlude =
                 .WithIOCommand("version", "Shows info about the current game version", show_version)
                 .WithIOCommand("focus", "Focuses the game window", focus_window)
                 .WithIOCommand("map", "Downloads a chart", "hash", download_map)
+                .WithIOCommand("is alive", "Checks if the game is launched and not frozen", is_alive)
 
     let private ms = new MemoryStream()
     let private context_output = new StreamReader(ms)

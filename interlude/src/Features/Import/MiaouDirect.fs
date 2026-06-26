@@ -3,9 +3,11 @@ namespace Interlude.Features.Import
 open System.IO
 open System.Threading
 open System.Threading.Tasks
+open Interlude.Features.Gameplay
 open Percyqaz.Common
 open Percyqaz.Flux.Windowing
 open Prelude
+open Prelude.Data.Library
 open Prelude.Data.Library.Imports
 open Interlude.UI
 open Interlude.Content
@@ -23,7 +25,10 @@ module MiaouDirect =
                     %"notification.install_song",
                     [hash; result.ConvertedCharts.ToString(); result.SkippedCharts.Length.ToString()] %> "notification.install_song.body"
                 )
-                Content.TriggerChartAdded()
+                let chart_meta = ChartDatabase.get_meta hash Content.Charts
+                if chart_meta.IsSome then
+                    GameThread.defer(fun () -> SelectedChart.change(chart_meta.Value, LibraryContext.None, true))
+                    Content.TriggerChartAdded()
             | Error reason ->
                 Logging.Error "Error importing %s: %s" hash reason
                 Notifications.error (%"notification.install_song_failed", hash)
