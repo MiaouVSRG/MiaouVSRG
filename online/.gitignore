@@ -7,3 +7,4 @@
 secrets
 /data
 /b2AuthorizeCfWorker_local.py
+docker-compose-nomaps.yml

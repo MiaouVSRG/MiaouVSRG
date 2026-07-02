@@ -866,3 +866,33 @@ module Web =
             
         let get(callback: Response option -> unit) =
             Client.get<Response> (snd ROUTE, callback)
+            
+    module Map =
+        module Info =
+            let ROUTE = (GET, MAIN_ENDPOINT + "/map")
+            
+            [<Json.AutoCodec>]
+            type MapDifficulty =
+                {
+                    Name: string
+                    Rating: float32
+                    Length: string
+                    BPM: int
+                    RiceCount: int
+                    LNCount: int
+                    Mapper: string
+                }
+            
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Name: string
+                    Artist: string
+                    Difficulties: MapDifficulty array
+                    Ranked: bool
+                    DownloadLink: string
+                    MiaoudirectLink: string
+                }
+                
+            let get(chart: string, callback: Response option -> unit) =
+                Client.get<Response> (snd ROUTE + "?chart=" + chart, callback)

@@ -71,6 +71,7 @@ module API =
         add_endpoint Web.User.Register.ROUTE Web.Users.Register.handle
         add_endpoint Web.User.Completion.ROUTE Web.Users.Completion.handle
         add_endpoint Web.Leaderboard.ROUTE Web.Leaderboard.handle
+        add_endpoint Web.Map.Info.ROUTE Web.Maps.Info.handle
 
     let handle_request
         (
