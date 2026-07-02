@@ -298,7 +298,7 @@ module Tree =
             (screen_bounds.Right - 10.0f)
             (origin + 5.0f)
             (screen_bounds.Right)
-            (originB - 50.0f)
+            (originB - 75.0f)
             (Colors.shadow_2.O3a scroll_fade.Alpha)
 
         let total_height = originB - origin

@@ -108,6 +108,7 @@ type private GroupItem(tree_ctx: TreeContext, name: string, items: ResizeArray<C
             let padded_chart_height = CHART_HEIGHT + CHART_SPACING
 
             let first_visible_chart_index = (tree_top - next_top) / padded_chart_height |> floor |> int |> max 0
+            Logging.Debug $"{first_visible_chart_index}"
             let mutable chart_index = first_visible_chart_index
 
             let mutable top_edge = next_top + float32 chart_index * padded_chart_height
