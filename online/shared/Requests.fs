@@ -874,22 +874,25 @@ module Web =
             [<Json.AutoCodec>]
             type MapDifficulty =
                 {
+                    Hash: string option
                     Name: string
+                    Artist: string
                     Rating: float32
                     Length: string
                     BPM: int
                     RiceCount: int
                     LNCount: int
                     Mapper: string
+                    Keymode: int
                 }
             
             [<Json.AutoCodec>]
             type Response =
                 {
                     Name: string
-                    Artist: string
                     Difficulties: MapDifficulty array
                     Ranked: bool
+                    Background: string
                     DownloadLink: string
                     MiaoudirectLink: string
                 }

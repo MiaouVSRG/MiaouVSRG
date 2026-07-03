@@ -51,11 +51,15 @@ module Info =
             else
                 let chart = db_chart.Value
                 let mutable source_folder = ""
+                let mutable require_folder_deletion = false
+                let mutable background_url = ""
                 if chart.DownloadLink.StartsWith("https://catboy.best") then
                     download_mapset_from_mino(chart.DownloadLink, chart.ChartId) |> Async.RunSynchronously
                     source_folder <- chart.ChartId
+                    require_folder_deletion <- true
                 else
                     source_folder <- chart.Path
+                    background_url <- chart.ImageLink
                 let files = Directory.GetFiles(source_folder, "*.osu")
                 for file in files do
                     let beatmap =
@@ -69,6 +73,8 @@ module Info =
                     if beatmap.IsNone then
                         Logging.Debug $"The file {file} is not an osu!mania map"
                     else
+                        if background_url = "" then
+                            background_url <- $"https://catboy.best/preview/background/{beatmap.Value.Metadata.BeatmapSetID}?set=1"
                         
                         let action: ConversionAction =
                             {
@@ -140,22 +146,29 @@ module Info =
                                 0
                                 
                         let diff: MapDifficulty = {
-                            Name = beatmap.Value.Metadata.Title
+                            Hash = hash
+                            Name = beatmap.Value.Metadata.Version
+                            Artist = beatmap.Value.Metadata.Artist
                             Rating = rating
                             Length = length
                             BPM = bpm
                             RiceCount = rice_count
                             LNCount = ln_count
                             Mapper = beatmap.Value.Metadata.Creator
+                            Keymode = converted_chart.Value.Chart.Keys
                         }
                             
                         diffs.Add(diff)
-                        
+                
+                if require_folder_deletion then
+                    // Delete downloaded charts from Mino
+                    Directory.Delete(source_folder, true)
+                      
                 let r: Response = {
                     Name = chart.Title
-                    Artist = ""
                     Difficulties = diffs.ToArray()
                     Ranked = chart.Ranked = 1
+                    Background = background_url
                     DownloadLink = chart.DownloadLink
                     MiaoudirectLink = $"miaou://map/{chart.ChartId}"
                 }
