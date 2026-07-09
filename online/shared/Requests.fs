@@ -905,7 +905,26 @@ module Web =
             let ROUTE = (GET, MAIN_ENDPOINT + "/map/leaderboard")
             
             [<Json.AutoCodec>]
+            type Score =
+                {
+                    Username: string
+                    Rank: int
+                    Acc: float
+                    Rate: Rate
+                    Mods: ModState
+                    Timestamp: int64
+                    Combo: int
+                    PerfectCount: int
+                    GreatCount: int
+                    MehCount: int
+                    MissCount: int
+                }
+
+            [<Json.AutoCodec>]
             type Response =
                 {
-                    Yes: bool
+                    Scores: Score array
                 }
+                
+            let get(chart: string, callback: Response option -> unit) =
+                Client.get<Response> (snd ROUTE + "?chart=" + chart, callback)
