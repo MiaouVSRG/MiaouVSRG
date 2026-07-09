@@ -895,7 +895,17 @@ module Web =
                     Background: string
                     DownloadLink: string
                     MiaoudirectLink: string
+                    Audio: string
                 }
                 
             let get(chart: string, callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE + "?chart=" + chart, callback)
+                
+        module Leaderboard =
+            let ROUTE = (GET, MAIN_ENDPOINT + "/map/leaderboard")
+            
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Yes: bool
+                }

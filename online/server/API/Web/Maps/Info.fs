@@ -53,6 +53,7 @@ module Info =
                 let mutable source_folder = ""
                 let mutable require_folder_deletion = false
                 let mutable background_url = ""
+                let mutable audio_preview_url = ""
                 if chart.DownloadLink.StartsWith("https://catboy.best") then
                     download_mapset_from_mino(chart.DownloadLink, chart.ChartId) |> Async.RunSynchronously
                     source_folder <- chart.ChartId
@@ -75,6 +76,13 @@ module Info =
                     else
                         if background_url = "" then
                             background_url <- $"https://catboy.best/preview/background/{beatmap.Value.Metadata.BeatmapSetID}?set=1"
+                            
+                        audio_preview_url <-
+                            if chart.DownloadLink.StartsWith("https://catboy.best") then
+                                $"https://b.ppy.sh/preview/{beatmap.Value.Metadata.BeatmapSetID}.mp3"
+                            else
+                                // Use Remove method because Path property contains ./ at the beginning
+                                $"https://cdn.miaouvsrg.com/{chart.Path.Remove(0, 2)}/{beatmap.Value.General.AudioFilename}"
                         
                         let action: ConversionAction =
                             {
@@ -171,6 +179,7 @@ module Info =
                     Background = background_url
                     DownloadLink = chart.DownloadLink
                     MiaoudirectLink = $"miaou://map/{chart.ChartId}"
+                    Audio = audio_preview_url
                 }
             
                 response.ReplyJson(r)                        
