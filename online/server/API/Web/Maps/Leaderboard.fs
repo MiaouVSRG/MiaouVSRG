@@ -51,7 +51,16 @@ module Leaderboard =
                 
                 let mutable scorable_chart = Unchecked.defaultof<Prelude.Charts.Chart>
                 
-                let files = Directory.GetFiles(chart.Path, "*.osu")
+                let mutable source_folder = ""
+                let mutable require_folder_deletion = false
+                if chart.DownloadLink.StartsWith("https://catboy.best") then
+                    download_mapset_from_mino(chart.DownloadLink, chart.ChartId) |> Async.RunSynchronously
+                    source_folder <- chart.ChartId
+                    require_folder_deletion <- true
+                else
+                    source_folder <- chart.Path
+                
+                let files = Directory.GetFiles(source_folder, "*.osu")
                 for file in files do
                     let beatmap =
                         match Beatmap.FromFile file with
@@ -107,8 +116,6 @@ module Leaderboard =
                         let default_rating = Difficulty.calculate(score.Rate, with_mods.Notes)
                         let user_rating = Performance.calculate default_rating scoring
                         
-                        Logging.Debug $"{scoring.JudgementCounts}"
-                        
                         
                         {
                             Username = user.Username
@@ -117,13 +124,18 @@ module Leaderboard =
                             Mods = score.Mods
                             Timestamp = score.TimePlayed
                             Combo = scoring.BestCombo
-                            MehCount = 0
-                            PerfectCount = 0
-                            MissCount = 0
-                            GreatCount = 0
+                            MehCount = scoring.JudgementCounts[2]
+                            PerfectCount = scoring.JudgementCounts[0]
+                            MissCount = scoring.JudgementCounts[3]
+                            GreatCount = scoring.JudgementCounts[1]
                             Acc = scoring.Accuracy
+                            Rating = user_rating
                         }
                     )
+                    
+                if require_folder_deletion then
+                    // Delete downloaded charts from Mino
+                    Directory.Delete(source_folder, true)
 
                 response.ReplyJson<Response>({ Scores = scores })
 

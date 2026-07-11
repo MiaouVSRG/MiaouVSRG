@@ -918,6 +918,7 @@ module Web =
                     GreatCount: int
                     MehCount: int
                     MissCount: int
+                    Rating: float32
                 }
 
             [<Json.AutoCodec>]
