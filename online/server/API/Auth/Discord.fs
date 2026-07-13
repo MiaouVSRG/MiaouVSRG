@@ -67,7 +67,7 @@ module Discord =
                 |> Async.RunSynchronously
                 |> Logging.Error "%s"
 
-                response.ReplyRedirect("https://yavsrg.net/login_failed")
+                response.ReplyRedirect("https://miaouvsrg.com/login_failed")
             else
 
             let! oauth_data =
@@ -90,7 +90,7 @@ module Discord =
                 |> Async.RunSynchronously
                 |> Logging.Error "%s"
 
-                response.ReplyRedirect("https://yavsrg.net/login_failed")
+                response.ReplyRedirect("https://miaouvsrg.com/login_failed")
             else
 
             let! identity =
@@ -104,6 +104,6 @@ module Discord =
                     identity.username
 
             match Users.DiscordAuthFlow.receive_discord_callback (state, uint64 identity.id, discord_tag) with
-            | true -> response.ReplyRedirect("https://yavsrg.net/login_success")
-            | false -> response.ReplyRedirect("https://yavsrg.net/login_failed")
+            | true -> response.ReplyRedirect("https://miaouvsrg.com/login_success")
+            | false -> response.ReplyRedirect("https://miaouvsrg.com/login_failed")
         }
