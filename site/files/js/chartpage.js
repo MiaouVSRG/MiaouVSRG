@@ -1,3 +1,5 @@
+import { getApiEndpoint } from "./utils.js"
+
 const parts = location.pathname.split("/").filter(Boolean);
 let chartId = parts.at(-1);
 let cachedChartId = chartId;
@@ -41,12 +43,6 @@ const diffColors = [
     '#18158E',
     '#000000'
 ];
-
-const PROD_URL = "https://beta.api.miaouvsrg.com"
-const DEV_URL = "https://api.miaou.dev.internal"
-
-const ENV = "prod";
-const URL = ENV === "dev" ? DEV_URL : PROD_URL
 
 // All HTML elements that needs to be updated
 const bg = document.getElementById("bg");
@@ -409,7 +405,7 @@ function setColorsByHsl(hsl1, hsl2){
 }
 
 async function setLeaderboard(id){
-    const leaderboardReq = await fetch(URL + "/web/map/leaderboard?chart=" + id);
+    const leaderboardReq = await fetch(getApiEndpoint() + "/web/map/leaderboard?chart=" + id);
     if(leaderboardReq.status !== 200){
         return;
     }
@@ -419,7 +415,7 @@ async function setLeaderboard(id){
 }
 
 async function init(){
-    const response = await fetch(URL + "/web/map?chart=" + chartId);
+    const response = await fetch(getApiEndpoint() + "/web/map?chart=" + chartId);
     if(response.status !== 200){
         return;
     }

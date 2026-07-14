@@ -1,7 +1,9 @@
+import { getApiEndpoint } from "./utils.js"
+
 let params = new URLSearchParams(document.location.search);
 let token = params.get("token");
 
-fetch("https://api.miaou.dev.internal/web/login/validate?token=" + token.replace("+", "%2B"), {
+fetch(getApiEndpoint() + "/web/login/validate?token=" + token.replace("+", "%2B"), {
     method: "GET",
     credentials: "include"
 })

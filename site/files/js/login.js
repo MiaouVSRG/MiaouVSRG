@@ -1,3 +1,5 @@
+import { getApiEndpoint } from "./utils.js"
+
 const discordLogin = document.getElementById("discordlogin");
 
 const form = document.getElementById("userform");
@@ -12,7 +14,7 @@ form.addEventListener("submit", (e) => {
     }
 
     if(e.submitter.value === "register"){
-        fetch("https://api.miaou.dev.internal/web/user/register", {
+        fetch(getApiEndpoint() + "/web/user/register", {
             method: "POST",
             body: JSON.stringify({
                 Username: username,
@@ -22,7 +24,7 @@ form.addEventListener("submit", (e) => {
         .then((response) => response.json())
         .then((json) => console.log(json));
     } else if (e.submitter.value === "login"){
-        fetch("https://api.miaou.dev.internal/web/user/login", {
+        fetch(getApiEndpoint() + "/web/user/login", {
             method: "POST",
             body: JSON.stringify({
                 Username: username,
@@ -37,11 +39,11 @@ form.addEventListener("submit", (e) => {
 });
 
 discordLogin.addEventListener("click", () => {
-    window.location.href = "https://api.miaou.dev.internal/web/login/discord";
+    window.location.href = getApiEndpoint() + "/web/login/discord";
 });
 
 window.onload = (event) => {
-    fetch("https://api.miaou.dev.internal/web/login/verify", {
+    fetch(getApiEndpoint() + "/web/login/verify", {
             method: "GET",
             credentials: "include"
         })

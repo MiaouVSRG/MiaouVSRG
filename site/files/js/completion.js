@@ -1,3 +1,5 @@
+import { getApiEndpoint } from "./utils.js"
+
 // Pour optimiser l'affichage, voici la logique de chatGPT :
 // 1) On n'affiche que x éléments (définis par la variable VISIBLE_COUNT) sur la page
 // 2) Quand on scrolle, on regarde de combien de maps on a scrollé (comme on sait qu'une map fait 45px (défini dans le completion.css), on peut facilement calculer que si on a scroll de 90px, alors on a scroll 2 maps)
@@ -354,7 +356,7 @@ document.querySelector(".resetfilterbutton2").addEventListener("click", () => {
 });
 
 const statspannel = document.getElementById("statspannel").children;
-for(i = 0; i < statspannel.length; i++){
+for(var i = 0; i < statspannel.length; i++){
     statspannel[i].addEventListener("mouseover", (event) => setMapRatioGame(event.target));
     statspannel[i].addEventListener("mouseout", () => setGameCompletionValues(userResponse));
 }
@@ -560,30 +562,30 @@ window.onload = async (event) => {
 
     if(username && page === "completion"){
 
-        const response = await fetch("https://api.miaou.dev.internal/web/user/completion?name=" + username);
+        const response = await fetch(getApiEndpoint() + "/web/user/completion?name=" + username);
 
         init(response)
 
-        const userResponse = await fetch("https://api.miaou.dev.internal/web/user?name=" + username);
+        const userResponse = await fetch(getApiEndpoint() + "/web/user?name=" + username);
         const userJson = await userResponse.json();
         userResponse = userJson;
         setGameCompletionValues(userResponse);
     } else {
 
-        fetch("https://api.miaou.dev.internal/web/login/verify", {
+        fetch(getApiEndpoint() + "/web/login/verify", {
             method: "GET",
             credentials: "include"
         })
         .then((response) => response.json())
         .then((json) => {
             if (json.Success){
-                fetch("https://api.miaou.dev.internal/web/user/completion", {
+                fetch(getApiEndpoint() + "/web/user/completion", {
                     method: "GET",
                     credentials: "include"
                 })
                 .then((response) => init(response))
 
-                fetch("https://api.miaou.dev.internal/web/user", {
+                fetch(getApiEndpoint() + "/web/user", {
                     method: "GET",
                     credentials: "include"
                 })

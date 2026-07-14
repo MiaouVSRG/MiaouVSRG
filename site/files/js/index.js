@@ -1,3 +1,5 @@
+import { getApiEndpoint } from "./utils.js"
+
 function init(response){
 
 
@@ -164,7 +166,7 @@ window.onload = (event) => {
 
         // On remplit la requête vide grâce à ".open()". Dans le "open()", on remplit les informations de la requête,
         // à savoir : la méthode (GET) et l'url. Le "false" indique qu'on doit attendre que le serveur réponde avant de continuer le code.
-        request.open("get","https://beta.api.miaouvsrg.com/web/user?name=" + username, false)
+        request.open("get", getApiEndpoint() + "/web/user?name=" + username, false)
 
         // On envoie la requête au serveur (l'équivalent invisible de coller l'url dans le navigateur)
         request.send()
@@ -176,14 +178,14 @@ window.onload = (event) => {
         init(response)
     } else {
 
-        fetch("https://api.miaou.dev.internal/web/login/verify", {
+        fetch(getApiEndpoint() + "/web/login/verify", {
             method: "GET",
             credentials: "include"
         })
         .then((response) => response.json())
         .then((json) => {
             if (json.Success){
-                fetch("https://api.miaou.dev.internal/web/user", {
+                fetch(getApiEndpoint() + "/web/user", {
                     method: "GET",
                     credentials: "include"
                 })
