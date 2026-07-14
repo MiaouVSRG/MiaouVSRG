@@ -30,7 +30,7 @@ module Validate =
             for key in headers.Keys do
                 Logging.Debug $"{key} : {headers[key]}"
 
-            if not(headers.ContainsKey("Host")) || not(headers.ContainsKey("Origin")) then
+            if not(headers.ContainsKey("X-Forwarded-Host")) || not(headers.ContainsKey("Origin")) then
                 response.ReplyError(403, "You should not be here.")
             
             require_query_parameter query_params "token"
@@ -40,7 +40,7 @@ module Validate =
             match User.by_auth_token token with
             | Some _ ->
                 let res: Response = {Success = true}
-                let cookies = Array.create 1 ("token", token, None, headers["Host"].Replace("api.", ""))
+                let cookies = Array.create 1 ("token", token, None, headers["X-Forwarded-Host"].Replace("api.", ""))
                 response.ReplyJson(res, 200, cookies, headers["Origin"])
             | None ->
                 response.ReplyError(404, "Invalid token")

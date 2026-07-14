@@ -33,7 +33,7 @@ module Finish =
         
         async{
             
-            if not(headers.ContainsKey("Host")) then
+            if not(headers.ContainsKey("X-Forwarded-Host")) then
                 response.ReplyError(403, "You should not be here.")
             else
                 
@@ -117,7 +117,7 @@ module Finish =
                     response.ReplyRedirect("https://miaouvsrg.com/login_failed")
                 | Ok token ->
                     let format_token = token.Replace("+", "%2B")
-                    let cookies = Array.create 1 ("discord_state", "", Some 0, headers["Host"])
+                    let cookies = Array.create 1 ("discord_state", "", Some 0, headers["X-Forwarded-Host"])
                     
                     // TODO: Set a new variable in secrets.json that handles the base website URL
                     response

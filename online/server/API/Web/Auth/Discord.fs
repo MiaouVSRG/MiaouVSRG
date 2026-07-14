@@ -20,7 +20,7 @@ module Discord =
             response: HttpResponse
         ) =
         async{
-            if not(headers.ContainsKey("Host")) then
+            if not(headers.ContainsKey("X-Forwarded-Host")) then
                 response.ReplyError(403, "You should not be here.")
             else    
                 let state = Random().Next()
@@ -32,6 +32,6 @@ module Discord =
                     + @"%2Fweb%2Flogin%2Fdiscord%2Ffinish&response_type=code&scope=identify&state="
                     + $"{state}"
                     
-                let cookies = Array.create 1 ("discord_state", state.ToString(), None, headers["Host"])
+                let cookies = Array.create 1 ("discord_state", state.ToString(), None, headers["X-Forwarded-Host"])
                 response.ReplyRedirect(url, cookies)
         }
