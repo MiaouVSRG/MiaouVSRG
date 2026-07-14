@@ -30,7 +30,7 @@ module Validate =
             for key in headers.Keys do
                 Logging.Debug $"{key} : {headers[key]}"
 
-            if not(headers.ContainsKey("Host")) then
+            if not(headers.ContainsKey("Host")) || not(headers.ContainsKey("Origin")) then
                 response.ReplyError(403, "You should not be here.")
             
             require_query_parameter query_params "token"

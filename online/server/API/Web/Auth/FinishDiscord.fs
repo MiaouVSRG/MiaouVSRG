@@ -116,7 +116,8 @@ module Finish =
                     Logging.Info $"User {discord_tag} tried to connect via web, but does not have an account"
                     response.ReplyRedirect("https://miaouvsrg.com/login_failed")
                 | Ok token ->
+                    let format_token = token.Replace("+", "%2B")
                     let cookies = Array.create 1 ("discord_state", "", Some 0, headers["Host"])
                     response
-                        .ReplyRedirect($"https://miaouvsrg.com/validate?token={token}", cookies)
+                        .ReplyRedirect($"https://miaouvsrg.com/validate?token={format_token}", cookies)
         }
