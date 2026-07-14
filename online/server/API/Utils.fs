@@ -1,5 +1,6 @@
 ﻿namespace Interlude.Web.Server.API
 
+open System
 open NetCoreServer
 open Prelude
 open Interlude.Web.Server.Domain.Core
@@ -14,6 +15,17 @@ module Utils =
     exception BadRequestException of Message: string option
 
     let BEARER_LENGTH = "Bearer ".Length
+    
+    let parseCookies (cookieHeader: string) : Map<string, string> =
+        cookieHeader.Split(';', StringSplitOptions.RemoveEmptyEntries)
+        |> Seq.choose (fun cookie ->
+            match cookie.Trim().Split('=', 2) with
+            | [| name; value |] ->
+                Some(name.Trim(), value.Trim())
+            | _ ->
+                None
+        )
+        |> Map.ofSeq
 
     let authorize (header: Map<string, string>) =
 
@@ -31,3 +43,20 @@ module Utils =
     let require_query_parameter (query_params: Map<string, string array>) (name: string) =
         if not (query_params.ContainsKey name) then
             raise (BadRequestException(Some(sprintf "'%s' is required" name)))
+            
+    let require_cookie (header: Map<string, string>) (cookie_name: string) =
+        if not (header.ContainsKey("Cookie")) || not (header["Cookie"].Contains(cookie_name)) then
+            raise (BadRequestException(Some($"Cookie {cookie_name} is required")))
+            
+    let require_referer (header: Map<string, string>) (website: string) =
+        if not (header.ContainsKey("Referer")) || not (header["Referer"].Contains(website)) then
+            raise (BadRequestException(Some($"Referer {website} is required")))
+            
+    let get_cookie (header: Map<string, string>) (cookie_name: string) =
+        let cookies =
+            header
+            |> Map.tryFind "Cookie"
+            |> Option.map parseCookies
+            |> Option.defaultValue Map.empty
+            
+        cookies[cookie_name]

@@ -24,11 +24,21 @@ module Search =
         ) =
         
         async{
-            require_query_parameter query_params "name"
+            let cookies =
+                headers
+                |> Map.tryFind "Cookie"
+                |> Option.map parseCookies
+                |> Option.defaultValue Map.empty
+                
+            let mutable user = None
+                
+            if cookies.ContainsKey("token") then
+                user <- User.by_auth_token cookies["token"]
+            else
+                require_query_parameter query_params "name"
+                user <- User.by_username (query_params["name"][0])
             
-            let user_name = query_params["name"][0]
-            
-            match User.by_username user_name with
+            match user with
             | Some (user_id, db_user) ->
                 let followers = (Friends.get_followers_ids user_id).Count
                 let stats = Stats.get_or_default user_id
@@ -181,7 +191,10 @@ module Search =
                     ProfileInfo = profile_info
                 }
                 
-                response.ReplyJson(res)
+                if cookies.ContainsKey("token") then
+                    response.ReplyJson(res, 200, Unchecked.defaultof<(string * string * int option * string) array>, headers["Origin"])
+                else
+                    response.ReplyJson(res)
             | None ->
                 response.ReplyError(404, "User not found !")
         }

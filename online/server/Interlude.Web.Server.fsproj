@@ -74,6 +74,10 @@
     <Compile Include="API\Web\Leaderboard.fs" />
     <Compile Include="API\Web\Maps\Info.fs" />
     <Compile Include="API\Web\Maps\Leaderboard.fs" />
+    <Compile Include="API\Web\Auth\Discord.fs" />
+    <Compile Include="API\Web\Auth\FinishDiscord.fs" />
+    <Compile Include="API\Web\Auth\Verify.fs" />
+    <Compile Include="API\Web\Auth\Validate.fs" />
     <Compile Include="API\API.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

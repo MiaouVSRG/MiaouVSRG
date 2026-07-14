@@ -3,6 +3,7 @@
 open System
 open System.Web
 open System.Net
+open Interlude.Web.Shared
 open NetCoreServer
 open System.Net.Http
 open System.Net.Sockets
@@ -12,39 +13,112 @@ open Prelude
 
 [<AutoOpen>]
 module HttpResponseExtensions =
+    
+    let ALLOWED_ORIGINS =
+        set [
+            "http://api.miaou.dev.internal"
+            "http://miaou.dev.internal"
+            "https://miaouvsrg.com"
+        ]
 
     type HttpResponse with
-        member this.ReplyJson<'T>(data: 'T, ?code: int) =
+        member this.ReplyJson<'T>(data: 'T, ?code: int, ?cookies: (string * string * int option * string) array, ?origin: string) =
             this.Clear()
-                .SetBegin(if code.IsSome then code.Value else 200)
-                .SetHeader("Access-Control-Allow-Origin", "*")
+                .SetBegin(if code.IsSome then code.Value else 200) |> ignore
+               
+            if cookies.IsSome && cookies.Value <> null then
+                for cookie_name, cookie_value, max_age, domain in cookies.Value do
+                    if max_age.IsSome then
+                        this.SetHeader("Set-Cookie", $"{cookie_name}={cookie_value}; Domain={domain}; HttpOnly; Secure; SameSite=None; Path=/; Max-Age={max_age.Value};") |> ignore
+                    else
+                        this.SetHeader("Set-Cookie", $"{cookie_name}={cookie_value}; Domain={domain}; HttpOnly; Secure; SameSite=None; Path=/") |> ignore
+                 
+            if origin.IsSome && ALLOWED_ORIGINS.Contains(origin.Value) then
+                this
+                    .SetHeader("Access-Control-Allow-Origin", origin.Value)
+                    .SetHeader("Access-Control-Allow-Credentials", "true") |> ignore
+            else
+                this
+                    .SetHeader("Access-Control-Allow-Origin", "*") |> ignore
+                
+            this
                 .SetHeader("Content-Type", "application/json")
                 .SetBody(JSON.ToString data)
             |> ignore
+            
+            Logging.Debug $"{this.Cache.ToString()}"
 
-        member this.ReplyRedirect(url: string) =
+        member this.ReplyRedirect(url: string, ?cookies: (string * string * int option * string) array, ?origin: string) =
             this.Clear()
-                .SetBegin(303)
+                .SetBegin(303) |> ignore
+                
+            if cookies.IsSome && cookies.Value <> null then
+                for cookie_name, cookie_value, max_age, domain in cookies.Value do
+                    if max_age.IsSome then
+                        this.SetHeader("Set-Cookie", $"{cookie_name}={cookie_value}; Domain={domain}; HttpOnly; Secure; SameSite=None; Path=/; Max-Age={max_age.Value};") |> ignore
+                    else
+                        this.SetHeader("Set-Cookie", $"{cookie_name}={cookie_value}; Domain={domain}; HttpOnly; Secure; SameSite=None; Path=/") |> ignore
+            
+            if origin.IsSome && ALLOWED_ORIGINS.Contains(origin.Value) then
+                this
+                    .SetHeader("Access-Control-Allow-Origin", origin.Value)
+                    .SetHeader("Access-Control-Allow-Credentials", "true") |> ignore
+            else
+                this
+                    .SetHeader("Access-Control-Allow-Origin", "*") |> ignore
+                    
+            this
                 .SetHeader("Location", url)
-                .SetHeader("Access-Control-Allow-Origin", "*")
                 .SetBody()
             |> ignore
             
-        member this.ReplyFile(file: byte array, filename: string) =
+        member this.ReplyFile(file: byte array, filename: string, ?cookies: (string * string * int option * string) array, ?origin: string) =
             this.Clear()
-                .SetBegin(200)
-                .SetHeader("Access-Control-Allow-Origin", "*")
+                .SetBegin(200) |> ignore
+                
+            if cookies.IsSome && cookies.Value <> null then
+                for cookie_name, cookie_value, max_age, domain in cookies.Value do
+                    if max_age.IsSome then
+                        this.SetHeader("Set-Cookie", $"{cookie_name}={cookie_value}; Domain={domain}; HttpOnly; Secure; SameSite=None; Path=/; Max-Age={max_age.Value};") |> ignore
+                    else
+                        this.SetHeader("Set-Cookie", $"{cookie_name}={cookie_value}; Domain={domain}; HttpOnly; Secure; SameSite=None; Path=/") |> ignore
+           
+            if origin.IsSome && ALLOWED_ORIGINS.Contains(origin.Value) then
+                this
+                    .SetHeader("Access-Control-Allow-Origin", origin.Value)
+                    .SetHeader("Access-Control-Allow-Credentials", "true") |> ignore
+            else
+                this
+                    .SetHeader("Access-Control-Allow-Origin", "*") |> ignore
+                    
+            this
                 .SetHeader("Content-Type", "application/octet-stream")
                 .SetHeader("Content-Disposition", $"attachment; filename=\"{filename}\"")
                 .SetBody(file)
             |> ignore
 
-        member this.ReplyError(code: int, reason: string) =
+        member this.ReplyError(code: int, reason: string, ?cookies: (string * string * int option * string) array, ?origin: string) =
             this.Clear()
-                .SetBegin(code)
+                .SetBegin(code) |> ignore
+                
+            if cookies.IsSome && cookies.Value <> null then
+                for cookie_name, cookie_value, max_age, domain in cookies.Value do
+                    if max_age.IsSome then
+                        this.SetHeader("Set-Cookie", $"{cookie_name}={cookie_value}; Domain={domain}; HttpOnly; Secure; SameSite=None; Path=/; Max-Age={max_age.Value};") |> ignore
+                    else
+                        this.SetHeader("Set-Cookie", $"{cookie_name}={cookie_value}; Domain={domain}; HttpOnly; Secure; SameSite=None; Path=/") |> ignore
+            
+            if origin.IsSome && ALLOWED_ORIGINS.Contains(origin.Value) then
+                this
+                    .SetHeader("Access-Control-Allow-Origin", origin.Value)
+                    .SetHeader("Access-Control-Allow-Credentials", "true") |> ignore
+            else
+                this
+                    .SetHeader("Access-Control-Allow-Origin", "*") |> ignore
+                    
+            this
                 .SetHeader("Cache-Control", "no-cache, no-store")
                 .SetHeader("Content-Type", "text/plain; charset=UTF-8")
-                .SetHeader("Access-Control-Allow-Origin", "*")
                 .SetBody(reason)
             |> ignore
 

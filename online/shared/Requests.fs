@@ -929,3 +929,26 @@ module Web =
                 
             let get(chart: string, callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE + "?chart=" + chart, callback)
+                
+    module Auth =
+        module Discord =
+            let ROUTE = (GET, MAIN_ENDPOINT + "/login/discord")
+            
+            module Finish =
+                let ROUTE = (GET, MAIN_ENDPOINT + "/login/discord/finish")
+                
+        module Verify =
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Success: bool
+                }
+            let ROUTE = (GET, MAIN_ENDPOINT + "/login/verify")
+            
+        module Validate =
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Success: bool
+                }
+            let ROUTE = (GET, MAIN_ENDPOINT + "/login/validate")

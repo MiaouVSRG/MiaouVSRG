@@ -66,6 +66,11 @@ module API =
         add_endpoint New.Charts.Download.ROUTE New.Charts.Download.handle
         
         // WEBSITE REQUESTS
+        add_endpoint Web.Auth.Discord.ROUTE Web.Auth.Discord.handle
+        add_endpoint Web.Auth.Discord.Finish.ROUTE Web.Auth.Finish.handle
+        add_endpoint Web.Auth.Verify.ROUTE Web.Auth.Verify.handle
+        add_endpoint Web.Auth.Validate.ROUTE Web.Auth.Validate.handle
+        
         add_endpoint Web.User.Search.ROUTE Web.Users.Search.handle
         add_endpoint Web.User.Login.ROUTE Web.Users.Login.handle
         add_endpoint Web.User.Register.ROUTE Web.Users.Register.handle
