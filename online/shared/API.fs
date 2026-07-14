@@ -19,6 +19,8 @@ module HttpResponseExtensions =
             "http://api.miaou.dev.internal"
             "http://miaou.dev.internal"
             "https://miaouvsrg.com"
+            "https://www.beta.miaouvsrg.com"
+            "https://beta.api.miaouvsrg.com"
         ]
 
     type HttpResponse with
