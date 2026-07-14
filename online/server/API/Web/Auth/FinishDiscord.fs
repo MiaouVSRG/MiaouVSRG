@@ -118,6 +118,8 @@ module Finish =
                 | Ok token ->
                     let format_token = token.Replace("+", "%2B")
                     let cookies = Array.create 1 ("discord_state", "", Some 0, headers["Host"])
+                    
+                    // TODO: Set a new variable in secrets.json that handles the base website URL
                     response
                         .ReplyRedirect($"https://miaouvsrg.com/validate?token={format_token}", cookies)
         }
