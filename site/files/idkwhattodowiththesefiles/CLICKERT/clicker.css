@@ -1,0 +1,30 @@
+
+
+.catbox{
+    display: flex;
+    margin-left: 25%;
+    margin-top: 15%;
+
+}
+
+.cat{
+    width: 250px;
+    height: 250px;
+    border-radius: 10px;
+}
+
+.upgradebox{
+    position: fixed;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    width: 35rem;
+    height: 100rem;
+    background-color: #20b2b4;
+    top:0;
+    right:0;
+}
+
+.number{
+   margin-left:30%;
+}

@@ -1,0 +1,726 @@
+body{
+    background-image: url("../../../assets/images/caca.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: "Fredoka One";
+    margin:0;
+    scrollbar-width: none;
+}
+
+html,body{
+    overflow-y:scroll;
+    scrollbar-width: none;
+}
+
+
+.mainbox{
+    margin-top:7.5rem;
+    margin-left:auto;
+    margin-right:auto;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    width: 90rem;
+    height: 50rem;
+    border-radius: 15px;
+    flex-direction: column;
+    box-shadow: black 5px 5px 5px;
+
+}
+
+.secondbox{
+    margin-top:1rem;
+    margin-left:auto;
+    margin-right:auto;
+    display: flex;
+    width: 90rem;
+    height: 35rem;
+    border-radius: 15px;
+    flex-direction: column;
+    box-shadow: black 5px 5px 5px;
+    background:linear-gradient(#0a0911 ,#1C1C1C7B 80%);
+}
+
+.topplaytext{
+    display: flex;
+    align-content: center;
+    color:white;
+    font-size:1.5rem;
+    margin-left:2rem;
+    margin-top:1.2rem;
+}
+
+.topplaystar{
+    margin-right: 0.5rem;
+}
+
+.thirdbox{
+    margin-top:1rem;
+    margin-left:auto;
+    margin-right:auto;
+    display: flex;
+    width: 90rem;
+    height: 25rem;
+    border-radius: 15px;
+    flex-direction: column;
+    box-shadow: black 5px 5px 5px;
+    background:linear-gradient(#1C1C1C7B, #0a0911 80%);
+
+
+}
+
+.showmore{
+    margin: 1.5rem auto 0;
+    color:white;
+    font-size:1.2rem;
+    background-color: #0A091183;
+    border-radius: 15px;
+    width:10rem;
+    align-content: center;
+    text-align: center;
+}
+
+.showmore:hover{
+    cursor: pointer;
+    background-color: #0A0911CA;
+}
+
+.fourthbox{
+    margin-top:2rem;
+    margin-left:auto;
+    margin-right:auto;
+    display: flex;
+    width: 90rem;
+    height: 25rem;
+    border-radius: 15px;
+    flex-direction: column;
+    box-shadow: black 5px 5px 5px;
+    background:linear-gradient(#0a0911 ,#1C1C1C7B 80%);
+}
+
+.metxtbox{
+    margin-left:2rem;
+    display:flex;
+    align-items: end;
+    height:3rem;
+}
+
+.metxt{
+    margin-left: 1rem;
+    font-size:1.5rem;
+    color:white;
+
+}
+
+.editpensvg{
+    margin-left:78rem;
+}
+
+
+.editpensvg:hover{
+    cursor: pointer;
+}
+
+.profilebanner{
+    object-fit: cover;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+
+}
+
+.profileinfo{
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    display:flex;
+    flex-direction: column;
+    width:100%;
+    height:100%;
+    background:linear-gradient(#1C1C1C7B, #0a0911 80%);
+}
+
+.profileinfo-info{
+    display:flex;
+    width:100%;
+    height:10rem;
+    align-items: center;
+
+
+
+    justify-content: start;
+    backdrop-filter: blur(3px);
+
+
+}
+
+.profilepic{
+    border-radius: 15px;
+    margin-left:1rem;
+    height:9rem;
+}
+
+.username{
+    margin-left:1rem;
+    font-size:3rem;
+    color:white;
+
+
+}
+
+.userflag{
+    border-radius:5px;
+    margin-left:1rem;
+    font-size:1.6rem;
+}
+
+
+.lvlvalue{
+
+    margin-left:2rem;
+    font-size:1.6rem;
+    color:white;
+    border-radius: 15px;
+    background-color: #0A091161;
+    padding-left:0.5rem;
+    padding-right:0.5rem;
+    padding-top:0.5rem;
+    padding-bottom:0.5rem;
+
+}
+
+.profileinfo-followers{
+    height:3.5rem;
+    display:flex;
+    align-items: center;
+
+}
+
+
+.followers-button{
+    gap:0.5rem;
+    margin-top:1rem;
+    margin-left:2.6rem;
+    background-color: #0A091199;
+    display:flex;
+    padding:0.6rem;
+    width:4.5rem;
+    border-radius:1.3rem;
+
+}
+
+.followers-number{
+    color:white;
+    font-size:1.5rem;
+}
+
+.keymodefilter{
+    margin-top:1rem;
+    border:none;
+    margin-left:3rem;
+    background-color:white;
+    padding:0.6rem;
+    font-family: "Fredoka One";
+    width: 10rem;
+    border-radius: 15px;
+    font-size:1.2rem;
+}
+
+.profileinfo-stats{
+    display:flex;
+    width:100%;
+    height:22rem;
+    border-bottom-right-radius: 15px;
+
+
+    border-bottom-left-radius: 15px;
+
+}
+
+.profileinfo-startpanel{
+    margin-top:1rem;
+    display:flex;
+    width:40rem;
+    height:12rem;
+    color:white;
+    flex-wrap: wrap;
+
+
+}
+
+.global{
+    display:flex;
+    flex-direction: column;
+    width:50%;
+    height:5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.globalranking-title{
+    font-size:1.2rem;
+}
+
+.globalranking-value{
+    font-size:2rem;
+}
+
+.country{
+    display:flex;
+    flex-direction: column;
+    width:50%;
+    height:5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.countryranking-title{
+    font-size:1.2rem;
+}
+
+.countryranking-value{
+    font-size:2rem;
+}
+
+.rating{
+    display:flex;
+    flex-direction: column;
+    height:5rem;
+    width:33%;
+    align-items: center;
+    justify-content: center;
+    align-self: end;
+}
+
+.rating-title{
+    font-size:1.2rem;
+}
+
+.rating-value{
+    font-size:2rem;
+}
+
+.playtime{
+    display:flex;
+    flex-direction: column;
+    height:5rem;
+    width:33%;
+    align-items: center;
+    justify-content: center;
+    align-self: end;
+}
+
+.playtime-title{
+    font-size:1.2rem;
+}
+
+.playtime-value{
+    font-size:2rem;
+}
+
+.completion{
+    display:flex;
+    flex-direction: column;
+    height:5rem;
+    width:34%;
+    align-items: center;
+    justify-content: center;
+    align-self: end;
+}
+
+.completion-title{
+    font-size:1.2rem;
+}
+
+.completion-value{
+    font-size:2rem;
+}
+
+
+
+
+.profileinfo-endpanel{
+    display:flex;
+    border-bottom-right-radius: 15px;
+    width:100%;
+    height:100%;
+    justify-content: end;
+
+}
+
+.catlineart{
+    display:flex;
+    align-items: end;
+}
+
+.catlineartimg{
+    margin-right:1.5rem;
+    height:75%;
+}
+
+.otherstats{
+    border-bottom-right-radius: 15px;
+    display:flex;
+    width:63%;
+    height:100%;
+    flex-direction: row;
+
+    border-left: white solid 2px;
+}
+
+.text{
+    margin-left:1rem;
+    margin-top:1rem;
+    font-size:1.3rem;
+    gap: 1rem;
+    display:flex;
+    color:white;
+    flex-direction: column;
+    width:63%;
+}
+
+
+
+.value{
+    vertical-align: middle;
+    font-size:1.3rem;
+    margin-top:1rem;
+    gap: 1rem;
+    display:flex;
+    color:white;
+    flex-direction: column;
+    width:37%;
+
+
+}
+
+.grades{
+    display:flex;
+    height:8rem;
+    justify-content:space-around;
+    align-items: end;
+    border-bottom-left-radius: 15px;
+}
+
+
+.rulesetselect{
+    margin-top:1rem;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.rulesetfilter{
+    border:none;
+    background-color:white;
+    padding:0.4rem;
+    font-family: "Fredoka One";
+    width: 10rem;
+    border-radius: 15px;
+    font-size:1.2rem;
+    text-align: center;
+
+}
+
+.stats-clears{
+    margin-top:1rem;
+    display:flex;
+    flex-direction: column;
+    width:40rem;
+    border-bottom-left-radius: 15px;
+    border-radius: 10px;
+
+}
+
+.pass{
+
+    display:flex;
+    margin-bottom:1.5rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.clear{
+    display:flex;
+    margin-bottom:1.5rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.clearplus{
+    display:flex;
+    margin-bottom:1.5rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.overclear{
+    display:flex;
+    margin-bottom:1.5rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.overclearplus{
+    display:flex;
+    margin-bottom:1.5rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.perfect{
+    display:flex;
+    margin-bottom:1.5rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
+.passimg{
+    width:3rem;
+    height:3rem;
+}
+
+.clearimg{
+    width:3rem;
+    height:3rem;
+}
+
+.clearplusimg{
+    width:3rem;
+    height:3rem;
+}
+
+.overclearimg{
+    width:3rem;
+    height:3rem;
+}
+
+.overclearplusimg{
+    width:3rem;
+    height:3rem;
+}
+
+.perfectimg{
+    width:3rem;
+    height:3rem;
+}
+
+
+
+
+.clear-value{
+    color:white;
+    font-size: 1.4rem;
+}
+
+.clearplus-value{
+    color:white;
+    font-size: 1.4rem;
+}
+
+.pass-value{
+    color:white;
+    font-size: 1.4rem;
+}
+
+.overclear-value{
+    color:white;
+    font-size: 1.4rem;
+}
+
+.overclearplus-value{
+    color:white;
+    font-size: 1.4rem;
+}
+
+.perfect-value{
+    color:white;
+    font-size: 1.4rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.thirdboxmain{
+    margin-top:0.8rem;
+    margin-right:3rem;
+    margin-left:3rem;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height:80%;
+
+}
+
+
+
+.scoretemplate{
+    background-color:blue;
+    display:flex;
+    width:100%;
+    height:18.5%;
+    border-radius: 15px;
+    color:white;
+    box-shadow: black 5px 5px 5px;
+
+}
+
+
+
+.topscore1{
+    background-color: #000000;
+    position: relative;
+}
+
+.chartbg{
+    z-index: 0;
+    position:absolute;
+    object-fit:cover;
+    width:100%;
+    height:100%;
+    border-radius: 15px;
+    opacity: 0.4;
+}
+
+.topscore-grade{
+    padding-left:0.5rem ;
+    z-index: 1;
+}
+
+.topscore-namebox{
+    display:flex;
+    flex-direction: column;
+    width: 70%;
+
+}
+
+.topscore-name{
+    padding-top:0.3rem;
+    z-index: 0;
+    font-size:1.5rem;
+}
+
+.topscore-diffname{
+    color: #8dffff;
+    font-style: italic;
+    z-index: 0;
+}
+
+
+
+.topscore-endbox{
+    display:flex;
+    z-index: 0;
+    /*background-color: deeppink;*/
+    width:30%;
+    border-radius: 15px;
+}
+
+.topscore-ratebox{
+    display:flex;
+    border-radius: 15px;
+    width:20%;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+
+}
+
+.topscore-rate{
+    background-color: #2e2e33;
+    z-index: 0;
+    border-radius: 15px;
+    padding:0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.topscore-accbox{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    /*background-color: #43e1ef;*/
+    width:25%;
+    font-size: 1.5rem;
+}
+
+.topscore-acc{
+    z-index: 0;
+}
+
+.topscore-ratingbox{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    background-color: #2e2e33;
+    width:55%;
+    font-size: 2rem;
+}
+
+.topscore-ratingvalue{
+    z-index: 0;
+}
+
+
+
+
+.topscore2{
+    background-color: #000000;
+    position: relative;
+}
+
+.topscore3{
+    background-color: #000000;
+    position: relative;
+}
+
+.topscore4{
+    background-color: #000000;
+    position: relative;
+}
+
+.topscore5{
+    background-color: #000000;
+    position: relative;
+}
+
+.keymodefiltertopplays{
+    border:none;
+    margin-left:1.5rem;
+    background-color:white;
+    padding:0.6rem;
+    font-family: "Fredoka One";
+    width: 5rem;
+    border-radius: 15px;
+    font-size:1.2rem;
+}

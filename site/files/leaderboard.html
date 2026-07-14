@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css"/>
+      <link href="/tailwind@2.0.1.min.css" rel="stylesheet">
+<!--font-->
+      <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+<!--font end-->
+    <meta charset="utf-8" />
+    <title>Leaderboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/tailwind@2.0.1.min.css" rel="stylesheet">
+    <link href="/css/leaderboard.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="/favicon.png" />
+  </head>
+  <div class="flex flex-col top-0 w-full sticky-header">
+      <div class=" py-2">
+          <div
+                  class="flex flex-row w-full items-center justify-between container mx-auto">
+              <div class="flex flex-row items-center justify-center text-2xl">
+                  <img class="h-10 ml-10 mr-6" src="/favicon.png"/>
+                  <a class="mr-8 boutong" href="/index.html">Home</a>
+                  <a class="mr-8 boutong" href="/interlude/changelog.html">News</a>
+                  <a class="mr-8 underline boutong" href="index.html">Wiki</a>
+              </div>
+              <div
+                      class="flex flex-row items-center justify-center  mr-10 gap-x-6">
+                  <a class="boutong" href="/discord.html">
+                      <svg viewBox="0 0 127.14 96.36" class="h-6"
+                           xmlns="http://www.w3.org/2000/svg">
+                          <path fill="currentColor"
+                                d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
+                      </svg>
+                  </a>
+                  <a class="boutong" href="https://github.com/MiaouVSRG/MiaouVSRG">
+                      <svg viewBox="0 0 98 96" class="h-8"
+                           xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"
+                                fill="currentColor"/>
+                      </svg>
+                  </a>
+
+                  <img class="tokens" src="/assets/images/tokens.png">
+                  <div class="tokensbg">
+                      <h1 class="tokensnumber">10000</h1>
+                  </div>
+                  <a class="shopkart boutong" href="https://www.miaouvsrg.com">
+
+                      <svg class="shopkarthoversvg" height="40px" viewBox="0 0 24 24" fill="none"
+                           xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                          <g id="SVGRepo_iconCarrier">
+                              <path class="shopkarthover"
+                                    d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z"
+                                    stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                          </g>
+                      </svg>
+                  </a>
+
+              </div>
+          </div>
+      </div>
+  </div>
+
+<!--tableau-->
+  <a class=" littlestar">🏆</a>
+  <a class=" littlestar2">🏆</a>
+    <img class="bomboclat" src="/assets/images/bomboclat.png">
+    <div class="bgcolor"> </div>
+     <div class="bgcolor2"> </div>
+    <select class="keymodefilter fredokafont">
+        <optgroup label="Keymode">
+            <option class="fredokafont" value="">4k</option>
+            <option value="">5k</option>
+            <option value="">6k</option>
+            <option value="">7k</option>
+            <option value="">8k</option>
+            <option value="">9k</option>
+            <option value="">10k</option>
+        </optgroup>
+    </select>
+
+  <select class="countryfilter">Country ⌄
+      <option value="">All</option>
+    <option value="">Fransse</option>
+  </select>
+
+  <select class="countryleaderboards">Global ⌄
+    <option value="">Global</option>
+      <option value="">Country</option>
+  </select>
+
+  <select class="leaderboardtype"> Filter
+      <option value="">Rating</option>
+  <option value="">Level</option>
+      <option value="">Playcount</option>
+      <option value="">Playtime</option>
+      <option value="">Accuracy</option>
+      <option value="">Insane Clears</option>
+
+  </select>
+  <div class="friendsranking"> Friends Leaderboard ⌄ </div>
+
+
+    <table>
+    <thead>
+    <tr class="fredokafont">
+        <th class="headerline" colspan="3" scope="colgroup"></th>
+        <th class="headerline" scope="col">Level</th>
+        <th class="headerline" scope="col">Playcount</th>
+        <th class="headerline" scope="col">Accuracy</th>
+        <th class="headerline" scope="col">Rating</th>
+
+    </tr>
+    </thead>
+
+    <tbody class="fredokafontsmall">
+    <tr>
+        <th  scope="row" class="ranking">#1</th>
+        <td class="playername"><h1 class=" rgb ">Hubert</h1></td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99999</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername"><h1 class="gold">Crevette</h1></td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername"><h1 class="silver">Crevette</h1></td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername"><h1 class="bronze">Crevette</h1></td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">9999</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">9999</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#3</th>
+        <td class="playername">Horus</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99745</td>
+    </tr>
+
+    <<tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <<tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#2</th>
+        <td class="playername">Crevette</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">99988</td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="ranking">#4</th>
+        <td class="playername">Noko</td>
+        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
+        <td class="xplevel">67</td>
+        <td class="totalplaycount">15,000</td>
+        <td class="globalaccuracy">98.67%</td>
+        <td class="rating">trop vieux</td>
+    </tr>
+
+
+    </tbody>
+
+    </table>
+    <h1 class="headertext"><a class="rgb">⭐</a>><u> Leaderboard </u><<a class="rgb">⭐</a></h1>
+
+ <!-- footer -->
+
+
+    </div>
+  </body>
+</html>
