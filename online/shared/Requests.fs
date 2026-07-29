@@ -749,6 +749,20 @@ module Web =
                     Hard: GradeCountInfo
                     Strict: GradeCountInfo
                 }
+                
+            [<Json.AutoCodec>]
+            type Play =
+                {
+                    ChartHash: string
+                    ChartName: string
+                    ChartDiffName: string
+                    ChartBackground: string
+                    Keymode: int
+                    Grade: string
+                    Rate: float32
+                    Accuracy: float
+                    Rating: float32
+                }
             
             [<Json.AutoCodec>]
             type ProfileInfo =
@@ -771,6 +785,7 @@ module Web =
                     O2JamCompletion: string
                     BMSCompletion: string
                     HitAccuracy: string
+                    TopPlays: Play array
                 }
             
             [<Json.AutoCodec>]

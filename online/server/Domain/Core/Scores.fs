@@ -465,5 +465,4 @@ module Score =
         }
         
     let by_user_id(user_id: int64) =
-        Logging.Debug "ouais %i" user_id
         BY_USER_ID.Execute user_id core_db |> expect

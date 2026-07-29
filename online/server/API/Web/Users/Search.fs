@@ -129,6 +129,29 @@ module Search =
                             
                     (rank, player_rating)
                     
+                let get_top_plays (scores: Score.ScoreByUserIdModel array): Play array =
+                    let mutable plays: Play array = Array.Empty()
+                    
+                    for score in scores do
+                        let chartop = Charts.get_chart_by_id score.ChartId
+                        if chartop.IsSome then
+                            let chart = chartop.Value
+                            let play: Play = {
+                                ChartHash = score.ChartId
+                                ChartName = chart.Title
+                                ChartDiffName = chart.DifficultyName
+                                ChartBackground = chart.ImageLink
+                                Keymode = chart.Keymode
+                                Grade = NORMAL.GradeName score.Grade
+                                Rate = score.Rate
+                                Accuracy = score.Accuracy
+                                Rating = 10.0f
+                            }
+                            plays <- plays.Append(play) |> _.ToArray()
+                        
+                    plays
+                    
+                    
                 let rank_4k, rating_4k = get_lb_infos 4
                 let rank_7k, rating_7k = get_lb_infos 7
                 
@@ -145,6 +168,8 @@ module Search =
                 let completion_etterna = sprintf "%.2f%%" (get_completion(scores, etterna_charts, None) * 100.0f)
                 let completion_o2jam = sprintf "%.2f%%" (get_completion(scores, o2Jam_charts, None) * 100.0f)
                 let completion_bms = sprintf "%.2f%%" (get_completion(scores, bms_charts, None) * 100.0f)
+                
+                let top_plays = get_top_plays scores
                 
                 let profile_info: ProfileInfo = {
                     Username = db_user.Username
@@ -185,6 +210,7 @@ module Search =
                     O2JamCompletion = completion_o2jam
                     BMSCompletion = completion_bms
                     HitAccuracy = sprintf "%.2f%%" average_acc
+                    TopPlays = top_plays
                 }
                 
                 let res: Response = {
