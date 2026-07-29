@@ -1,5 +1,10 @@
 import { getApiEndpoint } from "./utils.js"
 
+const topscoresBox = document.getElementById("topscores-box");
+const topscoresMainBox = document.getElementById("topscores-mainbox");
+const showMoreButton = document.getElementById("showmorebutton");
+const keymodefilterTopPlays = document.getElementById("keymodefiltertopplays");
+
 function init(response){
 
 
@@ -153,6 +158,140 @@ function init(response){
 
     // on spécifie qu'à chaque fois que le keymodefilter change, on veut que la fonction changeValues s'exécute
     keymodefilter.onchange = changeValues
+
+    keymodefilterTopPlays.onchange = () => showTopPlays(response, keymodefilterTopPlays.value);
+
+    showTopPlays(response, "any");
+}
+
+function showTopPlays(response, keymode){
+    // On vide la div pour mettre les nouveaux scores filtrés;
+    topscoresBox.innerHTML = "";
+    topscoresMainBox.style.height = "25rem";
+    showMoreButton.style.display = "block";
+
+    var topPlays = response.ProfileInfo.TopPlays;
+
+    switch(keymode){
+        case "4":
+            topPlays = response.ProfileInfo.TopPlays.filter(play => play.Keymode === 4);
+            break;
+        case "5":
+            topPlays = response.ProfileInfo.TopPlays.filter(play => play.Keymode === 5);
+            break;
+        case "6":
+            topPlays = response.ProfileInfo.TopPlays.filter(play => play.Keymode === 6);
+            break;
+        case "7":
+            topPlays = response.ProfileInfo.TopPlays.filter(play => play.Keymode === 7);
+            break;
+        case "8":
+            topPlays = response.ProfileInfo.TopPlays.filter(play => play.Keymode === 8);
+            break;
+        case "9":
+            topPlays = response.ProfileInfo.TopPlays.filter(play => play.Keymode === 9);
+            break;
+        case "10":
+            topPlays = response.ProfileInfo.TopPlays.filter(play => play.Keymode === 10);
+            break;
+        case "any":
+            topPlays = response.ProfileInfo.TopPlays;
+            break;
+    }
+
+    console.log(topPlays);
+
+    const mapsLength = topPlays.length > 100 ? 100 : topPlays.length
+    const height = (25 + mapsLength * 3.75 - 5 * 3.75) + "rem";
+    const gap = (5 * mapsLength) + "px";
+    const styleHeight = "calc(" + height + " + " + gap + ")";
+    var i = 1;
+    topPlays.forEach(play => {
+        if(i < 100){
+            let div = document.createElement("div");
+            div.classList.add("scoretemplate");
+            div.classList.add("topscore");
+
+            let chartBg = document.createElement("img");
+            chartBg.classList.add("chartbg");
+            chartBg.src = play.ChartBackground;
+            
+            div.appendChild(chartBg);
+
+            let topscoreGrade = document.createElement("img");
+            topscoreGrade.classList.add("topscore-grade");
+            topscoreGrade.src = "/assets/images/grades/" + play.Grade.toLowerCase().replace("+", "plus") + ".png";
+            div.appendChild(topscoreGrade);
+
+            let nameBox = document.createElement("div");
+            nameBox.classList.add("topscore-namebox");
+
+            let name = document.createElement("span");
+            name.classList.add("topscore-name");
+            name.innerText = play.ChartName;
+
+            let diffName = document.createElement("span");
+            diffName.classList.add("topscore-diffname");
+            diffName.innerText = play.ChartDiffName;
+
+            nameBox.appendChild(name);
+            nameBox.appendChild(diffName);
+
+            div.appendChild(nameBox);
+
+            let topscoreEndBox = document.createElement("div");
+            topscoreEndBox.classList.add("topscore-endbox");
+            
+            let topscoreRateBox = document.createElement("div");
+            topscoreRateBox.classList.add("topscore-ratebox");
+            let topscoreRate = document.createElement("span");
+            topscoreRate.classList.add("topscore-rate");
+            topscoreRate.innerText = Number(play.Rate).toFixed(2) + "x";
+
+            topscoreRateBox.appendChild(topscoreRate);
+
+            let topscoreAccBox = document.createElement("div");
+            topscoreAccBox.classList.add("topscore-accbox");
+            let topscoreAcc = document.createElement("span");
+            topscoreAcc.classList.add("topscore-acc");
+            if(play.Accuracy === 1){
+                topscoreAcc.innerText = "100%";
+            } else {
+                topscoreAcc.innerText = Number(play.Accuracy * 100).toFixed(2) + "%";
+            }
+
+            topscoreAccBox.appendChild(topscoreAcc);
+
+            let topscoreRatingBox = document.createElement("div");
+            topscoreRatingBox.classList.add("topscore-ratingbox");
+            let topscoreRatingvalue = document.createElement("span");
+            topscoreRatingvalue.classList.add("topscore-ratingvalue");
+            topscoreRatingvalue.innerText = play.Rating;
+
+            topscoreRatingBox.appendChild(topscoreRatingvalue);
+
+            topscoreEndBox.appendChild(topscoreRateBox);
+            topscoreEndBox.appendChild(topscoreAccBox);
+            topscoreEndBox.appendChild(topscoreRatingBox);
+
+            div.appendChild(topscoreEndBox);
+
+            if(i > 5){
+                div.classList.add("invisible");
+            }
+
+            topscoresBox.append(div);
+
+        }
+        i++;
+    });
+
+    showMoreButton.onclick = (event) => {
+        topscoresMainBox.style.height = styleHeight;
+        const hiddenPlays = document.getElementsByClassName("invisible");
+        [...hiddenPlays].forEach(hiddenPlay => hiddenPlay.classList.remove("invisible"));
+        showMoreButton.style.display = "none";
+    }
 }
 
 window.onload = (event) => {
