@@ -32,94 +32,90 @@ module Finish =
         require_referer headers "https://discord.com/"
         
         async{
-            
-            if not(headers.ContainsKey("X-Forwarded-Host")) then
-                response.ReplyError(403, "You should not be here.")
+            let host = require_host headers
+            let discord_state = get_cookie headers "discord_state"
+            let state = query_params["state"][0]
+            let code = query_params["code"][0]
+                
+            if(discord_state <> state) then
+                response.ReplyError(401, "")
+                
+            // use code to get an oauth token on behalf of discord user
+            let form =
+                dict
+                    [
+                        "client_id", SECRETS.DiscordClientId
+                        "client_secret", SECRETS.DiscordClientSecret
+                        "grant_type", "authorization_code"
+                        "code", code
+                        "redirect_uri", "https://" + SECRETS.ApiBaseUrl + "/web/login/discord/finish"
+                    ]
+
+            let data = new FormUrlEncodedContent(form)
+            data.Headers.Clear()
+            data.Headers.Add("Content-Type", "application/x-www-form-urlencoded")
+
+            let! oauth_response =
+                http_client.PostAsync("https://discord.com/api/oauth2/token", data)
+                |> Async.AwaitTask
+
+            if not oauth_response.IsSuccessStatusCode then
+                Logging.Error "Discord OAuth request failed: %s" oauth_response.ReasonPhrase
+
+                oauth_response.Content.ReadAsStringAsync()
+                |> Async.AwaitTask
+                |> Async.RunSynchronously
+                |> Logging.Error "%s"
+
+                response.ReplyRedirect("https://miaouvsrg.com/login_failed")
             else
-                
-                let discord_state = get_cookie headers "discord_state"
-                let state = query_params["state"][0]
-                let code = query_params["code"][0]
-                
-                if(discord_state <> state) then
-                    response.ReplyError(401, "")
-                
-                // use code to get an oauth token on behalf of discord user
-                let form =
-                    dict
-                        [
-                            "client_id", SECRETS.DiscordClientId
-                            "client_secret", SECRETS.DiscordClientSecret
-                            "grant_type", "authorization_code"
-                            "code", code
-                            "redirect_uri", "https://" + SECRETS.ApiBaseUrl + "/web/login/discord/finish"
-                        ]
 
-                let data = new FormUrlEncodedContent(form)
-                data.Headers.Clear()
-                data.Headers.Add("Content-Type", "application/x-www-form-urlencoded")
+            let! oauth_data =
+                oauth_response.Content.ReadFromJsonAsync<DiscordOAuthResponse>()
+                |> Async.AwaitTask
 
-                let! oauth_response =
-                    http_client.PostAsync("https://discord.com/api/oauth2/token", data)
-                    |> Async.AwaitTask
+            // use oauth token to get api information about "@me" on behalf of the user
+            let identity_request =
+                new HttpRequestMessage(HttpMethod.Get, "https://discord.com/api/users/@me")
 
-                if not oauth_response.IsSuccessStatusCode then
-                    Logging.Error "Discord OAuth request failed: %s" oauth_response.ReasonPhrase
+            identity_request.Headers.Clear()
+            identity_request.Headers.Add("Authorization", oauth_data.token_type + " " + oauth_data.access_token)
+            let identity_response = http_client.Send(identity_request)
 
-                    oauth_response.Content.ReadAsStringAsync()
-                    |> Async.AwaitTask
-                    |> Async.RunSynchronously
-                    |> Logging.Error "%s"
+            if not identity_response.IsSuccessStatusCode then
+                Logging.Error "Discord Identity request failed: %s" identity_response.ReasonPhrase
 
-                    response.ReplyRedirect("https://miaouvsrg.com/login_failed")
+                identity_response.Content.ReadAsStringAsync()
+                |> Async.AwaitTask
+                |> Async.RunSynchronously
+                |> Logging.Error "%s"
+
+                response.ReplyRedirect("https://miaouvsrg.com/login_failed")
+            else
+
+            let! identity =
+                identity_response.Content.ReadFromJsonAsync<DiscordIdentityResponse>()
+                |> Async.AwaitTask
+
+            let discord_tag =
+                if identity.discriminator <> "0" then
+                    identity.username + "#" + identity.discriminator
                 else
+                    identity.username
 
-                let! oauth_data =
-                    oauth_response.Content.ReadFromJsonAsync<DiscordOAuthResponse>()
-                    |> Async.AwaitTask
-
-                // use oauth token to get api information about "@me" on behalf of the user
-                let identity_request =
-                    new HttpRequestMessage(HttpMethod.Get, "https://discord.com/api/users/@me")
-
-                identity_request.Headers.Clear()
-                identity_request.Headers.Add("Authorization", oauth_data.token_type + " " + oauth_data.access_token)
-                let identity_response = http_client.Send(identity_request)
-
-                if not identity_response.IsSuccessStatusCode then
-                    Logging.Error "Discord Identity request failed: %s" identity_response.ReasonPhrase
-
-                    identity_response.Content.ReadAsStringAsync()
-                    |> Async.AwaitTask
-                    |> Async.RunSynchronously
-                    |> Logging.Error "%s"
-
-                    response.ReplyRedirect("https://miaouvsrg.com/login_failed")
-                else
-
-                let! identity =
-                    identity_response.Content.ReadFromJsonAsync<DiscordIdentityResponse>()
-                    |> Async.AwaitTask
-
-                let discord_tag =
-                    if identity.discriminator <> "0" then
-                        identity.username + "#" + identity.discriminator
-                    else
-                        identity.username
-
-                // match Users.DiscordAuthFlow.receive_discord_callback (state, uint64 identity.id, discord_tag) with
-                // | true -> response.ReplyRedirect("https://miaouvsrg.com/login_success")
-                // | false -> response.ReplyRedirect("https://miaouvsrg.com/login_failed")
+            // match Users.DiscordAuthFlow.receive_discord_callback (state, uint64 identity.id, discord_tag) with
+            // | true -> response.ReplyRedirect("https://miaouvsrg.com/login_success")
+            // | false -> response.ReplyRedirect("https://miaouvsrg.com/login_failed")
                 
-                match Auth.login_via_discord (uint64 identity.id) with
-                | Error() ->
-                    Logging.Info $"User {discord_tag} tried to connect via web, but does not have an account"
-                    response.ReplyRedirect("https://miaouvsrg.com/login_failed")
-                | Ok token ->
-                    let format_token = token.Replace("+", "%2B")
-                    let cookies = Array.create 1 ("discord_state", "", Some 0, headers["X-Forwarded-Host"])
+            match Auth.login_via_discord (uint64 identity.id) with
+            | Error() ->
+                Logging.Info $"User {discord_tag} tried to connect via web, but does not have an account"
+                response.ReplyRedirect("https://miaouvsrg.com/login_failed")
+            | Ok token ->
+                let format_token = token.Replace("+", "%2B")
+                let cookies = Array.create 1 ("discord_state", "", Some 0, host)
                     
-                    // TODO: Set a new variable in secrets.json that handles the base website URL
-                    response
-                        .ReplyRedirect($"https://miaouvsrg.com/validate?token={format_token}", cookies)
+                // TODO: Set a new variable in secrets.json that handles the base website URL
+                response
+                    .ReplyRedirect($"""https://{host.Replace("api.", "")}/user/login/validate?token={format_token}""", cookies)
         }

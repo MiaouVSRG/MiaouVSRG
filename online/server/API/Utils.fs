@@ -1,7 +1,12 @@
 ﻿namespace Interlude.Web.Server.API
 
 open System
+open System.Linq
+open System.Xml.Linq
+open Interlude.Web.Server
+open Interlude.Web.Shared
 open NetCoreServer
+open Percyqaz.Common
 open Prelude
 open Interlude.Web.Server.Domain.Core
 
@@ -60,3 +65,19 @@ module Utils =
             |> Option.defaultValue Map.empty
             
         cookies[cookie_name]
+        
+    let require_host (headers: Map<string, string>) =
+        if SECRETS.IsProduction then
+            if headers.ContainsKey("X-Forwarded-Host") && ALLOWED_ORIGINS.Contains($"""https://{headers["X-Forwarded-Host"]}""") then
+                headers["X-Forwarded-Host"]
+            else
+                for key in headers.Keys do
+                    Logging.Debug $"{headers[key]}"
+                raise (BadRequestException(Some("X-Forwarded-Host is required, but there are none (see above)")))
+        else
+            if headers.ContainsKey("Host") && ALLOWED_ORIGINS.Contains($"""https://{headers["Host"]}""") then
+                headers["Host"]
+            else
+                for header in headers do
+                    Logging.Debug $"{header}"
+                raise (BadRequestException(Some("Host is required, but there are none (see above)")))

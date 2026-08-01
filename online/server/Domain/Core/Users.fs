@@ -40,6 +40,10 @@ type User =
         Badges: Set<Badge>
         Color: int32
         Password: string option
+        ProfileBanner: string
+        ProfilePicture: string
+        CountryFlag: string option
+        Coins: int64
     }
 
 module User =
@@ -58,6 +62,10 @@ module User =
                     Column.Text("Badges")
                     Column.Integer("Color")
                     Column.Text("Password").Nullable
+                    Column.Text("ProfileBanner")
+                    Column.Text("ProfilePicture")
+                    Column.Text("CountryFlag").Nullable
+                    Column.Integer("Coins")
                 ]
         }
 
@@ -75,6 +83,10 @@ module User =
             Badges = Set.empty
             Color = Badge.DEFAULT_COLOR
             Password = None
+            ProfileBanner = "https://cdn.miaouvsrg.com/banners/empty.png"
+            ProfilePicture = "https://cdn.miaouvsrg.com/avatars/empty.png"
+            CountryFlag = None
+            Coins = 0
         }
         
     let create_with_password (username: string, password: string) =
@@ -88,6 +100,10 @@ module User =
             Badges = Set.empty
             Color = Badge.DEFAULT_COLOR
             Password = Some (BCrypt.HashPassword(password, salt))
+            ProfileBanner = "https://cdn.miaouvsrg.com/banners/empty.png"
+            ProfilePicture = "https://cdn.miaouvsrg.com/avatars/empty.png"
+            CountryFlag = None
+            Coins = 0
         }
 
     let private SAVE_NEW: NonQuery<User> =
@@ -103,6 +119,10 @@ module User =
                     "@Badges", SqliteType.Text, -1
                     "@Color", SqliteType.Integer, 8
                     "@Password", SqliteType.Text, -1
+                    "@ProfileBanner", SqliteType.Text, -1
+                    "@ProfilePicture", SqliteType.Text, -1
+                    "@CountryFlag", SqliteType.Text, -1
+                    "@Coins", SqliteType.Integer, 8
                 ]
             FillParameters =
                 (fun p user ->
@@ -114,6 +134,10 @@ module User =
                     p.Json JSON user.Badges
                     p.Int32 user.Color
                     p.StringOption user.Password
+                    p.String user.ProfileBanner
+                    p.String user.ProfilePicture
+                    p.StringOption user.CountryFlag
+                    p.Int64 user.Coins
                 )
         }
 
@@ -137,6 +161,10 @@ module User =
                         Badges = r.Json JSON
                         Color = r.Int32
                         Password = r.StringOption
+                        ProfileBanner = r.String
+                        ProfilePicture = r.String
+                        CountryFlag = r.StringOption
+                        Coins = r.Int64
                     }
                 )
         }
@@ -162,6 +190,10 @@ module User =
                         Badges = r.Json JSON
                         Color = r.Int32
                         Password = r.StringOption
+                        ProfileBanner = r.String
+                        ProfilePicture = r.String
+                        CountryFlag = r.StringOption
+                        Coins = r.Int64
                     }
                 )
         }
@@ -191,6 +223,10 @@ module User =
                             Badges = r.Json JSON
                             Color = r.Int32
                             Password = r.StringOption
+                            ProfileBanner = r.String
+                            ProfilePicture = r.String
+                            CountryFlag = r.StringOption
+                            Coins = r.Int64
                         }
                     )
             }
@@ -214,6 +250,10 @@ module User =
                         Badges = r.Json JSON
                         Color = r.Int32
                         Password = r.StringOption
+                        ProfileBanner = r.String
+                        ProfilePicture = r.String
+                        CountryFlag = r.StringOption
+                        Coins = r.Int64
                     }
                 )
         }
@@ -238,6 +278,10 @@ module User =
                         Badges = r.Json JSON
                         Color = r.Int32
                         Password = r.StringOption
+                        ProfileBanner = r.String
+                        ProfilePicture = r.String
+                        CountryFlag = r.StringOption
+                        Coins = r.Int64
                     }
                 )
         }
@@ -262,6 +306,10 @@ module User =
                         Badges = r.Json JSON
                         Color = r.Int32
                         Password = r.StringOption
+                        ProfileBanner = r.String
+                        ProfilePicture = r.String
+                        CountryFlag = r.StringOption
+                        Coins = r.Int64
                     }
                 )
         }
@@ -290,6 +338,10 @@ module User =
                         Badges = r.Json JSON
                         Color = r.Int32
                         Password = r.StringOption
+                        ProfileBanner = r.String
+                        ProfilePicture = r.String
+                        CountryFlag = r.StringOption
+                        Coins = r.Int64
                     }
                 )
         }

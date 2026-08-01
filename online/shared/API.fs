@@ -16,9 +16,15 @@ module HttpResponseExtensions =
     
     let ALLOWED_ORIGINS =
         set [
-            "http://api.miaou.dev.internal"
-            "http://miaou.dev.internal"
+            // .dev.internal : for local testing, not impacting production
+            "https://api.miaou.dev.internal"
+            "https://miaou.dev.internal"
+            
+            // Main website
             "https://miaouvsrg.com"
+            "https://api.miaouvsrg.com"
+            
+            // Beta website for testing
             "https://www.beta.miaouvsrg.com"
             "https://beta.api.miaouvsrg.com"
         ]

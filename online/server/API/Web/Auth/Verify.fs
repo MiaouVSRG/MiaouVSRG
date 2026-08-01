@@ -26,10 +26,6 @@ module Verify =
             response: HttpResponse
         ) =
         async {
-            
-            for key in headers.Keys do
-                Logging.Debug $"{key} : {headers[key]}"
-            
             if not(headers.ContainsKey("Origin")) then
                 response.ReplyError(403, "You should not be here.")
             else

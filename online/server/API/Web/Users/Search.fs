@@ -201,8 +201,8 @@ module Search =
                         Hard = hard_grades
                         Strict = strict_grades
                     }
-                    Avatar = "https://a.ppy.sh/25261784?1764839996.jpeg"
-                    Banner = "https://assets.ppy.sh/user-profile-covers/25261784/4337e6766860ef2203e32c4c16b7f5c7c552a72d1522aadf2b1af10e726a21a1.jpeg"
+                    Avatar = db_user.ProfilePicture
+                    Banner = db_user.ProfileBanner
                     Playcount = scores.Length
                     TotalHits = stats.NotesHit
                     OsuCompletion = completion_osu
