@@ -45,7 +45,7 @@ module Upload =
                     match verify_and_save_image (body, $"./banners/{id}.png") with
                     | Error err -> response.ReplyError(400, err)
                     | Ok _ -> 
-                        User.update_banner (id, $"https://cdn.miaouvsrg.com/banners/{id}")
+                        User.update_banner (id, $"https://cdn.miaouvsrg.com/banners/{id}.png")
                         let res: Response = { Success = true }
                         response.ReplyJson(res)
                         
@@ -53,7 +53,7 @@ module Upload =
                     match verify_and_save_image (body, $"./avatars/{id}.png") with
                     | Error err -> response.ReplyError(400, err)
                     | Ok _ -> 
-                        User.update_avatar (id, $"https://cdn.miaouvsrg.com/avatars/{id}")
+                        User.update_avatar (id, $"https://cdn.miaouvsrg.com/avatars/{id}.png")
                         let res: Response = { Success = true }
                         response.ReplyJson(res)
                 else
