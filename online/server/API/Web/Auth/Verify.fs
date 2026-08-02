@@ -30,15 +30,11 @@ module Verify =
                 response.ReplyError(403, "You should not be here.")
             else
             
-                require_cookie headers "token"
+                let token = require_cookie headers "token"
                 
-                let token = get_cookie headers "token"
-                    
-                match User.by_auth_token token with
-                | Some _ ->
-                    let res: Response = {Success = true}
-                    response.ReplyJson(res, 200, Unchecked.defaultof<(string * string * int option * string) array>, headers["Origin"])
-                | None ->
-                    let res: Response = {Success = false}
-                    response.ReplyJson(res)
+                // If this function passes then a user is found
+                let _ = authorize_with_cookie token
+                
+                let res: Response = {Success = true}
+                response.ReplyJson(res, 200, Unchecked.defaultof<(string * string * int option * string) array>, headers["Origin"])
         }

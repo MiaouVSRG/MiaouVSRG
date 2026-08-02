@@ -1,13 +1,9 @@
 ﻿namespace Interlude.Web.Server.API
 
 open System
-open System.Linq
-open System.Xml.Linq
 open Interlude.Web.Server
 open Interlude.Web.Shared
-open NetCoreServer
 open Percyqaz.Common
-open Prelude
 open Interlude.Web.Server.Domain.Core
 
 [<AutoOpen>]
@@ -44,6 +40,11 @@ module Utils =
 
         else
             raise NotAuthorizedException
+            
+    let authorize_with_cookie (token_cookie: string) =
+        match User.by_auth_token token_cookie with
+        | Some(id, user) -> id, user
+        | None -> raise AuthorizeFailedException
 
     let require_query_parameter (query_params: Map<string, string array>) (name: string) =
         if not (query_params.ContainsKey name) then
@@ -52,19 +53,18 @@ module Utils =
     let require_cookie (header: Map<string, string>) (cookie_name: string) =
         if not (header.ContainsKey("Cookie")) || not (header["Cookie"].Contains(cookie_name)) then
             raise (BadRequestException(Some($"Cookie {cookie_name} is required")))
+        else
+            let cookies =
+                header
+                |> Map.tryFind "Cookie"
+                |> Option.map parseCookies
+                |> Option.defaultValue Map.empty
+            
+            cookies[cookie_name]
             
     let require_referer (header: Map<string, string>) (website: string) =
         if not (header.ContainsKey("Referer")) || not (header["Referer"].Contains(website)) then
             raise (BadRequestException(Some($"Referer {website} is required")))
-            
-    let get_cookie (header: Map<string, string>) (cookie_name: string) =
-        let cookies =
-            header
-            |> Map.tryFind "Cookie"
-            |> Option.map parseCookies
-            |> Option.defaultValue Map.empty
-            
-        cookies[cookie_name]
         
     let require_host (headers: Map<string, string>) =
         if SECRETS.IsProduction then

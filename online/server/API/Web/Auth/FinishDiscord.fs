@@ -28,12 +28,11 @@ module Finish =
         
         require_query_parameter query_params "state"
         require_query_parameter query_params "code"
-        require_cookie headers "discord_state"
         require_referer headers "https://discord.com/"
         
         async{
             let host = require_host headers
-            let discord_state = get_cookie headers "discord_state"
+            let discord_state = require_cookie headers "discord_state"
             let state = query_params["state"][0]
             let code = query_params["code"][0]
                 
