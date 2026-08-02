@@ -5,6 +5,8 @@
 **/bin/
 **/obj/
 secrets
+avatars
+banners
 /data
 /b2AuthorizeCfWorker_local.py
 docker-compose-nomaps.yml

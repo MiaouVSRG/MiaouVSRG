@@ -129,6 +129,16 @@ module HttpResponseExtensions =
                 .SetHeader("Content-Type", "text/plain; charset=UTF-8")
                 .SetBody(reason)
             |> ignore
+            
+        /// This method is used for web browsers OPTIONS request (sent before any POST request).
+        /// We authorize the browser to send forms and files
+        member this.ReplyOptions() =
+            this.Clear()
+                .SetBegin(200)
+                .SetHeader("Access-Control-Allow-Origin", "*")
+                .SetHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+                .SetHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
+            |> ignore
 
 module API =
 
@@ -144,7 +154,7 @@ module API =
             Port: int
             SSLContext: SslContext
             Handle_Request:
-                HttpMethod * string * string * Map<string, string array> * Map<string, string> * HttpResponse
+                HttpMethod * string * string * byte array * Map<string, string array> * Map<string, string> * HttpResponse
                     -> Async<unit>
         }
 
@@ -176,14 +186,15 @@ module API =
                 let before = Stopwatch.GetTimestamp()
                 match request.Method with
                 | "GET" ->
-                    config.Handle_Request(GET, uri.AbsolutePath, request.Body, query_params, headers, this.Response)
+                    config.Handle_Request(GET, uri.AbsolutePath, request.Body, request.BodyBytes, query_params, headers, this.Response)
                     |> Async.RunSynchronously
                 | "DELETE" ->
-                    config.Handle_Request(DELETE, uri.AbsolutePath, request.Body, query_params, headers, this.Response)
+                    config.Handle_Request(DELETE, uri.AbsolutePath, request.Body, request.BodyBytes, query_params, headers, this.Response)
                     |> Async.RunSynchronously
                 | "POST" ->
-                    config.Handle_Request(POST, uri.AbsolutePath, request.Body, query_params, headers, this.Response)
+                    config.Handle_Request(POST, uri.AbsolutePath, request.Body, request.BodyBytes, query_params, headers, this.Response)
                     |> Async.RunSynchronously
+                | "OPTIONS" -> this.Response.ReplyOptions()
                 | _ -> this.Response.ReplyError(404, "Not found") |> ignore
 
                 Logging.Info "%s %s responded %i in %.0fms" request.Method uri.AbsolutePath this.Response.Status (Stopwatch.GetElapsedTime(before).TotalMilliseconds)

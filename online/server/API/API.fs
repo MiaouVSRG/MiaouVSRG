@@ -11,79 +11,87 @@ open Interlude.Web.Server.API
 
 module API =
 
-    type Handler = string * Map<string, string array> * Map<string, string> * HttpResponse -> Async<unit>
-    let handlers = Dictionary<(HttpMethod * string), Handler>()
+    type HandlerBodyString = string * Map<string, string array> * Map<string, string> * HttpResponse -> Async<unit>
+    type HandlerBodyBytes = byte array * Map<string, string array> * Map<string, string> * HttpResponse -> Async<unit>
+    
+    type BodyType =
+        | Bytes of HandlerBodyBytes
+        | String of HandlerBodyString
+        
+    let handlers = Dictionary<(HttpMethod * string), BodyType>()
 
     let inline add_endpoint route handle = handlers.Add(route, handle)
 
     do
-        add_endpoint Health.Status.ROUTE Health.Status.handle
+        add_endpoint Health.Status.ROUTE (BodyType.String Health.Status.handle)
 
         if not SECRETS.IsProduction then
-            add_endpoint (GET, "/auth/dummy") Auth.Dummy.handle
-            add_endpoint New.Charts.Migrate.ROUTE New.Charts.Migrate.handle
+            add_endpoint (GET, "/auth/dummy") (BodyType.String Auth.Dummy.handle)
+            add_endpoint New.Charts.Migrate.ROUTE (BodyType.String New.Charts.Migrate.handle)
 
-        add_endpoint Auth.Discord.ROUTE Auth.Discord.handle
+        add_endpoint Auth.Discord.ROUTE (BodyType.String Auth.Discord.handle)
 
-        add_endpoint Charts.Identify.ROUTE Charts.Identify.handle
-        add_endpoint Charts.Add.ROUTE Charts.Add.handle
-        add_endpoint Charts.Scores.Save.ROUTE Charts.Scores.Save.handle
-        add_endpoint Charts.Scores.Leaderboard.ROUTE Charts.Scores.Leaderboard.handle
+        add_endpoint Charts.Identify.ROUTE (BodyType.String Charts.Identify.handle)
+        add_endpoint Charts.Add.ROUTE (BodyType.String Charts.Add.handle)
+        add_endpoint Charts.Scores.Save.ROUTE (BodyType.String Charts.Scores.Save.handle)
+        add_endpoint Charts.Scores.Leaderboard.ROUTE (BodyType.String Charts.Scores.Leaderboard.handle)
 
-        add_endpoint Songs.Search.ROUTE Songs.Search.handle
-        add_endpoint Songs.Scan.ROUTE Songs.Scan.handle
-        add_endpoint Songs.Update.ROUTE Songs.Update.handle
+        add_endpoint Songs.Search.ROUTE (BodyType.String Songs.Search.handle)
+        add_endpoint Songs.Scan.ROUTE (BodyType.String Songs.Scan.handle)
+        add_endpoint Songs.Update.ROUTE (BodyType.String Songs.Update.handle)
 
-        add_endpoint Tables.Records.ROUTE Tables.Records.handle
-        add_endpoint Tables.Leaderboard.ROUTE Tables.Leaderboard.handle
-        add_endpoint Tables.List.ROUTE Tables.List.handle
-        add_endpoint Tables.Charts.ROUTE Tables.Charts.handle
+        add_endpoint Tables.Records.ROUTE (BodyType.String Tables.Records.handle)
+        add_endpoint Tables.Leaderboard.ROUTE (BodyType.String Tables.Leaderboard.handle)
+        add_endpoint Tables.List.ROUTE (BodyType.String Tables.List.handle)
+        add_endpoint Tables.Charts.ROUTE (BodyType.String Tables.Charts.handle)
 
-        add_endpoint Tables.Suggestions.Vote.ROUTE Tables.Suggestions.Vote.handle
-        add_endpoint Tables.Suggestions.List.ROUTE Tables.Suggestions.List.handle
-        add_endpoint Tables.Suggestions.Missing.ROUTE Tables.Suggestions.Missing.handle
-        add_endpoint Tables.Suggestions.Accept.ROUTE Tables.Suggestions.Accept.handle
-        add_endpoint Tables.Suggestions.Reject.ROUTE Tables.Suggestions.Reject.handle
+        add_endpoint Tables.Suggestions.Vote.ROUTE (BodyType.String Tables.Suggestions.Vote.handle)
+        add_endpoint Tables.Suggestions.List.ROUTE (BodyType.String Tables.Suggestions.List.handle)
+        add_endpoint Tables.Suggestions.Missing.ROUTE (BodyType.String Tables.Suggestions.Missing.handle)
+        add_endpoint Tables.Suggestions.Accept.ROUTE (BodyType.String Tables.Suggestions.Accept.handle)
+        add_endpoint Tables.Suggestions.Reject.ROUTE (BodyType.String Tables.Suggestions.Reject.handle)
 
-        add_endpoint Players.Online.ROUTE Players.Online.handle
-        add_endpoint Players.Search.ROUTE Players.Search.handle
+        add_endpoint Players.Online.ROUTE (BodyType.String Players.Online.handle)
+        add_endpoint Players.Search.ROUTE (BodyType.String Players.Search.handle)
 
-        add_endpoint Players.Profile.View.ROUTE Players.Profile.View.handle
-        add_endpoint Players.Profile.Options.ROUTE Players.Profile.Options.handle
+        add_endpoint Players.Profile.View.ROUTE (BodyType.String Players.Profile.View.handle)
+        add_endpoint Players.Profile.Options.ROUTE (BodyType.String Players.Profile.Options.handle)
 
-        add_endpoint Friends.List.ROUTE Friends.List.handle
-        add_endpoint Friends.Add.ROUTE Friends.Add.handle
-        add_endpoint Friends.Remove.ROUTE Friends.Remove.handle
+        add_endpoint Friends.List.ROUTE (BodyType.String Friends.List.handle)
+        add_endpoint Friends.Add.ROUTE (BodyType.String Friends.Add.handle)
+        add_endpoint Friends.Remove.ROUTE (BodyType.String Friends.Remove.handle)
 
-        add_endpoint Stats.Sync.ROUTE Stats.Sync.handle
-        add_endpoint Stats.Fetch.ROUTE Stats.Fetch.handle
-        add_endpoint Stats.Leaderboard.XP.ROUTE Stats.Leaderboard.XP.handle
-        add_endpoint Stats.Leaderboard.MonthlyXP.ROUTE Stats.Leaderboard.MonthlyXP.handle
-        add_endpoint Stats.Leaderboard.Keymode.ROUTE Stats.Leaderboard.Keymode.handle
-        add_endpoint Stats.Leaderboard.MonthlyKeymode.ROUTE Stats.Leaderboard.MonthlyKeymode.handle
+        add_endpoint Stats.Sync.ROUTE (BodyType.String Stats.Sync.handle)
+        add_endpoint Stats.Fetch.ROUTE (BodyType.String Stats.Fetch.handle)
+        add_endpoint Stats.Leaderboard.XP.ROUTE (BodyType.String Stats.Leaderboard.XP.handle)
+        add_endpoint Stats.Leaderboard.MonthlyXP.ROUTE (BodyType.String Stats.Leaderboard.MonthlyXP.handle)
+        add_endpoint Stats.Leaderboard.Keymode.ROUTE (BodyType.String Stats.Leaderboard.Keymode.handle)
+        add_endpoint Stats.Leaderboard.MonthlyKeymode.ROUTE (BodyType.String Stats.Leaderboard.MonthlyKeymode.handle)
         
-        add_endpoint New.Charts.Add.ROUTE New.Charts.Add.handle
-        add_endpoint New.Charts.Download.ROUTE New.Charts.Download.handle
+        add_endpoint New.Charts.Add.ROUTE (BodyType.String New.Charts.Add.handle)
+        add_endpoint New.Charts.Download.ROUTE (BodyType.String New.Charts.Download.handle)
         
         // WEBSITE REQUESTS
-        add_endpoint Web.Auth.Discord.ROUTE Web.Auth.Discord.handle
-        add_endpoint Web.Auth.Discord.Finish.ROUTE Web.Auth.Finish.handle
-        add_endpoint Web.Auth.Verify.ROUTE Web.Auth.Verify.handle
-        add_endpoint Web.Auth.Validate.ROUTE Web.Auth.Validate.handle
+        add_endpoint Web.Auth.Discord.ROUTE (BodyType.String Web.Auth.Discord.handle)
+        add_endpoint Web.Auth.Discord.Finish.ROUTE (BodyType.String Web.Auth.Finish.handle)
+        add_endpoint Web.Auth.Verify.ROUTE (BodyType.String Web.Auth.Verify.handle)
+        add_endpoint Web.Auth.Validate.ROUTE (BodyType.String Web.Auth.Validate.handle)
         
-        add_endpoint Web.User.Search.ROUTE Web.Users.Search.handle
-        add_endpoint Web.User.Login.ROUTE Web.Users.Login.handle
-        add_endpoint Web.User.Register.ROUTE Web.Users.Register.handle
-        add_endpoint Web.User.Completion.ROUTE Web.Users.Completion.handle
-        add_endpoint Web.Leaderboard.ROUTE Web.Leaderboard.handle
-        add_endpoint Web.Map.Info.ROUTE Web.Maps.Info.handle
-        add_endpoint Web.Map.Leaderboard.ROUTE Web.Maps.Leaderboard.handle
+        add_endpoint Web.User.Search.ROUTE (BodyType.String Web.Users.Search.handle)
+        add_endpoint Web.User.Login.ROUTE (BodyType.String Web.Users.Login.handle)
+        add_endpoint Web.User.Register.ROUTE (BodyType.String Web.Users.Register.handle)
+        add_endpoint Web.User.Completion.ROUTE (BodyType.String Web.Users.Completion.handle)
+        add_endpoint Web.User.Upload.ROUTE (BodyType.Bytes Web.Users.Upload.handle)
+        add_endpoint Web.Leaderboard.ROUTE (BodyType.String Web.Leaderboard.handle)
+        add_endpoint Web.Map.Info.ROUTE (BodyType.String Web.Maps.Info.handle)
+        add_endpoint Web.Map.Leaderboard.ROUTE (BodyType.String Web.Maps.Leaderboard.handle)
 
     let handle_request
         (
             method: HttpMethod,
             route: string,
             body: string,
+            body_bytes: byte array,
             query_params: Map<string, string array>,
             headers: Map<string, string>,
             response: HttpResponse
@@ -92,7 +100,11 @@ module API =
             if handlers.ContainsKey((method, route)) then
                 try
                     let handler = handlers.[(method, route)]
-                    do! handler (body, query_params, headers, response)
+                    let callback =
+                        match handler with
+                        | BodyType.Bytes handler_bytes -> handler_bytes (body_bytes, query_params, headers, response)
+                        | BodyType.String handler_string -> handler_string (body, query_params, headers, response)
+                    do! callback
                 with
                 | :? NotAuthorizedException ->
                     response.ReplyError(401, "Missing authorization token") |> ignore

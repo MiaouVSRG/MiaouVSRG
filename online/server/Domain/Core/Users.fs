@@ -435,3 +435,29 @@ module User =
 
     let rename (id: int64, new_name: string) =
         RENAME.Execute (id, new_name) core_db |> expect |> ignore
+        
+    let private UPDATE_BANNER: NonQuery<int64 * string> =
+        {
+            SQL = """UPDATE users SET ProfileBanner = @ProfileBanner WHERE Id = @Id;"""
+            Parameters = [ "@Id", SqliteType.Integer, 8; "@ProfileBanner", SqliteType.Text, -1 ]
+            FillParameters =
+                fun p (id, profile_banner) ->
+                    p.Int64 id
+                    p.String profile_banner
+        }
+        
+    let update_banner (id: int64, new_banner: string) =
+        UPDATE_BANNER.Execute (id, new_banner) core_db |> expect |> ignore
+    
+    let private UPDATE_AVATAR: NonQuery<int64 * string> =
+        {
+            SQL = """UPDATE users SET ProfilePicture = @ProfilePicture WHERE Id = @Id;"""
+            Parameters = [ "@Id", SqliteType.Integer, 8; "@ProfilePicture", SqliteType.Text, -1 ]
+            FillParameters =
+                fun p (id, profile_picture) ->
+                    p.Int64 id
+                    p.String profile_picture
+        }
+        
+    let update_avatar (id: int64, new_avatar: string) =
+        UPDATE_AVATAR.Execute (id, new_avatar) core_db |> expect |> ignore

@@ -858,6 +858,15 @@ module Web =
             
             let get (name: string, callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE + "?name=" + name, callback)
+        
+        module Upload =
+            let ROUTE = (POST, MAIN_ENDPOINT + "/user/picture")
+            
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Success: bool
+                }
                 
     module Leaderboard =
         let ROUTE = (GET, MAIN_ENDPOINT + "/leaderboard")
