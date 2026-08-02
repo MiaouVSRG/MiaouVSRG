@@ -11,7 +11,7 @@ open SixLabors.ImageSharp.Formats.Png
 
 module Upload =
     
-    let verify_image (image_bytes: byte array) =
+    let verify_and_save_image (image_bytes: byte array, path: string) =
         use ms = new MemoryStream(image_bytes)
         use image = Image.Load(ms)
         
@@ -19,7 +19,9 @@ module Upload =
         if image.Width > 2048 || image.Height > 2048 then
             Error "Image dimensions too large"
         else
-            Ok image
+            use file = File.Create(path)
+            image.SaveAsPng(file)
+            Ok true
     
     let handle
         (
@@ -38,23 +40,22 @@ module Upload =
             if body.Length > 5 * 1024 * 1024 then
                 response.ReplyError(400, "File too large")
             else
-                match verify_image body with
-                | Error err -> response.ReplyError(400, err)
-                | Ok image ->
-                    let picture_type = query_params["type"][0]
-                    if picture_type = "banner" then
-                        use file = File.Create($"./banners/{id}.png")
-                        image.SaveAsPng(file)
+                let picture_type = query_params["type"][0]
+                if picture_type = "banner" then
+                    match verify_and_save_image (body, $"./banners/{id}.png") with
+                    | Error err -> response.ReplyError(400, err)
+                    | Ok _ -> 
                         User.update_banner (id, $"https://cdn.miaouvsrg.com/banners/{id}")
                         let res: Response = { Success = true }
                         response.ReplyJson(res)
                         
-                    elif picture_type = "avatar" then
-                        use file = File.Create($"./avatars/{id}.png")
-                        image.SaveAsPng(file)
+                elif picture_type = "avatar" then
+                    match verify_and_save_image (body, $"./avatars/{id}.png") with
+                    | Error err -> response.ReplyError(400, err)
+                    | Ok _ -> 
                         User.update_avatar (id, $"https://cdn.miaouvsrg.com/avatars/{id}")
                         let res: Response = { Success = true }
                         response.ReplyJson(res)
-                    else
-                        response.ReplyError(400, "Invalid picture type parameter")
+                else
+                    response.ReplyError(400, "Invalid picture type parameter")
         }
