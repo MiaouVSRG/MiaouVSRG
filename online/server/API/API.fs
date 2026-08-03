@@ -28,6 +28,7 @@ module API =
         if not SECRETS.IsProduction then
             add_endpoint (GET, "/auth/dummy") (BodyType.String Auth.Dummy.handle)
             add_endpoint New.Charts.Migrate.ROUTE (BodyType.String New.Charts.Migrate.handle)
+            add_endpoint New.Scores.Migrate.ROUTE (BodyType.String New.Scores.Migrate.handle)
 
         add_endpoint Auth.Discord.ROUTE (BodyType.String Auth.Discord.handle)
 

@@ -713,6 +713,18 @@ module New =
             let get (id: string, callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE + "?id=" + id, callback)
                 
+    module Scores =
+        module Migrate =
+            let ROUTE = (GET, "/v2/scores/migrate")
+            
+            [<Json.AutoCodec>]
+            type Response = {
+                Success: bool
+            }
+            
+            let get(callback: Response option -> unit) =
+                Client.get<Response> (snd ROUTE, callback)
+                
 module Web =
     
     let MAIN_ENDPOINT = "/web"
