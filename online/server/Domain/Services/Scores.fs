@@ -111,54 +111,58 @@ module Scores =
                     Logging.Error "chart not convertible"
                 else
                     let chart = converted_chart.Value.Chart
-                    let with_mods = ModState.apply mods chart
-                    let default_rating = Difficulty.calculate(rate, with_mods.Notes)
-                    let scoring_easy =
-                        ScoreProcessor.run
-                            EASY
-                            with_mods.Keys
-                            (StoredReplay replay)
-                            with_mods.Notes
-                            rate
-                    
-                    let user_rating_easy = Performance.calculate default_rating scoring_easy
-                            
-                    let scoring_normal =
-                        ScoreProcessor.run
-                            NORMAL
-                            with_mods.Keys
-                            (StoredReplay replay)
-                            with_mods.Notes
-                            rate
-                            
-                    let scoring_hard =
-                        ScoreProcessor.run
-                            HARD
-                            with_mods.Keys
-                            (StoredReplay replay)
-                            with_mods.Notes
-                            rate
-                            
-                    let scoring_strict =
-                        ScoreProcessor.run
-                            STRICT
-                            with_mods.Keys
-                            (StoredReplay replay)
-                            with_mods.Notes
-                            rate
-                    
-                    let rating = user_rating_easy
-                                        
-                    let accuracies_init: AccuraciesState = Map.empty
-                    let accuracies: AccuraciesState =
-                        accuracies_init
-                        |> Map.add "EASY" scoring_easy.Accuracy
-                        |> Map.add "NORMAL" scoring_normal.Accuracy
-                        |> Map.add "HARD" scoring_hard.Accuracy
-                        |> Map.add "STRICT" scoring_strict.Accuracy
-                    
-                    final_accuracies <- accuracies
-                    final_rating <- rating
+                    let hash = Prelude.Charts.Chart.hash converted_chart.Value.Chart
+                    if hash <> chart_id then
+                        ()
+                    else
+                        let with_mods = ModState.apply mods chart
+                        let default_rating = Difficulty.calculate(rate, with_mods.Notes)
+                        let scoring_easy =
+                            ScoreProcessor.run
+                                EASY
+                                with_mods.Keys
+                                (StoredReplay replay)
+                                with_mods.Notes
+                                rate
+                        
+                        let user_rating_easy = Performance.calculate default_rating scoring_easy
+                                
+                        let scoring_normal =
+                            ScoreProcessor.run
+                                NORMAL
+                                with_mods.Keys
+                                (StoredReplay replay)
+                                with_mods.Notes
+                                rate
+                                
+                        let scoring_hard =
+                            ScoreProcessor.run
+                                HARD
+                                with_mods.Keys
+                                (StoredReplay replay)
+                                with_mods.Notes
+                                rate
+                                
+                        let scoring_strict =
+                            ScoreProcessor.run
+                                STRICT
+                                with_mods.Keys
+                                (StoredReplay replay)
+                                with_mods.Notes
+                                rate
+                        
+                        let rating = user_rating_easy
+                                            
+                        let accuracies_init: AccuraciesState = Map.empty
+                        let accuracies: AccuraciesState =
+                            accuracies_init
+                            |> Map.add "EASY" scoring_easy.Accuracy
+                            |> Map.add "NORMAL" scoring_normal.Accuracy
+                            |> Map.add "HARD" scoring_hard.Accuracy
+                            |> Map.add "STRICT" scoring_strict.Accuracy
+                        
+                        final_accuracies <- accuracies
+                        final_rating <- rating
 
         Directory.Delete(source_folder, true)
         (final_accuracies, final_rating)
