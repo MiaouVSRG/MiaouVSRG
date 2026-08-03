@@ -53,8 +53,6 @@ module HttpResponseExtensions =
                 .SetHeader("Content-Type", "application/json")
                 .SetBody(JSON.ToString data)
             |> ignore
-            
-            Logging.Debug $"{this.Cache.ToString()}"
 
         member this.ReplyRedirect(url: string, ?cookies: (string * string * int option * string) array, ?origin: string) =
             this.Clear()

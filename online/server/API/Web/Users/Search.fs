@@ -42,7 +42,7 @@ module Search =
             | Some (user_id, db_user) ->
                 let followers = (Friends.get_followers_ids user_id).Count
                 let stats = Stats.get_or_default user_id
-                let scores = Score.by_user_id user_id
+                let scores = Score.user_top_plays user_id
                 let all_charts = Charts.get_all
                 let osu_charts = Charts.get_by_source "osu!"
                 let etterna_charts = Charts.get_by_source "Etterna"
@@ -131,23 +131,26 @@ module Search =
                     
                 let get_top_plays (scores: Score.ScoreByUserIdModel array): Play array =
                     let mutable plays: Play array = Array.Empty()
+                    let mutable charts: string array = Array.Empty()
                     
                     for score in scores do
                         let chartop = Charts.get_chart_by_id score.ChartId
                         if chartop.IsSome then
-                            let chart = chartop.Value
-                            let play: Play = {
-                                ChartHash = score.ChartId
-                                ChartName = chart.Title
-                                ChartDiffName = chart.DifficultyName
-                                ChartBackground = chart.ImageLink
-                                Keymode = chart.Keymode
-                                Grade = NORMAL.GradeName score.Grade
-                                Rate = score.Rate
-                                Accuracy = score.Accuracy
-                                Rating = 10.0f
-                            }
-                            plays <- plays.Append(play) |> _.ToArray()
+                            if not(charts.Contains(score.ChartId)) then
+                                let chart = chartop.Value
+                                let play: Play = {
+                                    ChartHash = score.ChartId
+                                    ChartName = chart.Title
+                                    ChartDiffName = chart.DifficultyName
+                                    ChartBackground = chart.ImageLink
+                                    Keymode = chart.Keymode
+                                    Grade = NORMAL.GradeName score.Grade
+                                    Rate = score.Rate
+                                    Accuracy = score.Accuracy
+                                    Rating = score.Rating
+                                }
+                                plays <- plays.Append(play) |> _.ToArray()
+                                charts <- charts.Append(score.ChartId) |> _.ToArray()
                         
                     plays
                     

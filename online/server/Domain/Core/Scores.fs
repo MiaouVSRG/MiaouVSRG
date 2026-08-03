@@ -6,6 +6,7 @@ open Percyqaz.Data.Sqlite
 open Prelude
 open Prelude.Mods
 open Interlude.Web.Server
+type AccuraciesState = Map<string, float>
 
 type Score =
     {
@@ -17,6 +18,8 @@ type Score =
         Mods: ModState
         Ranked: bool // precomputed; true only if mod state is valid and rate >= 1
         Accuracy: float
+        Accuracies: AccuraciesState // For completion purposes where we don't want to calculate 1000+ accuracies for each request
+        Rating: float32 // For completion purposes where we don't want to calculate 1000+ ratings for each request
         Grade: int
         Lamp: int
         ReplayId: int64 option
@@ -76,6 +79,8 @@ module Score =
                 Mods TEXT NOT NULL,
                 Ranked INTEGER NOT NULL,
                 Accuracy REAL NOT NULL,
+                Accuracies TEXT NOT NULL,
+                Rating REAL NOT NULL,
                 Grade INTEGER NOT NULL,
                 Lamp INTEGER NOT NULL,
                 ReplayId INTEGER,
@@ -95,6 +100,8 @@ module Score =
             mods: ModState,
             is_ranked: bool,
             accuracy: float,
+            accuracies: AccuraciesState,
+            rating: float32,
             grade: int,
             lamp: int
         ) =
@@ -107,6 +114,8 @@ module Score =
             Mods = mods
             Ranked = is_ranked
             Accuracy = accuracy
+            Accuracies = accuracies
+            Rating = rating
             Grade = grade
             Lamp = lamp
             ReplayId = None
@@ -116,8 +125,8 @@ module Score =
         {
             SQL =
                 """
-            INSERT INTO scores2 (UserId, ChartId, TimePlayed, TimeUploaded, Rate, Mods, Ranked, Accuracy, Grade, Lamp, ReplayId)
-            VALUES (@UserId, @ChartId, @TimePlayed, @TimeUploaded, @Rate, @Mods, @Ranked, @Accuracy, @Grade, @Lamp, @ReplayId)
+            INSERT INTO scores2 (UserId, ChartId, TimePlayed, TimeUploaded, Rate, Mods, Accuracies, Rating, Ranked, Accuracy, Grade, Lamp, ReplayId)
+            VALUES (@UserId, @ChartId, @TimePlayed, @TimeUploaded, @Rate, @Mods, @Accuracies, @Rating, @Ranked, @Accuracy, @Grade, @Lamp, @ReplayId)
             ON CONFLICT DO UPDATE SET
                 TimeUploaded = excluded.TimeUploaded,
                 Ranked = excluded.Ranked,
@@ -134,6 +143,8 @@ module Score =
                     "@Mods", SqliteType.Text, -1
                     "@Ranked", SqliteType.Integer, 1
                     "@Accuracy", SqliteType.Real, 8
+                    "@Accuracies", SqliteType.Text, -1
+                    "@Rating", SqliteType.Real, 8
                     "@Grade", SqliteType.Integer, 4
                     "@Lamp", SqliteType.Integer, 4
                     "@ReplayId", SqliteType.Integer, 8
@@ -148,6 +159,8 @@ module Score =
                     p.Json JSON score.Mods
                     p.Boolean score.Ranked
                     p.Float64 score.Accuracy
+                    p.Json JSON score.Accuracies
+                    p.Float32 score.Rating
                     p.Int32 score.Grade
                     p.Int32 score.Lamp
                     p.Int64Option score.ReplayId
@@ -359,6 +372,8 @@ module Score =
             Rate: float32
             Mods: ModState
             Accuracy: float
+            Accuracies: AccuraciesState
+            Rating: float32
             Grade: int
             Lamp: int
         }
@@ -367,7 +382,7 @@ module Score =
         {
             SQL =
                 """
-            SELECT UserId, ChartId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp, ReplayId FROM scores2
+            SELECT UserId, ChartId, TimePlayed, Rate, Mods, Accuracy, Accuracies, Rating, Grade, Lamp, ReplayId FROM scores2
             WHERE Id = @Id
             """
             Parameters = [ "@Id", SqliteType.Integer, 8 ]
@@ -381,6 +396,8 @@ module Score =
                         Rate = r.Float32
                         Mods = r.Json JSON
                         Accuracy = r.Float64
+                        Accuracies = r.Json JSON
+                        Rating = r.Float32
                         Grade = r.Int32
                         Lamp = r.Int32
                     },
@@ -420,6 +437,8 @@ module Score =
             Rate: float32
             Mods: ModState
             Accuracy: float
+            Accuracies: AccuraciesState
+            Rating: float32
             Grade: int
             Lamp: int
             ReplayId: int option
@@ -433,6 +452,8 @@ module Score =
             Rate = 0.0f
             Mods = Map.empty
             Accuracy = 0.0
+            Accuracies = Map.empty
+            Rating = 0.0f
             Grade = 0
             Lamp = 0
             ReplayId = None
@@ -442,7 +463,7 @@ module Score =
         {
             SQL =
                 """
-            SELECT Id, ChartId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp, ReplayId FROM scores2
+            SELECT Id, ChartId, TimePlayed, Rate, Mods, Accuracy, Accuracies, Rating, Grade, Lamp, ReplayId FROM scores2
             WHERE UserId = @UserId
             ORDER BY Accuracy DESC -- Best plays first
             """
@@ -457,6 +478,8 @@ module Score =
                         Rate = r.Float32
                         Mods = r.Json JSON
                         Accuracy = r.Float64
+                        Accuracies = r.Json JSON
+                        Rating = r.Float32
                         Grade = r.Int32
                         Lamp = r.Int32
                         ReplayId = r.Int32Option
@@ -466,3 +489,104 @@ module Score =
         
     let by_user_id(user_id: int64) =
         BY_USER_ID.Execute user_id core_db |> expect
+        
+    let USER_TOP_PLAYS: Query<int64, ScoreByUserIdModel> =
+        {
+            SQL =
+                """
+            SELECT Id, ChartId, TimePlayed, Rate, Mods, Accuracy, Accuracies, Rating, Grade, Lamp, ReplayId FROM scores2
+            WHERE UserId = @UserId
+            ORDER BY Rating DESC -- Best plays first
+            """
+            Parameters = [ "@UserId", SqliteType.Integer, 8 ]
+            FillParameters = fun p user_id -> p.Int64 user_id
+            Read =
+                (fun r ->
+                    {
+                        Id = r.Int64
+                        ChartId = r.String
+                        TimePlayed = r.Int64
+                        Rate = r.Float32
+                        Mods = r.Json JSON
+                        Accuracy = r.Float64
+                        Accuracies = r.Json JSON
+                        Rating = r.Float32
+                        Grade = r.Int32
+                        Lamp = r.Int32
+                        ReplayId = r.Int32Option
+                    }
+                )
+        }
+        
+    let user_top_plays(user_id: int64) =
+        USER_TOP_PLAYS.Execute user_id core_db |> expect
+        
+    let MIGRATE_ACCURACIES_AND_RATINGS: NonQuery<int64 * Score> =
+        {
+            SQL =
+                """
+            UPDATE scores2 SET Accuracies = @Accuracies, Rating = @Rating
+            WHERE Id = @Id;
+            """
+            Parameters =
+                [
+                    "@Id", SqliteType.Integer, 8
+                    "@Accuracies", SqliteType.Text, -1
+                    "@Rating", SqliteType.Real, 8
+                ]
+            FillParameters =
+                fun p (score_id, score) ->
+                    p.Int64 score_id
+                    p.Json JSON score.Accuracies
+                    p.Float32 score.Rating
+        }
+        
+    let migrate_accuracies_and_ratings(id: int64, score: Score): bool =
+        MIGRATE_ACCURACIES_AND_RATINGS.Execute (id, score) core_db |> expect = 1
+        
+    type MigrationScoreModel =
+        {
+            Id: int64
+            UserId: int64
+            ChartId: string
+            TimePlayed: int64
+            TimeUploaded: int64
+            Rate: float32
+            Mods: ModState
+            Accuracy: float
+            Grade: int
+            Lamp: int
+            ReplayId: int64 option
+        }
+        
+    let private GET_SOME: Query<int64, MigrationScoreModel> =
+        {
+            SQL =
+                """
+                SELECT Id, UserId, ChartId, TimePlayed, TimeUploaded, Rate, Mods, Accuracy, Grade, Lamp, ReplayId FROM scores2
+                LIMIT @limit;
+                """
+            Parameters = [
+                "@limit", SqliteType.Integer, 8
+            ]
+            FillParameters = fun p int -> p.Int64 int
+            Read =
+                (fun r ->
+                {
+                    Id = r.Int64
+                    UserId = r.Int64
+                    ChartId = r.String
+                    TimePlayed = r.Int64
+                    TimeUploaded = r.Int64
+                    Rate = r.Float32
+                    Mods = r.Json JSON
+                    Accuracy = r.Float64
+                    Grade = r.Int32
+                    Lamp = r.Int32
+                    ReplayId = r.Int64Option
+                }
+            )
+        }
+        
+    let get_all =
+        GET_SOME.Execute 50000000 core_db |> expect

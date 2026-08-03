@@ -67,6 +67,7 @@
     <Compile Include="API\New\Charts\Add.fs" />
     <Compile Include="API\New\Charts\Migrate.fs" />
     <Compile Include="API\New\Charts\Download.fs" />
+    <Compile Include="API\New\Scores\Migrate.fs" />
     <Compile Include="API\Web\Users\Search.fs" />
     <Compile Include="API\Web\Users\Login.fs" />
     <Compile Include="API\Web\Users\Register.fs" />
