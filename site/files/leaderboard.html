@@ -1,634 +1,417 @@
 <!DOCTYPE html>
-<html>
-  <head>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css"/>
-      <link href="/tailwind@2.0.1.min.css" rel="stylesheet">
-<!--font-->
-      <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
-      <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
-<!--font end-->
-    <meta charset="utf-8" />
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <title>Leaderboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/tailwind@2.0.1.min.css" rel="stylesheet">
-    <link href="/css/leaderboard.css" rel="stylesheet" />
-    <link rel="icon" type="image/x-icon" href="/favicon.png" />
-  </head>
-  <!-- <div class="flex flex-col top-0 w-full sticky-header">
-      <div class=" py-2">
-          <div
-                  class="flex flex-row w-full items-center justify-between container mx-auto">
-              <div class="flex flex-row items-center justify-center text-2xl">
-                  <img class="h-10 ml-10 mr-6" src="/favicon.png"/>
-                  <a class="mr-8 boutong" href="/index.html">Home</a>
-                  <a class="mr-8 boutong" href="/interlude/changelog.html">News</a>
-                  <a class="mr-8 underline boutong" href="index.html">Wiki</a>
-              </div>
-              <div
-                      class="flex flex-row items-center justify-center  mr-10 gap-x-6">
-                  <a class="boutong" href="/discord.html">
-                      <svg viewBox="0 0 127.14 96.36" class="h-6"
-                           xmlns="http://www.w3.org/2000/svg">
-                          <path fill="currentColor"
-                                d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
-                      </svg>
-                  </a>
-                  <a class="boutong" href="https://github.com/MiaouVSRG/MiaouVSRG">
-                      <svg viewBox="0 0 98 96" class="h-8"
-                           xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd"
-                                clip-rule="evenodd"
-                                d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"
-                                fill="currentColor"/>
-                      </svg>
-                  </a>
-
-                  <img class="tokens" src="/assets/images/tokens.png">
-                  <div class="tokensbg">
-                      <h1 class="tokensnumber">10000</h1>
-                  </div>
-                  <a class="shopkart boutong" href="https://www.miaouvsrg.com">
-
-                      <svg class="shopkarthoversvg" height="40px" viewBox="0 0 24 24" fill="none"
-                           xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                          <g id="SVGRepo_iconCarrier">
-                              <path class="shopkarthover"
-                                    d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z"
-                                    stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"
-                                    stroke-linejoin="round"></path>
-                          </g>
-                      </svg>
-                  </a>
-
-              </div>
-          </div>
-      </div>
-  </div> -->
-
-<!--tableau-->
-  <a class=" littlestar">🏆</a>
-  <a class=" littlestar2">🏆</a>
-    <img class="bomboclat" src="/assets/images/bomboclat.png">
-    <div class="bgcolor"> </div>
-     <div class="bgcolor2"> </div>
-    <select class="keymodefilter fredokafont">
-        <optgroup label="Keymode">
-            <option class="fredokafont" value="">4k</option>
-            <option value="">5k</option>
-            <option value="">6k</option>
-            <option value="">7k</option>
-            <option value="">8k</option>
-            <option value="">9k</option>
-            <option value="">10k</option>
-        </optgroup>
-    </select>
-
-  <select class="countryfilter">Country ⌄
-      <option value="">All</option>
-    <option value="">Fransse</option>
-  </select>
-
-  <select class="countryleaderboards">Global ⌄
-    <option value="">Global</option>
-      <option value="">Country</option>
-  </select>
-
-  <select class="leaderboardtype"> Filter
-      <option value="">Rating</option>
-  <option value="">Level</option>
-      <option value="">Playcount</option>
-      <option value="">Playtime</option>
-      <option value="">Accuracy</option>
-      <option value="">Insane Clears</option>
-
-  </select>
-  <div class="friendsranking"> Friends Leaderboard ⌄ </div>
-
-
-    <table>
-    <thead>
-    <tr class="fredokafont">
-        <th class="headerline" colspan="3" scope="colgroup"></th>
-        <th class="headerline" scope="col">Level</th>
-        <th class="headerline" scope="col">Playcount</th>
-        <th class="headerline" scope="col">Accuracy</th>
-        <th class="headerline" scope="col">Rating</th>
-
-    </tr>
-    </thead>
-
-    <tbody class="fredokafontsmall">
-    <tr>
-        <th  scope="row" class="ranking">#1</th>
-        <td class="playername"><h1 class=" rgb ">Hubert</h1></td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99999</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername"><h1 class="gold">Crevette</h1></td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername"><h1 class="silver">Crevette</h1></td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername"><h1 class="bronze">Crevette</h1></td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">9999</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">9999</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#3</th>
-        <td class="playername">Horus</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99745</td>
-    </tr>
-
-    <<tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <<tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#2</th>
-        <td class="playername">Crevette</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">99988</td>
-    </tr>
-
-    <tr>
-        <th scope="row" class="ranking">#4</th>
-        <td class="playername">Noko</td>
-        <td class="flagmargin"><span class="countryflag fi fi-fr"></span></td>
-        <td class="xplevel">67</td>
-        <td class="totalplaycount">15,000</td>
-        <td class="globalaccuracy">98.67%</td>
-        <td class="rating">trop vieux</td>
-    </tr>
-
-
-    </tbody>
-
-    </table>
-    <h1 class="headertext"><a class="rgb">⭐</a>><u> Leaderboard </u><<a class="rgb">⭐</a></h1>
-
- <!-- footer -->
+    <link href="/css/header.css" rel="stylesheet">
+
+    <link
+            href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css"
+            rel="stylesheet"
+    />
+    <link href="/css/leaderboard.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?display=swap&family=Fredoka+One:ital,wght@0,400;1,400&family=Comfortaa:ital,wght@0,600;0,700;1,600;1,700"
+          rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+
+<div class="headerfix">
+    <div class="header">
+        <img class="pipheader" src="../../favicon.png">
+        <div class="homebutton">home</div>
+        <div class="lbbutton">leaderboards</div>
+        <div class="friendsbutton">friends</div>
+        <svg fill="#ffffff" height="34px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path d="M20.207 18.793L16.6 15.184a7.027 7.027 0 1 0-1.416 1.416l3.609 3.609a1 1 0 0 0 1.414-1.416zM6 11a5 5 0 1 1 5 5 5.006 5.006 0 0 1-5-5z"></path>
+            </g>
+        </svg>
+        <div class="headerusername" id="headerusername">username</div>
+        <img class="headerpfp" id="headerpfp" src="/assets/images/placeholder/PFP%20PLACEHOLDER.png">
+    </div>
+</div>
+
+<span class="coupedumondesalam">🏆</span>
+
+<img class="bomboclat" src="/assets/images/bomboclat.png">
+<img class="bomboclat2" src="/assets/images/bomboclat.png">
+
+<div class="mainbox">
+    <div class="leaderboardspan ">
+        <span class="star rgb">✦</span>
+        <span class="">LEADERBOARD</span>
+        <span class="star rgb">✦</span>
+        </div>
+
+    <div class="leaderboardtypeselectorbox">
+
+        <select class="leaderboardtypeselector" name="leaderboardtype">
+            <option class="ratingopt">rating</option>
+            <option class="accuracyopt">accuracy</option>
+            <option class="playtimeopt">playtime</option>
+            <option class="firstplaceopt">first places</option>
+            <option class="playcountopt">playcount</option>
+            <option class="o2jamlevelopt">o2jam level</option>
+            <option class="bestperformanceopt">best performance</option>
+        </select>
+
+            <select class="leaderboardcountryselector" autocomplete="country" id="country" name="country">
+                <option value="all">Global</option>
+                <option value="AF">Afghanistan</option>
+                <option value="AX">Åland Islands</option>
+                <option value="AL">Albania</option>
+                <option value="DZ">Algeria</option>
+                <option value="AS">American Samoa</option>
+                <option value="AD">Andorra</option>
+                <option value="AO">Angola</option>
+                <option value="AI">Anguilla</option>
+                <option value="AQ">Antarctica</option>
+                <option value="AG">Antigua and Barbuda</option>
+                <option value="AR">Argentina</option>
+                <option value="AM">Armenia</option>
+                <option value="AW">Aruba</option>
+                <option value="AU">Australia</option>
+                <option value="AT">Austria</option>
+                <option value="AZ">Azerbaijan</option>
+                <option value="BS">Bahamas</option>
+                <option value="BH">Bahrain</option>
+                <option value="BD">Bangladesh</option>
+                <option value="BB">Barbados</option>
+                <option value="BY">Belarus</option>
+                <option value="BE">Belgium</option>
+                <option value="BZ">Belize</option>
+                <option value="BJ">Benin</option>
+                <option value="BM">Bermuda</option>
+                <option value="BT">Bhutan</option>
+                <option value="BO">Bolivia (Plurinational State of)</option>
+                <option value="BA">Bosnia and Herzegovina</option>
+                <option value="BW">Botswana</option>
+                <option value="BV">Bouvet Island</option>
+                <option value="BR">Brazil</option>
+                <option value="IO">British Indian Ocean Territory</option>
+                <option value="BN">Brunei Darussalam</option>
+                <option value="BG">Bulgaria</option>
+                <option value="BF">Burkina Faso</option>
+                <option value="BI">Burundi</option>
+                <option value="CV">Cabo Verde</option>
+                <option value="KH">Cambodia</option>
+                <option value="CM">Cameroon</option>
+                <option value="CA">Canada</option>
+                <option value="BQ">Caribbean Netherlands</option>
+                <option value="KY">Cayman Islands</option>
+                <option value="CF">Central African Republic</option>
+                <option value="TD">Chad</option>
+                <option value="CL">Chile</option>
+                <option value="CN">China</option>
+                <option value="CX">Christmas Island</option>
+                <option value="CC">Cocos (Keeling) Islands</option>
+                <option value="CO">Colombia</option>
+                <option value="KM">Comoros</option>
+                <option value="CG">Congo</option>
+                <option value="CD">Congo, Democratic Republic of the</option>
+                <option value="CK">Cook Islands</option>
+                <option value="CR">Costa Rica</option>
+                <option value="HR">Croatia</option>
+                <option value="CU">Cuba</option>
+                <option value="CW">Curaçao</option>
+                <option value="CY">Cyprus</option>
+                <option value="CZ">Czech Republic</option>
+                <option value="CI">Côte d'Ivoire</option>
+                <option value="DK">Denmark</option>
+                <option value="DJ">Djibouti</option>
+                <option value="DM">Dominica</option>
+                <option value="DO">Dominican Republic</option>
+                <option value="EC">Ecuador</option>
+                <option value="EG">Egypt</option>
+                <option value="SV">El Salvador</option>
+                <option value="GQ">Equatorial Guinea</option>
+                <option value="ER">Eritrea</option>
+                <option value="EE">Estonia</option>
+                <option value="SZ">Eswatini (Swaziland)</option>
+                <option value="ET">Ethiopia</option>
+                <option value="FK">Falkland Islands (Malvinas)</option>
+                <option value="FO">Faroe Islands</option>
+                <option value="FJ">Fiji</option>
+                <option value="FI">Finland</option>
+                <option value="FR">France</option>
+                <option value="GF">French Guiana</option>
+                <option value="PF">French Polynesia</option>
+                <option value="TF">French Southern Territories</option>
+                <option value="GA">Gabon</option>
+                <option value="GM">Gambia</option>
+                <option value="GE">Georgia</option>
+                <option value="DE">Germany</option>
+                <option value="GH">Ghana</option>
+                <option value="GI">Gibraltar</option>
+                <option value="GR">Greece</option>
+                <option value="GL">Greenland</option>
+                <option value="GD">Grenada</option>
+                <option value="GP">Guadeloupe</option>
+                <option value="GU">Guam</option>
+                <option value="GT">Guatemala</option>
+                <option value="GG">Guernsey</option>
+                <option value="GN">Guinea</option>
+                <option value="GW">Guinea-Bissau</option>
+                <option value="GY">Guyana</option>
+                <option value="HT">Haiti</option>
+                <option value="HM">Heard Island and Mcdonald Islands</option>
+                <option value="HN">Honduras</option>
+                <option value="HK">Hong Kong</option>
+                <option value="HU">Hungary</option>
+                <option value="IS">Iceland</option>
+                <option value="IN">India</option>
+                <option value="ID">Indonesia</option>
+                <option value="IR">Iran</option>
+                <option value="IQ">Iraq</option>
+                <option value="IE">Ireland</option>
+                <option value="IM">Isle of Man</option>
+                <option value="IL">Israel</option>
+                <option value="IT">Italy</option>
+                <option value="JM">Jamaica</option>
+                <option value="JP">Japan</option>
+                <option value="JE">Jersey</option>
+                <option value="JO">Jordan</option>
+                <option value="KZ">Kazakhstan</option>
+                <option value="KE">Kenya</option>
+                <option value="KI">Kiribati</option>
+                <option value="KP">Korea, North</option>
+                <option value="KR">Korea, South</option>
+                <option value="XK">Kosovo</option>
+                <option value="KW">Kuwait</option>
+                <option value="KG">Kyrgyzstan</option>
+                <option value="LA">Lao People's Democratic Republic</option>
+                <option value="LV">Latvia</option>
+                <option value="LB">Lebanon</option>
+                <option value="LS">Lesotho</option>
+                <option value="LR">Liberia</option>
+                <option value="LY">Libya</option>
+                <option value="LI">Liechtenstein</option>
+                <option value="LT">Lithuania</option>
+                <option value="LU">Luxembourg</option>
+                <option value="MO">Macao</option>
+                <option value="MK">Macedonia North</option>
+                <option value="MG">Madagascar</option>
+                <option value="MW">Malawi</option>
+                <option value="MY">Malaysia</option>
+                <option value="MV">Maldives</option>
+                <option value="ML">Mali</option>
+                <option value="MT">Malta</option>
+                <option value="MH">Marshall Islands</option>
+                <option value="MQ">Martinique</option>
+                <option value="MR">Mauritania</option>
+                <option value="MU">Mauritius</option>
+                <option value="YT">Mayotte</option>
+                <option value="MX">Mexico</option>
+                <option value="FM">Micronesia</option>
+                <option value="MD">Moldova</option>
+                <option value="MC">Monaco</option>
+                <option value="MN">Mongolia</option>
+                <option value="ME">Montenegro</option>
+                <option value="MS">Montserrat</option>
+                <option value="MA">Morocco</option>
+                <option value="MZ">Mozambique</option>
+                <option value="MM">Myanmar (Burma)</option>
+                <option value="NA">Namibia</option>
+                <option value="NR">Nauru</option>
+                <option value="NP">Nepal</option>
+                <option value="NL">Netherlands</option>
+                <option value="AN">Netherlands Antilles</option>
+                <option value="NC">New Caledonia</option>
+                <option value="NZ">New Zealand</option>
+                <option value="NI">Nicaragua</option>
+                <option value="NE">Niger</option>
+                <option value="NG">Nigeria</option>
+                <option value="NU">Niue</option>
+                <option value="NF">Norfolk Island</option>
+                <option value="MP">Northern Mariana Islands</option>
+                <option value="NO">Norway</option>
+                <option value="OM">Oman</option>
+                <option value="PK">Pakistan</option>
+                <option value="PW">Palau</option>
+                <option value="PS">Palestine</option>
+                <option value="PA">Panama</option>
+                <option value="PG">Papua New Guinea</option>
+                <option value="PY">Paraguay</option>
+                <option value="PE">Peru</option>
+                <option value="PH">Philippines</option>
+                <option value="PN">Pitcairn Islands</option>
+                <option value="PL">Poland</option>
+                <option value="PT">Portugal</option>
+                <option value="PR">Puerto Rico</option>
+                <option value="QA">Qatar</option>
+                <option value="RE">Reunion</option>
+                <option value="RO">Romania</option>
+                <option value="RU">Russian Federation</option>
+                <option value="RW">Rwanda</option>
+                <option value="BL">Saint Barthelemy</option>
+                <option value="SH">Saint Helena</option>
+                <option value="KN">Saint Kitts and Nevis</option>
+                <option value="LC">Saint Lucia</option>
+                <option value="MF">Saint Martin</option>
+                <option value="PM">Saint Pierre and Miquelon</option>
+                <option value="VC">Saint Vincent and the Grenadines</option>
+                <option value="WS">Samoa</option>
+                <option value="SM">San Marino</option>
+                <option value="ST">Sao Tome and Principe</option>
+                <option value="SA">Saudi Arabia</option>
+                <option value="SN">Senegal</option>
+                <option value="RS">Serbia</option>
+                <option value="CS">Serbia and Montenegro</option>
+                <option value="SC">Seychelles</option>
+                <option value="SL">Sierra Leone</option>
+                <option value="SG">Singapore</option>
+                <option value="SX">Sint Maarten</option>
+                <option value="SK">Slovakia</option>
+                <option value="SI">Slovenia</option>
+                <option value="SB">Solomon Islands</option>
+                <option value="SO">Somalia</option>
+                <option value="ZA">South Africa</option>
+                <option value="GS">South Georgia and the South Sandwich Islands</option>
+                <option value="SS">South Sudan</option>
+                <option value="ES">Spain</option>
+                <option value="LK">Sri Lanka</option>
+                <option value="SD">Sudan</option>
+                <option value="SR">Suriname</option>
+                <option value="SJ">Svalbard and Jan Mayen</option>
+                <option value="SE">Sweden</option>
+                <option value="CH">Switzerland</option>
+                <option value="SY">Syria</option>
+                <option value="TW">Taiwan</option>
+                <option value="TJ">Tajikistan</option>
+                <option value="TZ">Tanzania</option>
+                <option value="TH">Thailand</option>
+                <option value="TL">Timor-Leste</option>
+                <option value="TG">Togo</option>
+                <option value="TK">Tokelau</option>
+                <option value="TO">Tonga</option>
+                <option value="TT">Trinidad and Tobago</option>
+                <option value="TN">Tunisia</option>
+                <option value="TR">Turkey (Türkiye)</option>
+                <option value="TM">Turkmenistan</option>
+                <option value="TC">Turks and Caicos Islands</option>
+                <option value="TV">Tuvalu</option>
+                <option value="UM">U.S. Outlying Islands</option>
+                <option value="UG">Uganda</option>
+                <option value="UA">Ukraine</option>
+                <option value="AE">United Arab Emirates</option>
+                <option value="GB">United Kingdom</option>
+                <option value="US">United States</option>
+                <option value="UY">Uruguay</option>
+                <option value="UZ">Uzbekistan</option>
+                <option value="VU">Vanuatu</option>
+                <option value="VA">Vatican City Holy See</option>
+                <option value="VE">Venezuela</option>
+                <option value="VN">Vietnam</option>
+                <option value="VG">Virgin Islands, British</option>
+                <option value="VI">Virgin Islands, U.S</option>
+                <option value="WF">Wallis and Futuna</option>
+                <option value="EH">Western Sahara</option>
+                <option value="YE">Yemen</option>
+                <option value="ZM">Zambia</option>
+                <option value="ZW">Zimbabwe</option>
+            </select>
+
+        <select class="leaderboardkeymodeselector" name="keymodeselector">
+            <option class="allkeys">all keymodes</option>
+            <option class="4k">4k</option>
+            <option class="5k">5k</option>
+            <option class="6k">6k</option>
+            <option class="7k">7k</option>
+            <option class="8k">8k</option>
+            <option class="9k">9k</option>
+            <option class="10k">10k</option>
+        </select>
 
 
     </div>
-  </body>
+
+
+    <div class="heading">
+        <span class="accuracyheading">accuracy</span>
+        <span class="playcountheading">playcount</span>
+        <span class="ratingheading">rating</span>
+    </div>
+
+
+
+    <div class="leaderboardinnerbox" id="leaderboardinnerbox">
+        <!-- <div class="playercard">
+            <div class="rank rgb">#1</div>
+            <div class="country ">
+                <span class="flagradius fi fi-fr"></span>
+            </div>
+            <div class="username">Hubert</div>
+            <div class="accuracy">99.99%</div>
+            <div class="playcount">999,999</div>
+            <div class="rating">9,999</div>
+
+        </div>
+
+        <div class="playercard">
+            <div class="rank gold">#2</div>
+            <div class="country ">
+                <span class="flagradius fi fi-fr"></span>
+            </div>
+            <div class="username">Hubert</div>
+            <div class="accuracy">99.99%</div>
+            <div class="playcount">999,999</div>
+            <div class="rating">9,999</div>
+
+        </div>
+
+        <div class="playercard">
+            <div class="rank silver">#3</div>
+            <div class="country ">
+                <span class="flagradius fi fi-fr"></span>
+            </div>
+            <div class="username">Hubert</div>
+            <div class="accuracy">99.99%</div>
+            <div class="playcount">999,999</div>
+            <div class="rating">9,999</div>
+
+        </div>
+
+        <div class="playercard">
+            <div class="rank bronze">#4</div>
+            <div class="country ">
+                <span class="flagradius fi fi-fr"></span>
+            </div>
+            <div class="username">Hubert</div>
+            <div class="accuracy">99.99%</div>
+            <div class="playcount">999,999</div>
+            <div class="rating">9,999</div>
+
+        </div>
+
+        <div class="playercard">
+            <div class="rank">#5</div>
+            <div class="country ">
+                <span class="flagradius fi fi-fr"></span>
+            </div>
+            <div class="username">Hubert</div>
+            <div class="accuracy">99.99%</div>
+            <div class="playcount">999,999</div>
+            <div class="rating">9,999</div>
+
+        </div> -->
+    </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<script type="module" src="/js/leaderboard.js"></script>
+</body>
 </html>

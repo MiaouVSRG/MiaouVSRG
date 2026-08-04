@@ -3,9 +3,16 @@ import { getApiEndpoint } from "./utils.js"
 const topscoresBox = document.getElementById("topscores-box");
 const topscoresMainBox = document.getElementById("topscores-mainbox");
 const showMoreButton = document.getElementById("showmorebutton");
+const showMoreText = document.getElementById("showmoretext");
 const keymodefilterTopPlays = document.getElementById("keymodefiltertopplays");
+const topscoresNumberofmaps = document.getElementById("topscores-numberofmaps");
+const headerpfp = document.getElementById("headerpfp");
+const headerusername = document.getElementById("headerusername");
 
 function init(response){
+    console.log(response.ProfileInfo.Avatar)
+    headerpfp.src = response.ProfileInfo.Avatar;
+    headerusername.innerText = response.ProfileInfo.Username;
 
 
 
@@ -168,7 +175,7 @@ function showTopPlays(response, keymode){
     // On vide la div pour mettre les nouveaux scores filtrés;
     topscoresBox.innerHTML = "";
     topscoresMainBox.style.height = "25rem";
-    showMoreButton.style.display = "block";
+    showMoreText.innerText = "show more \xa0v"
 
     var topPlays = response.ProfileInfo.TopPlays;
 
@@ -201,7 +208,9 @@ function showTopPlays(response, keymode){
 
     console.log(topPlays);
 
-    const mapsLength = topPlays.length > 100 ? 100 : topPlays.length
+    topscoresNumberofmaps.innerText = topPlays.length;
+
+    const mapsLength = topPlays.length > 100 ? 99 : topPlays.length
     const height = (25 + mapsLength * 3.75 - 5 * 3.75) + "rem";
     const gap = (5 * mapsLength) + "px";
     const styleHeight = "calc(" + height + " + " + gap + ")";
@@ -228,13 +237,24 @@ function showTopPlays(response, keymode){
 
             let name = document.createElement("span");
             name.classList.add("topscore-name");
-            name.innerText = play.ChartName;
+            let mapLink = document.createElement("a");
+            mapLink.classList.add("chartpagelink");
+            mapLink.href = "/charts/chartpage/" + play.ChartHash;
+            mapLink.target = "_blank";
+            mapLink.innerText = play.ChartName;
+            name.appendChild(mapLink);
+
+            nameBox.appendChild(name);
 
             let diffName = document.createElement("span");
             diffName.classList.add("topscore-diffname");
-            diffName.innerText = play.ChartDiffName;
+            let mapLinkDiff = document.createElement("a");
+            mapLinkDiff.classList.add("chartpagelink");
+            mapLinkDiff.href = "/charts/chartpage/" + play.ChartHash;
+            mapLinkDiff.target = "_blank";
+            mapLinkDiff.innerText = play.ChartDiffName;
+            diffName.appendChild(mapLinkDiff);
 
-            nameBox.appendChild(name);
             nameBox.appendChild(diffName);
 
             div.appendChild(nameBox);
@@ -266,7 +286,7 @@ function showTopPlays(response, keymode){
             topscoreRatingBox.classList.add("topscore-ratingbox");
             let topscoreRatingvalue = document.createElement("span");
             topscoreRatingvalue.classList.add("topscore-ratingvalue");
-            topscoreRatingvalue.innerText = play.Rating;
+            topscoreRatingvalue.innerText = Number(play.Rating).toFixed(2);
 
             topscoreRatingBox.appendChild(topscoreRatingvalue);
 
@@ -287,10 +307,14 @@ function showTopPlays(response, keymode){
     });
 
     showMoreButton.onclick = (event) => {
-        topscoresMainBox.style.height = styleHeight;
-        const hiddenPlays = document.getElementsByClassName("invisible");
-        [...hiddenPlays].forEach(hiddenPlay => hiddenPlay.classList.remove("invisible"));
-        showMoreButton.style.display = "none";
+        if(showMoreText.innerText.includes("show more")){
+            topscoresMainBox.style.height = styleHeight;
+            const hiddenPlays = document.getElementsByClassName("invisible");
+            [...hiddenPlays].forEach(hiddenPlay => hiddenPlay.classList.remove("invisible"));
+            showMoreText.innerText = "show less \xa0^"
+        } else {
+            showTopPlays(response, keymode);
+        }
     }
 }
 

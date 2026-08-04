@@ -704,3 +704,29 @@ html,body{
     border-radius: 15px;
     font-size:1.2rem;
 }
+
+.topscoresnumberofmaps{
+    font-size: 0.8rem;
+    color: black;
+    padding: 1px;
+    background-color: white;
+    margin-left: 1.5rem;
+    border-radius: 15px;
+    width: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 1rem;
+
+    /* Parce que sinon l'élément ne se place pas verticalement au centre */
+    align-self: center;
+}
+
+.chartpagelink{
+    /* Pour les balises a : sert à retirer les trucs de con genre le soulignage quand tu cliques sur le lien */
+    text-decoration: none;
+
+    /* Inherit: on prend la couleur de texte du parent */
+    /* On fait ça ici car chartpagelink est une balise a qui possède par défaut une couleur bleue */
+    color: inherit;
+}
