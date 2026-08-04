@@ -137,7 +137,7 @@ function init(response){
             // Alors le texte de la page doit valoir ce qui est contenu dans response.ProfileInfo.StatsGlobal
             global_ranking_value.innerText = response.ProfileInfo.StatsGlobal.GlobalRanking
             country_ranking_value.innerText = response.ProfileInfo.StatsGlobal.CountryRanking
-            playerrating.innerText = response.ProfileInfo.StatsGlobal.PlayerRating
+            playerrating.innerText = Number(response.ProfileInfo.StatsGlobal.PlayerRating).toFixed(2);
             playtime.innerText = response.ProfileInfo.Playtime
             htmlcompletion.innerText = response.ProfileInfo.StatsGlobal.Completion
         }

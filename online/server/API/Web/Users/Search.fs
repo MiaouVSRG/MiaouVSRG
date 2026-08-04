@@ -177,7 +177,12 @@ module Search =
                 // TODO: THIS IS TEMPORARY AND FOR INTERNAL TESTING ONLY
                 // THIS IS NOT THE NEW RATING SYSTEM
                 let mutable global_rating = 0.0f
-                for i in 1..100 do
+                let scores_to_count =
+                    if top_plays.Length >= 100 then
+                        100
+                    else
+                        top_plays.Length - 1
+                for i in 1..scores_to_count do
                     let play = top_plays[i]
                     global_rating <- global_rating + play.Rating
                 
