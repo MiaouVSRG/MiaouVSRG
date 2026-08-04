@@ -186,7 +186,7 @@ module Search =
                     let play = top_plays[i]
                     global_rating <- global_rating + play.Rating
                 
-                global_rating <- global_rating / 100.0f
+                global_rating <- global_rating / float32 scores_to_count
                 
                 let profile_info: ProfileInfo = {
                     Username = db_user.Username
