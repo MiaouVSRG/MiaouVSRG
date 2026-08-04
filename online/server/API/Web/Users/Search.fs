@@ -174,6 +174,15 @@ module Search =
                 
                 let top_plays = get_top_plays scores
                 
+                // TODO: THIS IS TEMPORARY AND FOR INTERNAL TESTING ONLY
+                // THIS IS NOT THE NEW RATING SYSTEM
+                let mutable global_rating = 0.0f
+                for i in 1..100 do
+                    let play = top_plays[i]
+                    global_rating <- global_rating + play.Rating
+                
+                global_rating <- global_rating / 100.0f
+                
                 let profile_info: ProfileInfo = {
                     Username = db_user.Username
                     Country = "fr"
@@ -182,7 +191,7 @@ module Search =
                     StatsGlobal = {
                         GlobalRanking = rank_4k
                         CountryRanking = 0
-                        PlayerRating = Math.Round(float (max rating_7k rating_4k), 2)
+                        PlayerRating = float global_rating
                         Completion = completion_percent_global
                     }
                     Stats4K = {
