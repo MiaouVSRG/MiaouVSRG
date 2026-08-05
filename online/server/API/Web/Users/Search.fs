@@ -149,7 +149,7 @@ module Search =
                                     if chart.ImageLink.StartsWith("https://cdn.miaouvsrg.com/") then
                                         chart.ImageLink
                                     elif chart.DownloadLink.Contains("https://catboy.best/") then
-                                        $"""https://catboy.best/preview/background/{chart.DownloadLink.Replace("https://catboy.best/d/", "").Replace("n", "")}?set=1"""
+                                        $"""https://assets.ppy.sh/beatmaps/{chart.DownloadLink.Replace("https://catboy.best/d/", "").Replace("n", "")}/covers/cover@2x.jpg"""
                                     else
                                         "not available"
                                         

@@ -75,7 +75,7 @@ module Info =
                         Logging.Debug $"The file {file} is not an osu!mania map"
                     else
                         if background_url = "" then
-                            background_url <- $"https://catboy.best/preview/background/{beatmap.Value.Metadata.BeatmapSetID}?set=1"
+                            background_url <- $"https://assets.ppy.sh/beatmaps/{beatmap.Value.Metadata.BeatmapSetID}/covers/cover@2x.jpg"
                             
                         audio_preview_url <-
                             if chart.DownloadLink.StartsWith("https://catboy.best") then

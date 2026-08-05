@@ -426,6 +426,9 @@ async function init(){
     miaouDirectButton.addEventListener("click", () => document.location.href = data.MiaoudirectLink);
 
     banner.src = data.Background;
+    if(data.Background.startsWith("https://cdn.miaouvsrg.com")){
+        bg.crossOrigin = "anonymous";
+    }
     bg.src = data.Background;
     audioPreview.src = data.Audio;
     chartTitle.innerText = data.Name;
