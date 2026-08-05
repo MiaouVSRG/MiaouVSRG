@@ -9,6 +9,7 @@ open Interlude.Web.Shared
 open Interlude.Web.Shared.Requests.Web.User.Search
 open NetCoreServer
 open Percyqaz.Common
+open Prelude.Calculator.NoteDifficulty
 open Prelude.Data.User.Stats
 open Prelude.Gameplay.Rulesets
 open Prelude.Gameplay.Scoring
@@ -51,7 +52,7 @@ module Search =
                 
                 let mutable total_acc = 0.0
                 for score in scores do
-                    total_acc <- score.Accuracy * 100.0
+                    total_acc <- total_acc + score.Accuracy * 100.0
                 let average_acc = total_acc / float scores.Length
                 
                 let get_completion(scores: Score.ScoreByUserIdModel array, charts: Chart array, keymode: int option): float32 =
@@ -95,7 +96,11 @@ module Search =
                             
                         if ranked && not (already_played.Contains((score.ChartId, score.Rate))) then
                             already_played.SetValue((score.ChartId, score.Rate), i)
-                            match ruleset.GradeName score.Grade with
+                            let accuracy = score.Accuracies[ruleset.Name]
+                            
+                            let grade_name = ruleset.GradeName (Grade.calculate ruleset.Grades accuracy)
+                                
+                            match grade_name with
                             | "PASS" -> pass_scores <- pass_scores + 1
                             | "CLEAR" -> clear_scores <- clear_scores + 1
                             | "CLEAR+" -> clearplus_scores <- clearplus_scores + 1

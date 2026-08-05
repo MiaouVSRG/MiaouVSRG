@@ -34,13 +34,13 @@ function init(response){
     htmlfollowers.innerHTML=response.ProfileInfo.Followers
 
     var htmlglobalranking=document.getElementById("globalranking")
-    htmlglobalranking.innerText=response.ProfileInfo.StatsGlobal.GlobalRanking
+    htmlglobalranking.innerText="#" + response.ProfileInfo.StatsGlobal.GlobalRanking
 
     var htmlcountryranking=document.getElementById("countryranking")
-    htmlcountryranking.innerText=response.ProfileInfo.StatsGlobal.CountryRanking
+    htmlcountryranking.innerText="#" + response.ProfileInfo.StatsGlobal.CountryRanking
 
     var htmlplayerrating=document.getElementById("playerrating")
-    htmlplayerrating.innerText=response.ProfileInfo.StatsGlobal.PlayerRating
+    htmlplayerrating.innerText=Number(response.ProfileInfo.StatsGlobal.PlayerRating).toFixed(2);
 
     var htmlplaytime=document.getElementById("playtime")
     htmlplaytime.innerText=response.ProfileInfo.Playtime
@@ -130,13 +130,12 @@ function init(response){
     function changeValues(){
         // On récupère la champ "value" de l'option choisie par l'utilisateur
         // Donc, par rapport à mon HTML, si l'utilisateur choisit "All keymodes", alors la variable value sera égale à "global"
-        var value = keymodefilter.value
-        console.log(value)
+        var value = keymodefilter.value;
         // Si la value est égale à "global"
         if(value === "global"){
             // Alors le texte de la page doit valoir ce qui est contenu dans response.ProfileInfo.StatsGlobal
-            global_ranking_value.innerText = response.ProfileInfo.StatsGlobal.GlobalRanking
-            country_ranking_value.innerText = response.ProfileInfo.StatsGlobal.CountryRanking
+            global_ranking_value.innerText ="#" + response.ProfileInfo.StatsGlobal.GlobalRanking
+            country_ranking_value.innerText ="#" + response.ProfileInfo.StatsGlobal.CountryRanking
             playerrating.innerText = Number(response.ProfileInfo.StatsGlobal.PlayerRating).toFixed(2);
             playtime.innerText = response.ProfileInfo.Playtime
             htmlcompletion.innerText = response.ProfileInfo.StatsGlobal.Completion
@@ -144,8 +143,8 @@ function init(response){
         // Sinon si la value est égale à "4K"
         else if(value === "4K"){
             // Alors le texte de la page doit valoir ce qui est contenu dans response.ProfileInfo.Stats4K
-            global_ranking_value.innerText = response.ProfileInfo.Stats4K.GlobalRanking
-            country_ranking_value.innerText = response.ProfileInfo.Stats4K.CountryRanking
+            global_ranking_value.innerText ="#" + response.ProfileInfo.Stats4K.GlobalRanking
+            country_ranking_value.innerText ="#" + response.ProfileInfo.Stats4K.CountryRanking
             playerrating.innerText = response.ProfileInfo.Stats4K.PlayerRating
             htmlcompletion.innerText = response.ProfileInfo.Stats4K.Completion
             //playtime.innerText = response.ProfileInfo.Stats4K.Playtime
@@ -153,8 +152,8 @@ function init(response){
         // Sinon si la value est égale à "7K"
         else if(value === "7K"){
             // Alors le texte de la page doit valoir ce qui est contenu dans response.ProfileInfo.Stats4K
-            global_ranking_value.innerText = response.ProfileInfo.Stats7K.GlobalRanking
-            country_ranking_value.innerText = response.ProfileInfo.Stats7K.CountryRanking
+            global_ranking_value.innerText ="#" + response.ProfileInfo.Stats7K.GlobalRanking
+            country_ranking_value.innerText ="#" + response.ProfileInfo.Stats7K.CountryRanking
             playerrating.innerText = response.ProfileInfo.Stats7K.PlayerRating
             htmlcompletion.innerText = response.ProfileInfo.Stats7K.Completion
             //playtime.innerText = response.ProfileInfo.Stats7K.Playtime
