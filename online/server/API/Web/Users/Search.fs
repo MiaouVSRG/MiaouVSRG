@@ -96,7 +96,9 @@ module Search =
                             
                         if ranked && not (already_played.Contains((score.ChartId, score.Rate))) then
                             already_played.SetValue((score.ChartId, score.Rate), i)
-                            let accuracy = score.Accuracies[ruleset.Name]
+                            // This is a temp workaround as some scores don't have replays during db migration
+                            // meaning that the new Accuracies system cannot be set for the score
+                            let accuracy = if score.Accuracies.Count > 0 then score.Accuracies[ruleset.Name] else score.Accuracy
                             
                             let grade_name = ruleset.GradeName (Grade.calculate ruleset.Grades accuracy)
                                 
