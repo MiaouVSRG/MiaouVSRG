@@ -47,7 +47,7 @@ module Upload =
                     | Ok _ -> 
                         User.update_banner (id, $"https://cdn.miaouvsrg.com/banners/{id}.png")
                         let res: Response = { Success = true }
-                        response.ReplyJson(res)
+                        response.ReplyJson(res, 200, Unchecked.defaultof<(string * string * int option * string) array>, headers["Origin"])
                         
                 elif picture_type = "avatar" then
                     match verify_and_save_image (body, $"./avatars/{id}.png") with
@@ -55,7 +55,7 @@ module Upload =
                     | Ok _ -> 
                         User.update_avatar (id, $"https://cdn.miaouvsrg.com/avatars/{id}.png")
                         let res: Response = { Success = true }
-                        response.ReplyJson(res)
+                        response.ReplyJson(res, 200, Unchecked.defaultof<(string * string * int option * string) array>, headers["Origin"])
                 else
                     response.ReplyError(400, "Invalid picture type parameter")
         }

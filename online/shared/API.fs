@@ -130,12 +130,14 @@ module HttpResponseExtensions =
             
         /// This method is used for web browsers OPTIONS request (sent before any POST request).
         /// We authorize the browser to send forms and files
-        member this.ReplyOptions() =
+        member this.ReplyOptions(origin: string) =
             this.Clear()
                 .SetBegin(200)
-                .SetHeader("Access-Control-Allow-Origin", "*")
+                .SetHeader("Access-Control-Allow-Origin", origin)
                 .SetHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
                 .SetHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
+                .SetHeader("Access-Control-Allow-Credentials", "true")
+                .SetBody("OK")
             |> ignore
 
 module API =
@@ -192,7 +194,7 @@ module API =
                 | "POST" ->
                     config.Handle_Request(POST, uri.AbsolutePath, request.Body, request.BodyBytes, query_params, headers, this.Response)
                     |> Async.RunSynchronously
-                | "OPTIONS" -> this.Response.ReplyOptions()
+                | "OPTIONS" -> this.Response.ReplyOptions(headers["Origin"])
                 | _ -> this.Response.ReplyError(404, "Not found") |> ignore
 
                 Logging.Info "%s %s responded %i in %.0fms" request.Method uri.AbsolutePath this.Response.Status (Stopwatch.GetElapsedTime(before).TotalMilliseconds)

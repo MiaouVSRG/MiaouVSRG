@@ -9,10 +9,63 @@ const topscoresNumberofmaps = document.getElementById("topscores-numberofmaps");
 const headerpfp = document.getElementById("headerpfp");
 const headerusername = document.getElementById("headerusername");
 
-function init(response){
-    console.log(response.ProfileInfo.Avatar)
+const avatar = document.getElementById("avatarimg");
+const banner = document.getElementById("bannerimg");
+
+// settings box
+const settingsBox = document.getElementById("settings");
+const avatarPreviewImg = document.getElementById("previewpfp");
+const avatarUploadButton = document.getElementById("avatar-upload");
+const bannerPreviewImg = document.getElementById("previewbanner")
+const bannerUploadButton = document.getElementById("banner-upload");
+const backgroundPreviewImg = document.getElementById("previewbg");
+const backgroundUploadButton = document.getElementById("background-upload");
+
+function isImageValid(filename){
+    return filename.endsWith(".png") || filename.endsWith(".jpeg") || filename.endsWith(".jpg") || filename.endsWith(".webp");
+}
+
+function init(response, isCurrentUser){
     headerpfp.src = response.ProfileInfo.Avatar;
     headerusername.innerText = response.ProfileInfo.Username;
+
+    if(isCurrentUser){
+        // Pour fermer la popup des settings
+        document.getElementById("backbutton").onclick = () => {
+            settingsBox.close();
+        };
+
+        document.getElementById("applybutton").onclick = () => {
+            submitImage();
+        };
+
+        // Pour ouvrir la popup des settings
+        avatar.onclick = () => {
+            settingsBox.showModal();
+        };
+
+        banner.onclick = () => {
+            settingsBox.showModal();
+        }
+
+        avatarUploadButton.onchange = () => {
+            if(isImageValid(avatarUploadButton.files[0].name)){
+                avatarPreviewImg.src = URL.createObjectURL(avatarUploadButton.files[0]);
+            }
+        };
+
+        bannerUploadButton.onchange = () => {
+            if(isImageValid(bannerUploadButton.files[0].name)){
+                bannerPreviewImg.src = URL.createObjectURL(bannerUploadButton.files[0]);
+            }
+        };
+
+        backgroundUploadButton.onchange = () => {
+            if(isImageValid(backgroundUploadButton.files[0].name)){
+                backgroundPreviewImg.src = URL.createObjectURL(backgroundUploadButton.files[0]);
+            }
+        };
+    }
 
 
 
@@ -102,11 +155,9 @@ function init(response){
 
 
     //pfp and banner
-    var htmllevel=document.getElementById("avatarimg")
-    .src=response.ProfileInfo.Avatar
+    avatar.src=response.ProfileInfo.Avatar;
 
-    var htmllevel=document.getElementById("bannerimg")
-        .src=response.ProfileInfo.Banner
+    banner.src=response.ProfileInfo.Banner;
 
 
 
@@ -317,6 +368,44 @@ function showTopPlays(response, keymode){
     }
 }
 
+function submitImage(){
+    if(avatarUploadButton.files.length !== 0){
+        const file = avatarUploadButton.files[0];
+        if(isImageValid(file.name)){
+            fetch(getApiEndpoint() + "/web/user/picture?type=avatar", {
+                method: "POST",
+                credentials: "include",
+                body: file
+            })
+            .then((response) => response.json())
+            .then((json) => {
+                if (json.Success){
+                    console.log("Image uploaded !");
+                } else {
+                }
+            });
+        }
+    }
+
+    if(bannerUploadButton.files.length !== 0){
+        const file = bannerUploadButton.files[0];
+        if(isImageValid(file.name)){
+            fetch(getApiEndpoint() + "/web/user/picture?type=banner", {
+                method: "POST",
+                credentials: "include",
+                body: file
+            })
+            .then((response) => response.json())
+            .then((json) => {
+                if (json.Success){
+                    console.log("Image uploaded !");
+                } else {
+                }
+            });
+        }
+    }
+}
+
 window.onload = (event) => {
     const parts = location.pathname.split("/").filter(Boolean);
     let username = parts.at(-1);
@@ -337,7 +426,7 @@ window.onload = (event) => {
         // on peut récupérer ce que le serveur nous a renvoyé grâce à la propriété "responseText" !
         // le JSON.parse permet de convertir la réponse du serveur en code utilisable en JS
         var response=JSON.parse(request.responseText)
-        init(response)
+        init(response, false)
     } else {
 
         fetch(getApiEndpoint() + "/web/login/verify", {
@@ -352,7 +441,7 @@ window.onload = (event) => {
                     credentials: "include"
                 })
                 .then((response) => response.json())
-                .then((json) => init(json))
+                .then((json) => init(json, true))
             } else {
             }
         });

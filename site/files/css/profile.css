@@ -123,6 +123,8 @@ html,body{
 }
 
 .profilebanner{
+    z-index: 0;
+    display:flex;
     object-fit: cover;
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;
@@ -157,6 +159,15 @@ html,body{
     border-radius: 15px;
     margin-left:1rem;
     height:9rem;
+}
+
+.profilepic:hover{
+    cursor: pointer;
+    filter: brightness(0.8);
+}
+
+.editpensvgbanner:hover{
+    cursor: pointer;
 }
 
 .username{
@@ -729,4 +740,169 @@ html,body{
     /* Inherit: on prend la couleur de texte du parent */
     /* On fait ça ici car chartpagelink est une balise a qui possède par défaut une couleur bleue */
     color: inherit;
+}
+
+
+
+
+
+.settingsbox{
+    flex-direction: column;
+    width: 40rem;
+    height: 48rem;
+    border-radius: 15px;
+    background:linear-gradient(transparent, rgb(0 0 0 / 0.75), rgb(0 0 0));
+    border:white 2px solid ;
+    backdrop-filter: blur(8px);
+    box-shadow: black 5px 5px 5px;
+    color:white;
+    font-size:1.2rem;
+    font-family: "Fredoka One";
+}
+
+.maincontainer{
+    margin-top:2rem;
+    height:39rem;
+    display:flex;
+    justify-content: center;
+    /* background-color:white; */
+    gap: 1rem;
+
+}
+
+.settingsbox::backdrop{
+    background-color:rgba(0, 0, 0, 0.4);
+}
+
+.previewpfp{
+box-shadow: black 5px 5px 5px;
+    border-radius: 10px;
+}
+
+.previewbanner{
+    box-shadow: black 5px 5px 5px;
+    border-radius: 10px;
+}
+
+.previewbg{
+    box-shadow: black 5px 5px 5px;
+    border-radius: 10px;
+}
+
+
+
+
+.previewpfpdiv{
+   /* background-color: #ff0000; */
+    height: 29%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: end;
+    padding-right: 3rem;
+}
+
+.previewbannerdiv{
+    /* background-color: #0800ff; */
+    height: 29%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: end;
+    padding-right: 3rem;
+}
+
+.previewbgdiv{
+   /* background-color: #ee00ff; */
+    height: 29%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: end;
+    padding-right: 3rem;
+
+}
+
+.previewcolorpicker{
+    /* background-color: #22ff00; */
+    height: 24%;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    padding-left: 2rem;
+}
+input {
+    width: 4.6rem;
+    overflow:hidden;
+}
+
+.previewcolorpickerspan{
+    /* background-color: #22ff00; */
+    height: 24%;
+    display: flex;
+    justify-content: space-around;
+    align-items: end;
+    flex-direction: column;
+    padding-right: 1rem;
+}
+
+.droite{
+    display:flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.gauche{
+    display:flex;
+    flex-direction: column;
+}
+
+.buttonsdiv{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    /* background-color: red; */
+    height:5rem;
+}
+
+.backbutton{
+    outline:none;
+    border:none;
+    border-radius: 15px;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 1.2rem;
+    font-family: "Fredoka One";
+    box-shadow: black 5px 5px 5px;
+    background-color: rgb(230 100 101);
+    color: white;
+    text-shadow: black 2px 2px 2px;
+}
+
+.applybutton{
+    outline:none;
+    border:none;
+    border-radius: 15px;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 1.2rem;
+    font-family: "Fredoka One";
+    box-shadow: black 5px 5px 5px;
+    background-color: rgb(148 230 100);
+    color: white;
+    text-shadow: black 2px 2px 2px;
+}
+
+.applybutton:hover{
+    cursor: pointer;
+}
+
+.backbutton:hover{
+    cursor: pointer;
 }
