@@ -18,15 +18,15 @@ module HttpResponseExtensions =
         set [
             // .dev.internal : for local testing, not impacting production
             "https://api.miaou.dev.internal"
-            "https://miaou.dev.internal"
+            "https://www.miaou.dev.internal"
             
             // Main website
-            "https://miaouvsrg.com"
+            "https://www.miaouvsrg.com"
             "https://api.miaouvsrg.com"
             
             // Beta website for testing
             "https://www.beta.miaouvsrg.com"
-            "https://beta.api.miaouvsrg.com"
+            "https://api.beta.miaouvsrg.com"
         ]
 
     type HttpResponse with

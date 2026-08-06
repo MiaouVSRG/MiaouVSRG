@@ -116,5 +116,5 @@ module Finish =
                     
                 // TODO: Set a new variable in secrets.json that handles the base website URL
                 response
-                    .ReplyRedirect($"""https://{host.Replace("api.", "")}/user/login/validate?token={format_token}""", cookies)
+                    .ReplyRedirect($"""https://{host.Replace("api.", "www.")}/user/login/validate?token={format_token}""", cookies)
         }
