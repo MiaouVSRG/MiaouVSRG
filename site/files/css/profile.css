@@ -593,7 +593,7 @@ html,body{
 }
 
 .invisible{
-    visibility: hidden;
+    display: none !important;
 }
 
 
