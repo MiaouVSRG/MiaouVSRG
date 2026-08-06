@@ -2,6 +2,7 @@
 
 open System
 open System.Security.Cryptography
+open Microsoft.FSharp.Collections
 open Percyqaz.Common
 open Prelude
 open Percyqaz.Data.Sqlite
@@ -44,7 +45,36 @@ type User =
         ProfilePicture: string
         CountryFlag: string option
         Coins: int64
+        
+        // Hex code for website custom theme
+        PrimaryColor: string option
+        SecondaryColor: string option
+        
+        // About me on website
+        AboutMe: string option
+        
+        // Background image on website
+        BackgroundImage: string option
     }
+    
+    member this.WithCustomTheme(primary: string, secondary: string) =
+        {
+            this with
+                PrimaryColor = Some primary
+                SecondaryColor = Some secondary
+        }
+        
+    member this.WithAboutMe(content: string) =
+        {
+            this with
+                AboutMe = Some content
+        }
+        
+    member this.WithBackgroundImage(background_url: string) =
+        {
+            this with
+                BackgroundImage = Some background_url
+        }
 
 module User =
 
@@ -66,6 +96,10 @@ module User =
                     Column.Text("ProfilePicture")
                     Column.Text("CountryFlag").Nullable
                     Column.Integer("Coins")
+                    Column.Text("PrimaryColor").Nullable
+                    Column.Text("SecondaryColor").Nullable
+                    Column.Text("AboutMe").Nullable
+                    Column.Text("WebBackgroundImage").Nullable
                 ]
         }
 
@@ -87,6 +121,10 @@ module User =
             ProfilePicture = "https://cdn.miaouvsrg.com/avatars/empty.png"
             CountryFlag = None
             Coins = 0
+            PrimaryColor = None
+            SecondaryColor = None
+            AboutMe = None
+            BackgroundImage = None
         }
         
     let create_with_password (username: string, password: string) =
@@ -104,6 +142,10 @@ module User =
             ProfilePicture = "https://cdn.miaouvsrg.com/avatars/empty.png"
             CountryFlag = None
             Coins = 0
+            PrimaryColor = None
+            SecondaryColor = None
+            AboutMe = None
+            BackgroundImage = None
         }
 
     let private SAVE_NEW: NonQuery<User> =
@@ -123,6 +165,10 @@ module User =
                     "@ProfilePicture", SqliteType.Text, -1
                     "@CountryFlag", SqliteType.Text, -1
                     "@Coins", SqliteType.Integer, 8
+                    "@PrimaryColor", SqliteType.Text, -1
+                    "@SecondaryColor", SqliteType.Text, -1
+                    "@AboutMe", SqliteType.Text, -1
+                    "@WebBackgroundImage", SqliteType.Text, -1
                 ]
             FillParameters =
                 (fun p user ->
@@ -138,6 +184,10 @@ module User =
                     p.String user.ProfilePicture
                     p.StringOption user.CountryFlag
                     p.Int64 user.Coins
+                    p.StringOption user.PrimaryColor
+                    p.StringOption user.SecondaryColor
+                    p.StringOption user.AboutMe
+                    p.StringOption user.BackgroundImage
                 )
         }
 
@@ -165,6 +215,10 @@ module User =
                         ProfilePicture = r.String
                         CountryFlag = r.StringOption
                         Coins = r.Int64
+                        PrimaryColor = r.StringOption
+                        SecondaryColor = r.StringOption
+                        AboutMe = r.StringOption
+                        BackgroundImage = r.StringOption
                     }
                 )
         }
@@ -194,6 +248,10 @@ module User =
                         ProfilePicture = r.String
                         CountryFlag = r.StringOption
                         Coins = r.Int64
+                        PrimaryColor = r.StringOption
+                        SecondaryColor = r.StringOption
+                        AboutMe = r.StringOption
+                        BackgroundImage = r.StringOption
                     }
                 )
         }
@@ -227,6 +285,10 @@ module User =
                             ProfilePicture = r.String
                             CountryFlag = r.StringOption
                             Coins = r.Int64
+                            PrimaryColor = r.StringOption
+                            SecondaryColor = r.StringOption
+                            AboutMe = r.StringOption
+                            BackgroundImage = r.StringOption
                         }
                     )
             }
@@ -254,6 +316,10 @@ module User =
                         ProfilePicture = r.String
                         CountryFlag = r.StringOption
                         Coins = r.Int64
+                        PrimaryColor = r.StringOption
+                        SecondaryColor = r.StringOption
+                        AboutMe = r.StringOption
+                        BackgroundImage = r.StringOption
                     }
                 )
         }
@@ -282,6 +348,10 @@ module User =
                         ProfilePicture = r.String
                         CountryFlag = r.StringOption
                         Coins = r.Int64
+                        PrimaryColor = r.StringOption
+                        SecondaryColor = r.StringOption
+                        AboutMe = r.StringOption
+                        BackgroundImage = r.StringOption
                     }
                 )
         }
@@ -310,6 +380,10 @@ module User =
                         ProfilePicture = r.String
                         CountryFlag = r.StringOption
                         Coins = r.Int64
+                        PrimaryColor = r.StringOption
+                        SecondaryColor = r.StringOption
+                        AboutMe = r.StringOption
+                        BackgroundImage = r.StringOption
                     }
                 )
         }
@@ -342,6 +416,10 @@ module User =
                         ProfilePicture = r.String
                         CountryFlag = r.StringOption
                         Coins = r.Int64
+                        PrimaryColor = r.StringOption
+                        SecondaryColor = r.StringOption
+                        AboutMe = r.StringOption
+                        BackgroundImage = r.StringOption
                     }
                 )
         }
@@ -461,3 +539,43 @@ module User =
         
     let update_avatar (id: int64, new_avatar: string) =
         UPDATE_AVATAR.Execute (id, new_avatar) core_db |> expect |> ignore
+        
+    let private UPDATE_BG_IMAGE: NonQuery<int64 * string> =
+        {
+            SQL = """UPDATE users SET WebBackgroundImage = @WebBackgroundImage WHERE Id = @Id;"""
+            Parameters = [ "@Id", SqliteType.Integer, 8; "@WebBackgroundImage", SqliteType.Text, -1 ]
+            FillParameters =
+                fun p (id, background_image) ->
+                    p.Int64 id
+                    p.String background_image
+        }
+        
+    let update_bakground_image (id: int64, new_image: string) =
+        UPDATE_BG_IMAGE.Execute (id, new_image) core_db |> expect |> ignore
+    
+    let private UPDATE_ABOUT_ME: NonQuery<int64 * string> =
+        {
+            SQL = """UPDATE users SET AboutMe = @AboutMe WHERE Id = @Id;"""
+            Parameters = [ "@Id", SqliteType.Integer, 8; "@AboutMe", SqliteType.Text, -1 ]
+            FillParameters =
+                fun p (id, about_me) ->
+                    p.Int64 id
+                    p.String about_me
+        }
+        
+    let update_about_me (id: int64, about_me: string) =
+        UPDATE_BG_IMAGE.Execute (id, about_me) core_db |> expect |> ignore
+    
+    let private UPDATE_THEME: NonQuery<int64 * string * string> =
+        {
+            SQL = """UPDATE users SET PrimaryColor = @PrimaryColor, SecondaryColor = @SecondaryColor WHERE Id = @Id;"""
+            Parameters = [ "@Id", SqliteType.Integer, 8; "@PrimaryColor", SqliteType.Text, -1; "@SecondaryColor", SqliteType.Text, -1 ]
+            FillParameters =
+                fun p (id, primary, secondary) ->
+                    p.Int64 id
+                    p.String primary
+                    p.String secondary
+        }
+        
+    let update_theme (id: int64, primary: string, secondary: string) =
+        UPDATE_THEME.Execute (id, primary, secondary) core_db |> expect |> ignore

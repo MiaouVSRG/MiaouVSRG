@@ -25,19 +25,13 @@ module Search =
         ) =
         
         async{
-            let cookies =
-                headers
-                |> Map.tryFind "Cookie"
-                |> Option.map parseCookies
-                |> Option.defaultValue Map.empty
-                
             let mutable user = None
-                
-            if cookies.ContainsKey("token") then
-                user <- User.by_auth_token cookies["token"]
-            else
-                require_query_parameter query_params "name"
+            
+            if query_params.ContainsKey("name") then
                 user <- User.by_username (query_params["name"][0])
+            else
+                let token = require_cookie headers "token"
+                user <- User.by_auth_token token
             
             match user with
             | Some (user_id, db_user) ->
@@ -243,13 +237,19 @@ module Search =
                     BMSCompletion = completion_bms
                     HitAccuracy = sprintf "%.2f%%" average_acc
                     TopPlays = top_plays
+                    
+                    // User always has default values in db
+                    PrimaryColor = db_user.PrimaryColor.Value
+                    SecondaryColor = db_user.SecondaryColor.Value
+                    BackgroundImage = db_user.BackgroundImage.Value
+                    AboutMe = db_user.AboutMe.Value
                 }
                 
                 let res: Response = {
                     ProfileInfo = profile_info
                 }
                 
-                if cookies.ContainsKey("token") then
+                if not(query_params.ContainsKey("name")) then
                     response.ReplyJson(res, 200, Unchecked.defaultof<(string * string * int option * string) array>, headers["Origin"])
                 else
                     response.ReplyJson(res)

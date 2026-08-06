@@ -56,6 +56,13 @@ module Upload =
                         User.update_avatar (id, $"https://cdn.miaouvsrg.com/avatars/{id}.png")
                         let res: Response = { Success = true }
                         response.ReplyJson(res, 200, Unchecked.defaultof<(string * string * int option * string) array>, headers["Origin"])
+                elif picture_type = "background" then
+                    match verify_and_save_image (body, $"./bg/{id}.png") with
+                    | Error err -> response.ReplyError(400, err)
+                    | Ok _ ->
+                        User.update_bakground_image(id, $"https://cdn.miaouvsrg.com/bg/{id}.png")
+                        let res: Response = { Success = true }
+                        response.ReplyJson(res, 200, Unchecked.defaultof<(string * string * int option * string) array>, headers["Origin"])
                 else
                     response.ReplyError(400, "Invalid picture type parameter")
         }

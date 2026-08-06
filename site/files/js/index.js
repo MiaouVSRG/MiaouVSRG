@@ -20,6 +20,17 @@ const bannerPreviewImg = document.getElementById("previewbanner")
 const bannerUploadButton = document.getElementById("banner-upload");
 const backgroundPreviewImg = document.getElementById("previewbg");
 const backgroundUploadButton = document.getElementById("background-upload");
+const primaryColorPicker = document.getElementById("colorpickermain");
+const secondaryColorPicker = document.getElementById("colorpickersecondary");
+const alphaPrimaryValueSpan = document.getElementById("alphaprimaryvalue");
+const alphaSecondaryValueSpan = document.getElementById("alphasecondaryvalue");
+const alphaPrimaryInput = document.getElementById("alphaprimary");
+const alphaSecondaryInput = document.getElementById("alphasecondary");
+
+var backgroundImage = "";
+
+// main constants
+const body = document.getElementsByTagName('body')[0];
 
 function isImageValid(filename){
     return filename.endsWith(".png") || filename.endsWith(".jpeg") || filename.endsWith(".jpg") || filename.endsWith(".webp");
@@ -29,6 +40,14 @@ function init(response, isCurrentUser){
     headerpfp.src = response.ProfileInfo.Avatar;
     headerusername.innerText = response.ProfileInfo.Username;
 
+    backgroundImage = response.ProfileInfo.BackgroundImage;
+    body.style.backgroundImage = "url(" + backgroundImage + ")";
+
+    primaryColorPicker.value = response.ProfileInfo.PrimaryColor;
+    secondaryColorPicker.value = response.ProfileInfo.SecondaryColor;
+
+    setColorTheme(response.ProfileInfo.PrimaryColor, response.ProfileInfo.SecondaryColor);
+
     if(isCurrentUser){
         // Pour fermer la popup des settings
         document.getElementById("backbutton").onclick = () => {
@@ -37,6 +56,7 @@ function init(response, isCurrentUser){
 
         document.getElementById("applybutton").onclick = () => {
             submitImage();
+            submitTheme();
         };
 
         // Pour ouvrir la popup des settings
@@ -64,6 +84,16 @@ function init(response, isCurrentUser){
             if(isImageValid(backgroundUploadButton.files[0].name)){
                 backgroundPreviewImg.src = URL.createObjectURL(backgroundUploadButton.files[0]);
             }
+        };
+
+        alphaPrimaryInput.onchange = () => {
+            alphaPrimaryValueSpan.innerText = "Opacity: " + alphaPrimaryInput.value;
+        };
+
+        alphaSecondaryInput.onchange = () => {
+            const val = Math.round(alphaSecondaryInput.value * 255).toString(16)
+            console.log(val);
+            alphaSecondaryValueSpan.innerText = "Opacity: " + val;
         };
     }
 
@@ -256,8 +286,6 @@ function showTopPlays(response, keymode){
             break;
     }
 
-    console.log(topPlays);
-
     topscoresNumberofmaps.innerText = topPlays.length;
 
     const mapsLength = topPlays.length > 100 ? 99 : topPlays.length
@@ -368,6 +396,21 @@ function showTopPlays(response, keymode){
     }
 }
 
+function reloadImage(isAvatar, isBanner, isBackground){
+    const timestamp = (new Date()).getTime()
+    if(isAvatar){
+        const baseSrcAvatar = avatar.src;
+        avatar.src = baseSrcAvatar + "?timestamp=" + timestamp;
+    }
+    if(isBanner){
+        const baseSrcBanner = banner.src;
+        banner.src = baseSrcBanner + "?timestamp=" + timestamp;
+    }
+    if(isBackground){
+        body.style.backgroundImage = "url(" + backgroundImage + "?timestamp=" + timestamp + ")";
+    }
+}
+
 function submitImage(){
     if(avatarUploadButton.files.length !== 0){
         const file = avatarUploadButton.files[0];
@@ -380,10 +423,13 @@ function submitImage(){
             .then((response) => response.json())
             .then((json) => {
                 if (json.Success){
-                    console.log("Image uploaded !");
+                    reloadImage(true, false, false);
+                    settingsBox.close();
                 } else {
+                    settingsBox.close();
                 }
-            });
+            })
+            .catch((reason => settingsBox.close()));
         }
     }
 
@@ -398,12 +444,70 @@ function submitImage(){
             .then((response) => response.json())
             .then((json) => {
                 if (json.Success){
-                    console.log("Image uploaded !");
+                    reloadImage(false, true, false);
+                    settingsBox.close();
                 } else {
+                    settingsBox.close();
                 }
-            });
+            })
+            .catch((reason => settingsBox.close()));
         }
     }
+
+    if(backgroundUploadButton.files.length !== 0){
+        const file = backgroundUploadButton.files[0];
+        if(isImageValid(file.name)){
+            fetch(getApiEndpoint() + "/web/user/picture?type=background", {
+                method: "POST",
+                credentials: "include",
+                body: file
+            })
+            .then((response) => response.json())
+            .then((json) => {
+                if (json.Success){
+                    reloadImage(false, false, true);
+                    settingsBox.close();
+                } else {
+                    settingsBox.close();
+                }
+            })
+            .catch((reason => settingsBox.close()));
+        }
+    }
+}
+
+function setColorTheme(primary, secondary){
+    document.documentElement.style.setProperty('--main-color', primary);
+    document.documentElement.style.setProperty('--secondary-color', secondary);
+}
+
+function submitTheme(){
+    const primaryColor = primaryColorPicker.value;
+    const secondaryColor = secondaryColorPicker.value;
+    const primaryAlpha = Math.round(alphaPrimaryInput.value * 255).toString(16);
+    const secondaryAlpha = Math.round(alphaSecondaryInput.value * 255).toString(16);
+
+    const finalPrimaryColor = primaryColorPicker.value + "" + primaryAlpha;
+    const finalSecondaryColor = secondaryColorPicker.value + "" + secondaryAlpha;
+    const body = {
+        "PrimaryColor": finalPrimaryColor,
+        "SecondaryColor": finalSecondaryColor
+    };
+    fetch(getApiEndpoint() + "/web/user/theme", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(body)
+    })
+    .then((response) => response.json())
+    .then((json) => {
+        if (json.Success){
+            setColorTheme(finalPrimaryColor, finalSecondaryColor);
+            settingsBox.close();
+        } else {
+            settingsBox.close();
+        }
+    })
+    .catch((reason => settingsBox.close()));
 }
 
 window.onload = (event) => {

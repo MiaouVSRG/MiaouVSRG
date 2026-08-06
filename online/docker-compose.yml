@@ -15,3 +15,4 @@ services:
             - ../maps:/docker_root/maps
             - ./avatars:/docker_root/avatars
             - ./banners:/docker_root/banners
+            - ./bg:/docker_root/bg

@@ -798,6 +798,10 @@ module Web =
                     BMSCompletion: string
                     HitAccuracy: string
                     TopPlays: Play array
+                    PrimaryColor: string
+                    SecondaryColor: string
+                    AboutMe: string
+                    BackgroundImage: string
                 }
             
             [<Json.AutoCodec>]
@@ -873,6 +877,22 @@ module Web =
         
         module Upload =
             let ROUTE = (POST, MAIN_ENDPOINT + "/user/picture")
+            
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Success: bool
+                }
+                
+        module Theme =
+            let ROUTE = (POST, MAIN_ENDPOINT + "/user/theme")
+            
+            [<Json.AutoCodec>]
+            type Request =
+                {
+                    PrimaryColor: string
+                    SecondaryColor: string
+                }
             
             [<Json.AutoCodec>]
             type Response =
