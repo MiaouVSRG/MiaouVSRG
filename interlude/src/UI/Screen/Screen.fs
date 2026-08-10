@@ -227,7 +227,7 @@ module Screen =
                 if
                     (current_type <> ScreenType.Play || Background.dim_percent.Value < 1.0f)
                 then
-                    Background.draw_with_dim (this.Bounds, Color.White, 1.0f)
+                    Background.draw (this.Bounds, Color.White, 1.0f)
                 else Render.rect this.Bounds Color.Black
 
             screen_container.Draw()

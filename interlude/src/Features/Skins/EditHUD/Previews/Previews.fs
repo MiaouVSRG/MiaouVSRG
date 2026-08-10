@@ -377,6 +377,13 @@ module SelectPreviews =
             ((Sprite.fill bounds texture).AsQuad)
             Color.White.AsQuad
             (Sprite.pick_texture (1, 0) texture)
+            
+    let private create_song_info (config: HudConfig) : SelectPreview =
+        None,
+        fun (bounds: Rect) ->
+
+        if config.SongInfoShowChartTitle then
+            Text.fill (Style.font, "Beatmap name", bounds.ShrinkB(bounds.Height * 0.3f), Color.White, Alignment.CENTER)
 
     let create (config: HudConfig) (element: HudElement) : SelectPreview =
         match element with
@@ -394,3 +401,4 @@ module SelectPreviews =
         | HudElement.InputMeter -> create_input_meter config
         | HudElement.KeysPerSecond -> create_kps config
         | HudElement.CustomImage -> create_custom_image config
+        | HudElement.SongInfo -> create_song_info config

@@ -232,7 +232,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             bounds.Width,
             bounds.Height)
         let q = r.AsQuad
-        Render.quad q Color.Aqua
+        // Render.quad q Color.Aqua
         Render.tex_quad
             q
             Color.White.AsQuad

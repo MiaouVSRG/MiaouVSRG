@@ -196,6 +196,7 @@
         <Compile Include="Features\Skins\Elements\InputMeter.fs"/>
         <Compile Include="Features\Skins\Elements\KeysPerSecond.fs"/>
         <Compile Include="Features\Skins\Elements\CustomImage.fs"/>
+        <Compile Include="Features\Skins\Elements\SongInfo.fs" />
         <Compile Include="Features\Play\PlayScreen.fs"/>
         <Compile Include="Features\Play\MultiplayerScreen.fs"/>
         <Compile Include="Features\Play\Spectate\SpectateControls.fs"/>
@@ -230,6 +231,7 @@
         <Compile Include="Features\Skins\EditHUD\Configuration\InputMeter.fs"/>
         <Compile Include="Features\Skins\EditHUD\Configuration\KeysPerSecond.fs"/>
         <Compile Include="Features\Skins\EditHUD\Configuration\CustomImage.fs"/>
+        <Compile Include="Features\Skins\EditHUD\Configuration\SongInfo.fs" />
         <Compile Include="Features\Skins\EditHUD\Configuration.fs"/>
         <Compile Include="Features\Skins\EditHUD\Previews\Previews.fs"/>
         <Compile Include="Features\Skins\EditHUD\Previews\SelectElement.fs"/>

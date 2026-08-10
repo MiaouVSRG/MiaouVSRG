@@ -13,7 +13,6 @@ type CurrentChart() =
     inherit Container(NodeType.None)
     
     override this.Init(parent: Widget) =
-        Logging.Debug "where"
         this
             .Add(
                 InlaidButton(
