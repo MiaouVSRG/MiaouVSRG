@@ -10,6 +10,7 @@ open Interlude.Web.Server.Domain.Core
 open Interlude.Web.Server.Domain.Core.Stats
 open Interlude.Web.Server.Domain.Services
 open Interlude.Web.Server.Domain.Services.Users
+open Interlude.Web.Server.Online
 open Interlude.Web.Shared
 open Interlude.Web.Shared.Requests.Web.Leaderboard
 open NetCoreServer
@@ -105,16 +106,25 @@ module Finish =
             // match Users.DiscordAuthFlow.receive_discord_callback (state, uint64 identity.id, discord_tag) with
             // | true -> response.ReplyRedirect("https://miaouvsrg.com/login_success")
             // | false -> response.ReplyRedirect("https://miaouvsrg.com/login_failed")
-                
-            match Auth.login_via_discord (uint64 identity.id) with
-            | Error() ->
-                Logging.Info $"User {discord_tag} tried to connect via web, but does not have an account"
-                response.ReplyRedirect("https://miaouvsrg.com/login_failed")
-            | Ok token ->
-                let format_token = token.Replace("+", "%2B")
+            
+            match User.by_discord_id(uint64 identity.id) with
+            | Some (user_id, db_user) ->
+                let is_online_in_game = Session.list_online_users() |> Array.contains((user_id, db_user.Username))
+                let token =
+                    // If the user is online ingame we dont generate a new token
+                    // So that the user is not disconnected ingame and can still play online
+                    if is_online_in_game then
+                        db_user.AuthToken.Replace("+", "%2B")
+                    else
+                        let new_token = User.generate_auth_token ()
+                        User.set_auth_token (user_id, new_token)
+                        new_token.Replace("+", "%2B")
+                        
                 let cookies = Array.create 1 ("discord_state", "", Some 0, host)
-                    
                 // TODO: Set a new variable in secrets.json that handles the base website URL
                 response
-                    .ReplyRedirect($"""https://{host.Replace("api.", "www.")}/user/login/validate?token={format_token}""", cookies)
+                    .ReplyRedirect($"""https://{host.Replace("api.", "www.")}/user/login/validate?token={token}""", cookies)
+            | None ->
+                Logging.Info $"User {discord_tag} tried to connect via web, but does not have an account"
+                response.ReplyRedirect("https://miaouvsrg.com/login_failed")
         }
