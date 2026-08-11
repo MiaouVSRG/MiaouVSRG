@@ -49,6 +49,7 @@ type User =
         // Hex code for website custom theme
         PrimaryColor: string option
         SecondaryColor: string option
+        TextColor: string option
         
         // About me on website
         AboutMe: string option
@@ -62,6 +63,12 @@ type User =
             this with
                 PrimaryColor = Some primary
                 SecondaryColor = Some secondary
+        }
+        
+    member this.WithTextColor(color: string) =
+        {
+            this with
+                TextColor = Some color
         }
         
     member this.WithAboutMe(content: string) =
@@ -100,6 +107,7 @@ module User =
                     Column.Text("SecondaryColor").Nullable
                     Column.Text("AboutMe").Nullable
                     Column.Text("WebBackgroundImage").Nullable
+                    Column.Text("TextColor").Nullable
                 ]
         }
 
@@ -125,6 +133,7 @@ module User =
             SecondaryColor = None
             AboutMe = None
             BackgroundImage = None
+            TextColor = None
         }
         
     let create_with_password (username: string, password: string) =
@@ -146,6 +155,7 @@ module User =
             SecondaryColor = None
             AboutMe = None
             BackgroundImage = None
+            TextColor = None
         }
 
     let private SAVE_NEW: NonQuery<User> =
@@ -169,6 +179,7 @@ module User =
                     "@SecondaryColor", SqliteType.Text, -1
                     "@AboutMe", SqliteType.Text, -1
                     "@WebBackgroundImage", SqliteType.Text, -1
+                    "@TextColor", SqliteType.Text, -1
                 ]
             FillParameters =
                 (fun p user ->
@@ -188,6 +199,7 @@ module User =
                     p.StringOption user.SecondaryColor
                     p.StringOption user.AboutMe
                     p.StringOption user.BackgroundImage
+                    p.StringOption user.TextColor
                 )
         }
 
@@ -219,6 +231,7 @@ module User =
                         SecondaryColor = r.StringOption
                         AboutMe = r.StringOption
                         BackgroundImage = r.StringOption
+                        TextColor = r.StringOption
                     }
                 )
         }
@@ -252,6 +265,7 @@ module User =
                         SecondaryColor = r.StringOption
                         AboutMe = r.StringOption
                         BackgroundImage = r.StringOption
+                        TextColor = r.StringOption
                     }
                 )
         }
@@ -289,6 +303,7 @@ module User =
                             SecondaryColor = r.StringOption
                             AboutMe = r.StringOption
                             BackgroundImage = r.StringOption
+                            TextColor = r.StringOption
                         }
                     )
             }
@@ -320,6 +335,7 @@ module User =
                         SecondaryColor = r.StringOption
                         AboutMe = r.StringOption
                         BackgroundImage = r.StringOption
+                        TextColor = r.StringOption
                     }
                 )
         }
@@ -352,6 +368,7 @@ module User =
                         SecondaryColor = r.StringOption
                         AboutMe = r.StringOption
                         BackgroundImage = r.StringOption
+                        TextColor = r.StringOption
                     }
                 )
         }
@@ -384,6 +401,7 @@ module User =
                         SecondaryColor = r.StringOption
                         AboutMe = r.StringOption
                         BackgroundImage = r.StringOption
+                        TextColor = r.StringOption
                     }
                 )
         }
@@ -420,6 +438,7 @@ module User =
                         SecondaryColor = r.StringOption
                         AboutMe = r.StringOption
                         BackgroundImage = r.StringOption
+                        TextColor = r.StringOption
                     }
                 )
         }
@@ -566,16 +585,17 @@ module User =
     let update_about_me (id: int64, about_me: string) =
         UPDATE_BG_IMAGE.Execute (id, about_me) core_db |> expect |> ignore
     
-    let private UPDATE_THEME: NonQuery<int64 * string * string> =
+    let private UPDATE_THEME: NonQuery<int64 * string * string * string> =
         {
-            SQL = """UPDATE users SET PrimaryColor = @PrimaryColor, SecondaryColor = @SecondaryColor WHERE Id = @Id;"""
-            Parameters = [ "@Id", SqliteType.Integer, 8; "@PrimaryColor", SqliteType.Text, -1; "@SecondaryColor", SqliteType.Text, -1 ]
+            SQL = """UPDATE users SET PrimaryColor = @PrimaryColor, SecondaryColor = @SecondaryColor, TextColor = @TextColor WHERE Id = @Id;"""
+            Parameters = [ "@Id", SqliteType.Integer, 8; "@PrimaryColor", SqliteType.Text, -1; "@SecondaryColor", SqliteType.Text, -1; "@TextColor", SqliteType.Text, -1 ]
             FillParameters =
-                fun p (id, primary, secondary) ->
+                fun p (id, primary, secondary, text_color) ->
                     p.Int64 id
                     p.String primary
                     p.String secondary
+                    p.String text_color
         }
         
-    let update_theme (id: int64, primary: string, secondary: string) =
-        UPDATE_THEME.Execute (id, primary, secondary) core_db |> expect |> ignore
+    let update_theme (id: int64, primary: string, secondary: string, text_color: string) =
+        UPDATE_THEME.Execute (id, primary, secondary, text_color) core_db |> expect |> ignore

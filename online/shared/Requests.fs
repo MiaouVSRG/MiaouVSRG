@@ -800,8 +800,10 @@ module Web =
                     TopPlays: Play array
                     PrimaryColor: string
                     SecondaryColor: string
+                    TextColor: string
                     AboutMe: string
                     BackgroundImage: string
+                    IsOnline: bool
                 }
             
             [<Json.AutoCodec>]
@@ -892,6 +894,7 @@ module Web =
                 {
                     PrimaryColor: string
                     SecondaryColor: string
+                    TextColor: string
                 }
             
             [<Json.AutoCodec>]

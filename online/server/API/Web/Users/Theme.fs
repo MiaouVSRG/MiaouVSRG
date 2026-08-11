@@ -26,7 +26,7 @@ module Theme =
             | Error _ ->
                 raise (BadRequestException None)
             | Ok(request: Request) ->
-                User.update_theme(id, request.PrimaryColor, request.SecondaryColor)
+                User.update_theme(id, request.PrimaryColor, request.SecondaryColor, request.TextColor)
                 let res: Response = {Success = true}
                 response.ReplyJson(res, 200, Unchecked.defaultof<(string * string * int option * string) array>, headers["Origin"])
         }

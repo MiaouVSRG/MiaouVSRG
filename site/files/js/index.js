@@ -9,6 +9,9 @@ const topscoresNumberofmaps = document.getElementById("topscores-numberofmaps");
 const headerpfp = document.getElementById("headerpfp");
 const headerusername = document.getElementById("headerusername");
 
+const userStatus = document.getElementById("user-status");
+const userStatusDotStyle = document.getElementById("user-status-style");
+
 const avatar = document.getElementById("avatarimg");
 const banner = document.getElementById("bannerimg");
 
@@ -22,6 +25,7 @@ const backgroundPreviewImg = document.getElementById("previewbg");
 const backgroundUploadButton = document.getElementById("background-upload");
 const primaryColorPicker = document.getElementById("colorpickermain");
 const secondaryColorPicker = document.getElementById("colorpickersecondary");
+const textColorPicker = document.getElementById("colorpickertext");
 const alphaPrimaryValueSpan = document.getElementById("alphaprimaryvalue");
 const alphaSecondaryValueSpan = document.getElementById("alphasecondaryvalue");
 const alphaPrimaryInput = document.getElementById("alphaprimary");
@@ -45,8 +49,16 @@ function init(response, isCurrentUser){
 
     primaryColorPicker.value = response.ProfileInfo.PrimaryColor;
     secondaryColorPicker.value = response.ProfileInfo.SecondaryColor;
+    textColorPicker.value = response.ProfileInfo.TextColor;
 
-    setColorTheme(response.ProfileInfo.PrimaryColor, response.ProfileInfo.SecondaryColor);
+    setColorTheme(response.ProfileInfo.PrimaryColor, response.ProfileInfo.SecondaryColor, response.ProfileInfo.TextColor);
+
+    userStatus.innerText = response.ProfileInfo.IsOnline ? "online" : "offline";
+    
+    if(response.ProfileInfo.IsOnline){
+        userStatusDotStyle.classList.remove("offline");
+        userStatusDotStyle.classList.add("online");
+    }
 
     if(isCurrentUser){
         // Pour fermer la popup des settings
@@ -91,9 +103,7 @@ function init(response, isCurrentUser){
         };
 
         alphaSecondaryInput.onchange = () => {
-            const val = Math.round(alphaSecondaryInput.value * 255).toString(16)
-            console.log(val);
-            alphaSecondaryValueSpan.innerText = "Opacity: " + val;
+            alphaSecondaryValueSpan.innerText = "Opacity: " + alphaSecondaryInput.value;
         };
     }
 
@@ -387,7 +397,7 @@ function showTopPlays(response, keymode){
     showMoreButton.onclick = (event) => {
         if(showMoreText.innerText.includes("show more")){
             topscoresMainBox.style.height = styleHeight;
-            const hiddenPlays = document.getElementsByClassName("invisible");
+            const hiddenPlays = document.getElementsByClassName("topscore");
             [...hiddenPlays].forEach(hiddenPlay => hiddenPlay.classList.remove("invisible"));
             showMoreText.innerText = "show less \xa0^"
         } else {
@@ -476,9 +486,13 @@ function submitImage(){
     }
 }
 
-function setColorTheme(primary, secondary){
+function setColorTheme(primary, secondary, textColor){
     document.documentElement.style.setProperty('--main-color', primary);
     document.documentElement.style.setProperty('--secondary-color', secondary);
+
+    const opaque = primary.slice(0,7);
+    document.documentElement.style.setProperty('--main-color-no-transparency', opaque);
+    document.documentElement.style.setProperty('--text-color', textColor);
 }
 
 function submitTheme(){
@@ -489,9 +503,12 @@ function submitTheme(){
 
     const finalPrimaryColor = primaryColorPicker.value + "" + primaryAlpha;
     const finalSecondaryColor = secondaryColorPicker.value + "" + secondaryAlpha;
+    
+    const textColor = textColorPicker.value;
     const body = {
         "PrimaryColor": finalPrimaryColor,
-        "SecondaryColor": finalSecondaryColor
+        "SecondaryColor": finalSecondaryColor,
+        "TextColor": textColor
     };
     fetch(getApiEndpoint() + "/web/user/theme", {
         method: "POST",
@@ -501,7 +518,7 @@ function submitTheme(){
     .then((response) => response.json())
     .then((json) => {
         if (json.Success){
-            setColorTheme(finalPrimaryColor, finalSecondaryColor);
+            setColorTheme(finalPrimaryColor, finalSecondaryColor, textColor);
             settingsBox.close();
         } else {
             settingsBox.close();

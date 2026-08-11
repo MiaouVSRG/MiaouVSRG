@@ -3,6 +3,10 @@
     --main-color: pink;
     --secondary-color: lightblue;
 
+    --main-color-no-transparency: pink;
+
+    --text-color: white;
+
     /* TODO: How to better implement this ? */
     --main-h: 350;
     --main-s: 100.0%;

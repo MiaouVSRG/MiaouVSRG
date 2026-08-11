@@ -5,6 +5,7 @@ open System.Linq
 open Interlude.Web.Server.API
 open Interlude.Web.Server.Domain.Core
 open Interlude.Web.Server.Domain.New
+open Interlude.Web.Server.Online
 open Interlude.Web.Shared
 open Interlude.Web.Shared.Requests.Web.User.Search
 open NetCoreServer
@@ -181,6 +182,8 @@ module Search =
                 let completion_o2jam = sprintf "%.2f%%" (get_completion(scores, o2Jam_charts, None) * 100.0f)
                 let completion_bms = sprintf "%.2f%%" (get_completion(scores, bms_charts, None) * 100.0f)
                 
+                let is_online = Session.list_online_users() |> Array.contains((user_id, db_user.Username))
+                
                 let top_plays = get_top_plays scores
                 
                 // TODO: THIS IS TEMPORARY AND FOR INTERNAL TESTING ONLY
@@ -199,7 +202,7 @@ module Search =
                 
                 let profile_info: ProfileInfo = {
                     Username = db_user.Username
-                    Country = "fr"
+                    Country = "de"
                     Followers = followers
                     Level = current_level stats.XP
                     StatsGlobal = {
@@ -241,8 +244,11 @@ module Search =
                     // User always has default values in db
                     PrimaryColor = db_user.PrimaryColor.Value
                     SecondaryColor = db_user.SecondaryColor.Value
+                    TextColor = db_user.TextColor.Value
                     BackgroundImage = db_user.BackgroundImage.Value
                     AboutMe = db_user.AboutMe.Value
+                    
+                    IsOnline = is_online
                 }
                 
                 let res: Response = {

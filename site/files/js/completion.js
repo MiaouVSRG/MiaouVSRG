@@ -169,14 +169,11 @@ function render() {
 
     );
 
-    // 🔥 espace au-dessus
     const topSpacer = document.createElement("div");
     topSpacer.style.height = (start * ITEM_HEIGHT) + "px";
     fragment.appendChild(topSpacer);
 
-    // 🔥 items visibles
     for (let i = start; i < end; i++) {
-        //const item = sortedData[i];
         const item = filteredData[i];
 
         const div = document.createElement("div");
@@ -184,7 +181,7 @@ function render() {
 
         div.innerHTML = `
             <img class="mapbg" src="${item.ChartInfo.Background || "/assets/images/marchepa.png"}">
-            <div class="mapname"><a style="color: white; text-decoration: none;" target="blank" href="/charts/chartpage/${item.ChartInfo.ChartId}">${item.ChartInfo.Title}</a></div>
+            <div class="mapname"><a style="color: white; text-decoration: none;" target="_blank" href="/charts/chartpage/${item.ChartInfo.ChartId}">${item.ChartInfo.Title}</a></div>
             <div class="mapdiffname">${item.ChartInfo.DifficultyName}</div>
             <div class="mapkeymode">${item.ChartInfo.Keymode+"k"}</div>
             <div class="maprating">${item.ChartInfo.Difficulty.toFixed(2)+"🟆"}</div>
@@ -199,10 +196,8 @@ function render() {
         fragment.appendChild(div);
     }
 
-    // 🔥 espace en dessous
     const bottomSpacer = document.createElement("div");
     bottomSpacer.style.height =
-        //((sortedData.length - end) * ITEM_HEIGHT) + "px";
         ((filteredData.length - end) * ITEM_HEIGHT) + "px";
 
     fragment.appendChild(bottomSpacer);
@@ -454,13 +449,9 @@ async function init(response) {
 
 
 
-// ===== RÉCUPÉRATION DU BOUTON DANS LE DOM =====
 // On récupère le bouton dans une variable pour pouvoir l'utiliser en JS
 const jumpToTopBtn = document.getElementById("jumpToTopBtn");
 
-// ===== FONCTION POUR FAIRE DÉFILER VERS LE HAUT =====
-// Cette fonction utilise la méthode window.scrollTo pour remonter en haut de la page
-// Le comportement "smooth" permet un défilement fluide
 function scrollToTop() {
     window.scrollTo({
         top: 0, // Position verticale : 0 (tout en haut)
@@ -468,8 +459,6 @@ function scrollToTop() {
     });
 }
 
-// ===== AFFICHER/MASQUER LE BOUTON EN FONCTION DU SCROLL =====
-// On écoute l'événement "scroll" sur la fenêtre
 window.addEventListener("scroll", function() {
     // Si l'utilisateur a scrolled de plus de 100px, on affiche le bouton
     if (window.pageYOffset > 300) {
@@ -479,8 +468,6 @@ window.addEventListener("scroll", function() {
     }
 });
 
-// ===== ÉCOUTEUR D'ÉVÉNEMENT POUR LE CLIQUE SUR LE BOUTON =====
-// Quand on clique sur le bouton, on appelle la fonction scrollToTop
 jumpToTopBtn.addEventListener("click", scrollToTop);
 
 

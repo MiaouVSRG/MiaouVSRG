@@ -46,7 +46,7 @@ html, body {
 .topplaytext {
     display: flex;
     align-content: center;
-    color: white;
+    color: var(--text-color);
     font-size: 1.5rem;
     margin-left: 2rem;
     margin-top: 1.2rem;
@@ -72,9 +72,9 @@ html, body {
 
 .showmore {
     margin: 1.5rem auto 0;
-    color: white;
+    color: var(--text-color);
     font-size: 1.2rem;
-    background-color: #0A091183;
+    background-color: var(--main-color);
     border-radius: 15px;
     width: 10rem;
     align-content: center;
@@ -83,7 +83,7 @@ html, body {
 
 .showmore:hover {
     cursor: pointer;
-    background-color: #0A0911CA;
+    background-color: var(--secondary-color);
 }
 
 .fourthbox {
@@ -109,7 +109,7 @@ html, body {
 .metxt {
     margin-left: 1rem;
     font-size: 1.5rem;
-    color: white;
+    color: var(--text-color);
 
 }
 
@@ -172,7 +172,7 @@ html, body {
 .username {
     margin-left: 1rem;
     font-size: 3rem;
-    color: white;
+    color: var(--text-color);
 
 
 }
@@ -188,9 +188,9 @@ html, body {
 
     margin-left: 2rem;
     font-size: 1.6rem;
-    color: white;
+    color: var(--text-color);
     border-radius: 15px;
-    background-color: #0A091161;
+    background-color: var(--main-color);
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     padding-top: 0.5rem;
@@ -210,7 +210,7 @@ html, body {
     gap: 0.5rem;
     margin-top: 1rem;
     margin-left: 2.6rem;
-    background-color: #0A091199;
+    background-color: var(--main-color);
     display: flex;
     padding: 0.6rem;
     width: 4.5rem;
@@ -219,7 +219,7 @@ html, body {
 }
 
 .followers-number {
-    color: white;
+    color: var(--text-color);
     font-size: 1.5rem;
 }
 
@@ -227,7 +227,7 @@ html, body {
     margin-top: 1rem;
     border: none;
     margin-left: 3rem;
-    background-color: white;
+    background-color: var(--text-color);
     padding: 0.6rem;
     font-family: "Fredoka One";
     width: 10rem;
@@ -251,7 +251,7 @@ html, body {
     display: flex;
     width: 40rem;
     height: 12rem;
-    color: white;
+    color: var(--text-color);
     flex-wrap: wrap;
 
 
@@ -381,7 +381,7 @@ html, body {
     font-size: 1.3rem;
     gap: 1rem;
     display: flex;
-    color: white;
+    color: var(--text-color);
     flex-direction: column;
     width: 63%;
 }
@@ -393,7 +393,7 @@ html, body {
     margin-top: 1rem;
     gap: 1rem;
     display: flex;
-    color: white;
+    color: var(--text-color);
     flex-direction: column;
     width: 37%;
 
@@ -419,7 +419,7 @@ html, body {
 
 .rulesetfilter {
     border: none;
-    background-color: white;
+    background-color: var(--main-color);
     padding: 0.4rem;
     font-family: "Fredoka One";
     width: 10rem;
@@ -521,32 +521,32 @@ html, body {
 
 
 .clear-value {
-    color: white;
+    color: var(--text-color);
     font-size: 1.4rem;
 }
 
 .clearplus-value {
-    color: white;
+    color: var(--text-color);
     font-size: 1.4rem;
 }
 
 .pass-value {
-    color: white;
+    color: var(--text-color);
     font-size: 1.4rem;
 }
 
 .overclear-value {
-    color: white;
+    color: var(--text-color);
     font-size: 1.4rem;
 }
 
 .overclearplus-value {
-    color: white;
+    color: var(--text-color);
     font-size: 1.4rem;
 }
 
 .perfect-value {
-    color: white;
+    color: var(--text-color);
     font-size: 1.4rem;
 }
 
@@ -573,7 +573,7 @@ html, body {
     width: 100%;
     height: 3.75rem;
     border-radius: 15px;
-    color: white;
+    color: var(--text-color);
     box-shadow: black 5px 5px 5px;
 
 }
@@ -638,7 +638,7 @@ html, body {
 }
 
 .topscore-rate {
-    background-color: #2e2e33;
+    background-color: var(--main-color);
     z-index: 0;
     border-radius: 15px;
     padding: 0.5rem 0.5rem 0.5rem 0.5rem;
@@ -663,9 +663,10 @@ html, body {
     justify-content: center;
     align-items: center;
     border-radius: 15px;
-    background-color: #2e2e33;
+    background-color: var(--main-color-no-transparency);
     width: 55%;
     font-size: 2rem;
+    opacity: 1;
 }
 
 .topscore-ratingvalue {
@@ -685,9 +686,9 @@ html, body {
 
 .topscoresnumberofmaps {
     font-size: 0.8rem;
-    color: black;
+    color: var(--text-color);
     padding: 1px;
-    background-color: white;
+    background-color: var(--main-color);
     margin-left: 1.5rem;
     border-radius: 15px;
     width: 3rem;
@@ -719,7 +720,7 @@ html, body {
     border: white 2px solid;
     backdrop-filter: blur(8px);
     box-shadow: black 5px 5px 5px;
-    color: white;
+    color: var(--text-color);
     font-size: 1.2rem;
     font-family: "Fredoka One";
 }
@@ -842,7 +843,7 @@ input {
     font-family: "Fredoka One";
     box-shadow: black 5px 5px 5px;
     background-color: rgb(230 100 101);
-    color: white;
+    color: var(--text-color);
     text-shadow: black 2px 2px 2px;
 }
 
@@ -858,7 +859,7 @@ input {
     font-family: "Fredoka One";
     box-shadow: black 5px 5px 5px;
     background-color: rgb(148 230 100);
-    color: white;
+    color: var(--text-color);
     text-shadow: black 2px 2px 2px;
 }
 
@@ -885,7 +886,7 @@ input {
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
     box-shadow: black 5px 5px 5px;
-    color: white;
+    color: var(--text-color);
 
 
 }

@@ -53,8 +53,8 @@
             <span class="  fi fi-fr userflag"> </span>
             <span id="level" class="lvlvalue">...</span>
             <div class="status">
-                <div class="statusdot online"></div>
-                <span class="">online</span></div>
+                <div class="statusdot offline" id="user-status-style"></div>
+                <span class="" id="user-status">offline</span></div>
         </div>
         <div class="profileinfo-followers">
             <div class="followers-button">
@@ -360,6 +360,10 @@
                         <span id="alphasecondaryvalue">Opacity: </span> 
                         <input type="range" id="alphasecondary" min="0" max="1" step="0.1">
                     </div>
+                </div>
+
+                <div class="colorpickergroup">
+                    <label class="color_wrapper"><input type="color" class="primarycolor" id="colorpickertext"></label>
                 </div>
 
             </div>
