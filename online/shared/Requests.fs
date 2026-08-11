@@ -903,6 +903,21 @@ module Web =
                     Success: bool
                 }
                 
+        module AboutMe =
+            let ROUTE = (POST, MAIN_ENDPOINT + "/user/aboutme")
+            
+            [<Json.AutoCodec>]
+            type Request =
+                {
+                    AboutMe: string
+                }
+            
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Success: bool
+                }
+                
     module Leaderboard =
         let ROUTE = (GET, MAIN_ENDPOINT + "/leaderboard")
         

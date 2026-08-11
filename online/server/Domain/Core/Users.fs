@@ -583,7 +583,7 @@ module User =
         }
         
     let update_about_me (id: int64, about_me: string) =
-        UPDATE_BG_IMAGE.Execute (id, about_me) core_db |> expect |> ignore
+        UPDATE_ABOUT_ME.Execute (id, about_me) core_db |> expect |> ignore
     
     let private UPDATE_THEME: NonQuery<int64 * string * string * string> =
         {
