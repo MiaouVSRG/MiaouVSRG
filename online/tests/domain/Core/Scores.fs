@@ -27,7 +27,7 @@ module Scores =
 
         let score_id = Score.save score
 
-        let results = Score.get_user_recent user_id
+        let results = Score.get_user_recent(user_id, 10)
         Assert.AreEqual(1, results.Length)
         Assert.AreEqual(score_id, results.[0].Id)
         Assert.AreEqual(score.ChartId, results.[0].ChartId)

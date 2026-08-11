@@ -1,11 +1,19 @@
 import { getApiEndpoint } from "./utils.js"
 
+const rulesetGradesSelect = document.getElementById("ruleset-grades");
+
 const topscoresBox = document.getElementById("topscores-box");
 const topscoresMainBox = document.getElementById("topscores-mainbox");
+const recentscoresBox = document.getElementById("recentscores-box");
+const recentscoresMainBox = document.getElementById("recentscores-mainbox");
 const showMoreButton = document.getElementById("showmorebutton");
 const showMoreText = document.getElementById("showmoretext");
+const showMoreButtonRecent = document.getElementById("showmorebutton-recent");
+const showMoreTextRecent = document.getElementById("showmoretext-recent");
 const keymodefilterTopPlays = document.getElementById("keymodefiltertopplays");
+const keymodefilterRecentPlays = document.getElementById("keymodefilterrecentplays");
 const topscoresNumberofmaps = document.getElementById("topscores-numberofmaps");
+const recentscoresNumberofmaps = document.getElementById("recentscores-numberofmaps");
 const headerpfp = document.getElementById("headerpfp");
 const headerusername = document.getElementById("headerusername");
 
@@ -14,6 +22,12 @@ const userStatusDotStyle = document.getElementById("user-status-style");
 
 const avatar = document.getElementById("avatarimg");
 const banner = document.getElementById("bannerimg");
+
+const editMeIcon = document.getElementById("edit-me-icon");
+const mePreview = document.getElementById('me-preview');
+const meEditor = document.getElementById("me-editor");
+
+var aboutMeValue = "";
 
 // settings box
 const settingsBox = document.getElementById("settings");
@@ -40,7 +54,35 @@ function isImageValid(filename){
     return filename.endsWith(".png") || filename.endsWith(".jpeg") || filename.endsWith(".jpg") || filename.endsWith(".webp");
 }
 
+function initializeMeEditor(text){
+    editMeIcon.onclick = () => {
+        if(mePreview.classList.contains("invisible")){
+            mePreview.innerHTML =
+                marked.parse(aboutMeValue);
+            meEditor.classList.add("invisible");
+            mePreview.classList.remove("invisible");
+            updateMe();
+        } else {
+            mePreview.classList.add("invisible");
+            meEditor.classList.remove("invisible");
+        }
+    };
+
+    // Initialize the editor
+    const OT = window.OverType?.default || window.OverType;
+    const [editor] = new OT('#me-editor', {
+        placeholder: 'Start typing markdown...',
+        value: text,
+        onChange: (value, instance) => {
+            aboutMeValue = value;
+        }
+    });
+}
+
 function init(response, isCurrentUser){
+    mePreview.innerHTML =
+      marked.parse(response.ProfileInfo.AboutMe);
+
     headerpfp.src = response.ProfileInfo.Avatar;
     headerusername.innerText = response.ProfileInfo.Username;
 
@@ -61,6 +103,8 @@ function init(response, isCurrentUser){
     }
 
     if(isCurrentUser){
+        initializeMeEditor(response.ProfileInfo.AboutMe);
+
         // Pour fermer la popup des settings
         document.getElementById("backbutton").onclick = () => {
             settingsBox.close();
@@ -140,29 +184,6 @@ function init(response, isCurrentUser){
 
     var htmlcompletion=document.getElementById("completion")
     htmlcompletion.innerText=response.ProfileInfo.StatsGlobal.Completion
-
-
-
-
-    //grades
-    var htmllevel=document.getElementById("normalpass")
-    htmllevel.innerText=response.ProfileInfo.GradeCount.Normal.Pass
-
-    var htmllevel=document.getElementById("normalclear")
-    htmllevel.innerText=response.ProfileInfo.GradeCount.Normal.Clear
-
-    var htmllevel=document.getElementById("normalclearplus")
-    htmllevel.innerText=response.ProfileInfo.GradeCount.Normal.ClearPlus
-
-    var htmllevel=document.getElementById("normaloverclear")
-    htmllevel.innerText=response.ProfileInfo.GradeCount.Normal.Overclear
-
-    var htmllevel=document.getElementById("normaloverclearplus")
-    htmllevel.innerText=response.ProfileInfo.GradeCount.Normal.OverclearPlus
-
-    var htmllevel=document.getElementById("normalperfect")
-    htmllevel.innerText=response.ProfileInfo.GradeCount.Normal.Perfect
-
 
 
 
@@ -255,10 +276,51 @@ function init(response, isCurrentUser){
 
     // on spécifie qu'à chaque fois que le keymodefilter change, on veut que la fonction changeValues s'exécute
     keymodefilter.onchange = changeValues
+    rulesetGradesSelect.onchange = () => showUserGrades(response, rulesetGradesSelect.value);
 
     keymodefilterTopPlays.onchange = () => showTopPlays(response, keymodefilterTopPlays.value);
+    keymodefilterRecentPlays.onchange = () => showRecentPlays(response, keymodefilterRecentPlays.value);
 
     showTopPlays(response, "any");
+    showRecentPlays(response, "any");
+    showUserGrades(response, "Easy");
+}
+
+function showUserGrades(response, judgement){
+    console.log(judgement)
+    var grades = response.ProfileInfo.GradeCount.Normal;
+    switch(judgement){
+        case "Easy":
+            grades = response.ProfileInfo.GradeCount.Easy;
+            break;
+        case "Normal":
+            grades = response.ProfileInfo.GradeCount.Normal;
+            break;
+        case "Hard":
+            grades = response.ProfileInfo.GradeCount.Hard;
+            break;
+        case "Strict":
+            grades = response.ProfileInfo.GradeCount.Strict;
+            break;
+    }
+
+    var passcount = document.getElementById("normalpass")
+    passcount.innerText = grades.Pass
+
+    var clearcount = document.getElementById("normalclear")
+    clearcount.innerText = grades.Clear
+
+    var clearpluscount = document.getElementById("normalclearplus")
+    clearpluscount.innerText=grades.ClearPlus
+
+    var overclearcount = document.getElementById("normaloverclear")
+    overclearcount.innerText=grades.Overclear
+
+    var overclearpluscount = document.getElementById("normaloverclearplus")
+    overclearpluscount.innerText = grades.OverclearPlus
+
+    var perfectcount = document.getElementById("normalperfect")
+    perfectcount.innerText = grades.Perfect
 }
 
 function showTopPlays(response, keymode){
@@ -406,6 +468,151 @@ function showTopPlays(response, keymode){
     }
 }
 
+function showRecentPlays(response, keymode){
+    // On vide la div pour mettre les nouveaux scores filtrés;
+    recentscoresBox.innerHTML = "";
+    recentscoresMainBox.style.height = "25rem";
+    showMoreTextRecent.innerText = "show more \xa0v"
+
+    var recentPlays = response.ProfileInfo.RecentPlays;
+
+    switch(keymode){
+        case "4":
+            recentPlays = response.ProfileInfo.RecentPlays.filter(play => play.Keymode === 4);
+            break;
+        case "5":
+            recentPlays = response.ProfileInfo.RecentPlays.filter(play => play.Keymode === 5);
+            break;
+        case "6":
+            recentPlays = response.ProfileInfo.RecentPlays.filter(play => play.Keymode === 6);
+            break;
+        case "7":
+            recentPlays = response.ProfileInfo.RecentPlays.filter(play => play.Keymode === 7);
+            break;
+        case "8":
+            recentPlays = response.ProfileInfo.RecentPlays.filter(play => play.Keymode === 8);
+            break;
+        case "9":
+            recentPlays = response.ProfileInfo.RecentPlays.filter(play => play.Keymode === 9);
+            break;
+        case "10":
+            recentPlays = response.ProfileInfo.RecentPlays.filter(play => play.Keymode === 10);
+            break;
+        case "any":
+            recentPlays = response.ProfileInfo.RecentPlays;
+            break;
+    }
+
+    recentscoresNumberofmaps.innerText = recentPlays.length;
+
+    const mapsLength = recentPlays.length > 100 ? 99 : recentPlays.length
+    const height = (25 + mapsLength * 3.75 - 5 * 3.75) + "rem";
+    const gap = (5 * mapsLength) + "px";
+    const styleHeight = "calc(" + height + " + " + gap + ")";
+    var i = 1;
+    recentPlays.forEach(play => {
+        if(i < 100){
+            let div = document.createElement("div");
+            div.classList.add("scoretemplate");
+            div.classList.add("recentscore");
+
+            let chartBg = document.createElement("img");
+            chartBg.classList.add("chartbg");
+            chartBg.src = play.ChartBackground;
+            
+            div.appendChild(chartBg);
+
+            let topscoreGrade = document.createElement("img");
+            topscoreGrade.classList.add("topscore-grade");
+            topscoreGrade.src = "/assets/images/grades/" + play.Grade.toLowerCase().replace("+", "plus") + ".png";
+            div.appendChild(topscoreGrade);
+
+            let nameBox = document.createElement("div");
+            nameBox.classList.add("topscore-namebox");
+
+            let name = document.createElement("span");
+            name.classList.add("topscore-name");
+            let mapLink = document.createElement("a");
+            mapLink.classList.add("chartpagelink");
+            mapLink.href = "/charts/chartpage/" + play.ChartHash;
+            mapLink.target = "_blank";
+            mapLink.innerText = play.ChartName;
+            name.appendChild(mapLink);
+
+            nameBox.appendChild(name);
+
+            let diffName = document.createElement("span");
+            diffName.classList.add("topscore-diffname");
+            let mapLinkDiff = document.createElement("a");
+            mapLinkDiff.classList.add("chartpagelink");
+            mapLinkDiff.href = "/charts/chartpage/" + play.ChartHash;
+            mapLinkDiff.target = "_blank";
+            mapLinkDiff.innerText = play.ChartDiffName;
+            diffName.appendChild(mapLinkDiff);
+
+            nameBox.appendChild(diffName);
+
+            div.appendChild(nameBox);
+
+            let topscoreEndBox = document.createElement("div");
+            topscoreEndBox.classList.add("topscore-endbox");
+            
+            let topscoreRateBox = document.createElement("div");
+            topscoreRateBox.classList.add("topscore-ratebox");
+            let topscoreRate = document.createElement("span");
+            topscoreRate.classList.add("topscore-rate");
+            topscoreRate.innerText = Number(play.Rate).toFixed(2) + "x";
+
+            topscoreRateBox.appendChild(topscoreRate);
+
+            let topscoreAccBox = document.createElement("div");
+            topscoreAccBox.classList.add("topscore-accbox");
+            let topscoreAcc = document.createElement("span");
+            topscoreAcc.classList.add("topscore-acc");
+            if(play.Accuracy === 1){
+                topscoreAcc.innerText = "100%";
+            } else {
+                topscoreAcc.innerText = Number(play.Accuracy * 100).toFixed(2) + "%";
+            }
+
+            topscoreAccBox.appendChild(topscoreAcc);
+
+            let topscoreRatingBox = document.createElement("div");
+            topscoreRatingBox.classList.add("topscore-ratingbox");
+            let topscoreRatingvalue = document.createElement("span");
+            topscoreRatingvalue.classList.add("topscore-ratingvalue");
+            topscoreRatingvalue.innerText = Number(play.Rating).toFixed(2);
+
+            topscoreRatingBox.appendChild(topscoreRatingvalue);
+
+            topscoreEndBox.appendChild(topscoreRateBox);
+            topscoreEndBox.appendChild(topscoreAccBox);
+            topscoreEndBox.appendChild(topscoreRatingBox);
+
+            div.appendChild(topscoreEndBox);
+
+            if(i > 5){
+                div.classList.add("invisible");
+            }
+
+            recentscoresBox.append(div);
+
+        }
+        i++;
+    });
+
+    showMoreButtonRecent.onclick = (event) => {
+        if(showMoreTextRecent.innerText.includes("show more")){
+            recentscoresMainBox.style.height = styleHeight;
+            const hiddenPlays = document.getElementsByClassName("recentscore");
+            [...hiddenPlays].forEach(hiddenPlay => hiddenPlay.classList.remove("invisible"));
+            showMoreTextRecent.innerText = "show less \xa0^"
+        } else {
+            showRecentPlays(response, keymode);
+        }
+    }
+}
+
 function reloadImage(isAvatar, isBanner, isBackground){
     const timestamp = (new Date()).getTime()
     if(isAvatar){
@@ -525,6 +732,24 @@ function submitTheme(){
         }
     })
     .catch((reason => settingsBox.close()));
+}
+
+function updateMe(){
+    const body = {
+        "AboutMe": aboutMeValue
+    };
+
+    fetch(getApiEndpoint() + "/web/user/aboutme", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(body)
+    })
+    .then((response) => response.json())
+    .then((json) => {
+        if(!json.Success){
+            console.error("erreur");
+        }
+    })
 }
 
 window.onload = (event) => {

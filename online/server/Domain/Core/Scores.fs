@@ -181,21 +181,28 @@ module Score =
             Rate: Rate
             Mods: ModState
             Accuracy: float
+            Accuracies: AccuraciesState
+            Rating: float32
             Grade: int
             Lamp: int
+            ReplayId: int option
         }
 
-    let private GET_USER_RECENT: Query<int64, RecentScore> =
+    let private GET_USER_RECENT: Query<int64 * int64, RecentScore> =
         {
             SQL =
                 """
-            SELECT Id, ChartId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp FROM scores2
+            SELECT Id, ChartId, TimePlayed, Rate, Mods, Accuracy, Accuracies, Rating, Grade, Lamp, ReplayId FROM scores2
             WHERE UserId = @UserId
             ORDER BY TimePlayed DESC
-            LIMIT 10;
+            LIMIT @Limit;
             """
-            Parameters = [ "@UserId", SqliteType.Integer, 8 ]
-            FillParameters = fun p id -> p.Int64 id
+            Parameters = [ "@UserId", SqliteType.Integer, 8; "@Limit", SqliteType.Integer, 8 ]
+            FillParameters =
+                (fun p (id, limit) ->
+                    p.Int64 id
+                    p.Int64 limit
+                )
             Read =
                 (fun r ->
                     {
@@ -205,14 +212,17 @@ module Score =
                         Rate = r.Float32 * 1.0f<rate>
                         Mods = r.Json JSON
                         Accuracy = r.Float64
+                        Accuracies = r.Json JSON
+                        Rating = r.Float32
                         Grade = r.Int32
                         Lamp = r.Int32
+                        ReplayId = r.Int32Option
                     }
                 )
         }
 
-    let get_user_recent (user_id: int64) =
-        GET_USER_RECENT.Execute user_id core_db |> expect
+    let get_user_recent (user_id: int64, limit: int64) =
+        GET_USER_RECENT.Execute (user_id, limit) core_db |> expect
 
     type LeaderboardScore =
         {

@@ -584,6 +584,11 @@ html, body {
     position: relative;
 }
 
+.recentscore {
+    background-color: #000000;
+    position: relative;
+}
+
 .chartbg {
     z-index: 0;
     position: absolute;
@@ -1152,3 +1157,19 @@ input {
     justify-content: center;
     flex-direction: column;
 }
+
+.secondbox-content {
+    margin-top: 0.5rem;
+    margin-left: 3rem;
+    margin-right: 3rem;
+    height: 100%;
+    background: transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    color: var(--text-color);
+}
+
+.showmore-recent{
+    margin-bottom: 1rem;
+}
+

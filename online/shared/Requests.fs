@@ -798,6 +798,7 @@ module Web =
                     BMSCompletion: string
                     HitAccuracy: string
                     TopPlays: Play array
+                    RecentPlays: Play array
                     PrimaryColor: string
                     SecondaryColor: string
                     TextColor: string

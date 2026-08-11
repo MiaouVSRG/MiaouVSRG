@@ -29,7 +29,7 @@ module View =
                 else
                     user_id, user
 
-            let recent_scores = Score.get_user_recent target_user_id
+            let recent_scores = Score.get_user_recent (target_user_id, 10)
 
             let scores: RecentScore array =
                 recent_scores

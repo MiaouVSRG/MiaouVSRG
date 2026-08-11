@@ -1,4 +1,4 @@
-const ENV = "beta";
+const ENV = "local"
 
 function getApiEndpoint(){
     switch(ENV){
