@@ -1,0 +1,134 @@
+body{
+    color:white;
+    font-family: "Fredoka One";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+    background-image: url("../../../assets/images/caca.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    margin-top: 10rem;
+}
+
+.catjump{
+width: 20rem;
+}
+
+.loginbox{
+    display: flex;
+    width: 30rem;
+    height: 32rem;
+    background-color: #07073F7E;
+    border-radius: 15px;
+    box-shadow: black 5px 5px 5px;
+    flex-direction: column;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    border: 3px solid white;
+}
+
+.loginspan{
+    margin-top: 1.5rem;
+    font-size: 2rem;
+}
+
+.usernamebox{
+    display: flex;
+    width: 25rem;
+    height: 2rem;
+    border-radius: 15px;
+    box-shadow: black 5px 5px 5px;
+    flex-direction: column;
+    align-items: center;
+    border: 3px solid white;
+    margin-bottom: 1.5rem;
+
+
+}
+
+.passwordbox{
+    display: flex;
+    width: 25rem;
+    height: 2rem;
+    border-radius: 15px;
+    box-shadow: black 5px 5px 5px;
+    flex-direction: column;
+    align-items: center;
+    border: 3px solid white;
+
+
+}
+
+.loginwrite{
+    margin-top: 5rem;
+    /*background-color: red;*/
+    height: 9.5rem;
+}
+
+.line{
+    margin-top: 3rem;
+    margin-bottom: 0.5rem;
+    height: 1rem;
+    width: 22rem;
+   border-bottom: 3px solid white;
+}
+
+.discordimg{
+    width: 5rem;
+    height: 5rem;
+}
+
+.discordimg:hover{
+    cursor: pointer;
+}
+
+.registerorlogin{
+    margin-top: 1rem;
+    display: flex;
+    /*background-color: green;*/
+    width: 26rem;
+    height: 2rem;
+    flex-direction: row;
+    justify-content: space-around;
+
+}
+
+.registerbutton{
+    background-color: #FB8CFF81;
+    display: flex;
+    width: 5rem;
+    height: 2rem;
+    border-radius: 15px;
+    box-shadow: black 5px 5px 5px;
+    align-items: center;
+    border: 3px solid white;
+    justify-content: center;
+    color: white;
+    font-family: "Fredoka One";
+}
+
+.loginbutton{
+    background-color: #00FFFF81;
+    display: flex;
+    width: 5rem;
+    height: 2rem;
+    border-radius: 15px;
+    box-shadow: black 5px 5px 5px;
+    align-items: center;
+    border: 3px solid white;
+    justify-content: center;
+    color: white;
+    font-family: "Fredoka One";
+}
+
+.registerbutton:hover{
+    cursor: pointer;
+}
+
+.loginbutton:hover{
+    cursor: pointer;
+}

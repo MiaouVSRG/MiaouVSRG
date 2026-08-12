@@ -13,3 +13,6 @@ services:
             - ./secrets:/docker_root/secrets
             - ./data:/docker_root/data
             - ../maps:/docker_root/maps
+            - ./avatars:/docker_root/avatars
+            - ./banners:/docker_root/banners
+            - ./bg:/docker_root/bg

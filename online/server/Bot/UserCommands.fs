@@ -154,7 +154,7 @@ module UserCommands =
                             else
                                 sprintf "%.2fx*" score.Rate
 
-                        let recent_scores = Score.get_user_recent user_id
+                        let recent_scores = Score.get_user_recent (user_id, 10)
 
                         let embed =
                             let color = user_info.Color |> Drawing.Color.FromArgb |> Color.op_Explicit

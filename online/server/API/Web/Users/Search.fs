@@ -5,10 +5,12 @@ open System.Linq
 open Interlude.Web.Server.API
 open Interlude.Web.Server.Domain.Core
 open Interlude.Web.Server.Domain.New
+open Interlude.Web.Server.Online
 open Interlude.Web.Shared
 open Interlude.Web.Shared.Requests.Web.User.Search
 open NetCoreServer
 open Percyqaz.Common
+open Prelude.Calculator.NoteDifficulty
 open Prelude.Data.User.Stats
 open Prelude.Gameplay.Rulesets
 open Prelude.Gameplay.Scoring
@@ -24,15 +26,20 @@ module Search =
         ) =
         
         async{
-            require_query_parameter query_params "name"
+            let mutable user = None
             
-            let user_name = query_params["name"][0]
+            if query_params.ContainsKey("name") then
+                user <- User.by_username (query_params["name"][0])
+            else
+                let token = require_cookie headers "token"
+                user <- User.by_auth_token token
             
-            match User.by_username user_name with
+            match user with
             | Some (user_id, db_user) ->
                 let followers = (Friends.get_followers_ids user_id).Count
                 let stats = Stats.get_or_default user_id
-                let scores = Score.by_user_id user_id
+                let scores = Score.user_top_plays user_id
+                let recent_scores = Score.get_user_recent (user_id, 100)
                 let all_charts = Charts.get_all
                 let osu_charts = Charts.get_by_source "osu!"
                 let etterna_charts = Charts.get_by_source "Etterna"
@@ -41,7 +48,7 @@ module Search =
                 
                 let mutable total_acc = 0.0
                 for score in scores do
-                    total_acc <- score.Accuracy * 100.0
+                    total_acc <- total_acc + score.Accuracy * 100.0
                 let average_acc = total_acc / float scores.Length
                 
                 let get_completion(scores: Score.ScoreByUserIdModel array, charts: Chart array, keymode: int option): float32 =
@@ -85,7 +92,13 @@ module Search =
                             
                         if ranked && not (already_played.Contains((score.ChartId, score.Rate))) then
                             already_played.SetValue((score.ChartId, score.Rate), i)
-                            match ruleset.GradeName score.Grade with
+                            // This is a temp workaround as some scores don't have replays during db migration
+                            // meaning that the new Accuracies system cannot be set for the score
+                            let accuracy = if score.Accuracies.Count > 0 then score.Accuracies[ruleset.Name] else score.Accuracy
+                            
+                            let grade_name = ruleset.GradeName (Grade.calculate ruleset.Grades accuracy)
+                                
+                            match grade_name with
                             | "PASS" -> pass_scores <- pass_scores + 1
                             | "CLEAR" -> clear_scores <- clear_scores + 1
                             | "CLEAR+" -> clearplus_scores <- clearplus_scores + 1
@@ -119,6 +132,70 @@ module Search =
                             
                     (rank, player_rating)
                     
+                let get_top_plays (scores: Score.ScoreByUserIdModel array): Play array =
+                    let mutable plays: Play array = Array.Empty()
+                    let mutable charts: string array = Array.Empty()
+                    
+                    for score in scores do
+                        let chartop = Charts.get_chart_by_id score.ChartId
+                        if chartop.IsSome then
+                            if not(charts.Contains(score.ChartId)) then
+                                let chart = chartop.Value
+                                let chart_background =
+                                    if chart.ImageLink.StartsWith("https://cdn.miaouvsrg.com/") then
+                                        chart.ImageLink
+                                    elif chart.DownloadLink.Contains("https://catboy.best/") then
+                                        $"""https://assets.ppy.sh/beatmaps/{chart.DownloadLink.Replace("https://catboy.best/d/", "").Replace("n", "")}/covers/cover@2x.jpg"""
+                                    else
+                                        "not available"
+                                        
+                                let play: Play = {
+                                    ChartHash = score.ChartId
+                                    ChartName = chart.Title
+                                    ChartDiffName = chart.DifficultyName
+                                    ChartBackground = chart_background
+                                    Keymode = chart.Keymode
+                                    Grade = NORMAL.GradeName score.Grade
+                                    Rate = score.Rate
+                                    Accuracy = score.Accuracy
+                                    Rating = score.Rating
+                                }
+                                plays <- plays.Append(play) |> _.ToArray()
+                                charts <- charts.Append(score.ChartId) |> _.ToArray()
+                        
+                    plays
+                    
+                let get_recent_plays (scores: Score.RecentScore array): Play array =
+                    let mutable plays: Play array = Array.Empty()
+                    
+                    for score in scores do
+                        let chartop = Charts.get_chart_by_id score.ChartId
+                        if chartop.IsSome then
+                            let chart = chartop.Value
+                            let chart_background =
+                                if chart.ImageLink.StartsWith("https://cdn.miaouvsrg.com/") then
+                                    chart.ImageLink
+                                elif chart.DownloadLink.Contains("https://catboy.best/") then
+                                    $"""https://assets.ppy.sh/beatmaps/{chart.DownloadLink.Replace("https://catboy.best/d/", "").Replace("n", "")}/covers/cover@2x.jpg"""
+                                else
+                                    "not available"
+                                    
+                            let play: Play = {
+                                ChartHash = score.ChartId
+                                ChartName = chart.Title
+                                ChartDiffName = chart.DifficultyName
+                                ChartBackground = chart_background
+                                Keymode = chart.Keymode
+                                Grade = NORMAL.GradeName score.Grade
+                                Rate = float32 score.Rate
+                                Accuracy = score.Accuracy
+                                Rating = score.Rating
+                            }
+                            plays <- plays.Append(play) |> _.ToArray()
+                        
+                    plays
+                    
+                    
                 let rank_4k, rating_4k = get_lb_infos 4
                 let rank_7k, rating_7k = get_lb_infos 7
                 
@@ -136,15 +213,34 @@ module Search =
                 let completion_o2jam = sprintf "%.2f%%" (get_completion(scores, o2Jam_charts, None) * 100.0f)
                 let completion_bms = sprintf "%.2f%%" (get_completion(scores, bms_charts, None) * 100.0f)
                 
+                let is_online = Session.list_online_users() |> Array.contains((user_id, db_user.Username))
+                
+                let top_plays = get_top_plays scores
+                let recent_plays = get_recent_plays recent_scores
+                
+                // TODO: THIS IS TEMPORARY AND FOR INTERNAL TESTING ONLY
+                // THIS IS NOT THE NEW RATING SYSTEM
+                let mutable global_rating = 0.0f
+                let scores_to_count =
+                    if top_plays.Length >= 100 then
+                        100
+                    else
+                        top_plays.Length - 1
+                for i in 1..scores_to_count do
+                    let play = top_plays[i]
+                    global_rating <- global_rating + play.Rating
+                
+                global_rating <- global_rating / float32 scores_to_count
+                
                 let profile_info: ProfileInfo = {
                     Username = db_user.Username
-                    Country = "fr"
+                    Country = "de"
                     Followers = followers
                     Level = current_level stats.XP
                     StatsGlobal = {
                         GlobalRanking = rank_4k
                         CountryRanking = 0
-                        PlayerRating = Math.Round(float (max rating_7k rating_4k), 2)
+                        PlayerRating = float global_rating
                         Completion = completion_percent_global
                     }
                     Stats4K = {
@@ -166,8 +262,8 @@ module Search =
                         Hard = hard_grades
                         Strict = strict_grades
                     }
-                    Avatar = "https://a.ppy.sh/25261784?1764839996.jpeg"
-                    Banner = "https://assets.ppy.sh/user-profile-covers/25261784/4337e6766860ef2203e32c4c16b7f5c7c552a72d1522aadf2b1af10e726a21a1.jpeg"
+                    Avatar = db_user.ProfilePicture
+                    Banner = db_user.ProfileBanner
                     Playcount = scores.Length
                     TotalHits = stats.NotesHit
                     OsuCompletion = completion_osu
@@ -175,13 +271,27 @@ module Search =
                     O2JamCompletion = completion_o2jam
                     BMSCompletion = completion_bms
                     HitAccuracy = sprintf "%.2f%%" average_acc
+                    TopPlays = top_plays
+                    RecentPlays = recent_plays
+                    
+                    // User always has default values in db
+                    PrimaryColor = db_user.PrimaryColor.Value
+                    SecondaryColor = db_user.SecondaryColor.Value
+                    TextColor = db_user.TextColor.Value
+                    BackgroundImage = db_user.BackgroundImage.Value
+                    AboutMe = db_user.AboutMe.Value
+                    
+                    IsOnline = is_online
                 }
                 
                 let res: Response = {
                     ProfileInfo = profile_info
                 }
                 
-                response.ReplyJson(res)
+                if not(query_params.ContainsKey("name")) then
+                    response.ReplyJson(res, 200, Unchecked.defaultof<(string * string * int option * string) array>, headers["Origin"])
+                else
+                    response.ReplyJson(res)
             | None ->
                 response.ReplyError(404, "User not found !")
         }

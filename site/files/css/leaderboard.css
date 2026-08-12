@@ -1,0 +1,282 @@
+body{
+    display: flex;
+    font-family: "Fredoka One";
+    justify-content: center;
+    background-image: url("../../../assets/images/caca.png");
+    background-attachment: fixed;
+    display: flex;
+
+}
+
+.bomboclat{
+    position: absolute;
+    margin-top:1.5rem;
+    margin-left:40rem;
+    z-index: 2;
+}
+
+.bomboclat2{
+    position: absolute;
+    margin-top:1.5rem;
+    margin-right:40rem;
+    z-index: 2;
+    transform: scale(-1, 1);
+}
+
+.coupedumondesalam{
+    position: absolute;
+    font-size: 6rem;
+    margin-top: 7.3rem;
+}
+
+.mainbox{
+    align-items: center;
+    width: 65rem;
+    height: 100rem;
+    background-color: rgb(98 168 172 / 0.78);
+    filter: saturate(185%);
+    margin-top: 15rem;
+    border-radius: 15px;
+    color: white;
+    font-size: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.leaderboardtypeselectorbox{
+    display: flex;
+    background-color: #4f9b9e;
+    width: 100%;
+    filter: saturate(185%);
+    height: 3rem;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+    box-shadow: rgb(12 38 42 / 0.37) 0 4px 0;
+}
+
+.leaderboardspan{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #3d7779;
+    width: 100%;
+    height: 3.5rem;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    filter: saturate(185%);
+
+}
+
+.star{
+    font-size: 3rem;
+    text-align: center;
+}
+
+.leaderboardtypeselector{
+    font-family: "comfortaa";
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-align: center;
+    border: none;
+    background-color: #3b7985;
+    border:white solid 2px;
+    filter: saturate(185%);
+    box-shadow: #0e2a0c88 3px 3px 0;
+    color:white;
+
+}
+
+.leaderboardcountryselector{
+    font-family: "comfortaa";
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-align: center;
+    border: none;
+    background-color: #3b7985;
+    border:white solid 2px;
+    filter: saturate(185%);
+    box-shadow: #0e2a0c88 3px 3px 0;
+    color:white;
+}
+
+.leaderboardkeymodeselector{
+    font-family: "comfortaa";
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-align: center;
+    border: none;
+    background-color: #3b7985;
+    border:white solid 2px;
+    filter: saturate(185%);
+    box-shadow: #0e2a0c88 3px 3px 0;
+    color:white;
+}
+
+.heading{
+    font-family: "Comfortaa";
+    font-size: 0.8rem;
+   // background-color: limegreen;
+    width: 62rem;
+    margin-top: 2rem;
+    text-align: end;
+    color: rgb(255 255 255 / 0.72);
+}
+
+.leaderboardinnerbox{
+    display: flex;
+    align-items: center;
+    width: 62rem;
+    height: 88rem;
+    //background-color: white;
+    flex-direction: column;
+
+}
+
+
+
+
+
+.accuracyheading{
+    padding-right: 3.5rem;
+}
+
+.playcountheading{
+    padding-right: 4.6rem;
+}
+
+.ratingheading{
+    padding-right: 2.9rem;
+}
+
+.playercard{
+    margin-top: 0.4rem;
+    display: flex;
+    background-color: #3b7985;
+    width: 100%;
+    height: 2rem;
+    border-radius: 15px;
+    font-size: 1rem;
+    align-items: center;
+    font-family: "Comfortaa";
+    filter: saturate(185%);
+    box-shadow: #0e2a0c88 3px 3px 0;
+}
+
+.rank{
+    display: flex;
+    //background-color: yellow;
+    height: 100%;
+    align-items: center;
+    justify-content: start;
+    padding-left: 0.5rem;
+    width: 7%;
+    font-weight: bold;
+}
+
+.country{
+    display: flex;
+   // background-color: #909007;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 3%;
+    border-radius: 5px;
+}
+
+.flagradius{
+    border-radius: 5px;
+    font-size: 1.3rem;
+}
+
+.username{
+    padding-left: 0.5rem;
+    display: flex;
+    //background-color: yellow;
+    height: 100%;
+    align-items: center;
+    justify-content: start;
+    width: 50%;
+    font-weight: 1400;
+}
+
+/* Toutes les balises 'a' qui se trouvent dans une balise avec la classe username */
+.username > a {
+    /* Retire les trucs de con des balises 'a' genre le soulignage etc */
+    text-decoration: none;
+    /* Retire la couleur par défaut (bleu/violet) des liens */
+    color: inherit;
+}
+
+.accuracy{
+    display: flex;
+    //background-color: #909007;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 13%;
+}
+
+.playcount{
+    display: flex;
+    //background-color: yellow;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 13%;
+}
+
+.rating{
+    display: flex;
+    //background-color: #909007;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 14%;
+
+}
+
+
+.rgb{
+    background: linear-gradient(
+            to right,
+            rgb(191 0 255),
+            rgb(12 59 247),
+            rgb(0 255 208),
+            rgb(55 255 0),
+            rgb(255 221 0),
+            rgb(255 0 0),
+            rgb(191 0 255)
+    );
+    background-clip: text;
+    color: transparent;
+    background-size: 200% auto;
+    animation: GradientAnimation 3s linear infinite;
+    text-shadow: none !important;
+}
+
+@keyframes GradientAnimation {
+    0%{
+        background-position: 200% 50%;
+    }
+    100%{
+
+        background-position: 0% 50%
+    }
+}
+
+
+
+.bronze{
+    color: #c4951f;
+}
+.silver{
+    color: silver;
+}
+.gold{
+    color: #f7ff3c;
+}

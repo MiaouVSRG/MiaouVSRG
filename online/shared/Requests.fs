@@ -713,6 +713,18 @@ module New =
             let get (id: string, callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE + "?id=" + id, callback)
                 
+    module Scores =
+        module Migrate =
+            let ROUTE = (GET, "/v2/scores/migrate")
+            
+            [<Json.AutoCodec>]
+            type Response = {
+                Success: bool
+            }
+            
+            let get(callback: Response option -> unit) =
+                Client.get<Response> (snd ROUTE, callback)
+                
 module Web =
     
     let MAIN_ENDPOINT = "/web"
@@ -749,6 +761,20 @@ module Web =
                     Hard: GradeCountInfo
                     Strict: GradeCountInfo
                 }
+                
+            [<Json.AutoCodec>]
+            type Play =
+                {
+                    ChartHash: string
+                    ChartName: string
+                    ChartDiffName: string
+                    ChartBackground: string
+                    Keymode: int
+                    Grade: string
+                    Rate: float32
+                    Accuracy: float
+                    Rating: float32
+                }
             
             [<Json.AutoCodec>]
             type ProfileInfo =
@@ -771,6 +797,14 @@ module Web =
                     O2JamCompletion: string
                     BMSCompletion: string
                     HitAccuracy: string
+                    TopPlays: Play array
+                    RecentPlays: Play array
+                    PrimaryColor: string
+                    SecondaryColor: string
+                    TextColor: string
+                    AboutMe: string
+                    BackgroundImage: string
+                    IsOnline: bool
                 }
             
             [<Json.AutoCodec>]
@@ -843,6 +877,47 @@ module Web =
             
             let get (name: string, callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE + "?name=" + name, callback)
+        
+        module Upload =
+            let ROUTE = (POST, MAIN_ENDPOINT + "/user/picture")
+            
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Success: bool
+                }
+                
+        module Theme =
+            let ROUTE = (POST, MAIN_ENDPOINT + "/user/theme")
+            
+            [<Json.AutoCodec>]
+            type Request =
+                {
+                    PrimaryColor: string
+                    SecondaryColor: string
+                    TextColor: string
+                }
+            
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Success: bool
+                }
+                
+        module AboutMe =
+            let ROUTE = (POST, MAIN_ENDPOINT + "/user/aboutme")
+            
+            [<Json.AutoCodec>]
+            type Request =
+                {
+                    AboutMe: string
+                }
+            
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Success: bool
+                }
                 
     module Leaderboard =
         let ROUTE = (GET, MAIN_ENDPOINT + "/leaderboard")
@@ -866,3 +941,89 @@ module Web =
             
         let get(callback: Response option -> unit) =
             Client.get<Response> (snd ROUTE, callback)
+            
+    module Map =
+        module Info =
+            let ROUTE = (GET, MAIN_ENDPOINT + "/map")
+            
+            [<Json.AutoCodec>]
+            type MapDifficulty =
+                {
+                    Hash: string option
+                    Name: string
+                    Artist: string
+                    Rating: float32
+                    Length: string
+                    BPM: int
+                    RiceCount: int
+                    LNCount: int
+                    Mapper: string
+                    Keymode: int
+                }
+            
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Name: string
+                    Difficulties: MapDifficulty array
+                    Ranked: bool
+                    Background: string
+                    DownloadLink: string
+                    MiaoudirectLink: string
+                    Audio: string
+                }
+                
+            let get(chart: string, callback: Response option -> unit) =
+                Client.get<Response> (snd ROUTE + "?chart=" + chart, callback)
+                
+        module Leaderboard =
+            let ROUTE = (GET, MAIN_ENDPOINT + "/map/leaderboard")
+            
+            [<Json.AutoCodec>]
+            type Score =
+                {
+                    Username: string
+                    Rank: int
+                    Acc: float
+                    Rate: Rate
+                    Mods: ModState
+                    Timestamp: int64
+                    Combo: int
+                    PerfectCount: int
+                    GreatCount: int
+                    MehCount: int
+                    MissCount: int
+                    Rating: float32
+                }
+
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Scores: Score array
+                }
+                
+            let get(chart: string, callback: Response option -> unit) =
+                Client.get<Response> (snd ROUTE + "?chart=" + chart, callback)
+                
+    module Auth =
+        module Discord =
+            let ROUTE = (GET, MAIN_ENDPOINT + "/login/discord")
+            
+            module Finish =
+                let ROUTE = (GET, MAIN_ENDPOINT + "/login/discord/finish")
+                
+        module Verify =
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Success: bool
+                }
+            let ROUTE = (GET, MAIN_ENDPOINT + "/login/verify")
+            
+        module Validate =
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Success: bool
+                }
+            let ROUTE = (GET, MAIN_ENDPOINT + "/login/validate")
