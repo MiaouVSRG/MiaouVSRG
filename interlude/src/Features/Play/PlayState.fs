@@ -18,6 +18,7 @@ type PlayState(info: LoadedChartInfo, pacemaker: PacemakerState, scoring: ScoreP
     let first_note = info.WithMods.FirstNote
 
     member this.Chart = info.Chart
+    member this.ChartMeta = info.ChartMeta
     member this.WithColors = info.WithColors
     member this.Scoring = scoring
     /// 0.0f<ms> = You are at the start of the audio file

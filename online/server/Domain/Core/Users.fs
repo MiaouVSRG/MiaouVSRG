@@ -2,6 +2,7 @@
 
 open System
 open System.Security.Cryptography
+open Microsoft.FSharp.Collections
 open Percyqaz.Common
 open Prelude
 open Percyqaz.Data.Sqlite
@@ -40,7 +41,47 @@ type User =
         Badges: Set<Badge>
         Color: int32
         Password: string option
+        ProfileBanner: string
+        ProfilePicture: string
+        CountryFlag: string option
+        Coins: int64
+        
+        // Hex code for website custom theme
+        PrimaryColor: string option
+        SecondaryColor: string option
+        TextColor: string option
+        
+        // About me on website
+        AboutMe: string option
+        
+        // Background image on website
+        BackgroundImage: string option
     }
+    
+    member this.WithCustomTheme(primary: string, secondary: string) =
+        {
+            this with
+                PrimaryColor = Some primary
+                SecondaryColor = Some secondary
+        }
+        
+    member this.WithTextColor(color: string) =
+        {
+            this with
+                TextColor = Some color
+        }
+        
+    member this.WithAboutMe(content: string) =
+        {
+            this with
+                AboutMe = Some content
+        }
+        
+    member this.WithBackgroundImage(background_url: string) =
+        {
+            this with
+                BackgroundImage = Some background_url
+        }
 
 module User =
 
@@ -58,6 +99,15 @@ module User =
                     Column.Text("Badges")
                     Column.Integer("Color")
                     Column.Text("Password").Nullable
+                    Column.Text("ProfileBanner")
+                    Column.Text("ProfilePicture")
+                    Column.Text("CountryFlag").Nullable
+                    Column.Integer("Coins")
+                    Column.Text("PrimaryColor").Nullable
+                    Column.Text("SecondaryColor").Nullable
+                    Column.Text("AboutMe").Nullable
+                    Column.Text("WebBackgroundImage").Nullable
+                    Column.Text("TextColor").Nullable
                 ]
         }
 
@@ -75,6 +125,15 @@ module User =
             Badges = Set.empty
             Color = Badge.DEFAULT_COLOR
             Password = None
+            ProfileBanner = "https://cdn.miaouvsrg.com/banners/empty.png"
+            ProfilePicture = "https://cdn.miaouvsrg.com/avatars/empty.png"
+            CountryFlag = None
+            Coins = 0
+            PrimaryColor = None
+            SecondaryColor = None
+            AboutMe = None
+            BackgroundImage = None
+            TextColor = None
         }
         
     let create_with_password (username: string, password: string) =
@@ -88,6 +147,15 @@ module User =
             Badges = Set.empty
             Color = Badge.DEFAULT_COLOR
             Password = Some (BCrypt.HashPassword(password, salt))
+            ProfileBanner = "https://cdn.miaouvsrg.com/banners/empty.png"
+            ProfilePicture = "https://cdn.miaouvsrg.com/avatars/empty.png"
+            CountryFlag = None
+            Coins = 0
+            PrimaryColor = None
+            SecondaryColor = None
+            AboutMe = None
+            BackgroundImage = None
+            TextColor = None
         }
 
     let private SAVE_NEW: NonQuery<User> =
@@ -103,6 +171,15 @@ module User =
                     "@Badges", SqliteType.Text, -1
                     "@Color", SqliteType.Integer, 8
                     "@Password", SqliteType.Text, -1
+                    "@ProfileBanner", SqliteType.Text, -1
+                    "@ProfilePicture", SqliteType.Text, -1
+                    "@CountryFlag", SqliteType.Text, -1
+                    "@Coins", SqliteType.Integer, 8
+                    "@PrimaryColor", SqliteType.Text, -1
+                    "@SecondaryColor", SqliteType.Text, -1
+                    "@AboutMe", SqliteType.Text, -1
+                    "@WebBackgroundImage", SqliteType.Text, -1
+                    "@TextColor", SqliteType.Text, -1
                 ]
             FillParameters =
                 (fun p user ->
@@ -114,6 +191,15 @@ module User =
                     p.Json JSON user.Badges
                     p.Int32 user.Color
                     p.StringOption user.Password
+                    p.String user.ProfileBanner
+                    p.String user.ProfilePicture
+                    p.StringOption user.CountryFlag
+                    p.Int64 user.Coins
+                    p.StringOption user.PrimaryColor
+                    p.StringOption user.SecondaryColor
+                    p.StringOption user.AboutMe
+                    p.StringOption user.BackgroundImage
+                    p.StringOption user.TextColor
                 )
         }
 
@@ -137,6 +223,15 @@ module User =
                         Badges = r.Json JSON
                         Color = r.Int32
                         Password = r.StringOption
+                        ProfileBanner = r.String
+                        ProfilePicture = r.String
+                        CountryFlag = r.StringOption
+                        Coins = r.Int64
+                        PrimaryColor = r.StringOption
+                        SecondaryColor = r.StringOption
+                        AboutMe = r.StringOption
+                        BackgroundImage = r.StringOption
+                        TextColor = r.StringOption
                     }
                 )
         }
@@ -162,6 +257,15 @@ module User =
                         Badges = r.Json JSON
                         Color = r.Int32
                         Password = r.StringOption
+                        ProfileBanner = r.String
+                        ProfilePicture = r.String
+                        CountryFlag = r.StringOption
+                        Coins = r.Int64
+                        PrimaryColor = r.StringOption
+                        SecondaryColor = r.StringOption
+                        AboutMe = r.StringOption
+                        BackgroundImage = r.StringOption
+                        TextColor = r.StringOption
                     }
                 )
         }
@@ -191,6 +295,15 @@ module User =
                             Badges = r.Json JSON
                             Color = r.Int32
                             Password = r.StringOption
+                            ProfileBanner = r.String
+                            ProfilePicture = r.String
+                            CountryFlag = r.StringOption
+                            Coins = r.Int64
+                            PrimaryColor = r.StringOption
+                            SecondaryColor = r.StringOption
+                            AboutMe = r.StringOption
+                            BackgroundImage = r.StringOption
+                            TextColor = r.StringOption
                         }
                     )
             }
@@ -214,6 +327,15 @@ module User =
                         Badges = r.Json JSON
                         Color = r.Int32
                         Password = r.StringOption
+                        ProfileBanner = r.String
+                        ProfilePicture = r.String
+                        CountryFlag = r.StringOption
+                        Coins = r.Int64
+                        PrimaryColor = r.StringOption
+                        SecondaryColor = r.StringOption
+                        AboutMe = r.StringOption
+                        BackgroundImage = r.StringOption
+                        TextColor = r.StringOption
                     }
                 )
         }
@@ -238,6 +360,15 @@ module User =
                         Badges = r.Json JSON
                         Color = r.Int32
                         Password = r.StringOption
+                        ProfileBanner = r.String
+                        ProfilePicture = r.String
+                        CountryFlag = r.StringOption
+                        Coins = r.Int64
+                        PrimaryColor = r.StringOption
+                        SecondaryColor = r.StringOption
+                        AboutMe = r.StringOption
+                        BackgroundImage = r.StringOption
+                        TextColor = r.StringOption
                     }
                 )
         }
@@ -262,6 +393,15 @@ module User =
                         Badges = r.Json JSON
                         Color = r.Int32
                         Password = r.StringOption
+                        ProfileBanner = r.String
+                        ProfilePicture = r.String
+                        CountryFlag = r.StringOption
+                        Coins = r.Int64
+                        PrimaryColor = r.StringOption
+                        SecondaryColor = r.StringOption
+                        AboutMe = r.StringOption
+                        BackgroundImage = r.StringOption
+                        TextColor = r.StringOption
                     }
                 )
         }
@@ -290,6 +430,15 @@ module User =
                         Badges = r.Json JSON
                         Color = r.Int32
                         Password = r.StringOption
+                        ProfileBanner = r.String
+                        ProfilePicture = r.String
+                        CountryFlag = r.StringOption
+                        Coins = r.Int64
+                        PrimaryColor = r.StringOption
+                        SecondaryColor = r.StringOption
+                        AboutMe = r.StringOption
+                        BackgroundImage = r.StringOption
+                        TextColor = r.StringOption
                     }
                 )
         }
@@ -383,3 +532,70 @@ module User =
 
     let rename (id: int64, new_name: string) =
         RENAME.Execute (id, new_name) core_db |> expect |> ignore
+        
+    let private UPDATE_BANNER: NonQuery<int64 * string> =
+        {
+            SQL = """UPDATE users SET ProfileBanner = @ProfileBanner WHERE Id = @Id;"""
+            Parameters = [ "@Id", SqliteType.Integer, 8; "@ProfileBanner", SqliteType.Text, -1 ]
+            FillParameters =
+                fun p (id, profile_banner) ->
+                    p.Int64 id
+                    p.String profile_banner
+        }
+        
+    let update_banner (id: int64, new_banner: string) =
+        UPDATE_BANNER.Execute (id, new_banner) core_db |> expect |> ignore
+    
+    let private UPDATE_AVATAR: NonQuery<int64 * string> =
+        {
+            SQL = """UPDATE users SET ProfilePicture = @ProfilePicture WHERE Id = @Id;"""
+            Parameters = [ "@Id", SqliteType.Integer, 8; "@ProfilePicture", SqliteType.Text, -1 ]
+            FillParameters =
+                fun p (id, profile_picture) ->
+                    p.Int64 id
+                    p.String profile_picture
+        }
+        
+    let update_avatar (id: int64, new_avatar: string) =
+        UPDATE_AVATAR.Execute (id, new_avatar) core_db |> expect |> ignore
+        
+    let private UPDATE_BG_IMAGE: NonQuery<int64 * string> =
+        {
+            SQL = """UPDATE users SET WebBackgroundImage = @WebBackgroundImage WHERE Id = @Id;"""
+            Parameters = [ "@Id", SqliteType.Integer, 8; "@WebBackgroundImage", SqliteType.Text, -1 ]
+            FillParameters =
+                fun p (id, background_image) ->
+                    p.Int64 id
+                    p.String background_image
+        }
+        
+    let update_bakground_image (id: int64, new_image: string) =
+        UPDATE_BG_IMAGE.Execute (id, new_image) core_db |> expect |> ignore
+    
+    let private UPDATE_ABOUT_ME: NonQuery<int64 * string> =
+        {
+            SQL = """UPDATE users SET AboutMe = @AboutMe WHERE Id = @Id;"""
+            Parameters = [ "@Id", SqliteType.Integer, 8; "@AboutMe", SqliteType.Text, -1 ]
+            FillParameters =
+                fun p (id, about_me) ->
+                    p.Int64 id
+                    p.String about_me
+        }
+        
+    let update_about_me (id: int64, about_me: string) =
+        UPDATE_ABOUT_ME.Execute (id, about_me) core_db |> expect |> ignore
+    
+    let private UPDATE_THEME: NonQuery<int64 * string * string * string> =
+        {
+            SQL = """UPDATE users SET PrimaryColor = @PrimaryColor, SecondaryColor = @SecondaryColor, TextColor = @TextColor WHERE Id = @Id;"""
+            Parameters = [ "@Id", SqliteType.Integer, 8; "@PrimaryColor", SqliteType.Text, -1; "@SecondaryColor", SqliteType.Text, -1; "@TextColor", SqliteType.Text, -1 ]
+            FillParameters =
+                fun p (id, primary, secondary, text_color) ->
+                    p.Int64 id
+                    p.String primary
+                    p.String secondary
+                    p.String text_color
+        }
+        
+    let update_theme (id: int64, primary: string, secondary: string, text_color: string) =
+        UPDATE_THEME.Execute (id, primary, secondary, text_color) core_db |> expect |> ignore

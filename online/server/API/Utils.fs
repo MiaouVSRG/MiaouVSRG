@@ -1,7 +1,9 @@
 ﻿namespace Interlude.Web.Server.API
 
-open NetCoreServer
-open Prelude
+open System
+open Interlude.Web.Server
+open Interlude.Web.Shared
+open Percyqaz.Common
 open Interlude.Web.Server.Domain.Core
 
 [<AutoOpen>]
@@ -14,6 +16,17 @@ module Utils =
     exception BadRequestException of Message: string option
 
     let BEARER_LENGTH = "Bearer ".Length
+    
+    let parseCookies (cookieHeader: string) : Map<string, string> =
+        cookieHeader.Split(';', StringSplitOptions.RemoveEmptyEntries)
+        |> Seq.choose (fun cookie ->
+            match cookie.Trim().Split('=', 2) with
+            | [| name; value |] ->
+                Some(name.Trim(), value.Trim())
+            | _ ->
+                None
+        )
+        |> Map.ofSeq
 
     let authorize (header: Map<string, string>) =
 
@@ -27,7 +40,44 @@ module Utils =
 
         else
             raise NotAuthorizedException
+            
+    let authorize_with_cookie (token_cookie: string) =
+        match User.by_auth_token token_cookie with
+        | Some(id, user) -> id, user
+        | None -> raise AuthorizeFailedException
 
     let require_query_parameter (query_params: Map<string, string array>) (name: string) =
         if not (query_params.ContainsKey name) then
             raise (BadRequestException(Some(sprintf "'%s' is required" name)))
+            
+    let require_cookie (header: Map<string, string>) (cookie_name: string) =
+        if not (header.ContainsKey("Cookie")) || not (header["Cookie"].Contains(cookie_name)) then
+            raise (BadRequestException(Some($"Cookie {cookie_name} is required")))
+        else
+            let cookies =
+                header
+                |> Map.tryFind "Cookie"
+                |> Option.map parseCookies
+                |> Option.defaultValue Map.empty
+            
+            cookies[cookie_name]
+            
+    let require_referer (header: Map<string, string>) (website: string) =
+        if not (header.ContainsKey("Referer")) || not (header["Referer"].Contains(website)) then
+            raise (BadRequestException(Some($"Referer {website} is required")))
+        
+    let require_host (headers: Map<string, string>) =
+        if SECRETS.IsProduction then
+            if headers.ContainsKey("X-Forwarded-Host") && ALLOWED_ORIGINS.Contains($"""https://{headers["X-Forwarded-Host"]}""") then
+                headers["X-Forwarded-Host"]
+            else
+                for key in headers.Keys do
+                    Logging.Debug $"{headers[key]}"
+                raise (BadRequestException(Some("X-Forwarded-Host is required, but there are none (see above)")))
+        else
+            if headers.ContainsKey("Host") && ALLOWED_ORIGINS.Contains($"""https://{headers["Host"]}""") then
+                headers["Host"]
+            else
+                for header in headers do
+                    Logging.Debug $"{header}"
+                raise (BadRequestException(Some("Host is required, but there are none (see above)")))

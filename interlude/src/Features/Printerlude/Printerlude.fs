@@ -3,6 +3,7 @@
 open System
 open System.Threading
 open System.IO
+open Interlude.Features.Import
 open Percyqaz.Common
 open Percyqaz.Shell
 open Percyqaz.Shell.Shell
@@ -70,6 +71,15 @@ module Printerlude =
                     |> sprintf "PR for %i%% %.2f" acc
                     |> io.WriteLine
             | None -> ()
+            
+        let download_map(io: IOContext) (hash: string) =
+            GameThread.defer (fun () -> MiaouDirect.download hash)
+            io.WriteLine "Message to download map sent"
+            
+        let is_alive(io: IOContext) =
+            io.WriteLine "I am alive !"
+            
+            
 
         let register_commands (ctx: ShellContext) =
             ctx
@@ -98,6 +108,8 @@ module Printerlude =
             ctx
                 .WithIOCommand("version", "Shows info about the current game version", show_version)
                 .WithIOCommand("focus", "Focuses the game window", focus_window)
+                .WithIOCommand("map", "Downloads a chart", "hash", download_map)
+                .WithIOCommand("is alive", "Checks if the game is launched and not frozen", is_alive)
 
     let private ms = new MemoryStream()
     let private context_output = new StreamReader(ms)
@@ -138,7 +150,7 @@ module Printerlude =
         Terminal.add_message @"================================================"
 
         if instance = 0 then
-            ipc_shutdown_token <- Some(IPC.start_server_thread "Interlude" ipc_commands)
+            ipc_shutdown_token <- Some(IPC.start_server_thread "MiaouVSRG" ipc_commands)
 
     let deinit () =
         logging_disposable |> Option.iter (fun d -> d.Dispose())

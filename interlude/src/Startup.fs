@@ -1,7 +1,10 @@
 ﻿namespace Interlude.UI
 
+open System
 open System.IO
 
+open System.Linq
+open Microsoft.Win32
 open Percyqaz.Common
 open Percyqaz.Flux.Audio
 open Prelude
@@ -21,11 +24,34 @@ open Interlude.Features.Stats
 open Interlude.Features.Import
 
 module Startup =
+    
+    /// <summary>
+    /// FOR WINDOWS USERS ONLY. <br/>
+    /// This function registers the "miaou://" uri in the regedit of the user
+    /// </summary>
+    let register_miaoudirect_uri () =
+        if not (Registry.CurrentUser.GetSubKeyNames().Contains(@"Software\Classes\miaou")) then
+            let key = Registry.CurrentUser.CreateSubKey(@"Software\Classes\miaou")
+
+            key.SetValue("", "URL:Miaou Protocol")
+            key.SetValue("URL Protocol", "")
+
+            let cmd = key.CreateSubKey(@"shell\open\command")
+
+            let exe = Environment.ProcessPath
+
+            cmd.SetValue(
+                "",
+                sprintf "\"%s\" \"%%1\"" exe
+            )
 
     let mutable private deinit_required = false
     let mutable private deinit_once = false
 
     let init (instance: int) : Screen.ScreenRoot =
+        if OperatingSystem.IsWindows() then
+            register_miaoudirect_uri()
+        
         Options.init ()
         Content.init ()
 
@@ -40,70 +66,6 @@ module Startup =
             Network.init ()
             DiscordRPC.init ()
             Updates.check_for_updates ()
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (1).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (2).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (3).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (4).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (5).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (6).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (7).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (8).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (9).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (10).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (11).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (12).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (13).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (14).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (15).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
-
-            // let path = Path.GetFullPath("MiaouVSRG.Resources.map (16).osz")
-            // if Path.Exists(path) then
-            //     FileDrop.handle path
 
             deinit_required <- true
 

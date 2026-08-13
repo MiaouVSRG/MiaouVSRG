@@ -1,10 +1,13 @@
 ﻿namespace Interlude.Features.LevelSelect
 
 open System.Linq
+open Interlude.Features.LevelSelect
+open Percyqaz.Common
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.UI
 open Prelude
+open Prelude.Charts
 open Prelude.Data.Library
 open Interlude.Content
 open Interlude.Options
@@ -22,6 +25,8 @@ module Tree =
     let mutable private last_item: ChartItem option = None
     let mutable is_empty = false
     let scroll_fade = Animation.Fade 0.0f
+    
+    let mutable private updated_rate: Rate = 1.0f<rate>
 
     let private find_selected_chart_in_tree () : unit =
         match SelectedChart.CACHE_DATA with
@@ -90,7 +95,7 @@ module Tree =
             |> Seq.map (fun (group_name, group) ->
                 group.Charts
                 |> Seq.map (fun (chart_meta, context) ->
-                    let i = ChartItem(tree_ctx, group_name, group.Context, chart_meta, context)
+                    let i = ChartItem(tree_ctx, group_name, group.Context, chart_meta, context, updated_rate)
                     last_item <- Some i
                     i
                 )
@@ -105,10 +110,21 @@ module Tree =
         tree_ctx.CacheFlag <- 0
         tree_ctx.ClickDebounce <- 500.0
         tree_ctx.MultiSelection <- None
+        tree_ctx.HasRateChanged <- false
+        
+    let refresh_chart_meta(info: LoadedChartInfo) =
+        if info.Rate <> updated_rate then
+            tree_ctx.HasRateChanged <- true
+        updated_rate <- info.Rate
+        if tree_ctx.HasRateChanged then
+            refresh()
 
     do
         LevelSelect.on_refresh_all.Add refresh
         LevelSelect.on_refresh_details.Add(fun () -> tree_ctx.CacheFlag <- tree_ctx.CacheFlag + 1)
+        
+        SelectedChart.on_chart_change_finished.Add refresh_chart_meta
+        SelectedChart.on_chart_update_finished.Add refresh_chart_meta
         SelectedChart.on_chart_change_started.Add(fun info -> if info.ChartMeta.Hash <> tree_ctx.SelectedChart then find_selected_chart_in_tree())
 
     let previous () : unit =
@@ -212,6 +228,7 @@ module Tree =
     let update (origin: float32, originB: float32, elapsed_ms: float) : unit =
         tree_ctx.ScrollPosition.Update elapsed_ms
         scroll_fade.Update elapsed_ms
+        tree_ctx.DragScrollingAnimationValue <- scroll_fade.Value
 
         if (%%"context_menu").Pressed() && SelectedChart.CACHE_DATA.IsSome then
             match tree_ctx.MultiSelection with
@@ -281,7 +298,7 @@ module Tree =
             (screen_bounds.Right - 10.0f)
             (origin + 5.0f)
             (screen_bounds.Right)
-            (originB - 50.0f)
+            (originB - 75.0f)
             (Colors.shadow_2.O3a scroll_fade.Alpha)
 
         let total_height = originB - origin

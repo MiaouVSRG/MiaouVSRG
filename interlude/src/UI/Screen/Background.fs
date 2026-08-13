@@ -202,6 +202,20 @@ module Background =
                 )
                 background
 
+    let draw_rect (r: Rect, color: Color) : unit =
+        Render.rect r Color.Black
+        List.iter
+            (fun (bg: Sprite, (fade: Animation.Fade), _) ->
+                let color = color.O4a fade.Alpha
+                
+                // TODO: Maybe zoom in to fit the whole component when resizing in HUD ?
+                Render.sprite
+                    (Sprite.fill r bg)
+                    color
+                    bg
+            )
+            background
+                
     let drawq (q: Quad, color: Color, depth: float32) : unit =
         Render.quad q Color.Black
         List.iter

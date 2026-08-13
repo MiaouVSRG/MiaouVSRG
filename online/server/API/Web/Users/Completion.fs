@@ -26,16 +26,27 @@ module Completion =
         ) =
         
         async{
-            require_query_parameter query_params "name"
+            let cookies =
+                headers
+                |> Map.tryFind "Cookie"
+                |> Option.map parseCookies
+                |> Option.defaultValue Map.empty
+                
+            let mutable user = None
+                
+            if cookies.ContainsKey("token") then
+                user <- User.by_auth_token cookies["token"]
+            else
+                require_query_parameter query_params "name"
+                user <- User.by_username (query_params["name"][0])
             
-            let user_name = query_params["name"][0]
             let limit =
                 if not (query_params.ContainsKey "limit") then
                     None
                 else
                     Some (int (query_params["limit"][0]))
             
-            match User.by_username user_name with
+            match user with
             | Some (user_id, db_user) ->
                 let mutable user_completion: CompletionCard array = Array.Empty()
                 let charts = Charts.get_all_ranked
@@ -46,13 +57,13 @@ module Completion =
                     let mutable passed: bool = false
                     let chart_scores = scores |> Array.filter(fun s -> s.ChartId = chart.ChartId)
                     for score in chart_scores do
-                        if score.Accuracy > best_score.Accuracy then
+                        if (score.Accuracy > best_score.Accuracy && score.Rate >= best_score.Rate) || (score.Rate > best_score.Rate) then
                             best_score <- score
-                            passed <- true
+                            if score.Rate >= 1.0f then passed <- true
                     
                     let chart_info: ChartInfo = {
                         ChartId = chart.ChartId
-                        DownloadLink = chart.DownloadLink.Replace("./", "https://cdn.miaouvsrg.com/")
+                        DownloadLink = $"miaou://map/{chart.ChartId}"
                         Source = chart.Source
                         Keymode = chart.Keymode
                         Title = chart.Title
@@ -112,6 +123,9 @@ module Completion =
                 else    
                     let res: Response = user_completion
                     
+                    if cookies.ContainsKey("token") then
+                        response.ReplyJson(res, 200, Unchecked.defaultof<(string * string * int option * string) array>, headers["Origin"])
+                    else
                     response.ReplyJson(res)
             | None ->
                 response.ReplyError(404, "User not found !")

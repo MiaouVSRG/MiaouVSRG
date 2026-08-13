@@ -1,0 +1,522 @@
+<html>
+
+<head>
+    <title>'s profile</title>
+    <link href="/css/profile.css" rel="stylesheet">
+
+    <link href="/css/header.css" rel="stylesheet">
+
+    <link href="/css/root.css" rel="stylesheet">
+
+
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta charset="utf-8">
+    <link
+            href="https://fonts.googleapis.com/css2?display=swap&family=Fredoka+One:ital,wght@0,400;1,400&family=Comfortaa:ital,wght@0,600;0,700;1,600;1,700"
+            rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css"/>
+</head>
+
+
+<body>
+
+<!--header-->
+<div class="headerfix">
+    <div class="header">
+        <img class="pipheader" src="/favicon.png">
+        <div class="homebutton">home</div>
+        <div class="lbbutton">leaderboards</div>
+        <div class="challengebutton">challenges</div>
+        <div class="shopbutton">shop</div>
+        <div class="completionbutton">completion</div>
+        <svg fill="#ffffff" height="34px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path
+                        d="M20.207 18.793L16.6 15.184a7.027 7.027 0 1 0-1.416 1.416l3.609 3.609a1 1 0 0 0 1.414-1.416zM6 11a5 5 0 1 1 5 5 5.006 5.006 0 0 1-5-5z">
+                </path>
+            </g>
+        </svg>
+        <div id="headerusername" class="headerusername">username</div>
+        <img id="headerpfp" class="headerpfp" src="/assets/images/placeholder/PFP%20PLACEHOLDER.png">
+    </div>
+</div>
+
+
+<div class="mainbox">
+    <img id="bannerimg" class="profilebanner" width="100%" height="250px">
+    <div class="profileinfo">
+        <div class="profileinfo-info">
+            <img id="avatarimg" class="profilepic">
+            <span id="username" class="username">...</span>
+            <span class="  fi fi-fr userflag"> </span>
+            <span id="level" class="lvlvalue">...</span>
+            <div class="status">
+                <div class="statusdot offline" id="user-status-style"></div>
+                <span class="" id="user-status">offline</span></div>
+        </div>
+        <div class="profileinfo-followers">
+            <div class="followers-button">
+                <svg width="30px" height="30px" viewBox="0 0 24.00 24.00" fill="none"
+                     xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path
+                                d="M5 21C5 17.134 8.13401 14 12 14C15.866 14 19 17.134 19 21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+                                stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        </path>
+                    </g>
+                </svg>
+                <span id="followers" class="followers-number">...</span>
+            </div>
+            <select id="keymodefilter" class="keymodefilter">
+                <option value="global">All Keymodes</option>
+                <option value="4K">4k</option>
+                <option value="7K">7k</option>
+            </select>
+        </div>
+        <div class="profileinfo-stats">
+
+            <div class="stats-clears">
+                <div class="profileinfo-startpanel">
+
+                    <div class="global">
+                        <span class="globalranking-title">global ranking</span>
+                        <span id="globalranking" class="globalranking-value">...</span>
+                    </div>
+
+                    <div class="country">
+                        <span class="countryranking-title">country ranking</span>
+                        <span id="countryranking" class="countryranking-value">...</span>
+                    </div>
+
+                    <div class="rating">
+                        <span class="rating-title">rating</span>
+                        <span id="playerrating" class="rating-value">...</span>
+                    </div>
+
+                    <div class="playtime">
+                        <span class="playtime-title">playtime</span>
+                        <span id="playtime" class="playtime-value">...</span>
+                    </div>
+
+                    <div class="completion">
+                        <span class="completion-title">completion</span>
+                        <span id="completion" class="completion-value">...</span>
+                    </div>
+
+                </div>
+                <div class="rulesetselect">
+
+                    <select class="rulesetfilter" id="ruleset-grades">
+                        <option value="Easy">EASY</option>
+                        <option value="Normal">NORMAL</option>
+                        <option value="Hard">HARD</option>
+                        <option value="Strict">STRICT</option>
+                    </select>
+
+                </div>
+                <div class="grades">
+
+
+                    <div class="pass">
+                        <img class="passimg" src="/assets/images/grades/pass.png">
+                        <span id="normalpass" class="pass-value">...</span>
+                    </div>
+
+                    <div class="clear">
+                        <img class="clearimg" src="/assets/images/grades/clear.png">
+                        <span id="normalclear" class="clear-value">...</span>
+                    </div>
+
+                    <div class="clearplus">
+                        <img class="clearplusimg" src="/assets/images/grades/clearplus.png">
+                        <span id="normalclearplus" class="clearplus-value">...</span>
+                    </div>
+
+                    <div class="overclear">
+                        <img class="overclearimg" src="/assets/images/grades/overclear.png">
+                        <span id="normaloverclear" class="overclear-value">...</span>
+                    </div>
+
+                    <div class="overclearplus">
+                        <img class="overclearplusimg" src="/assets/images/grades/overclearplus.png">
+                        <span id="normaloverclearplus" class="overclearplus-value">...</span>
+                    </div>
+
+                    <div class="perfect">
+                        <img class="perfectimg" src="/assets/images/grades/perfect.png">
+                        <span id="normalperfect" class="perfect-value">...</span>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+            <div class="profileinfo-endpanel">
+                <div class="catlineart">
+                    <img class="catlineartimg" src="/assets/images/catthumb.png">
+
+                </div>
+                <div class="otherstats">
+
+                    <div class="text">
+                        <span>Hit Accuracy:</span>
+                        <span>Play Count:</span>
+                        <span>Total Hits:</span>
+                        <span>Total Score:</span>
+                        <span>Osu! total completion:</span>
+                        <span>O2Jam total completion:</span>
+                        <span>BMS total completion:</span>
+                        <span>Etterna total completion:</span>
+                    </div>
+
+                    <div class="value">
+                        <span id="hitaccuracy">...</span>
+                        <span id="playcount">...</span>
+                        <span id="totalhits">...</span>
+                        <span id="totalscore">...</span>
+                        <span id="osutotalcompletion">...</span>
+                        <span id="o2jamtotalcompletion">...</span>
+                        <span id="bmstotalcompletion">...</span>
+                        <span id="etternatotalcompletion">...</span>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="secondbox">
+    <div class="metxtbox">
+        <svg viewBox="0 0 600 600" version="1.1" id="svg9724" sodipodi:docname="page.svg"
+             inkscape:version="1.2.2 (1:1.2.2+202212051550+b0a8486541)" width="30px" height="30px"
+             xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+             xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
+             xmlns:svg="http://www.w3.org/2000/svg" fill="#000000">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <defs id="defs9728"></defs>
+                <sodipodi:namedview id="namedview9726" pagecolor="#ffffff" bordercolor="#ffffff" borderopacity="1.0"
+                                    inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0"
+                                    inkscape:deskcolor="#ffffff" showgrid="true" inkscape:zoom="0.84118632"
+                                    inkscape:cx="176.53639"
+                                    inkscape:cy="360.79997" inkscape:window-width="1920" inkscape:window-height="1009"
+                                    inkscape:window-x="0" inkscape:window-y="1080" inkscape:window-maximized="1"
+                                    inkscape:current-layer="svg9724" showguides="true">
+                    <inkscape:grid type="xygrid" id="grid9972" originx="0" originy="0"></inkscape:grid>
+                    <sodipodi:guide position="300,360" orientation="1,0" id="guide1208" inkscape:locked="false">
+                    </sodipodi:guide>
+                </sodipodi:namedview>
+                <path
+                        style="color:#ffffff;fill:#ffffff;stroke-linejoin:round;-inkscape-stroke:none;paint-order:stroke fill markers"
+                        d="M 40,0 A 40.004,40.004 0 0 0 0,40 v 520 a 40.004,40.004 0 0 0 40,40 h 520 a 40.004,40.004 0 0 0 40,-40 V 40 A 40.004,40.004 0 0 0 560,0 Z M 80,80 H 520 V 520 H 80 Z"
+                        id="path1098"></path>
+                <path
+                        style="color:#ffffff;fill:#ffffff;stroke-width:0.999999;stroke-linecap:round;stroke-linejoin:round;-inkscape-stroke:none;paint-order:stroke fill markers"
+                        d="m 150,110 a 40.004,34.0034 0 0 0 -40,34 v 102 a 40.004,34.0034 0 0 0 40,34 h 80 a 40.004,34.0034 0 0 0 40,-34 V 144 a 40.004,34.0034 0 0 0 -40,-34 z"
+                        id="path1093"></path>
+                <path style="color:#ffffff;fill:#ffffff;stroke-linecap:round;-inkscape-stroke:none"
+                      d="m 327.04492,120 a 30,30 0 0 0 -30,30 30,30 0 0 0 30,30 H 460 a 30,30 0 0 0 30,-30 30,30 0 0 0 -30,-30 z"
+                      id="path450"></path>
+                <path style="color:#ffffff;fill:#ffffff;stroke-linecap:round;-inkscape-stroke:none"
+                      d="m 328.18164,220 a 30,30 0 0 0 -30,30 30,30 0 0 0 30,30 h 130.68164 a 30,30 0 0 0 30,-30 30,30 0 0 0 -30,-30 z"
+                      id="path450-3"></path>
+                <path style="color:#ffffff;fill:#ffffff;stroke-linecap:round;-inkscape-stroke:none"
+                      d="m 141.98242,320 a 30,30 0 0 0 -30,30 30,30 0 0 0 30,30 h 316.03516 a 30,30 0 0 0 30,-30 30,30 0 0 0 -30,-30 z"
+                      id="path450-3-6"></path>
+                <path style="color:#ffffff;fill:#ffffff;stroke-linecap:round;-inkscape-stroke:none"
+                      d="m 141.98047,420 a 30,30 0 0 0 -30,30 30,30 0 0 0 30,30 H 459.1875 a 30,30 0 0 0 30,-30 30,30 0 0 0 -30,-30 z"
+                      id="path450-3-6-7"></path>
+            </g>
+        </svg>
+        <span class="metxt">me! :</span>
+        <svg id="edit-me-icon" class="editpensvg" width="30px" viewBox="0 0 24.00 24.00" fill="none"
+             xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path
+                        d="M15.4998 5.50067L18.3282 8.3291M13 21H21M3 21.0004L3.04745 20.6683C3.21536 19.4929 3.29932 18.9052 3.49029 18.3565C3.65975 17.8697 3.89124 17.4067 4.17906 16.979C4.50341 16.497 4.92319 16.0772 5.76274 15.2377L17.4107 3.58969C18.1918 2.80865 19.4581 2.80864 20.2392 3.58969C21.0202 4.37074 21.0202 5.63707 20.2392 6.41812L8.37744 18.2798C7.61579 19.0415 7.23497 19.4223 6.8012 19.7252C6.41618 19.994 6.00093 20.2167 5.56398 20.3887C5.07171 20.5824 4.54375 20.6889 3.48793 20.902L3 21.0004Z"
+                        stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+        </svg>
+    </div>
+
+    <div id="me-preview" class="secondbox-content"></div>
+    <div class="editor-container invisible secondbox-content" id="me-editor"></div>
+
+</div>
+
+
+<div class="thirdbox" id="topscores-mainbox">
+    <div class="topplaytext">
+        <svg class="topplaystar" width="30px" height="30px" viewBox="0 0 24 24" fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path
+                        d="M11.245 4.174C11.4765 3.50808 11.5922 3.17513 11.7634 3.08285C11.9115 3.00298 12.0898 3.00298 12.238 3.08285C12.4091 3.17513 12.5248 3.50808 12.7563 4.174L14.2866 8.57639C14.3525 8.76592 14.3854 8.86068 14.4448 8.93125C14.4972 8.99359 14.5641 9.04218 14.6396 9.07278C14.725 9.10743 14.8253 9.10947 15.0259 9.11356L19.6857 9.20852C20.3906 9.22288 20.743 9.23007 20.8837 9.36432C21.0054 9.48051 21.0605 9.65014 21.0303 9.81569C20.9955 10.007 20.7146 10.2199 20.1528 10.6459L16.4387 13.4616C16.2788 13.5829 16.1989 13.6435 16.1501 13.7217C16.107 13.7909 16.0815 13.8695 16.0757 13.9507C16.0692 14.0427 16.0982 14.1387 16.1563 14.3308L17.506 18.7919C17.7101 19.4667 17.8122 19.8041 17.728 19.9793C17.6551 20.131 17.5108 20.2358 17.344 20.2583C17.1513 20.2842 16.862 20.0829 16.2833 19.6802L12.4576 17.0181C12.2929 16.9035 12.2106 16.8462 12.1211 16.8239C12.042 16.8043 11.9593 16.8043 11.8803 16.8239C11.7908 16.8462 11.7084 16.9035 11.5437 17.0181L7.71805 19.6802C7.13937 20.0829 6.85003 20.2842 6.65733 20.2583C6.49056 20.2358 6.34626 20.131 6.27337 19.9793C6.18915 19.8041 6.29123 19.4667 6.49538 18.7919L7.84503 14.3308C7.90313 14.1387 7.93218 14.0427 7.92564 13.9507C7.91986 13.8695 7.89432 13.7909 7.85123 13.7217C7.80246 13.6435 7.72251 13.5829 7.56262 13.4616L3.84858 10.6459C3.28678 10.2199 3.00588 10.007 2.97101 9.81569C2.94082 9.65014 2.99594 9.48051 3.11767 9.36432C3.25831 9.23007 3.61074 9.22289 4.31559 9.20852L8.9754 9.11356C9.176 9.10947 9.27631 9.10743 9.36177 9.07278C9.43726 9.04218 9.50414 8.99359 9.55657 8.93125C9.61593 8.86068 9.64887 8.76592 9.71475 8.57639L11.245 4.174Z"
+                        stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+        </svg>
+        <span>Top plays:</span>
+        <select class="keymodefiltertopplays" id="keymodefiltertopplays">
+            <option value="any">all</option>
+            <option value="4">4k</option>
+            <option value="5">5k</option>
+            <option value="6">6k</option>
+            <option value="7">7k</option>
+            <option value="8">8k</option>
+            <option value="9">9k</option>
+            <option value="10">10k</option>
+        </select>
+        <span class="topscoresnumberofmaps" id="topscores-numberofmaps">0</span>
+    </div>
+    <div class="thirdboxmain" id="topscores-box">
+
+    </div>
+</div>
+
+<div class="showmore" id="showmorebutton">
+    <span id="showmoretext">show more &nbsp;v</span>
+</div>
+
+<div class="fourthbox" id="recentscores-mainbox">
+    <div class="topplaytext">
+        <svg class="topplaystar" width="30px" height="30px" viewBox="0 0 24 24" fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path
+                        d="M11.245 4.174C11.4765 3.50808 11.5922 3.17513 11.7634 3.08285C11.9115 3.00298 12.0898 3.00298 12.238 3.08285C12.4091 3.17513 12.5248 3.50808 12.7563 4.174L14.2866 8.57639C14.3525 8.76592 14.3854 8.86068 14.4448 8.93125C14.4972 8.99359 14.5641 9.04218 14.6396 9.07278C14.725 9.10743 14.8253 9.10947 15.0259 9.11356L19.6857 9.20852C20.3906 9.22288 20.743 9.23007 20.8837 9.36432C21.0054 9.48051 21.0605 9.65014 21.0303 9.81569C20.9955 10.007 20.7146 10.2199 20.1528 10.6459L16.4387 13.4616C16.2788 13.5829 16.1989 13.6435 16.1501 13.7217C16.107 13.7909 16.0815 13.8695 16.0757 13.9507C16.0692 14.0427 16.0982 14.1387 16.1563 14.3308L17.506 18.7919C17.7101 19.4667 17.8122 19.8041 17.728 19.9793C17.6551 20.131 17.5108 20.2358 17.344 20.2583C17.1513 20.2842 16.862 20.0829 16.2833 19.6802L12.4576 17.0181C12.2929 16.9035 12.2106 16.8462 12.1211 16.8239C12.042 16.8043 11.9593 16.8043 11.8803 16.8239C11.7908 16.8462 11.7084 16.9035 11.5437 17.0181L7.71805 19.6802C7.13937 20.0829 6.85003 20.2842 6.65733 20.2583C6.49056 20.2358 6.34626 20.131 6.27337 19.9793C6.18915 19.8041 6.29123 19.4667 6.49538 18.7919L7.84503 14.3308C7.90313 14.1387 7.93218 14.0427 7.92564 13.9507C7.91986 13.8695 7.89432 13.7909 7.85123 13.7217C7.80246 13.6435 7.72251 13.5829 7.56262 13.4616L3.84858 10.6459C3.28678 10.2199 3.00588 10.007 2.97101 9.81569C2.94082 9.65014 2.99594 9.48051 3.11767 9.36432C3.25831 9.23007 3.61074 9.22289 4.31559 9.20852L8.9754 9.11356C9.176 9.10947 9.27631 9.10743 9.36177 9.07278C9.43726 9.04218 9.50414 8.99359 9.55657 8.93125C9.61593 8.86068 9.64887 8.76592 9.71475 8.57639L11.245 4.174Z"
+                        stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+        </svg>
+        <span>Recent plays:</span>
+        <select class="keymodefiltertopplays" id="keymodefilterrecentplays">
+            <option value="any">all</option>
+            <option value="4">4k</option>
+            <option value="5">5k</option>
+            <option value="6">6k</option>
+            <option value="7">7k</option>
+            <option value="8">8k</option>
+            <option value="9">9k</option>
+            <option value="10">10k</option>
+        </select>
+        <span class="topscoresnumberofmaps" id="recentscores-numberofmaps">0</span>
+    </div>
+    <div class="thirdboxmain" id="recentscores-box">
+
+    </div>
+
+</div>
+
+<div class="showmore showmore-recent" id="showmorebutton-recent">
+    <span id="showmoretext-recent">show more &nbsp;v</span>
+</div>
+
+
+<dialog class="settingsbox" id="settings">
+
+    <div class="maincontainer">
+        <div class="gauche">
+            <div class="previewpfpdiv">
+                profile picture
+
+                <input type="file" name="avatar" accept="image/*" id="avatar-upload">
+            </div>
+
+            <div class="previewbannerdiv">
+                banner
+
+                <input type="file" name="banner" accept="image/*" id="banner-upload">
+            </div>
+
+            <div class="previewbgdiv">
+                background
+
+                <input type="file" name="background" accept="image/*" id="background-upload">
+            </div>
+
+            <div class="previewcolorpickerspan">
+                <span>primary color:</span>
+                <span>secondary color:</span>
+                <span>text color:</span>
+            </div>
+
+        </div>
+
+
+        <div class="droite">
+            <div class="previewpfpdiv">
+
+                <img class="previewpfp" id="previewpfp" height="150px" src="https://cdn.miaouvsrg.com/avatars/2.png">
+
+            </div>
+
+            <div class="previewbannerdiv">
+
+                <img class="previewbanner" id="previewbanner" height="150px"
+                     src="https://cdn.miaouvsrg.com/banners/2.png">
+
+            </div>
+
+            <div class="previewbgdiv">
+
+                <img class="previewbg" id="previewbg" height="150px" src="/assets/images/caca.png">
+
+            </div>
+
+            <div class="previewcolorpicker">
+
+                <div class="colorpickergroup">
+                    <label class="color_wrapper"><input type="color" class="primarycolor" id="colorpickermain"></label>
+                    <div class="colorpickergroup-alpha">
+                        <span id="alphaprimaryvalue">Opacity: </span> 
+                        <input type="range" id="alphaprimary" min="0" max="1" step="0.1">
+                    </div>
+                </div>
+                <div class="colorpickergroup">
+                    <label class="color_wrapper"><input type="color" class="primarycolor" id="colorpickersecondary"></label>
+                    <div class="colorpickergroup-alpha">
+                        <span id="alphasecondaryvalue">Opacity: </span> 
+                        <input type="range" id="alphasecondary" min="0" max="1" step="0.1">
+                    </div>
+                </div>
+
+                <div class="colorpickergroup">
+                    <label class="color_wrapper"><input type="color" class="primarycolor" id="colorpickertext"></label>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="buttonsdiv">
+
+        <button class="backbutton" id="backbutton">back</button>
+        <button class="applybutton" id="applybutton">apply</button>
+
+    </div>
+
+</dialog>
+
+
+<div class="miniprofilebox invisible">
+    <span class="miniprofileprofile">profile</span>
+    <span class="miniprofilefriends">friends</span>
+    <span class="miniprofilesettings">settings</span>
+    <span class="miniprofilelogout">log out</span>
+</div>
+
+<div class="challengesbox invisible">
+    <div class="challbg ">
+
+    <div class="challkeybox">
+
+        <span class="challkeyspan">4k</span>
+        <span class="challkeyspan">5k</span>
+        <span class="challkeyspan">6k</span>
+        <span class="challkeyspan">7k</span>
+        <span class="challkeyspan">8k</span>
+        <span class="challkeyspan">9k</span>
+        <span class="challkeyspan">10k</span>
+
+
+    </div>
+
+    <div class="challdiffbox hard">
+        <div class="switch"><</div>
+        <span class="challdiffspan">normal</span>
+        <div class="switch">></div>
+    </div>
+
+    <div class="challtypebox">
+        <div class="switch"><</div>
+        <span class="challtypespan">daily</span>
+        <div class="switch">></div>
+    </div>
+
+    </div>
+
+
+    <div class="challcard">
+
+        <div class="namediffchall">
+            <span class="mapchallname">galaxy collapse</span>
+             <span class="challsr">[6.80✦] </span>
+        </div>
+            <div class="challacc">>95%</div>
+            <span class="reward">1,000$</span>
+
+
+
+
+    </div>
+
+    <div class="challcard">
+
+        <div class="namediffchall">
+            <span class="mapchallname">Roars of V.E.N.G.E.A.N.C.E -Take Back Everything-</span>
+            <span class="challsr">[8.20✦]</span>
+        </div>
+             <div class="challacc">>95%</div>
+            <span class="reward">1,000$</span>
+
+
+
+
+    </div>
+
+    <div class="challcard">
+
+
+            <span class="challsizediv">get 90%+ on x maps >5✦</span>
+            <span class="rewardonly"> 1,000$</span>
+
+    </div>
+
+    <div class="challcard">
+
+
+            <span class="challsizediv">get 5+ rating on x maps</span>
+            <span class="rewardonly"> 1,000$</span>
+
+    </div>
+
+    <div class="challcard">
+
+
+            <span class="challsizediv">get 7+ rating on x maps</span>
+            <span class="rewardonly"> 1,000$</span>
+
+    </div>
+
+
+</div>
+
+
+<!-- Render me! -->
+<script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+
+<!-- Write me! -->
+<script src="https://cdn.jsdelivr.net/npm/overtype@latest"></script>
+
+<script type="module" src="/js/index.js"></script>
+</body>
+
+</html>

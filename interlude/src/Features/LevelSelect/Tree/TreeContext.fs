@@ -3,6 +3,7 @@
 open Percyqaz.Flux.UI
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.Input
+open Prelude.Charts
 open Prelude.Data.Library
 open Interlude.UI
 open Interlude.Features.Gameplay
@@ -23,7 +24,7 @@ module TreeConstants =
     let [<Literal>] CHART_SELECTED_PADDING = 50.0f
     let [<Literal>] CHART_SPACING = Style.PADDING
     let [<Literal>] GROUP_HEIGHT = 55.0f
-    let [<Literal>] GROUP_SPACING = Style.PADDING * 6.0f
+    let [<Literal>] GROUP_SPACING = Style.PADDING * 4.0f
 
     let [<Literal>] GROUP_ITEM_LEFT_SPLIT = 0.55f
 
@@ -52,9 +53,14 @@ type private TreeContext =
         mutable CurrentlyDragScrolling: bool
         mutable DragScrollPosition: float32
         mutable ScrollToChartOnce: bool
+        
+        mutable DragScrollingAnimationValue: float32
 
         // todo: needs better name
         mutable CacheFlag: int
+        
+        mutable CachedCharts: (string * Chart) list
+        mutable HasRateChanged: bool
 
     }
 
@@ -127,8 +133,13 @@ type private TreeContext =
             DragScrollPosition = 0.0f
             ClickDebounce = 0.0
             ScrollToChartOnce = false
+            
+            DragScrollingAnimationValue = 0.0f
 
             CacheFlag = 0
+            
+            CachedCharts = List.Empty
+            HasRateChanged = false
         }
 
 [<AbstractClass>]

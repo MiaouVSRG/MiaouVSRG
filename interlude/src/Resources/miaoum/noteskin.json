@@ -24,10 +24,11 @@
     "HoldNoteTrim": 1.5,
     "JudgementLineOffset": 0,
     "JudgementLineScale": 0.0063492064,
-    "KeymodeSpecificColumnWidth": [150, 150, 150, 150, 150, 150, 150, 150],
+    "KeymodeSpecificColumnWidth": [150, 150, 150, 150, 110, 150, 150, 150],
     "LinearSampling": true,
+    "MinimumHoldNoteLength": false,
     "NoteColors": {
-        "Colors": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 0, 0, 0, 0, 0, 0], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
+        "Colors": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 0, 0, 0, 0, 0, 0], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 3, 4, 3, 1, 3, 7, 8, 9], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
         "Style": "Column",
         "UseGlobalColors": false
     },
@@ -42,7 +43,7 @@
     },
     "NotesUnderReceptors": true,
     "PlayfieldAlignment": [0.5, 0.5],
-    "PlayfieldColor": [230, 0, 0, 0],
+    "PlayfieldColor": [255, 0, 0, 0],
     "ReceptorColors": [[0, 2, 0], [0, 1, 2, 3], [0, 1, 2, 1, 0], [0, 1, 0, 0, 1, 0], [0, 1, 0, 2, 0, 1, 0], [0, 1, 1, 0, 0, 1, 1, 0], [0, 1, 0, 1, 2, 1, 0, 1, 0], [0, 1, 2, 1, 0, 0, 1, 2, 1, 0]],
     "ReceptorOffset": 0,
     "ReceptorStyle": "Receptors",
@@ -51,7 +52,7 @@
     "UseExplosions": true,
     "UseHoldTailTexture": true,
     "UseJudgementLine": true,
-    "UseKeymodeSpecificColumnWidth": false,
+    "UseKeymodeSpecificColumnWidth": true,
     "UseReceptors": true,
     "UseRotation": false
 }
