@@ -769,6 +769,7 @@ module Web =
                     ChartName: string
                     ChartDiffName: string
                     ChartBackground: string
+                    ChartRating: float32
                     Keymode: int
                     Grade: string
                     Rate: float32
