@@ -8,7 +8,7 @@ open Prelude.Charts
 
 type DetailedPatternOption = string option
 
-type Pattern = Jack of DetailedPatternOption | Stream of DetailedPatternOption | LN of DetailedPatternOption | Vibro | Empty
+type Pattern = Jack of DetailedPatternOption | Stream of DetailedPatternOption | LN of DetailedPatternOption | Trill of DetailedPatternOption | Vibro | Empty
 
 module Pattern =
     let format_pattern pattern =
@@ -16,6 +16,7 @@ module Pattern =
         | Jack pattern -> if pattern.IsSome then pattern.Value else "Jack"
         | Stream pattern -> if pattern.IsSome then pattern.Value else "Stream"
         | LN pattern -> if pattern.IsSome then pattern.Value else "LN"
+        | Trill pattern -> if pattern.IsSome then pattern.Value else "Trill"
         | Vibro -> "Vibro"
         | Empty -> "None"
 
@@ -199,6 +200,20 @@ module NoteDifficulty =
             
             let has_all_rows = has_previous_row && has_next_row
             
+            let most_common_pattern (notes_pattern_list: (Pattern * float32) array) =
+                let filtered =
+                    notes_pattern_list
+                    |> Array.map fst
+                    |> Array.filter (fun p -> not p.IsEmpty) // Remove columns without note
+                
+                if filtered.Length <> 0 then
+                    filtered
+                    |> Array.countBy id
+                    |> Array.maxBy snd
+                    |> fst
+                else
+                    Pattern.Empty
+            
             // JACK DETECTION :
             // If the previous row has a rice note in the same column as the current note analyzed, then the current note is likely a jack
             // If the delta between previous_time & current_time AND the delta between current_time & next_time are likely the same (+-20bpm), then the current note is likely in the middle of a jack pattern
@@ -249,12 +264,13 @@ module NoteDifficulty =
                     notes_pattern[column] <- (Pattern.Jack(Some "ChordJack"), prob + 0.2f)
             
             let avg_jack_prob = if jack_notes = 0 then 0.0f else (notes_pattern |> Array.map snd |> Array.sum) / float32 existing_notes
-            row_patterns[0] <- (Pattern.Jack(None), avg_jack_prob, jack_notes)
+            row_patterns[0] <- (most_common_pattern notes_pattern, avg_jack_prob, jack_notes)
             
             // TRILL DETECTION :
             // JUMPTRILL DETECTION : If the current row has at least two notes on a side and the previous/next row has at least two notes on the other side, then the row is likely a jumptrill
-            // SPLIT TRILL DETECTION : If the current row has at least two notes and the previous/next row has all the other notes, then the row is likely a split trill
+            // SPLIT TRILL DETECTION : If the current row has at least two notes and the previous/next row has at least two notes NOT on the same columns, then the row is likely a split trill
             // ONE HAND TRILL DETECTION : If the current row has only a note on a side and the previous/next row has only another note on the same side, then the row is likely a one hand trill
+            // TODO: How to handle brackets correctly ? (*naive* approach : this is basically a split trill on the right hand and a split trill on the left hand)
             let is_row_trill (current_item: TimeItem<NoteRow>, previous_item: TimeItem<NoteRow> option, next_item: TimeItem<NoteRow> option) =
                 let mutable is_trill = false
                 let mutable is_jumptrill = false
@@ -271,28 +287,74 @@ module NoteDifficulty =
                 let current_left_hand_note_count = left_hand_note_count(current_item.Data)
                 let current_right_hand_note_count = right_hand_note_count(current_item.Data)
                 
-                // jumptrill detection
-                if current_left_hand_note_count >= 2 && (has_previous_item || has_next_item) then
-                    if (has_previous_item && right_hand_note_count(previous_item.Value.Data) >= current_left_hand_note_count) || (has_next_item && right_hand_note_count(next_item.Value.Data) >= current_left_hand_note_count) then
+                let are_notes_on_same_column (first: NoteRow, second: NoteRow) =
+                    let mutable result: bool = false
+                    for column = 0 to current_item.Data.Length - 1 do
+                        if first[column] <> NoteType.NOTHING && second[column] <> NoteType.NOTHING then
+                            result <- true
+                        else
+                            ()
+                    
+                    result
+                
+                // jumptrill detection : from left hand to right hand
+                if current_left_hand_note_count >= 2 && current_right_hand_note_count = 0 && (has_previous_item || has_next_item) then
+                    if (has_previous_item && right_hand_note_count(previous_item.Value.Data) >= current_left_hand_note_count && not(are_notes_on_same_column(previous_item.Value.Data, current_item.Data)))
+                       || (has_next_item && right_hand_note_count(next_item.Value.Data) >= current_left_hand_note_count && not(are_notes_on_same_column(next_item.Value.Data, current_item.Data))) then
                         is_trill <- true
                         is_jumptrill <- true
-                        
-                if current_right_hand_note_count >= 2 && (has_previous_item || has_next_item) then
-                    if (has_previous_item && left_hand_note_count(previous_item.Value.Data) >= current_right_hand_note_count) || (has_next_item && left_hand_note_count(next_item.Value.Data) >= current_right_hand_note_count) then
+                
+                // jumptrill detection : from right hand to left hand        
+                if current_right_hand_note_count >= 2 && current_left_hand_note_count = 0 && (has_previous_item || has_next_item) then
+                    if (has_previous_item && left_hand_note_count(previous_item.Value.Data) >= current_right_hand_note_count && not(are_notes_on_same_column(previous_item.Value.Data, current_item.Data)))
+                       || (has_next_item && left_hand_note_count(next_item.Value.Data) >= current_right_hand_note_count && not(are_notes_on_same_column(next_item.Value.Data, current_item.Data))) then
                         is_trill <- true
                         is_jumptrill <- true
-                        
+                
+                // If the previous and next rows have the same number of notes, and the current row is a trill,
+                // the current row is in the middle of a trill pattern        
                 if is_trill && has_previous_item && has_next_item then
                     if left_hand_note_count(previous_item.Value.Data) = left_hand_note_count(next_item.Value.Data) || right_hand_note_count(previous_item.Value.Data) = right_hand_note_count(next_item.Value.Data) then
                         is_middle_of_trill_pattern <- true
                 
-                // split trill detection
-                // si la row actuelle a au moins 2 notes, et que la row d'après en comporte au moins deux qui ne sont pas sur les mêmes colonnes, alors c'est un split trill
-                let are_notes_on_same_column (first: NoteRow, second: NoteRow) =
-                    for column = 0 to current_item.Data.Length do
-                        
+                let get_rice_count (row: NoteRow) =
+                    (row |> Array.filter(fun note -> note = NoteType.NORMAL)).Length
+                    
+                let get_notes_on_row (row: NoteRow) =
+                     (row |> Array.filter(fun note -> note <> NoteType.NOTHING)).Length
                 
-                if (current_item.Data |> Array.filter(fun note -> note = NoteType.NORMAL)).Length = 2
+                // split trill detection
+                // si la row actuelle a au moins 2 notes, et que la row d'après en comporte au moins deux qui ne sont pas sur les mêmes colonnes, alors c'est un split trill    
+                if not(is_jumptrill) && get_rice_count(current_item.Data) >= 2 then
+                    if (has_previous_item && get_rice_count(previous_item.Value.Data) >= 2 && not(are_notes_on_same_column(previous_item.Value.Data, current_item.Data)))
+                       || (has_next_item && get_rice_count(next_item.Value.Data) >= 2 && not(are_notes_on_same_column(next_item.Value.Data, current_item.Data)))
+                       then
+                           is_trill <- true
+                           is_split_trill <- true
+                
+                // one hand trill detection on the left hand
+                if get_notes_on_row(current_item.Data) = 1 && current_left_hand_note_count = 1
+                   && (
+                       // Basically checks that either next or previous row has only one note on the left and not on the same column of the current row
+                       (has_previous_item && get_notes_on_row(previous_item.Value.Data) = 1 && left_hand_note_count previous_item.Value.Data = 1 && not(are_notes_on_same_column(previous_item.Value.Data, current_item.Data)))
+                       || (has_next_item && get_notes_on_row(next_item.Value.Data) = 1 && left_hand_note_count next_item.Value.Data = 1 && not(are_notes_on_same_column(next_item.Value.Data, current_item.Data)))
+                      )
+                   then
+                       is_trill <- true
+                       is_one_hand_trill <- true
+                
+                // one hand trill detection on the right hand
+                if get_notes_on_row(current_item.Data) = 1 && current_right_hand_note_count = 1
+                   && (
+                       // Basically checks that either next or previous row has only one note on the right and not on the same column of the current row
+                       (has_previous_item && get_notes_on_row(previous_item.Value.Data) = 1 && right_hand_note_count previous_item.Value.Data = 1 && not(are_notes_on_same_column(previous_item.Value.Data, current_item.Data)))
+                       || (has_next_item && get_notes_on_row(next_item.Value.Data) = 1 && right_hand_note_count next_item.Value.Data = 1 && not(are_notes_on_same_column(next_item.Value.Data, current_item.Data)))
+                      )
+                   then
+                       is_trill <- true
+                       is_one_hand_trill <- true
+                       
+                is_trill, is_jumptrill, is_split_trill, is_one_hand_trill, is_middle_of_trill_pattern
                 
             
             // STREAM DETECTION :
@@ -346,13 +408,30 @@ module NoteDifficulty =
                     notes_pattern[column] <- (Pattern.Stream(Some "JumpStream"), prob + 0.2f)
             
             let avg_stream_prob = if stream_notes = 0 then 0.0f else (notes_pattern |> Array.map snd |> Array.sum) / float32 existing_notes
-            row_patterns[1] <- (Pattern.Stream(None), avg_stream_prob, stream_notes)
+            row_patterns[1] <- (most_common_pattern notes_pattern, avg_stream_prob, stream_notes)
             
             for column = 0 to current_item.Data.Length - 1 do
                 let is_stream, _ = is_note_stream(column, current_item, previous_item, next_item)
                 let is_jack, _ = is_note_jack(column, current_item, previous_item, next_item)
                 
-                Logging.Debug $"{current_item.Time} (column {column}) - {is_jack} {is_stream}"
+                // Logging.Debug $"{current_item.Time} (column {column}) - {is_jack} {is_stream}"
+                ()
+                
+            reset_notes_pattern()
+            let is_trill, is_jumptrill, is_split_trill, is_one_hand_trill, is_middle_of_jumptrill = is_row_trill (current_item, previous_item, next_item)
+            let mutable trill_prob = 0.0f
+            let mutable p: Pattern = Pattern.Empty
+            if is_trill then
+                trill_prob <- 1.0f
+                p <- Pattern.Trill(None)
+            if is_jumptrill then
+                p <- Pattern.Trill(Some "JumpTrill")
+            if is_split_trill then
+                p <- Pattern.Trill(Some "SplitTrill")
+            if is_one_hand_trill then
+                p <- Pattern.Trill(Some "OneHandTrill")
+            
+            row_patterns[2] <- (p, trill_prob, existing_notes)
              
                     
             let time_delta = if has_previous_row then (current_item.Time - previous_item.Value.Time) / rate else 0.0f<ms/rate>

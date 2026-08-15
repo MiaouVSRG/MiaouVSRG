@@ -78,6 +78,12 @@ type DifficultyOverlay(chart: ModdedChart, playfield: Playfield, difficulty: Dif
                 let get_pattern (column: int) =
                     let pattern,_,_ = difficulty.RowDifficulty[index].Patterns[column]
                     pattern
+                    
+                let find_most_probable_pattern =
+                    let patterns = difficulty.RowDifficulty[index].Patterns |> Array.sortByDescending (fun (_, probability, _) -> probability)
+                    
+                    let p, _, _ = patterns[0]
+                    Pattern.format_pattern p
 
                 draw_label
                     (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentL(0.5f).Shrink(5.0f))
@@ -101,6 +107,13 @@ type DifficultyOverlay(chart: ModdedChart, playfield: Playfield, difficulty: Dif
                     // difficulty.Strains.[index].NotesV1.[k]
                     // $"%.2f{difficulty.RowDifficulty[index].Jack} (%.2f{difficulty.NoteDifficulty.[index].[k].J})"
                     $"S %.2f{get_pattern_probability(1) * 100.0f}%% ({get_number_of_notes_per_pattern_detected(1)})"
+                    Colors.pink_accent
+                    
+                draw_string_label
+                    (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).TranslateY(-(playfield.ColumnWidth * 0.6f)).Shrink(5.0f))
+                    // difficulty.Strains.[index].NotesV1.[k]
+                    // $"%.2f{difficulty.RowDifficulty[index].Jack} (%.2f{difficulty.NoteDifficulty.[index].[k].J})"
+                    $"{find_most_probable_pattern}"
                     Colors.pink_accent
                 // draw_label
                 //     (note_box.ShrinkPercentT(0.5f).SlicePercentT(0.6f).SlicePercentR(0.5f).TranslateY(playfield.ColumnWidth * 0.3f).Shrink(5.0f))
