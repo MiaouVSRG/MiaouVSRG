@@ -82,6 +82,7 @@ module API =
         add_endpoint Web.User.Login.ROUTE (BodyType.String Web.Users.Login.handle)
         add_endpoint Web.User.Register.ROUTE (BodyType.String Web.Users.Register.handle)
         add_endpoint Web.User.Completion.ROUTE (BodyType.String Web.Users.Completion.handle)
+        add_endpoint Web.User.Friends.ROUTE (BodyType.String Web.Users.Friends.handle)
         add_endpoint Web.User.Upload.ROUTE (BodyType.Bytes Web.Users.Upload.handle)
         add_endpoint Web.User.Theme.ROUTE (BodyType.String Web.Users.Theme.handle)
         add_endpoint Web.User.AboutMe.ROUTE (BodyType.String Web.Users.AboutMe.handle)

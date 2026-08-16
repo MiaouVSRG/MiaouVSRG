@@ -396,7 +396,7 @@ function showTopPlays(response, keymode){
 
             nameBox.appendChild(name);
 
-            let diffName = document.createElement("span");
+            let diffName = document.createElement("div");
             diffName.classList.add("topscore-diffname");
             let mapLinkDiff = document.createElement("a");
             mapLinkDiff.classList.add("chartpagelink");
@@ -541,14 +541,18 @@ function showRecentPlays(response, keymode){
 
             nameBox.appendChild(name);
 
-            let diffName = document.createElement("span");
+            let diffName = document.createElement("div");
             diffName.classList.add("topscore-diffname");
             let mapLinkDiff = document.createElement("a");
             mapLinkDiff.classList.add("chartpagelink");
             mapLinkDiff.href = "/charts/chartpage/" + play.ChartHash;
             mapLinkDiff.target = "_blank";
             mapLinkDiff.innerText = play.ChartDiffName;
+            let mapRating = document.createElement("span");
+            mapRating.classList.add("topscore-maprating");
+            mapRating.innerText = "(" + Number(play.ChartRating).toFixed(2) + ")";
             diffName.appendChild(mapLinkDiff);
+            diffName.append(mapRating);
 
             nameBox.appendChild(diffName);
 
