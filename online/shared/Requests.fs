@@ -828,6 +828,7 @@ module Web =
                     Country: string option
                     Avatar: string
                     Banner: string
+                    IsMutual: bool
                 }
             
             [<Json.AutoCodec>]

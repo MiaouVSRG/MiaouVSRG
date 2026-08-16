@@ -28,13 +28,15 @@ module Friends =
                     
                 let friends =
                     Array.zip friends online
-                    |> Array.map (fun ((_, friend), session) ->
+                    |> Array.map (fun ((friend_id, friend), session) ->
+                        let relation = Friends.relation(id, friend_id)
                         {
                             Username = friend.Username
                             IsOnline = session.IsSome
                             Avatar = friend.ProfilePicture
                             Banner = friend.ProfileBanner
                             Country = friend.CountryFlag
+                            IsMutual = relation.IsMutualFriend
                         }
                     )
 

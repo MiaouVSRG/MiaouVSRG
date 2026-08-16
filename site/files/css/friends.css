@@ -22,6 +22,7 @@ body{
     height: 50rem;
     margin: auto;
     margin-top: 6rem;
+    box-shadow: rgb(0 0 0 / 0.68) 5px 5px 5px;
 }
 
 .innerbox{
@@ -138,4 +139,27 @@ margin-top: 0.5rem;
 
 .unknownflag{
     background-image: url("/assets/images/unknownflag.png");
+}
+
+.svg{
+
+    z-index: 5;
+    margin-top: 7.5rem;
+    margin-left: -9rem;
+    position: absolute !important;
+    top:0;
+    height: 2rem;
+    width: 2rem;
+}
+
+.follow{
+    color: #37ff00;
+}
+
+.mutual{
+    color: #FF56D5;
+}
+
+.hidden{
+    display: none;
 }
