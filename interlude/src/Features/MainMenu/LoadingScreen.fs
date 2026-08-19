@@ -1,5 +1,6 @@
 ﻿namespace Interlude.Features.MainMenu
 
+open Percyqaz.Common
 open Percyqaz.Flux.Audio
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.Windowing
@@ -8,6 +9,7 @@ open Interlude.Content
 open Interlude.Options
 open Interlude.UI
 open Interlude.Features.Online
+open Prelude.Data.Library
 
 type LoadingScreen(post_init_thunk: unit -> unit) =
     inherit Screen()
@@ -15,7 +17,8 @@ type LoadingScreen(post_init_thunk: unit -> unit) =
     let mutable closing = false
     let audio_fade = Animation.Fade 0.0f
     let animation = Animation.Sequence()
-    let background_fade = Animation.Delay(2200.0)
+    let background_fade = Animation.Delay(1500.0)
+    let loading_container = LoadingIndicator.Percentage(0.0f)
 
     let post_init () =
         async {
@@ -40,8 +43,8 @@ type LoadingScreen(post_init_thunk: unit -> unit) =
 
     override this.Init(parent: Widget) =
         this
-        |* LoadingIndicator.Strip(fun () -> not closing)
-            .Position(Position.SliceT(165.0f, 10.0f).SliceX(400.0f))
+        |* loading_container
+            .Position(Position.SliceB(150.0f, 100.0f).SliceX(500.0f))
         base.Init parent
 
     override this.OnEnter(prev: ScreenType) =
@@ -53,11 +56,11 @@ type LoadingScreen(post_init_thunk: unit -> unit) =
         | ScreenType.SplashScreen ->
             animation.Add(Animation.Action(fun () -> Sounds.get("hello").Play()))
             animation.Add(Animation.Delay 100.0)
-            animation.Add(Animation.Action(fun () -> Screen.logo.MoveCenter()))
+            animation.Add(Animation.Action(fun () -> Screen.logo.MoveTopLeft(false)))
             animation.Add(Animation.Delay 900.0)
             animation.Add(Animation.Action(post_init))
         | _ ->
-            Screen.logo.MoveCenter()
+            Screen.logo.MoveTopLeft(true)
             closing <- true
             DiscordRPC.clear()
             audio_fade.Snap()
@@ -84,11 +87,19 @@ type LoadingScreen(post_init_thunk: unit -> unit) =
         )
 
     override this.Draw() =
+        let loaded_charts = ChartDatabase.LOADED_CHARTS
+        
+        // TODO: Optimize this count (set chart count in some data.json stored while closing the game)
+        // so it won't load every time the user opens the game
+        let total_charts = ChartDatabase.CHART_COUNT
+        loading_container.Percentage <- float32 loaded_charts
         let alpha =
             if closing then
-                255.0 * (1.0 - background_fade.Progress) |> int
-            else
                 255.0 * background_fade.Progress |> int
+            else
+                255.0 * (1.0 - background_fade.Progress) |> int
+        
+        Render.sprite this.Bounds Colors.white (Content.Texture "loading-screen")
         Render.rect this.Bounds (Colors.black.O4a alpha)
 
         if closing then
@@ -97,7 +108,7 @@ type LoadingScreen(post_init_thunk: unit -> unit) =
                 "goodbye ^^",
                 70.0f,
                 this.Bounds.CenterX,
-                40.0f,
+                this.Bounds.CenterY,
                 Colors.text,
                 0.5f
             )
@@ -105,12 +116,23 @@ type LoadingScreen(post_init_thunk: unit -> unit) =
             Text.draw_aligned_b (
                 Style.font,
                 "loading :3",
-                70.0f,
+                50.0f,
                 this.Bounds.CenterX,
-                40.0f,
-                (Colors.white.O4a alpha, Colors.black.O4a alpha),
+                775.0f,
+                (Colors.white, Colors.black),
                 0.5f
             )
+            if total_charts > 0 then
+                Text.draw_aligned_b (
+                    Style.font,
+                    // Not only the charts are loaded but it takes 95% of the loading time
+                    $"{loaded_charts} / {total_charts} charts loaded",
+                    20.0f,
+                    this.Bounds.CenterX,
+                    920.0f,
+                    (Colors.white, Colors.black),
+                    0.5f
+                )
             base.Draw()
 
     override this.OnBack() =

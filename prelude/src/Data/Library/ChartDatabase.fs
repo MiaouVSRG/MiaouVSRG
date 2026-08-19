@@ -25,6 +25,9 @@ type ChartDatabase =
 module ChartDatabase =
 
     (* Retrieval operations *)
+    
+    let mutable LOADED_CHARTS = 0
+    let mutable CHART_COUNT = 0
 
     let get_chart (chart_id: string) (db: ChartDatabase) : Result<Chart, string> =
         DbCharts.get_chart chart_id db.Database
@@ -176,13 +179,22 @@ module ChartDatabase =
     let sqlite_vacuum (db: ChartDatabase) =
         lock db.LockObject <| fun () ->
         Database.exec_raw "VACUUM;" db.Database |> ignore
+        
+    let set_chart_count(db: ChartDatabase) =
+        lock db.LockObject
+        <| fun () ->
+            let count = DbCharts.count db.Database
+            if count.IsSome then
+                CHART_COUNT <- count.Value
 
     let private fast_load (db: ChartDatabase) : ChartDatabase =
+        set_chart_count(db)
         lock db.LockObject
         <| fun () ->
             assert (db.Cache.Count = 0)
 
             for chart_meta in DbCharts.fast_load db.Database do
+                LOADED_CHARTS <- LOADED_CHARTS + 1
                 db.Cache.[chart_meta.Hash] <- chart_meta
 
                 if chart_meta.Length > 0.0f<ms> && chart_meta.Patterns.Density90 <> 0.0f</rate> then

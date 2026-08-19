@@ -13,6 +13,7 @@ type Secrets =
         ApiCert: string
         ApiCertPassword: string
         ApiBaseUrl: string
+        AutomatedTasksPassword: string
         DiscordBotToken: string
         DiscordClientId: string
         DiscordClientSecret: string
@@ -25,6 +26,7 @@ type Secrets =
             ApiCert = "localhost.pfx"
             ApiCertPassword = "DEVELOPMENT"
             ApiBaseUrl = "localhost"
+            AutomatedTasksPassword = "DEVELOPMENT"
             DiscordBotToken = ""
             DiscordClientId = ""
             DiscordClientSecret = ""

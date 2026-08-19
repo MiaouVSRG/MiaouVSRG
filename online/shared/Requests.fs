@@ -725,6 +725,75 @@ module New =
             let get(callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE, callback)
                 
+module Challenge =
+    module Generate =
+        let ROUTE = (GET, "/challenge/generate")
+        
+        [<Json.AutoCodec>]
+        type Response =
+            {
+                Success: bool
+            }
+            
+    module Single =
+        let ROUTE = (GET, "/challenge")
+        
+        [<Json.AutoCodec>]
+        type Response =
+            {
+                Name: string
+                Type: string
+                EndDate: int64
+                Difficulty: string
+                Coins: int64 option
+                Keymode: int
+                Ongoing: bool
+            }
+            
+    module All =
+        let ROUTE = (GET, "/challenge/all")
+        
+        [<Json.AutoCodec>]
+        type ChallengeResponse =
+            {
+                Name: string
+                Type: string
+                EndDate: int64
+                Difficulty: string
+                Coins: int64 option
+                Keymode: int
+                Ongoing: bool
+            }
+        
+        [<Json.AutoCodec>]
+        type Response = ChallengeResponse array
+    
+    module Ongoing =
+        let ROUTE = (GET, "/challenge/ongoing")
+        
+        [<Json.AutoCodec>]
+        type ChallengeChartResponse =
+            {
+                Charts: string array // chart ids so the user can miaoudirect
+                GoalAccuracy: float option
+            }
+        
+        [<Json.AutoCodec>]
+        type Challenge =
+            {
+                Name: string
+                Type: string
+                EndDate: int64
+                Difficulty: string
+                Coins: int64 option
+                Keymode: int
+                ChallengeType: string
+                ChallengeChart: ChallengeChartResponse option
+            }
+        
+        [<Json.AutoCodec>]
+        type Response = Challenge array
+
 module Web =
     
     let MAIN_ENDPOINT = "/web"

@@ -106,6 +106,10 @@ type Theme(storage) as this =
 module Theme =
 
     let TEXTURES = [|
+        "loading-screen"
+        "loading-screen-progress-bar-full"
+        "loading-screen-progress-bar-empty"
+        "loading-screen-progress-bar-tail"
         "background"
         "rain"
         "logo"

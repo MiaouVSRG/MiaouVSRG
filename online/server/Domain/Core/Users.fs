@@ -611,5 +611,5 @@ module User =
                     p.String text_color
         }
         
-    let updatmonthly_statse_theme (id: int64, primary: string, secondary: string, text_color: string) =
+    let update_theme (id: int64, primary: string, secondary: string, text_color: string) =
         UPDATE_THEME.Execute (id, primary, secondary, text_color) core_db |> expect |> ignore

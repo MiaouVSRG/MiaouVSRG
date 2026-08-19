@@ -12,6 +12,7 @@
     <Compile Include="Domain\Core\Scores.fs" />
     <Compile Include="Domain\Core\Stats.fs" />
     <Compile Include="Domain\Core\Tables.fs" />
+    <Compile Include="Domain\Core\Challenges.fs" />
     <Compile Include="Domain\Backbeat\Sources.fs" />
     <Compile Include="Domain\Backbeat\Songs.fs" />
     <Compile Include="Domain\Backbeat\Tables.fs" />
@@ -68,6 +69,10 @@
     <Compile Include="API\New\Charts\Migrate.fs" />
     <Compile Include="API\New\Charts\Download.fs" />
     <Compile Include="API\New\Scores\Migrate.fs" />
+    <Compile Include="API\Challenge\Generate.fs" />
+    <Compile Include="API\Challenge\Ongoing.fs" />
+    <Compile Include="API\Challenge\Single.fs" />
+    <Compile Include="API\Challenge\All.fs" />
     <Compile Include="API\Web\Users\Search.fs" />
     <Compile Include="API\Web\Users\Login.fs" />
     <Compile Include="API\Web\Users\Register.fs" />
