@@ -31,8 +31,12 @@ type Logo() =
 
     let OFFSCREEN_BELOW : Position = { Left = 0.5f %- 300.0f; Top = 0.5f %+ 1000.0f; Right = 0.5f %+ 300.0f; Bottom = 0.5f %+ 1600.0f }
     let CENTER : Position = { Left = 0.5f %- 400.0f; Top = 0.5f %- 750.0f; Right = 0.5f %+ 400.0f; Bottom = 0.5f %+ 50.0f }
+    let TOP_LEFT : Position = { Left = 0.2f %- 400.0f; Top = 0.5f %- 980.0f; Right = 0.2f %+ 400.0f; Bottom = 0.5f %- 180.0f }
+    let OFFSCREEN_TOP_LEFT : Position = {  Left = 0.0f %- 400.0f; Top = 0.5f %- 980.0f; Right = 0.0f %+ 400.0f; Bottom = 0.5f %- 180.0f }
     let OFFSCREEN_LEFT : Position = { Left = 0.0f %- 610.0f; Top = 0.5f %- 300.0f; Right = 0.0f %- 100.0f; Bottom = 0.5f %+ 300.0f }
     let MENU : Position = { Left = 0.5f %- 400.0f; Top = 0.5f %- 980.0f; Right = 0.5f %+ 400.0f; Bottom = 0.5f %- 190.0f }
+    
+    let OFFSCREEN_TOP : Position = MENU.TranslateY(-420.0f)
 
     let WAVE_HEIGHT = 20.0f
     let WAVE_SPEED = 0.002f
@@ -43,9 +47,12 @@ type Logo() =
     let WAVE_SCALE_2 = 0.73f
 
     let counter = Animation.Counter(10000000.0)
+    
+    let mutable needs_fade = false
+    let background_fade = Animation.Delay(1500.0)
 
     override this.Init(parent: Widget) : unit =
-        this.Position <- OFFSCREEN_BELOW
+        this.Position <- OFFSCREEN_TOP_LEFT
         base.Init parent
 
     override this.Draw() =
@@ -204,7 +211,7 @@ type Logo() =
                     + 2.0f * BREATHING_INTENSITY)
                 * w
 
-            let breathe_bounds = this.Bounds.Translate(0.0f, breathe_1)
+            let breathe_bounds = this.Bounds // this.Bounds.Translate(0.0f, breathe_1)
 
             let {
                     Rect.Left = l
@@ -213,11 +220,17 @@ type Logo() =
                     Bottom = b
                 } =
                 breathe_bounds
-            Render.sprite breathe_bounds Colors.white (Content.Texture "logo")
+            
+            if needs_fade then
+                let alpha = 255.0 * (1.0 - background_fade.Progress) |> int
+                Render.sprite breathe_bounds (Colors.white.O4a alpha) (Content.Texture "logo")
+            else
+                Render.sprite breathe_bounds Colors.white (Content.Texture "logo")
 
     override this.Update(elapsed_ms, moved) =
         base.Update(elapsed_ms, moved)
         counter.Update elapsed_ms
+        background_fade.Update elapsed_ms
 
     member this.MoveCenter() : unit =
         this.Position <- CENTER
@@ -228,3 +241,11 @@ type Logo() =
 
     member this.MoveMenu() : unit =
         this.Position <- MENU.Expand 75.0f
+        
+    member this.MoveOffscreenTop() : unit =
+        this.Position <- OFFSCREEN_TOP.Expand 75.0f
+        
+    member this.MoveTopLeft(closing: bool) : unit =
+        this.Position <- TOP_LEFT
+        needs_fade <- closing
+        background_fade.Reset()

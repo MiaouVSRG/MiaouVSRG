@@ -9,8 +9,12 @@ open Prelude
 open Interlude.UI
 open Interlude.Features.Gameplay
 
+module CurrentChart =
+    let SHOW_POS = Position.SliceT(TOP_BAR_HEIGHT).SlicePercentL(INFO_SCREEN_SPLIT)
+    let HIDDEN_POS = Position.SliceT(TOP_BAR_HEIGHT).SlicePercentL(INFO_SCREEN_SPLIT).TranslateX(-SCREEN_OFFSET + 2000.0f)
+
 type CurrentChart() =
-    inherit Container(NodeType.None)
+    inherit SlideContainer(NodeType.None)
     
     override this.Init(parent: Widget) =
         this
@@ -39,13 +43,12 @@ type CurrentChart() =
         base.Init(parent)
 
     override this.Draw() =
-
-        let q = this.Bounds.ShrinkX(10.0f).ShrinkT(10.0f) |> _.AsQuad
+        let bounds = this.Bounds.ShrinkX(10.0f).ShrinkT(10.0f)
         let chart_namebox_texture = Content.Texture "chart-namebox"
-        Render.tex_quad
-            q
-            Color.White.AsQuad
-            (Sprite.pick_texture (0,0) chart_namebox_texture)
+        Render.sprite
+            bounds
+            Color.White
+            chart_namebox_texture
 
         let title_text =
             match SelectedChart.CACHE_DATA with
@@ -62,3 +65,12 @@ type CurrentChart() =
         Text.fill_b (Style.font, diff_text, this.Bounds.Shrink(20.0f, 10.0f).SliceB(50.0f), Colors.text, Alignment.CENTER)
         
         base.Draw()
+        
+    override this.Update(elapsed_ms, moved) =
+        base.Update(elapsed_ms, moved)
+        
+    member this.Hide() : unit =
+        this.Position  <- CurrentChart.HIDDEN_POS
+        
+    member this.Show() : unit =
+        this.Position <- CurrentChart.SHOW_POS

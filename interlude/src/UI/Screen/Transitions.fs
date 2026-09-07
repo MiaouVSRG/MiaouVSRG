@@ -16,6 +16,7 @@ module Transitions =
         | EnterGameplayNoFadeAudio
         | EnterGameplayFadeAudio
         | LeaveGameplay
+        | Raw // Nothing should happen during the transition (see LoadingScreen.Draw for better understanding)
         member this.Duration =
             match this with
             | Default
@@ -23,6 +24,7 @@ module Transitions =
             | EnterGameplayNoFadeAudio
             | EnterGameplayFadeAudio
             | LeaveGameplay -> 350.0
+            | Raw -> 0.0
 
     let private fancy_transition (inbound: bool) (amount: float32) (bounds: Rect) =
         let amount = if inbound then amount else 2.0f - amount
@@ -55,6 +57,8 @@ module Transitions =
             TriangleWipe.draw_upward inbound amount bounds
             Render.stencil_begin_draw ()
             Background.draw (bounds, Palette.color (255.0f * amount |> int, 0.3f, 0.5f), 1.0f)
+            
+        | Raw -> ()
 
         Render.stencil_finish ()
 

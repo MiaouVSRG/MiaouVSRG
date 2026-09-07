@@ -251,6 +251,23 @@ module DbCharts =
 
     let get_meta (hash: string) (db: Database) : ChartMeta option =
         GET_META.Execute hash db |> expect |> Array.tryExactlyOne
+        
+    let private GET_COUNT: Query<int, int> =
+        {
+            SQL =
+                """
+            SELECT
+                count()
+            FROM charts
+            WHERE 1 = @Value;
+            """
+            Parameters = [ "@Value", SqliteType.Integer, 8 ]
+            FillParameters = fun p value -> p.Int32 value
+            Read = fun r -> r.Int32
+        }
+        
+    let count(db: Database) =
+        GET_COUNT.Execute 1 db |> expect |> Array.tryExactlyOne
 
     let private FAST_LOAD: Query<int, ChartMeta> =
         {

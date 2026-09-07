@@ -1,6 +1,7 @@
 ﻿namespace Interlude.Features.LevelSelect
 
 open Percyqaz.Common
+open Percyqaz.Flux.UI
 open Percyqaz.Flux.Windowing
 open Prelude
 open Prelude.Skins.Noteskins
@@ -16,6 +17,16 @@ open Interlude.Features.Play.Replay
 open Interlude.Features.Online
 open Interlude.Features.Collections
 open Interlude.Features.Gameplay
+
+[<AutoOpen>]
+module LevelSelectConstants =
+    // Constants used by every
+    [<Literal>]
+    let TOP_BAR_HEIGHT = 150.0f
+    [<Literal>]
+    let INFO_SCREEN_SPLIT = 0.4f
+    [<Literal>]
+    let SCREEN_OFFSET = 10000.0f
 
 module LevelSelect =
 

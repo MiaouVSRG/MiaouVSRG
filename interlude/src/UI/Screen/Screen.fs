@@ -2,6 +2,7 @@
 
 open System
 open System.IO
+open Interlude.Options
 open Percyqaz.Common
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.Audio
@@ -16,7 +17,7 @@ open Interlude.UI
 module Toolbar =
 
     let HEIGHT = 70.0f
-    let slideout_amount = Animation.Fade 1.0f
+    let slideout_amount = Animation.Fade 0.0f
     let mutable hidden = false
     let mutable draw_top = false
     let mutable draw_bottom = false
@@ -95,6 +96,9 @@ module Screen =
     let mutable current_type = ScreenType.SplashScreen
     let mutable private current = Unchecked.defaultof<Screen>
     let private screens: Screen array = Array.zeroCreate 5
+    let default_background_fade_transition = Animation.Delay 500.0
+    let mutable default_background_fade_transition_started = false
+    let mutable default_background_fade_transition_backwards = false
 
     let init (_screens: Screen array) : unit =
         assert (_screens.Length = 4)
@@ -148,6 +152,15 @@ module Screen =
         override this.Draw() = current.Draw()
 
     let private screen_container = ScreenContainer()
+    
+    let start_default_background_fade (backwards: bool) =
+        default_background_fade_transition_started <- true
+        default_background_fade_transition_backwards <- backwards
+    
+    let reset_default_background_fade () =
+        default_background_fade_transition_started <- false
+        default_background_fade_transition.Reset()
+        default_background_fade_transition_backwards <- false
 
     /// Returns true if the transition could be triggered and is now in motion
     /// false if the requested change was rejected (transition already in progress)
@@ -201,6 +214,8 @@ module Screen =
             base.Update(elapsed_ms, moved)
 
             perf.Update(elapsed_ms, moved)
+            if default_background_fade_transition_started then
+                default_background_fade_transition.Update elapsed_ms
 
             Background.update elapsed_ms
             HelpOverlay.display.Update(elapsed_ms, moved)
@@ -224,11 +239,22 @@ module Screen =
 
         override this.Draw() =
             if enable_background && current_type <> ScreenType.SplashScreen then
-                if
+                let default_background_on_main_menu = options.DefaultBackgroundOnMainMenu.Value
+                if (current_type = ScreenType.MainMenu || default_background_fade_transition_started) && default_background_on_main_menu then
+                    let alpha =
+                        if default_background_fade_transition_backwards then
+                            int(255.0 * default_background_fade_transition.Progress)
+                        else
+                            int(255.0 * (1.0 - default_background_fade_transition.Progress))
+                            
+                    Background.draw (this.Bounds, Color.White, 1.0f)
+                    Render.sprite this.Bounds (Color.White.O4a alpha) (Content.Texture "background")
+                elif
                     (current_type <> ScreenType.Play || Background.dim_percent.Value < 1.0f)
                 then
-                    Background.draw (this.Bounds, Color.White, 1.0f)
-                else Render.rect this.Bounds Color.Black
+                    Background.draw_with_dim (this.Bounds, Color.White, 1.0f)
+                else
+                    Render.rect this.Bounds Color.Black
 
             screen_container.Draw()
             logo.Draw()

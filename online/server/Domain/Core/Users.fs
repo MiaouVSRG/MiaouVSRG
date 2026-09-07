@@ -56,6 +56,8 @@ type User =
         
         // Background image on website
         BackgroundImage: string option
+        
+        LastUpdated: int64 option
     }
     
     member this.WithCustomTheme(primary: string, secondary: string) =
@@ -108,6 +110,7 @@ module User =
                     Column.Text("AboutMe").Nullable
                     Column.Text("WebBackgroundImage").Nullable
                     Column.Text("TextColor").Nullable
+                    Column.Integer("LastUpdated").Nullable
                 ]
         }
 
@@ -134,6 +137,7 @@ module User =
             AboutMe = None
             BackgroundImage = None
             TextColor = None
+            LastUpdated = None
         }
         
     let create_with_password (username: string, password: string) =
@@ -156,6 +160,7 @@ module User =
             AboutMe = None
             BackgroundImage = None
             TextColor = None
+            LastUpdated = None
         }
 
     let private SAVE_NEW: NonQuery<User> =
@@ -180,6 +185,7 @@ module User =
                     "@AboutMe", SqliteType.Text, -1
                     "@WebBackgroundImage", SqliteType.Text, -1
                     "@TextColor", SqliteType.Text, -1
+                    "@LastUpdated", SqliteType.Integer, 8
                 ]
             FillParameters =
                 (fun p user ->
@@ -200,6 +206,7 @@ module User =
                     p.StringOption user.AboutMe
                     p.StringOption user.BackgroundImage
                     p.StringOption user.TextColor
+                    p.Int64Option user.LastUpdated
                 )
         }
 
@@ -232,6 +239,7 @@ module User =
                         AboutMe = r.StringOption
                         BackgroundImage = r.StringOption
                         TextColor = r.StringOption
+                        LastUpdated = r.Int64Option
                     }
                 )
         }
@@ -266,6 +274,7 @@ module User =
                         AboutMe = r.StringOption
                         BackgroundImage = r.StringOption
                         TextColor = r.StringOption
+                        LastUpdated = r.Int64Option
                     }
                 )
         }
@@ -304,6 +313,7 @@ module User =
                             AboutMe = r.StringOption
                             BackgroundImage = r.StringOption
                             TextColor = r.StringOption
+                            LastUpdated = r.Int64Option
                         }
                     )
             }
@@ -336,6 +346,7 @@ module User =
                         AboutMe = r.StringOption
                         BackgroundImage = r.StringOption
                         TextColor = r.StringOption
+                        LastUpdated = r.Int64Option
                     }
                 )
         }
@@ -369,6 +380,7 @@ module User =
                         AboutMe = r.StringOption
                         BackgroundImage = r.StringOption
                         TextColor = r.StringOption
+                        LastUpdated = r.Int64Option
                     }
                 )
         }
@@ -402,6 +414,7 @@ module User =
                         AboutMe = r.StringOption
                         BackgroundImage = r.StringOption
                         TextColor = r.StringOption
+                        LastUpdated = r.Int64Option
                     }
                 )
         }
@@ -439,6 +452,7 @@ module User =
                         AboutMe = r.StringOption
                         BackgroundImage = r.StringOption
                         TextColor = r.StringOption
+                        LastUpdated = r.Int64Option
                     }
                 )
         }

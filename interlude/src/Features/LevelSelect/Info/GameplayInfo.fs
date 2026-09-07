@@ -9,8 +9,13 @@ open Prelude.Mods
 open Interlude.UI
 open Interlude.Features.Gameplay
 
+module GameplayInfo =
+    let HEIGHT = 200.0f
+    let SHOW_POS = Position.SliceB(InlaidButton.HEIGHT_BOTTOM_ROUNDED + 20.0f, HEIGHT)
+    let HIDDEN_POS = Position.SliceB(InlaidButton.HEIGHT_BOTTOM_ROUNDED + 20.0f, HEIGHT).TranslateX(-SCREEN_OFFSET - 3000.0f)
+
 type GameplayInfo() =
-    inherit Container(NodeType.None)
+    inherit SlideContainer(NodeType.None)
 
     let never_played = %"levelselect.last_played.never"
 
@@ -35,8 +40,6 @@ type GameplayInfo() =
                 t
         mod_string <- ModState.mods_format SelectedChart.selected_mods.Value
         mod_status <- info.WithMods.Status
-
-    static member HEIGHT = 200.0f
 
     override this.Init(parent) =
         SelectedChart.on_chart_change_finished.Add refresh
@@ -73,3 +76,12 @@ type GameplayInfo() =
         Text.fill_b (Style.font, SelectedChart.FMT_DURATION, three_icon_infos, Colors.text, Alignment.RIGHT)
 
         base.Draw()
+        
+    override this.Update(elapsed_ms, moved) =
+        base.Update(elapsed_ms, moved)
+            
+    member this.Show() =
+        this.Position <- GameplayInfo.SHOW_POS
+        
+    member this.Hide() =
+        this.Position <- GameplayInfo.HIDDEN_POS

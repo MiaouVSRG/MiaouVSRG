@@ -9,6 +9,42 @@ open Prelude.Calculator
 open Interlude.UI
 open Interlude.Features.Gameplay
 
+module PatternsHeader =
+    let SHOW_POS = Position.SliceT(AngledButton.HEIGHT)
+    let HIDDEN_POS = Position.SliceT(AngledButton.HEIGHT).TranslateX(-SCREEN_OFFSET)
+
+type PatternsHeader(display: Setting<InfoPanelMode>) =
+    inherit SlideContainer(NodeType.None)
+    
+    override this.Init(parent: Widget) =
+        this
+            .Add(
+                AngledButton(
+                    %"levelselect.info.details",
+                    (fun () -> display.Set InfoPanelMode.Local),
+                    Palette.MAIN_100
+                )
+                    .Hotkey("scoreboard_storage")
+                    .LeanLeft(false)
+                    .LeanRight(false)
+                    .Position(PatternsHeader.SHOW_POS)
+                    .Help(Help.Info("levelselect.info.mode", "scoreboard_storage"))
+            )
+        base.Init(parent)
+        
+    override this.Update(elapsed_ms, moved) =
+        base.Update(elapsed_ms, moved)
+        
+    member this.Hide() : unit =
+        this.Position  <- PatternsHeader.HIDDEN_POS
+        
+    member this.Show(with_slide_animation) : unit =
+        this.Position <- PatternsHeader.SHOW_POS
+        if not with_slide_animation then
+            this.SnapPosition()
+    
+    
+
 type Patterns(display: Setting<InfoPanelMode>) =
     inherit Container(NodeType.None)
 
@@ -18,6 +54,8 @@ type Patterns(display: Setting<InfoPanelMode>) =
     let on_chart_update(info: LoadedChartInfo) =
         patterns <- info.Patterns.Clusters |> Array.truncate 6
         category <- info.Patterns.Category
+        
+    let patterns_header = PatternsHeader(display)
 
     override this.Init(parent: Widget) =
         base.Init parent
@@ -25,22 +63,14 @@ type Patterns(display: Setting<InfoPanelMode>) =
         SelectedChart.when_loaded false on_chart_update
 
         this
-        |* AngledButton(
-            %"levelselect.info.details",
-            (fun () -> display.Set InfoPanelMode.Local),
-            Palette.MAIN_100
-        )
-            .Hotkey("scoreboard_storage")
-            .LeanLeft(false)
-            .LeanRight(false)
-            .Position(Position.SliceT(AngledButton.HEIGHT))
-            .Help(Help.Info("levelselect.info.mode", "scoreboard_storage"))
+        |* patterns_header
+            .Position(PatternsHeader.HIDDEN_POS)
 
     override this.Draw() =
         base.Draw()
 
         let mutable b =
-            this.Bounds.SliceT(60.0f).Shrink(20.0f, 0.0f).Translate(0.0f, 60.0f)
+            patterns_header.Bounds.SliceT(60.0f).Shrink(20.0f, 0.0f).Translate(0.0f, 60.0f)
 
         let TEXT_WIDTH = 240.0f
         let BAR_L = b.Left + TEXT_WIDTH + 5.0f
@@ -101,3 +131,12 @@ type Patterns(display: Setting<InfoPanelMode>) =
             bar (0.9f, entry.Density90, 1.0f, entry.Density90)
 
             b <- b.Translate(0.0f, 60.0f)
+            
+    override this.Update(elapsed_ms, moved) =
+        base.Update(elapsed_ms, moved)
+            
+    member this.Show(with_slide_animation: bool) =
+        patterns_header.Show(with_slide_animation)
+        
+    member this.Hide() =
+        patterns_header.Hide()

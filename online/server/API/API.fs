@@ -72,6 +72,11 @@ module API =
         add_endpoint New.Charts.Add.ROUTE (BodyType.String New.Charts.Add.handle)
         add_endpoint New.Charts.Download.ROUTE (BodyType.String New.Charts.Download.handle)
         
+        add_endpoint Challenge.Generate.ROUTE (BodyType.String Challenge.Generate.handle)
+        add_endpoint Challenge.Ongoing.ROUTE (BodyType.String Challenge.Ongoing.handle)
+        add_endpoint Challenge.Single.ROUTE (BodyType.String Challenge.Single.handle)
+        add_endpoint Challenge.All.ROUTE (BodyType.String Challenge.All.handle)
+        
         // WEBSITE REQUESTS
         add_endpoint Web.Auth.Discord.ROUTE (BodyType.String Web.Auth.Discord.handle)
         add_endpoint Web.Auth.Discord.Finish.ROUTE (BodyType.String Web.Auth.Finish.handle)
@@ -82,6 +87,7 @@ module API =
         add_endpoint Web.User.Login.ROUTE (BodyType.String Web.Users.Login.handle)
         add_endpoint Web.User.Register.ROUTE (BodyType.String Web.Users.Register.handle)
         add_endpoint Web.User.Completion.ROUTE (BodyType.String Web.Users.Completion.handle)
+        add_endpoint Web.User.Friends.ROUTE (BodyType.String Web.Users.Friends.handle)
         add_endpoint Web.User.Upload.ROUTE (BodyType.Bytes Web.Users.Upload.handle)
         add_endpoint Web.User.Theme.ROUTE (BodyType.String Web.Users.Theme.handle)
         add_endpoint Web.User.AboutMe.ROUTE (BodyType.String Web.Users.AboutMe.handle)

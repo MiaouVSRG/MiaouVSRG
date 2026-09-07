@@ -1,6 +1,8 @@
 ﻿namespace Interlude.UI
 
 open System
+open Interlude.Content
+open Percyqaz.Common
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.UI
 open Prelude
@@ -56,6 +58,38 @@ module LoadingIndicator =
 
                 let b = this.Bounds.Expand(Style.PADDING)
                 LoadingAnimation.draw_border b (float32 animation.Progress) (Colors.white.O4a fade.Alpha)
+                
+    type Percentage(initial_count: int) =
+        inherit StaticWidget(NodeType.None)
+        
+        member val Count = initial_count with get, set
+        member val TotalCount = 1 with get, set
+        member val Alpha = 255 with get, set // See LoadingScreen.draw to understand why we need this value
+
+        override this.Update(elapsed_ms, moved) =
+            base.Update(elapsed_ms, moved)
+
+        override this.Draw() =
+            let percent = float32 this.Count / float32 this.TotalCount
+            let TAIL_SIZE = 100.0f // 100px width and 100px height
+
+            Render.sprite this.Bounds (Colors.white.O4a this.Alpha) (Content.Texture "loading-screen-progress-bar-empty")
+                
+            let r_progress_bar: Rect = {
+                Left = this.Bounds.Left
+                Top = this.Bounds.Top
+                Right = this.Bounds.Left + (this.Bounds.Width * percent)
+                Bottom = this.Bounds.Bottom
+            }
+            Render.sprite r_progress_bar (Colors.white.O4a this.Alpha) ((Content.Texture "loading-screen-progress-bar-full"))
+                
+            let left_pos =
+                if percent = 1.0f then
+                    this.Bounds.Right - (TAIL_SIZE / 2.0f)
+                else
+                    this.Bounds.Left + ((this.Bounds.Width - TAIL_SIZE) * percent)
+            let r_tail: Rect = Rect.FromSize(left_pos, this.Bounds.Top, TAIL_SIZE, TAIL_SIZE)
+            Render.sprite r_tail (Colors.white.O4a this.Alpha) (Content.Texture "loading-screen-progress-bar-tail")
 
 type WIP() as this =
     inherit StaticWidget(NodeType.None)

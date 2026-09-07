@@ -280,7 +280,7 @@ module Tree =
             elif tree_ctx.ScrollPosition.Value > hi then
                 tree_ctx.ScrollPosition.Value <- hi
 
-    let draw (origin: float32, originB: float32) : unit =
+    let draw (origin: float32, originB: float32, slide_animation_progress: float32) : unit =
 
         let screen_bounds = Render.bounds()
 
@@ -290,7 +290,7 @@ module Tree =
         Render.stencil_begin_draw ()
 
         let bottom_edge =
-            List.fold (fun t (i: GroupItem) -> i.Draw(t, origin, originB)) tree_ctx.ScrollPosition.Value groups
+            List.fold (fun t (i: GroupItem) -> i.Draw(t, origin, originB, slide_animation_progress)) tree_ctx.ScrollPosition.Value groups
 
         Render.stencil_finish ()
 
