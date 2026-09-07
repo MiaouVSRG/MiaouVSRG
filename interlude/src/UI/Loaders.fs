@@ -59,57 +59,37 @@ module LoadingIndicator =
                 let b = this.Bounds.Expand(Style.PADDING)
                 LoadingAnimation.draw_border b (float32 animation.Progress) (Colors.white.O4a fade.Alpha)
                 
-    type Percentage(initial_percentage: float32) =
+    type Percentage(initial_count: int) =
         inherit StaticWidget(NodeType.None)
-
-        let animation = Animation.Counter(1500.0)
-        let fade = Animation.Fade 0.0f
         
-        member val Percentage = initial_percentage with get, set
+        member val Count = initial_count with get, set
+        member val TotalCount = 1 with get, set
+        member val Alpha = 255 with get, set // See LoadingScreen.draw to understand why we need this value
 
         override this.Update(elapsed_ms, moved) =
             base.Update(elapsed_ms, moved)
-            animation.Update elapsed_ms
-            fade.Target <- if true then 1.0f else 0.0f
-            fade.Update elapsed_ms
 
         override this.Draw() =
-            let percent = this.Percentage / 16937.0f
-            if fade.Alpha = 0 then
-                ()
-            else
+            let percent = float32 this.Count / float32 this.TotalCount
+            let TAIL_SIZE = 100.0f // 100px width and 100px height
 
-                let tick_width = this.Bounds.Width * 0.2f
+            Render.sprite this.Bounds (Colors.white.O4a this.Alpha) (Content.Texture "loading-screen-progress-bar-empty")
                 
-                let TAIL_SIZE = 100.0f // 100px width and 100px height
-
-                let pos =
-                    -tick_width
-                    + (this.Bounds.Width + tick_width) * float32 animation.Progress
-
-                Render.sprite this.Bounds Colors.white (Content.Texture "loading-screen-progress-bar-empty")
+            let r_progress_bar: Rect = {
+                Left = this.Bounds.Left
+                Top = this.Bounds.Top
+                Right = this.Bounds.Left + (this.Bounds.Width * percent)
+                Bottom = this.Bounds.Bottom
+            }
+            Render.sprite r_progress_bar (Colors.white.O4a this.Alpha) ((Content.Texture "loading-screen-progress-bar-full"))
                 
-                let r_progress_bar: Rect = {
-                    Left = this.Bounds.Left
-                    Top = this.Bounds.Top
-                    Right = this.Bounds.Left + (this.Bounds.Width * percent)
-                    Bottom = this.Bounds.Bottom
-                }
-                Render.sprite r_progress_bar Colors.white ((Content.Texture "loading-screen-progress-bar-full"))
-                
-                let left_pos =
-                    if percent = 1.0f then
-                        this.Bounds.Right - (TAIL_SIZE / 2.0f)
-                    else
-                        this.Bounds.Left + ((this.Bounds.Width - TAIL_SIZE) * percent)
-                let r_tail: Rect = Rect.FromSize(left_pos, this.Bounds.Top, TAIL_SIZE, TAIL_SIZE)
-                Render.sprite r_tail Colors.white (Content.Texture "loading-screen-progress-bar-tail")
-                // Render.rect_edges
-                //     (this.Bounds.Left)
-                //     this.Bounds.Top
-                //     (this.Bounds.Left + (this.Bounds.Width * percent))
-                //     this.Bounds.Bottom
-                //     (Colors.white)
+            let left_pos =
+                if percent = 1.0f then
+                    this.Bounds.Right - (TAIL_SIZE / 2.0f)
+                else
+                    this.Bounds.Left + ((this.Bounds.Width - TAIL_SIZE) * percent)
+            let r_tail: Rect = Rect.FromSize(left_pos, this.Bounds.Top, TAIL_SIZE, TAIL_SIZE)
+            Render.sprite r_tail (Colors.white.O4a this.Alpha) (Content.Texture "loading-screen-progress-bar-tail")
 
 type WIP() as this =
     inherit StaticWidget(NodeType.None)

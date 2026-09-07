@@ -3,6 +3,7 @@
 open System
 open System.Runtime.CompilerServices
 open Interlude.Content
+open Interlude.UI
 open Percyqaz.Common
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.Input
@@ -11,10 +12,35 @@ open Percyqaz.Flux.Windowing
 open Prelude
 open Prelude.Data.Library
 
+module SearchBoxPositionsForLevelSelect =
+    // Refers to Searchbox.HEIGHT (we cannot access it here)
+    let HEIGHT = 50.0f
+    let TOP_BAR_HEIGHT = 150.0f
+    let SCREEN_OFFSET = 10000.0f
+    let MARGIN_TOP = 5.0f
+    let SHOW_POS = Position
+                            .SliceT(TOP_BAR_HEIGHT / 1.5f)
+                            .ShrinkB(AngledButton.HEIGHT)
+                            .SliceY(HEIGHT)
+                            .ShrinkPercentL(0.4f)
+                            .ShrinkL(500.0f)
+                            .ShrinkR((TOP_BAR_HEIGHT - AngledButton.HEIGHT - HEIGHT - Style.PADDING) * 0.5f)
+                            .TranslateY(MARGIN_TOP)
+                            
+    let HIDDEN_POS = Position
+                            .SliceT(TOP_BAR_HEIGHT / 1.5f)
+                            .ShrinkB(AngledButton.HEIGHT)
+                            .SliceY(HEIGHT)
+                            .ShrinkPercentL(0.4f)
+                            .ShrinkL(500.0f)
+                            .ShrinkR((TOP_BAR_HEIGHT - AngledButton.HEIGHT - HEIGHT - Style.PADDING) * 0.5f)
+                            .TranslateX(SCREEN_OFFSET + 50000.0f)
+                            .TranslateY(MARGIN_TOP)
+                            
 // todo: consider composition over inheriting the framecontainer!
 // todo: reconsider fragile composition with TextColor on TextEntry
 type SearchBox(query_text: Setting<string>, callback: string -> unit) as this =
-    inherit Container(NodeType.Container(fun _ -> Some this.TextEntry))
+    inherit SlideContainer(NodeType.Container(fun _ -> Some this.TextEntry))
     let search_timer = new Diagnostics.Stopwatch()
 
     let text_entry =
@@ -90,6 +116,12 @@ type SearchBox(query_text: Setting<string>, callback: string -> unit) as this =
     override this.OnFocus (by_mouse: bool) : unit =
         base.OnFocus(by_mouse: bool)
         if this.KeyboardAutoSelect && not by_mouse then GameThread.defer (fun () -> this.Select false)
+        
+    member this.Show() =
+        this.Position <- SearchBoxPositionsForLevelSelect.SHOW_POS
+        
+    member this.Hide() =
+        this.Position <- SearchBoxPositionsForLevelSelect.HIDDEN_POS
 
 [<Extension>]
 type SearchBoxExtensions() =

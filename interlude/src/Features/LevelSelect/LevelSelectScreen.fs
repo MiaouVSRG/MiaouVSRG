@@ -16,17 +16,21 @@ open Interlude.Features.Play
 
 type LevelSelectScreen() =
     inherit Screen()
-
-    let TOP_BAR_HEIGHT = 150.0f
-    let INFO_SCREEN_SPLIT = 0.4f
     let BULK_ACTION_BUTTON_WIDTH = 300.0f
-    
-    // 2 * full InlaidButton width (sort and group by) +
-    // 3 * semi InlaidButton width (randomize chart, context menu and levelselect options buttons) +
-    // 4 * 5px gaps between them
-    let LIBRARY_VIEW_WIDTH = 3.5f * InlaidButton.WIDTH + 20.0f
 
     let search_text = Setting.simple ""
+    
+    let current_chart_container = CurrentChart()
+    let info_panel_container = InfoPanel()
+    let library_view_controls_container = LibraryViewControls()
+    let searchbox_container = SearchBox(search_text, fun f -> LevelSelect.filter <- f; Tree.refresh ())
+    
+    let enter_screen_sequence = Animation.Group()
+    let exit_screen_sequence = Animation.Group()
+    let mutable enter = false
+    let mutable exit = false
+    
+    let slide_animation = Animation.Fade 0.0f
     
     member this.ApplyKeymodeFilter(keymode : int) =
         let inner_filter = LevelSelect.filter.Filter
@@ -58,26 +62,14 @@ type LevelSelectScreen() =
 
         this
             .With(
-                CurrentChart()
-                    .Position(Position.SliceT(TOP_BAR_HEIGHT).SlicePercentL(INFO_SCREEN_SPLIT)),
-
-                SearchBox(search_text, fun f ->
-                    LevelSelect.filter <- f
-                    Tree.refresh ()
-                )
-                    .Position(
-                        Position
-                            .SliceT(TOP_BAR_HEIGHT / 1.5f)
-                            .ShrinkB(AngledButton.HEIGHT)
-                            .SliceY(SearchBox.HEIGHT)
-                            .ShrinkPercentL(0.4f)
-                            .ShrinkL(500.0f)
-                            .ShrinkR((TOP_BAR_HEIGHT - AngledButton.HEIGHT - SearchBox.HEIGHT - Style.PADDING) * 0.5f)
-                    )
+                current_chart_container
+                    .Position(CurrentChart.HIDDEN_POS),
+                searchbox_container
+                    .Position(SearchBoxPositionsForLevelSelect.HIDDEN_POS)
                     .Help(Help.Info("levelselect.search", "search")),
 
-                InfoPanel()
-                    .Position(Position.ShrinkT(TOP_BAR_HEIGHT + 5.0f).SlicePercentL(INFO_SCREEN_SPLIT)),
+                info_panel_container
+                    .Position(InfoPanel.SHOW_POS),
 
                 // Empty states explaining why there are no charts to show
                 Container(NodeType.None)
@@ -112,17 +104,18 @@ type LevelSelectScreen() =
                     .Conditional(fun () -> Tree.is_empty)
             )
             // Normal chart actions (no bulk select)
-            .WithConditional(
-                (fun () -> Tree.multi_selection().IsNone),
-
-                InlaidButton(
-                    sprintf "%s %s" Icons.PLAY %"levelselect.play",
-                    LevelSelect.choose_this_chart,
-                    ButtonType.Default
-                )
-                    .Position(Position.SliceB(InlaidButton.HEIGHT).SliceR(InlaidButton.WIDTH * 1.2f))
-                    .Help(Help.Info("levelselect.play", "select"))
-            )
+            // .WithConditional(
+            //     (fun () -> Tree.multi_selection().IsNone),
+            //
+            //     InlaidButton(
+            //         sprintf "%s %s" Icons.PLAY %"levelselect.play",
+            //         LevelSelect.choose_this_chart,
+            //         ButtonType.Default
+            //     )
+            //         .Position(Position.SliceB(InlaidButton.HEIGHT).SliceR(InlaidButton.WIDTH * 1.2f))
+            //         .Help(Help.Info("levelselect.play", "select"))
+            // )
+            
             // Bulk select actions
             .WithConditional(
                 (fun () -> Tree.multi_selection().IsSome),
@@ -144,12 +137,14 @@ type LevelSelectScreen() =
             )
             .Add(
                 // Goes last so that its dropdowns draw over action buttons
-                LibraryViewControls()
-                    .Position(Position.SliceT(TOP_BAR_HEIGHT / 1.35f).SliceB(50.0f).ShrinkPercentL(0.55f).SliceR(LIBRARY_VIEW_WIDTH))
+                library_view_controls_container
+                    .Position(LibraryViewControls.HIDDEN_POS)
             )
 
     override this.Update(elapsed_ms, moved) =
         base.Update(elapsed_ms, moved)
+            
+        slide_animation.Update elapsed_ms
 
         if (%%"select").Pressed() then
             LevelSelect.choose_this_chart ()
@@ -168,10 +163,16 @@ type LevelSelectScreen() =
             Tree.bottom_of_group ()
 
         Tree.update (this.Bounds.Top + TOP_BAR_HEIGHT / 1.35f, this.Bounds.Bottom, elapsed_ms)
+        
+        if not exit && enter then
+            enter_screen_sequence.Update elapsed_ms
+            
+        if not enter && exit then
+            exit_screen_sequence.Update elapsed_ms
 
     override this.Draw() =
 
-        Tree.draw (this.Bounds.Top + TOP_BAR_HEIGHT / 1.35f, this.Bounds.Bottom)
+        Tree.draw (this.Bounds.Top + TOP_BAR_HEIGHT / 1.35f, this.Bounds.Bottom, slide_animation.Value)
 
         base.Draw()
 
@@ -182,6 +183,37 @@ type LevelSelectScreen() =
         Toolbar.show(true, false)
 
         Tree.refresh ()
+        
+        enter_screen_sequence.Add
+        <| Animation.seq
+            [
+                Animation.Action current_chart_container.Show
+                Animation.Action info_panel_container.Show
+                Animation.Action library_view_controls_container.Show
+                Animation.Action searchbox_container.Show
+                Animation.Delay 650.0
+                Animation.Action (fun () -> slide_animation.Target <- 1.0f)
+                Animation.Action (fun () -> Screen.reset_default_background_fade())
+            ]
+            
+        exit_screen_sequence.Add
+        <| Animation.seq
+            [
+                Animation.Action(fun () -> Screen.start_default_background_fade(true))
+                Animation.Action current_chart_container.Hide
+                Animation.Action info_panel_container.Hide
+                Animation.Delay 100.0
+                Animation.Action (fun () -> slide_animation.Target <- 0.0f)
+                Animation.Action library_view_controls_container.Hide
+                Animation.Action searchbox_container.Hide
+                Animation.Delay 300.0
+                Animation.Action (fun () -> slide_animation.Snap())
+                Animation.Action(fun () -> Screen.change ScreenType.MainMenu Transitions.Raw |> ignore)
+            ]
+            
+        enter <- true
+        exit <- false
+        
         DiscordRPC.in_menus ("Choosing a song")
 
     override this.OnExit(_: ScreenType) = Input.remove_listener ()
@@ -190,4 +222,6 @@ type LevelSelectScreen() =
         if Network.lobby.IsSome then
             Some ScreenType.Lobby
         else
-            Some ScreenType.MainMenu
+            exit <- true
+            enter <- false
+            None

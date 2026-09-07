@@ -72,7 +72,7 @@ type Toolbar() =
         bottom_only_container
             // Bottom right info
             .With(
-                Text("Updates.version")
+                Text(Updates.version)
                     .Align(Alignment.RIGHT)
                     .Position(Position.SliceR(5.0f, 300.0f).SliceB(HEIGHT).SlicePercentT(0.5f)),
 

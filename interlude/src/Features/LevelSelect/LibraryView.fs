@@ -78,9 +78,20 @@ type private ModeDropdown
                         )
                 }
         )
+        
+module LibraryViewControls =
+    // 2 * full InlaidButton width (sort and group by) +
+    // 3 * semi InlaidButton width (randomize chart, context menu and levelselect options buttons) +
+    // 4 * 5px gaps between them
+    let LIBRARY_VIEW_WIDTH = 3.5f * InlaidButton.WIDTH + 20.0f
+    
+    let MARGIN_RIGHT = 30.0f
+    
+    let SHOW_POS = Position.SliceT(TOP_BAR_HEIGHT / 1.35f).SliceB(50.0f).ShrinkPercentL(0.55f).SliceR(LIBRARY_VIEW_WIDTH + MARGIN_RIGHT)
+    let HIDDEN_POS = Position.SliceT(TOP_BAR_HEIGHT / 1.35f).SliceB(50.0f).ShrinkPercentL(0.55f).SliceR(LIBRARY_VIEW_WIDTH + MARGIN_RIGHT).TranslateX(SCREEN_OFFSET + 50000.0f)
 
 type LibraryViewControls() =
-    inherit Container(NodeType.None)
+    inherit SlideContainer(NodeType.None)
     let GAP = 5.0f
     let BUTTON_WIDTH = InlaidButton.WIDTH / 2.0f
 
@@ -180,3 +191,9 @@ type LibraryViewControls() =
             elif (%%"reverse_group_mode").Pressed() then
                 Setting.app not options.ChartGroupReverse
                 LevelSelect.refresh_all ()
+                
+    member this.Hide() : unit =
+        this.Position <- LibraryViewControls.HIDDEN_POS
+        
+    member this.Show() : unit =
+        this.Position <- LibraryViewControls.SHOW_POS

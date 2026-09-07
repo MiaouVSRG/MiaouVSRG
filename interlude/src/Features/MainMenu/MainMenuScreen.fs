@@ -1,5 +1,6 @@
 ﻿namespace Interlude.Features.MainMenu
 
+open Interlude.Features.Skins.EditHUD
 open Percyqaz.Common
 open Percyqaz.Flux.Audio
 open Percyqaz.Flux.Input
@@ -17,7 +18,7 @@ open Interlude.Features.Online
 open Interlude.Features.OptionsMenu
 open Interlude.Features.LevelSelect
         
-type private MenuButton(texture: Sprite, on_click: unit -> unit, r: Rect, position: Position, focused_texture: Sprite option) =
+type private MenuButton(texture: Sprite, on_click: unit -> unit, position: Position, focused_texture: Sprite option) =
     inherit
         SlideContainer(
             NodeType.Button(fun () ->
@@ -25,14 +26,22 @@ type private MenuButton(texture: Sprite, on_click: unit -> unit, r: Rect, positi
                 on_click ()
             )
         )
+        
+    let show_animation = Animation.Delay 200.0
+    let mutable show = false
+    
+    let hide_animation = Animation.Delay 200.0
+    let mutable hide = false
 
     override this.Init(parent) =
+        show_animation.Reset()
+        hide_animation.Reset()
+        
         this
-            .With(
+            .Position(position)
+            .Add(
                 MouseListener().Button(this)
             )
-            .Position(position)
-            .Hide()
 
         base.Init parent
 
@@ -41,30 +50,46 @@ type private MenuButton(texture: Sprite, on_click: unit -> unit, r: Rect, positi
         Style.hover.Play()
 
     override this.Draw() =
-        let q = r |> _.AsQuad
-        Render.tex_quad
-            q
-            Colors.white.AsQuad
-            (Sprite.pick_texture (0,0) texture)
+        let alpha =
+            if not hide && show then
+                255.0 * show_animation.Progress |> int
+            elif not show && hide then
+                255.0 * (1.0 - hide_animation.Progress) |> int
+            else
+                0
+                
+        Render.sprite
+            this.Bounds
+            (Colors.white.O4a alpha)
+            texture
         // Percyqaz I love you for implementing this
         if this.Focused && focused_texture.IsSome then
-            Render.tex_quad
-                q
-                Colors.white.AsQuad
-                (Sprite.pick_texture (0,0) focused_texture.Value)
+            Render.sprite
+                this.Bounds
+                (Colors.white.O4a alpha)
+                focused_texture.Value
         
         base.Draw()
         
     override this.Update(elapsed_ms, moved) =
         base.Update(elapsed_ms, moved)
+        
+        if not hide && show then
+            if hide_animation.Complete then hide_animation.Reset()
+            show_animation.Update elapsed_ms
+        
+        if not show && hide then
+            if show_animation.Complete then show_animation.Reset()
+            hide_animation.Update elapsed_ms
             
 
     member this.Hide() =
-        this.Position(position.SliceL(-100.0f)).SnapPosition()
+        show <- false
+        hide <- true
 
     member this.Show() =
-        this.Hide()
-        this.Position <- position
+        hide <- false
+        show <- true
 
 // todo: cool redesign with news feed and stuff
 
@@ -87,15 +112,22 @@ type MainMenuScreen() =
                 GameThread.defer (fun () -> Song.set_low_pass 1.0f)
         )
             .Show()
-
+            
+    
+    let enter_screen_sequence = Animation.Group()
+    let exit_screen_sequence = Animation.Group()
+    let mutable enter = false
+    let mutable exit = false
+    
     let play_action () =
-        Screen.change ScreenType.LevelSelect Transitions.Default |> ignore
+        exit <- true
+        enter <- false
+        // Screen.change ScreenType.LevelSelect Transitions.Raw |> ignore
 
     let play_button =
         MenuButton(
             play_button_texture,
             play_action,
-            Rect.FromSize(750.0f, 420.0f, 390.0f, 120.0f),
             Position.Box(0.0f, 0.5f, 745.0f, -128.0f, 390.0f, 120.0f),
             Some play_button_hover_texture
         )
@@ -104,7 +136,6 @@ type MainMenuScreen() =
         MenuButton(
             options_button_texture,
             (fun () -> OptionsPage().Show()),
-            Rect.FromSize(750.0f, 595.0f, 390.0f, 120.0f),
             Position.Box(0.0f, 0.5f, 745.0f, 47.0f, 390.0f, 120.0f),
             Some options_button_hover_texture
         )
@@ -116,7 +147,6 @@ type MainMenuScreen() =
                 if Screen.back Transitions.UnderLogo then
                     Screen.logo.MoveCenter ()
             ),
-            Rect.FromSize(750.0f, 770.0f, 390.0f, 120.0f),
             Position.Box(0.0f, 0.5f, 745.0f, 222.0f, 390.0f, 120.0f),
             Some quit_button_hover_texture
         )
@@ -129,14 +159,13 @@ type MainMenuScreen() =
     let mutable splash_text = "", ""
     let splash_fade = Animation.Fade 0.0f
     let splash_subtitle_fade = Animation.Fade 0.0f
-    let button_sequence = Animation.Group()
 
     override this.Init (parent: Widget): unit =
         this
             .Add(
                 play_button,
                 options_button,
-                quit_button,
+                quit_button
 
                 // AngledButton(
                 //     Icons.HEART + " " + %"menu.changelog",
@@ -146,12 +175,12 @@ type MainMenuScreen() =
                 //     .LeanRight(false)
                 //     .Position(Position.SliceB(AngledButton.HEIGHT).SliceR(300.0f)),
 
-                AngledButton(
-                    Icons.MESSAGE_SQUARE + " " + %"menu.discord",
-                    (fun () -> open_url ("https://discord.gg/mVcjvvBzbQ")),
-                    Palette.DARK_100
-                )
-                    .Position(Position.SliceB(AngledButton.HEIGHT).SliceR(300.0f).TranslateX(-325.0f))
+                // AngledButton(
+                //     Icons.MESSAGE_SQUARE + " " + %"menu.discord",
+                //     (fun () -> open_url ("https://discord.gg/mVcjvvBzbQ")),
+                //     Palette.DARK_100
+                // )
+                //     .Position(Position.SliceB(AngledButton.HEIGHT).SliceR(300.0f).TranslateX(-325.0f))
             )
         base.Init(parent)
 
@@ -182,17 +211,36 @@ type MainMenuScreen() =
                 splash_text <- choose_splash ()
             )
 
-        button_sequence.Add
+        enter_screen_sequence.Add
         <| Animation.seq
             [
                 Animation.Action play_button.Show
-                Animation.Delay 50.0
+                Animation.Action(fun () -> Toolbar.slideout_amount.Target <- 1.0f)
+                Animation.Delay 200.0
                 Animation.Action options_button.Show
-                Animation.Delay 50.0
+                Animation.Delay 200.0
                 Animation.Action quit_button.Show
                 Animation.Delay 200.0
                 Animation.Action(fun () -> splash_fade.Target <- 1.0f)
+                // If we went from LevelSelect
+                Animation.Action(fun () -> Screen.reset_default_background_fade())
             ]
+            
+        exit_screen_sequence.Add
+        <| Animation.seq
+            [
+                Animation.Action(fun () -> Screen.start_default_background_fade(false))
+                Animation.Action play_button.Hide
+                Animation.Action options_button.Hide
+                Animation.Action quit_button.Hide
+                Animation.Action(fun () -> Toolbar.slideout_amount.Target <- 0.0f)
+                Animation.Action(fun () -> Screen.logo.MoveOffscreenTop())
+                Animation.Delay 200.0
+                Animation.Action(fun () -> Screen.change ScreenType.LevelSelect Transitions.Raw |> ignore)
+            ]
+            
+        enter <- true
+        exit <- false
 
         DiscordRPC.in_menus ("Miaou")
 
@@ -203,10 +251,6 @@ type MainMenuScreen() =
         Toolbar.hide ()
         splash_fade.Target <- 0.0f
         splash_fade.Snap()
-        play_button.Hide()
-        options_button.Hide()
-        quit_button.Hide()
-        Background.dim 0.7f
 
         Sounds.get("hello").Stop()
 
@@ -215,39 +259,39 @@ type MainMenuScreen() =
         else confirm_quit(); None
 
     override this.Draw() =
-        let c = this.Bounds.CenterX
-        let (splash, subsplash) = splash_text
-        let a1 = splash_subtitle_fade.Value * splash_fade.Value * 255.0f |> int
-        let a2 = splash_fade.Alpha
-
-        let heading_width = Text.measure (Style.font, splash) * 40.0f
-
-        Render.rect_size
-            (c - heading_width * 0.5f - 20.0f)
-            (this.Bounds.Top - 25.0f + 40.0f * splash_fade.Value)
-            (heading_width + 40.0f)
-            70.0f
-            (Colors.shadow_2.O1a a2)
-
-        Text.draw_aligned_b (
-            Style.font,
-            subsplash,
-            20.0f,
-            c,
-            this.Bounds.Top + 50.0f + 30.0f * splash_subtitle_fade.Value,
-            (Colors.white.O4a a1, Palette.color (a1, 0.5f, 0.0f)),
-            Alignment.CENTER
-        )
-
-        Text.draw_aligned_b (
-            Style.font,
-            splash,
-            40.0f,
-            c,
-            this.Bounds.Top - 20.0f + 40.0f * splash_fade.Value,
-            (Colors.white.O4a a2, Palette.color (a2, 0.5f, 0.0f)),
-            Alignment.CENTER
-        )
+        // let c = this.Bounds.CenterX
+        // let (splash, subsplash) = splash_text
+        // let a1 = splash_subtitle_fade.Value * splash_fade.Value * 255.0f |> int
+        // let a2 = splash_fade.Alpha
+        //
+        // let heading_width = Text.measure (Style.font, splash) * 40.0f
+        //
+        // Render.rect_size
+        //     (c - heading_width * 0.5f - 20.0f)
+        //     (this.Bounds.Top - 25.0f + 40.0f * splash_fade.Value)
+        //     (heading_width + 40.0f)
+        //     70.0f
+        //     (Colors.shadow_2.O1a a2)
+        //
+        // Text.draw_aligned_b (
+        //     Style.font,
+        //     subsplash,
+        //     20.0f,
+        //     c,
+        //     this.Bounds.Top + 50.0f + 30.0f * splash_subtitle_fade.Value,
+        //     (Colors.white.O4a a1, Palette.color (a1, 0.5f, 0.0f)),
+        //     Alignment.CENTER
+        // )
+        //
+        // Text.draw_aligned_b (
+        //     Style.font,
+        //     splash,
+        //     40.0f,
+        //     c,
+        //     this.Bounds.Top - 20.0f + 40.0f * splash_fade.Value,
+        //     (Colors.white.O4a a2, Palette.color (a2, 0.5f, 0.0f)),
+        //     Alignment.CENTER
+        // )
         
         (*Render.sprite (Rect.FromSize(750.0f, 420.0f, 400.0f, 400.0f)) Colors.white play_button_texture
         Render.sprite (Rect.FromSize(750.0f, 595.0f, 400.0f, 400.0f)) Colors.white options_button_texture
@@ -259,7 +303,12 @@ type MainMenuScreen() =
         base.Update(elapsed_ms, moved)
         splash_fade.Update elapsed_ms
         splash_subtitle_fade.Update elapsed_ms
-        button_sequence.Update elapsed_ms
+        
+        if not exit && enter then
+            enter_screen_sequence.Update elapsed_ms
+            
+        if not enter && exit then
+            exit_screen_sequence.Update elapsed_ms
 
         splash_subtitle_fade.Target <-
             if Mouse.hover (this.Bounds.ShrinkX(400.0f).SliceT(100.0f)) then

@@ -198,6 +198,7 @@ type GameOptions =
 
         EnableExperiments: Setting<bool>
         EnableConsole: Setting<bool>
+        DefaultBackgroundOnMainMenu: Setting<bool>
         Hotkeys: Dictionary<Hotkey, Bind>
         GameplayBinds: (Bind array) array
 
@@ -266,6 +267,7 @@ type GameOptions =
 
             EnableExperiments = Setting.simple false
             EnableConsole = Setting.simple false
+            DefaultBackgroundOnMainMenu = Setting.simple true
             Hotkeys = Dictionary<Hotkey, Bind>()
             GameplayBinds =
                 [|

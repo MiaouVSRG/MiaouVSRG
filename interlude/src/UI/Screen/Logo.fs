@@ -35,6 +35,8 @@ type Logo() =
     let OFFSCREEN_TOP_LEFT : Position = {  Left = 0.0f %- 400.0f; Top = 0.5f %- 980.0f; Right = 0.0f %+ 400.0f; Bottom = 0.5f %- 180.0f }
     let OFFSCREEN_LEFT : Position = { Left = 0.0f %- 610.0f; Top = 0.5f %- 300.0f; Right = 0.0f %- 100.0f; Bottom = 0.5f %+ 300.0f }
     let MENU : Position = { Left = 0.5f %- 400.0f; Top = 0.5f %- 980.0f; Right = 0.5f %+ 400.0f; Bottom = 0.5f %- 190.0f }
+    
+    let OFFSCREEN_TOP : Position = MENU.TranslateY(-420.0f)
 
     let WAVE_HEIGHT = 20.0f
     let WAVE_SPEED = 0.002f
@@ -209,7 +211,7 @@ type Logo() =
                     + 2.0f * BREATHING_INTENSITY)
                 * w
 
-            let breathe_bounds = this.Bounds.Translate(0.0f, breathe_1)
+            let breathe_bounds = this.Bounds // this.Bounds.Translate(0.0f, breathe_1)
 
             let {
                     Rect.Left = l
@@ -239,6 +241,9 @@ type Logo() =
 
     member this.MoveMenu() : unit =
         this.Position <- MENU.Expand 75.0f
+        
+    member this.MoveOffscreenTop() : unit =
+        this.Position <- OFFSCREEN_TOP.Expand 75.0f
         
     member this.MoveTopLeft(closing: bool) : unit =
         this.Position <- TOP_LEFT

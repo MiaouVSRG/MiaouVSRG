@@ -21,6 +21,7 @@ type private GroupItem(tree_ctx: TreeContext, name: string, items: ResizeArray<C
     let mutable last_cached_flag = -1
     let select_animation = Animation.Fade(0.0f)
     let mutable label = ""
+    let mutable slide_animation = 0.0f
     let special_color =
         match group_ctx with
         | LibraryGroupContext.None -> None
@@ -81,9 +82,11 @@ type private GroupItem(tree_ctx: TreeContext, name: string, items: ResizeArray<C
     /// Only called if this group can be seen on screen
     member private this.DrawCulled(bounds: Rect) : unit =
         let group_tex = if focused then Content.Texture "map-group-hover" else Content.Texture "map-group"
+        
+        let slide_bounds = bounds.TranslateX(1000.0f * (1.0f - slide_animation))
 
         Render.tex_quad
-            (bounds |> _.AsQuad)
+            (slide_bounds |> _.AsQuad)
             Color.White.AsQuad
             (Sprite.pick_texture (0,0) group_tex)
 
@@ -94,27 +97,27 @@ type private GroupItem(tree_ctx: TreeContext, name: string, items: ResizeArray<C
                 | AmountSelected.None -> Icons.SQUARE, Colors.text_subheading
                 | AmountSelected.Some -> Icons.PLUS_SQUARE, Colors.text_yellow_2
                 | AmountSelected.All -> Icons.CHECK_SQUARE, Colors.text_yellow_2
-            Text.fill_b (Style.font, display_name, bounds.Shrink(15.0f, 5.0f).ShrinkR(150.0f), name_color, Alignment.LEFT)
-            Text.fill_b (Style.font, filled_icon, bounds.Shrink(15.0f, 5.0f), Colors.text, Alignment.RIGHT)
-            Text.fill_b (Style.font, label, bounds.Shrink(65.0f, 5.0f), Colors.text_subheading, Alignment.RIGHT)
+            Text.fill_b (Style.font, display_name, slide_bounds.Shrink(15.0f, 5.0f).ShrinkR(150.0f), name_color, Alignment.LEFT)
+            Text.fill_b (Style.font, filled_icon, slide_bounds.Shrink(15.0f, 5.0f), Colors.text, Alignment.RIGHT)
+            Text.fill_b (Style.font, label, slide_bounds.Shrink(65.0f, 5.0f), Colors.text_subheading, Alignment.RIGHT)
         | None ->
-            Text.fill_b (Style.font, display_name, bounds.Shrink(15.0f, 5.0f).ShrinkR(100.0f), Colors.text, Alignment.LEFT)
-            Text.fill_b (Style.font, label, bounds.Shrink(15.0f, 5.0f).ShrinkR(5.0f), Colors.text_subheading, Alignment.RIGHT)
+            Text.fill_b (Style.font, display_name, slide_bounds.Shrink(15.0f, 5.0f).ShrinkR(100.0f), Colors.text, Alignment.LEFT)
+            Text.fill_b (Style.font, label, slide_bounds.Shrink(15.0f, 5.0f).ShrinkR(5.0f), Colors.text_subheading, Alignment.RIGHT)
 
-    member this.Draw(this_top: float32, tree_top: float32, tree_bottom: float32) : float32 =
+    member this.Draw(this_top: float32, tree_top: float32, tree_bottom: float32, slide_animation_progress: float32) : float32 =
+        slide_animation <- slide_animation_progress
         let next_top = this.IfVisible(this_top, tree_top, tree_bottom, this.DrawCulled)
 
         if this.Expanded then
             let padded_chart_height = CHART_HEIGHT + CHART_SPACING
 
             let first_visible_chart_index = (tree_top - next_top) / padded_chart_height |> floor |> int |> max 0
-            Logging.Debug $"{first_visible_chart_index}"
             let mutable chart_index = first_visible_chart_index
 
             let mutable top_edge = next_top + float32 chart_index * padded_chart_height
 
             while top_edge < tree_bottom && chart_index < items.Count do
-                top_edge <- items.[chart_index].Draw(top_edge, tree_top, tree_bottom)
+                top_edge <- items.[chart_index].Draw(top_edge, tree_top, tree_bottom, slide_animation_progress)
                 chart_index <- chart_index + 1
 
             let expanded_next_top = next_top + float32 items.Count * padded_chart_height

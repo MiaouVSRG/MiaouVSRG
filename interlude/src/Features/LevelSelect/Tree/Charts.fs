@@ -40,6 +40,8 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
     let mutable last_rate = 1.0f<rate>
     let mutable cached_meta = chart_meta
     
+    let mutable slide_animation = 0.0f
+    
     let TEXT_MARGIN = 60.0f
     let TEXT_MARGIN_NO_PB = 12.0f
 
@@ -221,12 +223,23 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
         let stripe_length = CHART_LEFT_MARGIN * hover_animation.Value
         let chart_selection_background_texture = if this.Selected then Content.Texture "chart-selection-background-hover" else Content.Texture "chart-selection-background"
         
-        let r = Rect.FromSize(
-            
-            (if this.Selected then
+        let left =
+            if this.Selected then
                 bounds.Left - CHART_SELECTED_PADDING
             else
-                bounds.Left - stripe_length),
+                bounds.Left - stripe_length
+                
+        let right =
+            if this.Selected then
+                bounds.Right - CHART_SELECTED_PADDING
+            else
+                bounds.Right - stripe_length
+                
+        let remaining_left = right - left
+        
+        let r = Rect.FromSize(
+            
+            left + (remaining_left * (1.0f - slide_animation)),
             
             bounds.Top - 5.5f,
             bounds.Width,
@@ -253,10 +266,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
                     chart_meta.Title
             ),
             23.0f,
-            (if this.Selected then
-                bounds.Left - CHART_SELECTED_PADDING + get_text_margin
-            else
-                bounds.Left - stripe_length + get_text_margin),
+            left + get_text_margin + (remaining_left * (1.0f - slide_animation)),
             bounds.Top,
             if this.Selected then Colors.text_yellow_2 else Colors.text
         )
@@ -265,10 +275,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             Style.font,
             sprintf "%s  •  %s" (if options.TreeShowNativeText.Value then chart_meta.ArtistNative |> Option.defaultValue chart_meta.Artist else chart_meta.Artist) chart_meta.Creator,
             18.0f,
-            (if this.Selected then
-                bounds.Left - CHART_SELECTED_PADDING + get_text_margin
-            else
-                bounds.Left - stripe_length + get_text_margin),
+            left + get_text_margin + (remaining_left * (1.0f - slide_animation)),
             bounds.Top + 34.0f,
             Colors.text_subheading
         )
@@ -278,10 +285,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             Style.font,
             Icons.STAR,
             36.0f,
-            (if this.Selected then
-                bounds.Right - CHART_SELECTED_PADDING - get_text_margin - 300.0f
-            else
-                bounds.Right - stripe_length - get_text_margin - 350.0f),
+            right - get_text_margin - (if this.Selected then 300.0f else 350.0f) + ((Render.width() - left) * (1.0f - slide_animation)),
             bounds.Top + ((bounds.Bottom - bounds.Top) / 4.0f) - 5.0f,
             (Colors.white, Difficulty.color chart_meta.Rating)
         )
@@ -290,10 +294,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             Style.font,
             $"{Math.Round(cached_meta.Rating |> float, 2)}",
             36.0f,
-            (if this.Selected then
-                bounds.Right - CHART_SELECTED_PADDING - get_text_margin - 250.0f
-            else
-                bounds.Right - stripe_length - get_text_margin - 300.0f),
+            right - get_text_margin - (if this.Selected then 250.0f else 300.0f) + ((Render.width() - left) * (1.0f - slide_animation)),
             bounds.Top + ((bounds.Bottom - bounds.Top) / 4.0f),
             (Colors.white, Difficulty.color chart_meta.Rating)
         )
@@ -302,10 +303,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             Style.font,
             chart_meta.Subtitle |> Option.defaultValue chart_meta.DifficultyName,
             15.0f,
-            (if this.Selected then
-                bounds.Left - CHART_SELECTED_PADDING + get_text_margin
-            else
-                bounds.Left - stripe_length + get_text_margin),
+            left + get_text_margin + (remaining_left * (1.0f - slide_animation)),
             bounds.Top + 65.0f,
             Colors.text_subheading
         )
@@ -317,7 +315,8 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
 
         Text.draw_aligned_b (Style.font, icon, 25.0f, bounds.Right - 65.0f, bounds.Top + 15.0f, Colors.text, Alignment.CENTER)
 
-    member this.Draw(this_top: float32, tree_top: float32, tree_bottom: float32) : float32 =
+    member this.Draw(this_top: float32, tree_top: float32, tree_bottom: float32, slide_animation_progress: float32) : float32 =
+        slide_animation <- slide_animation_progress
         this.IfVisible(this_top, tree_top, tree_bottom, this.DrawCulled)
 
     /// Only called if this chart can be seen on screen

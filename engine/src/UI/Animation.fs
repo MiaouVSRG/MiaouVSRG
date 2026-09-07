@@ -20,7 +20,7 @@ module Animation =
     type Fade(initial_value: float32) =
         inherit Animation()
 
-        static let DURATION_MS = 1500.0
+        static let DURATION_MS = 1800.0
 
         let mutable start_value = initial_value
         let mutable end_value = initial_value
