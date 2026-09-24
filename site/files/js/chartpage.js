@@ -1,4 +1,4 @@
-import { getApiEndpoint } from "./utils.js"
+import { getApiEndpoint, getDiffColor } from "./utils.js"
 
 const parts = location.pathname.split("/").filter(Boolean);
 let chartId = parts.at(-1);
@@ -12,37 +12,6 @@ let leaderboard = null;
 const DARK_COLOR_TARGET = 12.5;
 const LIGHT_COLOR_TARGET = 92.5;
 const COLOR_OFFSET = 10;
-// const diffColors = [
-//   '#4290FB',
-//   '#4AB1FE',
-//   '#4FD5F3',
-//   '#4FFFE0',
-//   '#64FF8E',
-//   '#9FFF50',
-//   '#E0F85A',
-//   '#FDB96C',
-//   '#FF7769',
-//   '#FF4E6F',
-//   '#DB4A9A',
-//   '#A94DBF',
-//   '#6962DA',
-//   '#3133B4',
-//   '#0F0D69',
-//   '#000000'
-// ];
-const diffColors = [
-    '#4290FB',
-    '#4FC0FF',
-    '#4FFFD5',
-    '#7CFF4F',
-    '#F6F05C',
-    '#FF8068',
-    '#FF4E6F',
-    '#C645B8',
-    '#6563DE',
-    '#18158E',
-    '#000000'
-];
 
 // All HTML elements that needs to be updated
 const bg = document.getElementById("bg");
@@ -256,7 +225,7 @@ function createDiffImages(){
         image.style.height = 32 + "px";
 
         let colorValue = difficulty.Rating > 10 ? 10 : Math.floor(difficulty.Rating);
-        const color = diffColors[colorValue];
+        const color = getDiffColor(colorValue);
         image.style.color = color;
         
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');

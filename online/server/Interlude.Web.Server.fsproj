@@ -75,6 +75,7 @@
     <Compile Include="API\Web\Users\Upload.fs" />
     <Compile Include="API\Web\Users\Theme.fs" />
     <Compile Include="API\Web\Users\AboutMe.fs" />
+    <Compile Include="API\Web\Users\Friends.fs" />
     <Compile Include="API\Web\Leaderboard.fs" />
     <Compile Include="API\Web\Maps\Info.fs" />
     <Compile Include="API\Web\Maps\Leaderboard.fs" />

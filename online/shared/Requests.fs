@@ -769,6 +769,7 @@ module Web =
                     ChartName: string
                     ChartDiffName: string
                     ChartBackground: string
+                    ChartRating: float32
                     Keymode: int
                     Grade: string
                     Rate: float32
@@ -815,6 +816,23 @@ module Web =
             
             let get (name: string, callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE + "?name=" + name, callback)
+                
+        module Friends =
+            let ROUTE = (GET, MAIN_ENDPOINT + "/user/friends")
+            
+            [<Json.AutoCodec>]
+            type Friend =
+                {
+                    Username: string
+                    IsOnline: bool
+                    Country: string option
+                    Avatar: string
+                    Banner: string
+                    IsMutual: bool
+                }
+            
+            [<Json.AutoCodec>]
+            type Response = Friend array
                 
         module Login =
             let ROUTE = (POST, MAIN_ENDPOINT + "/user/login")
