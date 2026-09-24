@@ -1,6 +1,7 @@
 ﻿namespace Interlude.UI
 
 open System
+open Interlude.Content
 open Percyqaz.Common
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.UI
@@ -47,17 +48,17 @@ type Slider(setting: Setting.Bounded<float32>) =
         this
             .Add(
                 Text(fun () -> if typed_number.Value = "" then this.Format setting.Value else typed_number.Value)
-                    .Align(Alignment.LEFT)
+                    .Align(Alignment.CENTER)
                     .Color(fun () ->
                         if typed_number.Value <> "" then Colors.text_yellow_2 else Colors.text
                     )
-                    .Position(Position.SliceL TEXTWIDTH),
+                    .Position(Position.SliceR(TEXTWIDTH)),
 
                 MouseListener()
                     .OnLeftClick(fun () ->
                         this.Select true
                         Style.click.Play()
-                        if Mouse.x() > this.Bounds.Left + TEXTWIDTH then dragging <- true
+                        if Mouse.x() < this.Bounds.Right - TEXTWIDTH then dragging <- true
                     )
                     .OnRightClick(fun () ->
                         Style.text_close.Play()
@@ -102,7 +103,7 @@ type Slider(setting: Setting.Bounded<float32>) =
 
     override this.Update(elapsed_ms, moved) =
         base.Update(elapsed_ms, moved)
-        let bounds = this.Bounds.ShrinkL TEXTWIDTH
+        let bounds = this.Bounds.ShrinkR(TEXTWIDTH)
 
         if dragging && Mouse.held Mouse.LEFT then
             let l, r = bounds.Left, bounds.Right
@@ -140,17 +141,27 @@ type Slider(setting: Setting.Bounded<float32>) =
 
     abstract member DrawBar : Rect * float32 -> unit
     default this.DrawBar (bounds: Rect, percent: float32) =
+        let dot = Content.Texture "slider-dot"
+        let empty_slider = Content.Texture "slider-empty"
+        let full_slider = Content.Texture "slider-full"
         let cursor_x = bounds.Left + bounds.Width * percent
-
-        Render.rect_edges cursor_x bounds.Top bounds.Right bounds.Bottom
-            (if this.Selected then
-                 Colors.pink_shadow.O3
-             else
-                 Colors.grey_2.O2)
-
-        Render.rect_edges bounds.Left bounds.Top cursor_x bounds.Bottom
-            (if this.Selected then Colors.pink_accent else Colors.grey_2)
+        
+        let selected_bounds: Rect = {bounds with Right = cursor_x}
+            
+        Render.sprite bounds Color.White empty_slider
+        Render.sprite selected_bounds Color.White full_slider
+            
+        let DOT_WIDTH = 20.0f
+        let dot_bounds: Rect =
+            {
+                Left = cursor_x - DOT_WIDTH / 2.0f
+                Top = bounds.CenterY - DOT_WIDTH / 2.0f
+                Bottom = bounds.CenterY + DOT_WIDTH / 2.0f
+                Right = cursor_x + DOT_WIDTH / 2.0f
+            }
+            
+        Render.sprite (dot_bounds) Color.Aqua dot
 
     override this.Draw() =
-        this.DrawBar(this.Bounds.ShrinkL(TEXTWIDTH).ShrinkY(10.0f), get_percent () |> min 1.0f |> max 0.0f)
+        this.DrawBar(this.Bounds.ShrinkR(TEXTWIDTH).SlicePercentY(0.1f), get_percent () |> min 1.0f |> max 0.0f)
         base.Draw()

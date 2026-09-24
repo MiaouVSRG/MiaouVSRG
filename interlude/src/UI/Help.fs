@@ -1,6 +1,7 @@
 ﻿namespace Interlude.UI
 
 open System.Runtime.CompilerServices
+open Interlude.Content
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.UI
@@ -111,8 +112,8 @@ module HelpOverlay =
                         outline.Bottom + SPACING
 
                 let callout_bounds = Rect.FromSize(x, y, width, height)
-                Render.border Style.PADDING callout_bounds (Colors.cyan_accent.O4a alpha)
-                Render.rect callout_bounds (Colors.cyan_shadow.O4a alpha)
+                Render.border Style.PADDING callout_bounds (Colors.white.O4a alpha)
+                Render.rect callout_bounds (Colors.black.O4a alpha)
 
                 Callout.draw (
                     callout_bounds.Left,

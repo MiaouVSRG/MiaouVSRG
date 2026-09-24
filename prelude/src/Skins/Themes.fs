@@ -169,6 +169,12 @@ module Theme =
         // Beatmap download
         "online-beatmap-card"
         "online-beatmap-card-hover"
+        
+        // Misc
+        "slider-dot"
+        "slider-empty"
+        "slider-full"
+        "hintbox"
     |]
 
     let SOUNDS =

@@ -1,5 +1,7 @@
 ﻿namespace Interlude.Features.Score
 
+open System
+open Percyqaz.Common
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.UI
 open Percyqaz.Flux.Input
@@ -8,6 +10,7 @@ open Prelude.Calculator.KeymodeSkillBreakdown
 open Prelude.Gameplay.Scoring
 open Prelude.Data.User
 open Interlude.UI
+open Prelude.Mods
 
 #nowarn "3370"
 
@@ -134,6 +137,8 @@ type GameDetails
         stats: ScoreScreenStats ref, score_info: ScoreInfo
     ) =
     inherit Container(NodeType.None)
+    
+    let mods_text = Text(fun () -> sprintf "%s" (if score_info.ModString() = "" then "NM" else score_info.ModString())).Align(Alignment.CENTER).Position(Position.SlicePercentX(1.0f).SliceT(70.0f).TranslateY(175.0f).Shrink(10.0f).TranslateX(-10.0f))
 
     override this.Init(parent) =
         this
@@ -143,8 +148,15 @@ type GameDetails
         |+ Text(fun () -> $"{score_info.Rate}x")
             .Align(Alignment.CENTER)
             .Position(Position.SliceL(120.0f).SliceT(70.0f).TranslateY(55.0f).TranslateX(215.0f).Shrink(10.0f))
-        |* Text(fun () -> sprintf "%s" (if score_info.ModString() = "" then "NM" else score_info.ModString()))
-            .Align(Alignment.CENTER)
-            .Position(Position.SlicePercentX(1.0f).SliceT(70.0f).TranslateY(175.0f).Shrink(10.0f).TranslateX(-10.0f))
+        |* mods_text
 
         base.Init parent
+        
+    override this.Draw() =
+        let text_focused = mods_text.Bounds.Contains(Mouse.pos())
+        if text_focused && score_info.Mods.Keys.Contains("column_swap") then
+            let columns_text = ColumnSwap.format(ColumnSwap.unpack (score_info.Mods["column_swap"]))
+            let box_bounds = mods_text.Bounds.TranslateY(-50.0f).ShrinkPercentX(0.2f)
+            Render.rect box_bounds Color.Black
+            Text.fill_b(Style.font, columns_text, box_bounds, Colors.text, Alignment.CENTER)
+        base.Draw()
