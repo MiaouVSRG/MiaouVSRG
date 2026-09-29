@@ -13,7 +13,7 @@ module PageLayout =
         | Full
         | Custom of float32
 
-    let PAGE_ITEM_HEIGHT = 65.0f
+    let PAGE_ITEM_HEIGHT = 50.0f
     let PAGE_LABEL_WIDTH = PAGE_ITEM_HEIGHT * 6.0f
     let PAGE_ITEM_WIDTH = 1080.0f
 

@@ -162,6 +162,19 @@ module Theme =
         "overclear"
         "overclearplus"
         "perfect"
+        
+        // SETTINGS SCREEN
+        "settings-frame"
+        
+        // Beatmap download
+        "online-beatmap-card"
+        "online-beatmap-card-hover"
+        
+        // Misc
+        "slider-dot"
+        "slider-empty"
+        "slider-full"
+        "hintbox"
     |]
 
     let SOUNDS =

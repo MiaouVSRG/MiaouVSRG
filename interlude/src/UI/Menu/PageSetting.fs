@@ -2,8 +2,9 @@
 
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.UI
+open Prelude
 
-type PageSetting(localised_text, widget: Widget) as this =
+type PageSetting(localised_text: string, widget: Widget) as this =
     inherit Container(NodeType.Container(fun _ -> Some this.Child))
 
     let mutable widget = widget
@@ -13,7 +14,7 @@ type PageSetting(localised_text, widget: Widget) as this =
         and set (w: Widget) =
             let old_widget = widget
             widget <- w
-            w.Position <- Position.ShrinkL(PAGE_LABEL_WIDTH).Shrink(Style.PADDING).ShrinkR(Style.PADDING * 2.0f)
+            w.Position <- Position.ShrinkL(PAGE_LABEL_WIDTH).ShrinkR(Style.PADDING * 20.0f).Shrink(Style.PADDING)
 
             if this.Initialised then
                 w.Init this
@@ -24,23 +25,21 @@ type PageSetting(localised_text, widget: Widget) as this =
     override this.Init(parent: Widget) =
         this
             .Add(
-                Text(localised_text + ":")
-                    .Color(fun () -> if widget.Focused then Colors.text_yellow_2 else Colors.text)
+                Text(localised_text)
+                    .Color(Colors.text)
                     .Align(Alignment.LEFT)
                     .Position(Position.SliceT(PAGE_ITEM_HEIGHT).SliceL(PAGE_LABEL_WIDTH).ShrinkY(Style.PADDING).ShrinkL(15.0f))
             )
 
         base.Init parent
         widget
-            .Position(Position.ShrinkL(PAGE_LABEL_WIDTH).Shrink(Style.PADDING))
+            .Position(Position.ShrinkL(PAGE_LABEL_WIDTH).ShrinkR(Style.PADDING * 20.0f).Shrink(Style.PADDING))
             .Init(this)
 
     override this.Draw() =
-        if widget.Selected then
-            Render.rect (widget.Bounds.Expand(15.0f, Style.PADDING)) Colors.pink_accent.O2
-        elif widget.Focused then
-            Render.rect (widget.Bounds.Expand(15.0f, Style.PADDING)) Colors.yellow_accent.O1
-
+        // if widget.Selected then
+        //     Render.rect (widget.Bounds.Expand(15.0f, Style.PADDING)) Colors.pink_accent.O2
+        Render.rect (this.Bounds.ShrinkR(80.0f)) (Color.DarkGray.O4a(100))
         base.Draw()
         widget.Draw()
 

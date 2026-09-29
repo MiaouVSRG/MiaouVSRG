@@ -1,5 +1,6 @@
 ﻿namespace Interlude.Features.MainMenu
 
+open Interlude.Features.OptionsScreen
 open Interlude.Features.Skins.EditHUD
 open Percyqaz.Common
 open Percyqaz.Flux.Audio
@@ -135,7 +136,15 @@ type MainMenuScreen() =
     let options_button =
         MenuButton(
             options_button_texture,
-            (fun () -> OptionsPage().Show()),
+            // (fun () -> OptionsPage().Show()),
+            (fun () ->
+                if Screen.change_new
+                       (fun () -> NewOptionsScreen())
+                       ScreenType.Options
+                       Transitions.Raw
+                then
+                    ()
+            ),
             Position.Box(0.0f, 0.5f, 745.0f, 47.0f, 390.0f, 120.0f),
             Some options_button_hover_texture
         )

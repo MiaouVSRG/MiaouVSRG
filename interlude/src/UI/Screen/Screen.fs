@@ -78,6 +78,7 @@ type ScreenType =
     | EditHud = 6
     | Replay = 7
     | Score = 8
+    | Options = 9
 
 [<AbstractClass>]
 type Screen() =
@@ -240,7 +241,7 @@ module Screen =
         override this.Draw() =
             if enable_background && current_type <> ScreenType.SplashScreen then
                 let default_background_on_main_menu = options.DefaultBackgroundOnMainMenu.Value
-                if (current_type = ScreenType.MainMenu || default_background_fade_transition_started) && default_background_on_main_menu then
+                if (current_type = ScreenType.MainMenu || default_background_fade_transition_started || current_type = ScreenType.Options) && default_background_on_main_menu then
                     let alpha =
                         if default_background_fade_transition_backwards then
                             int(255.0 * default_background_fade_transition.Progress)
