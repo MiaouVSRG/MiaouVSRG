@@ -80,8 +80,7 @@ type GameplayInfoBoxes() =
         | _ ->
             let no_pb_bounds = this.Bounds.SliceR(PERSONAL_BESTS_WIDTH).ShrinkL(10.0f)
             Render.rect no_pb_bounds base_color
-            Text.fill_b (Style.font, %"levelselect.no_personal_best", no_pb_bounds.SliceT(50.0f).Shrink(10.0f, 0.0f), Colors.text_greyout, Alignment.CENTER)
-            Text.fill_b (Style.font, %"levelselect.no_personal_best.subtitle", no_pb_bounds.SliceB(30.0f).Shrink(10.0f, 0.0f).Translate(0.0f, -8.0f), Colors.text_greyout, Alignment.CENTER)
+            Text.fill_b (Style.font, %"levelselect.no_personal_best", no_pb_bounds.Shrink(12.0f, 12.0f), Colors.text_greyout, Alignment.CENTER)
 
         let pattern_bounds = this.Bounds.ShrinkR(PERSONAL_BESTS_WIDTH)
         Render.rect pattern_bounds base_color

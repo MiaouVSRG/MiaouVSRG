@@ -17,7 +17,7 @@ open Interlude.Features.Skins.EditNoteskin
 open Interlude.Features.Skins.EditHUD
 open Interlude.Features.Skins.Browser
 
-type private NoteskinButton(id: string, meta: SkinMetadata, on_switch: unit -> unit, on_edit: unit -> unit) =
+type NoteskinButton(id: string, meta: SkinMetadata, on_switch: unit -> unit, on_edit: unit -> unit) =
     inherit
         Container(
             NodeType.Button(fun _ ->
@@ -83,7 +83,7 @@ type private NoteskinButton(id: string, meta: SkinMetadata, on_switch: unit -> u
 
         base.Draw()
 
-type private HUDButton(id: string, meta: SkinMetadata, on_switch: unit -> unit, on_edit: unit -> unit) =
+type HUDButton(id: string, meta: SkinMetadata, on_switch: unit -> unit, on_edit: unit -> unit) =
     inherit
         Container(
             NodeType.Button(fun _ ->

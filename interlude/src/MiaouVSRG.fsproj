@@ -293,6 +293,7 @@
         <Compile Include="Features\Options\OptionsLayout.fs"/>
         <Compile Include="Features\Options\OptionsPage.fs"/>
         <Compile Include="Features\Options\QuickMenuPage.fs"/>
+        <Compile Include="Features\NewOptions\NewOptionsScreen.fs" />
         <Compile Include="Features\Multiplayer\LobbySelect\Create.fs"/>
         <Compile Include="Features\Multiplayer\LobbySelect\Invites.fs"/>
         <Compile Include="Features\Multiplayer\LobbySelect\List.fs"/>

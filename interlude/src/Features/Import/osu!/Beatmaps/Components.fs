@@ -81,14 +81,14 @@ type private BeatmapImportCard(data: MinoBeatmapSet) as this =
         if modes.Length > 3 then
             sprintf "%i-%iK" modes.[0] modes.[modes.Length - 1]
         else
-            modes |> Seq.map (fun k -> sprintf "%iK" k) |> String.concat ", "
+            modes |> Seq.map (fun k -> sprintf "%iK" k) |> String.concat "/"
 
     override this.Init(parent) =
         this
-        |+ Frame(
-            Fill = (fun () -> if this.Focused then fill.O3 else fill.O2),
-            Border = fun () -> if this.Focused then Colors.white else border.O2
-        )
+        // |+ Frame(
+        //     Fill = (fun () -> if this.Focused then fill.O3 else fill.O2),
+        //     Border = fun () -> if this.Focused then Colors.white else border.O2
+        // )
         //|+ Button(Icons.OPEN_IN_BROWSER,
         //    fun () -> openUrl(sprintf "https://osu.ppy.sh/beatmapsets/%i" data.beatmapset_id)
         //    ,
@@ -102,6 +102,9 @@ type private BeatmapImportCard(data: MinoBeatmapSet) as this =
 
     override this.Draw() =
         base.Draw()
+        
+        let beatmap_card_sprite = Content.Texture "online-beatmap-card"
+        Render.sprite this.Bounds Color.White beatmap_card_sprite
 
         match status with
         | Downloading -> Render.rect (this.Bounds.SliceL(this.Bounds.Width * progress)) Colors.white.O1
@@ -110,7 +113,7 @@ type private BeatmapImportCard(data: MinoBeatmapSet) as this =
         Text.fill_b (
             Style.font,
             data.title,
-            this.Bounds.SliceT(45.0f).Shrink(10.0f, 0.0f),
+            this.Bounds.SliceT(45.0f).Shrink(10.0f, 0.0f).Translate(100.0f, 8.0f),
             Colors.text,
             Alignment.LEFT
         )
@@ -118,60 +121,50 @@ type private BeatmapImportCard(data: MinoBeatmapSet) as this =
         Text.fill_b (
             Style.font,
             data.artist + " - " + data.creator,
-            this.Bounds.SliceB(45.0f).Shrink(10.0f, 5.0f),
+            this.Bounds.SliceB(45.0f).Shrink(10.0f, 5.5f).Translate(100.0f, -5.0f),
             Colors.text_subheading,
             Alignment.LEFT
         )
 
         let status_bounds =
-            this.Bounds.SliceB(40.0f).SliceR(150.0f).Shrink(5.0f, 0.0f)
+            this.Bounds.SliceB(30.0f).SliceR(310.0f).Shrink(5.0f, 0.0f)
 
-        Render.rect status_bounds Colors.shadow_2.O2
 
         Text.fill_b (
             Style.font,
             ranked_status,
-            status_bounds.Shrink(5.0f, 0.0f).ShrinkB(5.0f),
+            status_bounds.Shrink(7.0f, 0.0f).ShrinkB(5.0f),
             (border, Colors.shadow_2),
             Alignment.CENTER
         )
 
         let download_bounds =
-            this.Bounds.SliceT(40.0f).SliceR(300.0f).Shrink(5.0f, 0.0f)
+            this.Bounds.Shrink(20.0f, 20.0f).SliceR(60.0f)
 
-        Render.rect download_bounds Colors.shadow_2.O2
 
         Text.fill_b (
             Style.font,
             (match status with
-             | NotDownloaded -> Icons.DOWNLOAD + " Download"
-             | Downloading -> Icons.DOWNLOAD + " Downloading .."
-             | DownloadFailed -> Icons.X + " Error"
-             | Installed -> Icons.CHECK + " Downloaded"),
-            download_bounds.Shrink(5.0f, 0.0f).ShrinkB(5.0f),
+             | NotDownloaded
+             | Downloading -> Icons.DOWNLOAD
+             | DownloadFailed -> Icons.X
+             | Installed -> Icons.CHECK),
+            download_bounds,
             (match status with
              | NotDownloaded -> if this.Focused then Colors.text_yellow_2 else Colors.text
-             | Downloading -> Colors.text_yellow_2
+             | Downloading -> Colors.text_subheading
              | DownloadFailed -> Colors.text_red
              | Installed -> Colors.text_green),
             Alignment.CENTER
         )
 
-        let stat x text =
-            let stat_bounds = this.Bounds.SliceB(40.0f).ShrinkR(x).SliceR(145.0f)
-            Render.rect stat_bounds Colors.shadow_2.O2
-
-            Text.fill_b (
-                Style.font,
-                text,
-                stat_bounds.Shrink(5.0f, 0.0f).ShrinkB(5.0f),
-                Colors.text_subheading,
-                Alignment.CENTER
-            )
-
-        stat 150.0f (sprintf "%s %i" Icons.HEART data.favourite_count)
-        stat 300.0f (sprintf "%s %i" Icons.PLAY data.play_count)
-        stat 450.0f keymodes_string
+        Text.fill_b (
+            Style.font,
+            keymodes_string,
+            this.Bounds.Shrink(15.0f, 15.0f).SliceL(60.0f),
+            Colors.text,
+            Alignment.CENTER
+        )
 
         if this.Focused && Mouse.x () > this.Bounds.Right - 600.0f then
             let popover_bounds =

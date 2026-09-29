@@ -91,7 +91,7 @@ type private LocalScoreCard(score_info: ScoreInfo) =
 
                 MouseListener()
                     .Button(this)
-                    .OnRightClick(fun () -> ScoreContextMenu(true, score_info).Show())
+                    .OnRightClick(fun () -> ScoreContextMenu(false, score_info).Show())
             )
 
         base.Init(parent)
