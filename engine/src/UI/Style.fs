@@ -15,10 +15,14 @@ module Colors =
     let black = Color.Black
     let shadow_1 = Color.FromArgb 0xFF_050308
     let shadow_2 = Color.FromArgb 0xFF_0a0911
+    
+    let purple_accent = Color.FromArgb 0xFF_701469
+    let purple_background = Color.FromArgb 0xFF_eab7f7
 
     let white = Color.White
     let grey_1 = Color.FromArgb 0xFF_cecfd9
     let grey_2 = Color.FromArgb 0xFF_b4b3bc
+    let dark_gray = Color.FromArgb 0xFF_303030
     let text = white, shadow_1
     let text_subheading = grey_1, shadow_2
     let text_greyout = grey_2, shadow_2

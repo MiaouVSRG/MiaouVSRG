@@ -1,19 +1,19 @@
-﻿namespace YAVSRG.CLI.Features
+﻿namespace MiaouVSRG.CLI.Features
 
 open System
 open System.IO
-open Prelude.Skins
-open Prelude.Skins.Noteskins
-open Prelude.Skins.HudLayouts
-open Prelude.Skins.Repo
-open Prelude
+open Catnip.Skins
+open Catnip.Skins.Noteskins
+open Catnip.Skins.HudLayouts
+open Catnip.Skins.Repo
+open Catnip
 open SixLabors.ImageSharp
-open YAVSRG.CLI.Utils
-open YAVSRG.CLI.Features.Backbeat
+open MiaouVSRG.CLI.Utils
+open MiaouVSRG.CLI.Features.Backbeat
 
 module Skins =
 
-    let SKINS_ROOT = Path.Combine(YAVSRG_PATH, "backbeat", "skins")
+    let SKINS_ROOT = Path.Combine(MIAOUVSRG_PATH, "backbeat", "skins")
 
     let private generate_preview (ns: Noteskin, target_file: string) =
         use img = NoteskinPreview.render ns
@@ -30,7 +30,7 @@ module Skins =
             | Ok repo -> repo
             | Error _ -> SkinRepo.Empty
 
-        let skin_folder = Path.Combine(INTERLUDE_SKINS_PATH, name)
+        let skin_folder = Path.Combine(miaouvsrg_SKINS_PATH, name)
         match Skin.FromPath skin_folder with
         | Error err -> raise err
         | Ok skin ->
@@ -105,12 +105,12 @@ module Skins =
                 skin.Metadata
                 group_name
                 version
-                (sprintf "https://github.com/YAVSRG/YAVSRG/raw/main/backbeat/skins/files/%s.isk" filename)
+                (sprintf "https://github.com/MiaouVSRG/MiaouVSRG/raw/main/backbeat/skins/files/%s.isk" filename)
                 (sprintf
-                    "https://github.com/YAVSRG/YAVSRG/raw/main/backbeat/skins/files/%s.png"
+                    "https://github.com/MiaouVSRG/MiaouVSRG/raw/main/backbeat/skins/files/%s.png"
                     filename)
                 (sprintf
-                    "https://github.com/YAVSRG/YAVSRG/raw/main/backbeat/skins/files/%s"
+                    "https://github.com/MiaouVSRG/MiaouVSRG/raw/main/backbeat/skins/files/%s"
                     (group_name + "__thumbnail.png"))
                 existing_skins
 

@@ -1,25 +1,25 @@
-namespace Interlude.Web.Server.API.New.Scores
+namespace MiaouVSRG.Web.Server.API.New.Scores
 
 open System.IO
 open System.IO.Compression
 open System.Linq
 open System.Net.Http
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.New
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests.New.Charts.Migrate
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.New
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests.New.Charts.Migrate
 open NetCoreServer
 open Percyqaz.Common
-open Prelude
-open Prelude.Calculator
-open Prelude.Charts.Chart
-open Prelude.Data
-open Prelude.Formats
-open Prelude.Formats.Osu
-open Prelude.Gameplay.Replays
-open Prelude.Gameplay.Rulesets
-open Prelude.Gameplay.Scoring
-open Prelude.Mods
+open Catnip
+open Catnip.Calculator
+open Catnip.Charts.Chart
+open Catnip.Data
+open Catnip.Formats
+open Catnip.Formats.Osu
+open Catnip.Gameplay.Replays
+open Catnip.Gameplay.Rulesets
+open Catnip.Gameplay.Scoring
+open Catnip.Mods
 
 module Migrate =
     
@@ -75,7 +75,7 @@ module Migrate =
                         
                         if chart_db.DownloadLink = "not available" then
                             let httpclient = new System.Net.Http.HttpClient()
-                            let! response = httpclient.GetAsync("https://cdn.yavsrg.net/" + chart_db.ChartId) |> Async.AwaitTask
+                            let! response = httpclient.GetAsync("https://cdn.miaouvsrg.com/" + chart_db.ChartId) |> Async.AwaitTask
 
                             if not response.IsSuccessStatusCode then
                                 Logging.Debug "Chart notes not found on server"
@@ -88,7 +88,7 @@ module Migrate =
                                 | Error reason ->
                                     Logging.Debug "Malformed chart: %s" reason
                                 | Ok chart_data ->
-                                    let hash = Prelude.Charts.Chart.hash chart_data
+                                    let hash = Catnip.Charts.Chart.hash chart_data
                                     if hash <> chart_db.ChartId then
                                         ()
                                     else
@@ -204,7 +204,7 @@ module Migrate =
                                         }
                                             
                                     let converted_chart =
-                                        match Osu_To_Interlude.convert beatmap.Value action with
+                                        match Osu_To_Miaouvsrg.convert beatmap.Value action with
                                         | Ok chart -> Some chart
                                         | Error err ->
                                             Logging.Error "%s ::: %s" (fst err) (snd err)
@@ -215,7 +215,7 @@ module Migrate =
                                         success <- false
                                     else
                                         let chart = converted_chart.Value.Chart
-                                        let hash = Prelude.Charts.Chart.hash converted_chart.Value.Chart
+                                        let hash = Catnip.Charts.Chart.hash converted_chart.Value.Chart
                                         if hash <> chart_db.ChartId then
                                             ()
                                         else

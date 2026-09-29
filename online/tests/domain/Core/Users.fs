@@ -1,9 +1,9 @@
-namespace Interlude.Web.Tests.Domain.Core
+namespace MiaouVSRG.Web.Tests.Domain.Core
 
 open NUnit.Framework
 
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.Services
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Services
 
 module Users =
 

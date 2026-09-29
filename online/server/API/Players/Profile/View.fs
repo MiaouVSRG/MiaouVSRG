@@ -1,11 +1,11 @@
-﻿namespace Interlude.Web.Server.API.Players.Profile
+﻿namespace MiaouVSRG.Web.Server.API.Players.Profile
 
 open NetCoreServer
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests
-open Interlude.Web.Server.API
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.Services
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Services
 
 module View =
 

@@ -1,10 +1,10 @@
-﻿namespace Interlude.Web.Server.Bot
+﻿namespace MiaouVSRG.Web.Server.Bot
 
 open Discord
 open Discord.WebSocket
-open Prelude.Backbeat.Archive
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.Backbeat
+open Catnip.Backbeat.Archive
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Backbeat
 
 module UserInteractables =
 

@@ -1,13 +1,13 @@
-﻿namespace Interlude.Web.Server.Online
+﻿namespace MiaouVSRG.Web.Server.Online
 
 open System
 open System.Collections.Generic
 open System.Linq
 open System.IO
 open Percyqaz.Common
-open Interlude.Web.Shared
-open Interlude.Web.Server.Domain.Services
-open Interlude.Web.Server.Domain.Core
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Server.Domain.Services
+open MiaouVSRG.Web.Server.Domain.Core
 
 type LobbyId = Guid
 type PlayerId = Guid

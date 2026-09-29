@@ -1,4 +1,4 @@
-﻿namespace Interlude.Web.Server
+﻿namespace MiaouVSRG.Web.Server
 
 open System.IO
 open System.Reflection
@@ -47,7 +47,7 @@ module Secrets =
 #else
             failwith "Secrets folder not found! Did you mount it properly?"
 #endif
-        match Prelude.Common.JSON.FromFile<Secrets>("./secrets/secrets.json") with
+        match Catnip.Common.JSON.FromFile<Secrets>("./secrets/secrets.json") with
         | Ok o -> o
         | Error e -> failwithf "Error while reading secrets.json: %O" e
 
@@ -55,7 +55,7 @@ module Secrets =
         let stream =
             Assembly
                 .GetExecutingAssembly()
-                .GetManifestResourceStream("Interlude.Web.Server.Version.txt")
+                .GetManifestResourceStream("MiaouVSRG.Web.Server.Version.txt")
 
         use tr = new StreamReader(stream)
         tr.ReadToEnd()

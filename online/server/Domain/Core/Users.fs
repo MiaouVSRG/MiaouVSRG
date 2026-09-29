@@ -1,12 +1,12 @@
-﻿namespace Interlude.Web.Server.Domain.Core
+﻿namespace MiaouVSRG.Web.Server.Domain.Core
 
 open System
 open System.Security.Cryptography
 open Microsoft.FSharp.Collections
 open Percyqaz.Common
-open Prelude
+open Catnip
 open Percyqaz.Data.Sqlite
-open Interlude.Web.Server
+open MiaouVSRG.Web.Server
 open BCrypt.Net
 
 type Badge = string

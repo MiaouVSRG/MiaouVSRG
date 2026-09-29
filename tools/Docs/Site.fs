@@ -1,9 +1,9 @@
-﻿namespace YAVSRG.CLI.Features
+﻿namespace MiaouVSRG.CLI.Features
 
 open System.Text.RegularExpressions
 open System.IO
 open Percyqaz.Data.Markdown
-open YAVSRG.CLI.Utils
+open MiaouVSRG.CLI.Utils
 
 module Site =
 
@@ -145,16 +145,16 @@ module Site =
 
         let re = Regex("(?=\s[0-9]\.[0-9]+\.[0-9]+.*\s*\=\=\=\=)")
 
-        File.ReadAllText(Path.Combine(YAVSRG_PATH, "interlude", "docs", "changelog.md"))
+        File.ReadAllText(Path.Combine(MIAOUVSRG_PATH, "miaouvsrg", "docs", "changelog.md"))
         |> re.Split
         |> Array.map (fun s -> s.Trim())
         |> Array.except [ "" ]
         |> Array.map Markdown.Parse
         |> Array.map MarkdownToHtml.render_document
-        |> build_mpage (Path.Combine(SITE_PATH, "files", "interlude", "changelog.html")) "Changelog"
+        |> build_mpage (Path.Combine(SITE_PATH, "files", "miaouvsrg", "changelog.html")) "Changelog"
 
         let wiki_pages =
-            Directory.EnumerateFiles(Path.Combine(YAVSRG_PATH, "interlude", "docs", "wiki"))
+            Directory.EnumerateFiles(Path.Combine(MIAOUVSRG_PATH, "miaouvsrg", "docs", "wiki"))
             |> Seq.filter (fun f -> f.EndsWith ".md" && not (f.EndsWith "index.md"))
             |> Seq.map parse_wiki_file
             |> Array.ofSeq
@@ -182,20 +182,20 @@ module Site =
 
         for page in wiki_pages do
             wiki_template
-                .Replace("{{title}}", sprintf "%s - Interlude Wiki" page.Title)
+                .Replace("{{title}}", sprintf "%s - miaouvsrg Wiki" page.Title)
                 .Replace("{{content}}", page.Html)
             |> fun t ->
-                File.WriteAllText(Path.Combine(SITE_PATH, "files", "interlude", "wiki", page.Filename + ".html"), t)
+                File.WriteAllText(Path.Combine(SITE_PATH, "files", "miaouvsrg", "wiki", page.Filename + ".html"), t)
 
         let content =
             File
-                .ReadAllText(Path.Combine(YAVSRG_PATH, "interlude", "docs", "wiki", "index.md"))
+                .ReadAllText(Path.Combine(MIAOUVSRG_PATH, "miaouvsrg", "docs", "wiki", "index.md"))
                 .Split([| "::::" |], System.StringSplitOptions.TrimEntries)
             |> Array.map (Markdown.Parse >> MarkdownToHtml.render_document)
             |> Array.map (sprintf "<div class=\"frame text-2xl container flex flex-col mx-auto p-4\">%s</div>")
             |> String.concat ""
 
         wiki_template
-            .Replace("{{title}}", "Interlude Wiki")
+            .Replace("{{title}}", "miaouvsrg Wiki")
             .Replace("{{content}}", content + wiki_sidebar_content)
-        |> fun t -> File.WriteAllText(Path.Combine(SITE_PATH, "files", "interlude", "wiki", "index.html"), t)
+        |> fun t -> File.WriteAllText(Path.Combine(SITE_PATH, "files", "miaouvsrg", "wiki", "index.html"), t)

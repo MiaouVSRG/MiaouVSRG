@@ -1,14 +1,14 @@
-﻿namespace YAVSRG.CLI.Features
+﻿namespace MiaouVSRG.CLI.Features
 
 open System.IO
 open System.IO.Compression
 open System.Diagnostics
 open System.Runtime.InteropServices
-open YAVSRG.CLI.Utils
+open MiaouVSRG.CLI.Utils
 
 module Play =
 
-    let GAME_FOLDER = Path.Combine(YAVSRG_PATH, "GAME")
+    let GAME_FOLDER = Path.Combine(MIAOUVSRG_PATH, "GAME")
 
     let detect_build_info() =
         let arch = RuntimeInformation.OSArchitecture
@@ -37,7 +37,7 @@ module Play =
             Directory.CreateDirectory GAME_FOLDER |> ignore
             let build_info = detect_build_info()
             Releases.build_platform build_info
-            ZipFile.ExtractToDirectory(Path.Combine(YAVSRG_PATH, "interlude", "releases", sprintf "MiaouVSRG-%s.zip" build_info.Name), GAME_FOLDER, true)
+            ZipFile.ExtractToDirectory(Path.Combine(MIAOUVSRG_PATH, "miaouvsrg", "releases", sprintf "MiaouVSRG-%s.zip" build_info.Name), GAME_FOLDER, true)
         with err -> printfn "Error creating GAME folder: %O" err
 
         // exec "git" "checkout main"
@@ -48,33 +48,29 @@ module Play =
         if not (Directory.Exists GAME_FOLDER && Directory.EnumerateFileSystemEntries GAME_FOLDER |> Seq.isEmpty |> not) then
             update()
 
-        if File.Exists(Path.Combine(GAME_FOLDER, "Interlude.exe")) then
-            File.Move(Path.Combine(GAME_FOLDER, "Interlude.exe"), Path.Combine(GAME_FOLDER, "MiaouVSRG.exe"), true)
-        elif File.Exists(Path.Combine(GAME_FOLDER, "Interlude")) then
-            File.Move(Path.Combine(GAME_FOLDER, "Interlude"), Path.Combine(GAME_FOLDER, "MiaouVSRG"), true)
         elif File.Exists(Path.Combine(GAME_FOLDER, "MiaouVSRG.exe")) then
             Process.Start(Path.Combine(GAME_FOLDER, "MiaouVSRG.exe")).WaitForExit()
         elif File.Exists(Path.Combine(GAME_FOLDER, "MiaouVSRG")) then
             Process.Start(Path.Combine(GAME_FOLDER, "MiaouVSRG")).WaitForExit()
         else
-            printfn "Your GAME folder is missing an Interlude executable, run `yavsrg update` to fix it"
+            printfn "Your GAME folder is missing an MiaouVSRG executable, run `miaouvsrg update` to fix it"
 
     let debug_run () =
-        let build_output = Path.Combine(INTERLUDE_SOURCE_PATH, "bin", "Debug", "net9.0")
+        let build_output = Path.Combine(MIAOUVSRG_SOURCE_PATH, "bin", "Debug", "net9.0")
         try
             let build_info = detect_build_info()
             if not (Directory.Exists build_output) then Directory.CreateDirectory build_output |> ignore
 
             File.Copy(
-                Path.Combine(YAVSRG_PATH, "engine", "lib", build_info.RuntimeId, build_info.BassLibraryFile),
-                Path.Combine(INTERLUDE_SOURCE_PATH, "bin", "Debug", "net9.0", build_info.BassLibraryFile),
+                Path.Combine(MIAOUVSRG_PATH, "engine", "lib", build_info.RuntimeId, build_info.BassLibraryFile),
+                Path.Combine(MIAOUVSRG_SOURCE_PATH, "bin", "Debug", "net9.0", build_info.BassLibraryFile),
                 true
             )
 
             File.Copy(
-                Path.Combine(YAVSRG_PATH, "engine", "lib", build_info.RuntimeId, build_info.BassFxLibraryFile),
-                Path.Combine(INTERLUDE_SOURCE_PATH, "bin", "Debug", "net9.0", build_info.BassFxLibraryFile),
+                Path.Combine(MIAOUVSRG_PATH, "engine", "lib", build_info.RuntimeId, build_info.BassFxLibraryFile),
+                Path.Combine(MIAOUVSRG_SOURCE_PATH, "bin", "Debug", "net9.0", build_info.BassFxLibraryFile),
                 true
             )
         with err -> printfn "Error detecting platform: %O" err
-        exec_at INTERLUDE_SOURCE_PATH "dotnet" "run --configuration Debug -v q"
+        exec_at MIAOUVSRG_SOURCE_PATH "dotnet" "run --configuration Debug -v q"

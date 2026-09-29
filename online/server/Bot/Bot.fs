@@ -1,12 +1,12 @@
-﻿namespace Interlude.Web.Server.Bot
+﻿namespace MiaouVSRG.Web.Server.Bot
 
 open System
 open System.Threading
 open Discord
 open Discord.WebSocket
 open Percyqaz.Common
-open Interlude.Web.Server
-open Interlude.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server
+open MiaouVSRG.Web.Server.Domain.Core
 
 module Bot =
 

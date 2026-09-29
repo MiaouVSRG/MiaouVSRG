@@ -1,13 +1,13 @@
-﻿namespace Interlude.Web.Server.API.Charts.Scores
+﻿namespace MiaouVSRG.Web.Server.API.Charts.Scores
 
 open System
 open NetCoreServer
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests
-open Interlude.Web.Server.API
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.Services
-open Interlude.Web.Server.Domain
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Services
+open MiaouVSRG.Web.Server.Domain
 
 module Leaderboard =
 

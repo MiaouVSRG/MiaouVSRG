@@ -1,8 +1,8 @@
-﻿namespace YAVSRG.CLI.Features.Backbeat
+﻿namespace MiaouVSRG.CLI.Features.Backbeat
 
 open Percyqaz.Common
-open Prelude.Backbeat.Archive
-open Interlude.Web.Shared
+open Catnip.Backbeat.Archive
+open MiaouVSRG.Web.Shared
 
 module Check =
     

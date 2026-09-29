@@ -16,7 +16,7 @@ jobs:
           dotnet-version: 9.0.x
           
       - name: Unit tests
-        run: dotnet test -v q online/tests/domain/Interlude.Web.Tests.Domain.fsproj
+        run: dotnet test -v q online/tests/domain/MiaouVSRG.Web.Tests.Domain.fsproj
           
       - name: Setup certificate and secrets for Server instance
         run: |
@@ -27,10 +27,10 @@ jobs:
       - name: Build and run image 
         run: | 
             cd online
-            docker compose -p interludeweb up --build --detach
+            docker compose -p miaouvsrgweb up --build --detach
             cd ..
         
       - name: Integration tests
         run: |
             docker logs server
-            dotnet test online/tests/integration/Interlude.Web.Tests.Integration.fsproj
+            dotnet test online/tests/integration/MiaouVSRG.Web.Tests.Integration.fsproj

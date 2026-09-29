@@ -1,8 +1,8 @@
-﻿namespace Interlude.Web.Tests.Domain.Backbeat
+﻿namespace MiaouVSRG.Web.Tests.Domain.Backbeat
 
 open NUnit.Framework
 
-open Interlude.Web.Server.Domain.Backbeat
+open MiaouVSRG.Web.Server.Domain.Backbeat
 
 module Tables =
 

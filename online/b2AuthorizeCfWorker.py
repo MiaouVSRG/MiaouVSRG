@@ -58,7 +58,7 @@ async function handleRequest(request) {
 let authToken='<B2_DOWNLOAD_TOKEN>'
 let b2Headers = new Headers(request.headers)
 b2Headers.append("Authorization", authToken)
-modRequest = new Request(request.url.replace("cdn.yavsrg.net/", "cdn.yavsrg.net/file/yavsrg-backbeat/"), {
+modRequest = new Request(request.url.replace("cdn.miaouvsrg.com/", "cdn.miaouvsrg.com/file/miaouvsrg-backbeat/"), {
     method: request.method,
     headers: b2Headers
 })
