@@ -4,26 +4,26 @@ This guide assumes little pre-existing knowledge other than that you have writte
 
 If you are experienced with a workflow that works for you instead, feel free to disregard or improvise upon these instructions at your own risk
 
-If these steps don't help or you are stuck, ask in [the Discord](https://yavsrg.net/discord)
+If these steps don't help or you are stuck, ask in [the Discord](https://miaouvsrg.com/discord)
 
 ### 1. Get the code on your machine
-See the [guide to building Interlude as a developer in README.md](https://github.com/YAVSRG/YAVSRG?tab=readme-ov-file#-building-interlude-for-developers-only)
+See the [guide to building MiaouVSRG as a developer in README.md](https://github.com/MiaouVSRG/MiaouVSRG?tab=readme-ov-file#-building-miaouvsrg-for-developers-only)
 
-Now you can successfully build and run Interlude with any changes you've made to the codebase!
+Now you can successfully build and run MiaouVSRG with any changes you've made to the codebase!
 
-### 2. Create a fork of YAVSRG on GitHub
+### 2. Create a fork of MiaouVSRG on GitHub
 
 You will need to [sign up for a GitHub account](https://github.com/login) if you don't have one
 
-Once you are signed into your GitHub account, [create a fork of YAVSRG](https://github.com/YAVSRG/YAVSRG/fork)
+Once you are signed into your GitHub account, [create a fork of MiaouVSRG](https://github.com/MiaouVSRG/MiaouVSRG/fork)
 
 This is where you can commit whatever changes you like to your own copy of the repo
 
 Once the fork is created, connect the repository on your machine to a branch on the fork with these commands:
 
 ```bash
-# terminal needs to be in the YAVSRG folder
-git remote add personal https://github.com/<*YOUR GITHUB USERNAME*>/YAVSRG.git
+# terminal needs to be in the MiaouVSRG folder
+git remote add personal https://github.com/<*YOUR GITHUB USERNAME*>/MiaouVSRG.git
 git checkout -b <*BRANCH NAME*>
 git push --set-upstream personal <*BRANCH NAME*>
 # now you can add commits and push them as you please
@@ -43,13 +43,13 @@ The `main` on your local repo should only be used for fetching updates from the 
 
 You can now make any changes you like and commit/push your work as you go using git or IDE integrations with git
 
-Any commits you push will appear at `https://github/com/<*YOUR USERNAME*>/YAVSRG` and not on the main repo
+Any commits you push will appear at `https://github/com/<*YOUR USERNAME*>/MiaouVSRG` and not on the main repo
 
 When you are ready to submit your changes to be added to the main repo, you can submit a PR (step 4)
 
 ### 4. Submit a PR
 
-Submit a PR by going to https://github.com/YAVSRG/YAVSRG/compare, choose `base: main` <- `compare: <*YOUR BRANCH*>` and click 'Open Pull Request'
+Submit a PR by going to https://github.com/MiaouVSRG/MiaouVSRG/compare, choose `base: main` <- `compare: <*YOUR BRANCH*>` and click 'Open Pull Request'
 
 Give your PR a title and description and submit it, it is now basically an open thread on the main repo to add/merge the changes into the current version
 

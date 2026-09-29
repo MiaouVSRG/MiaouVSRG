@@ -1,11 +1,11 @@
-﻿namespace Interlude.Web.Server.Domain.Core
+﻿namespace MiaouVSRG.Web.Server.Domain.Core
 
 open System
 open Percyqaz.Common
 open Percyqaz.Data.Sqlite
-open Prelude
-open Prelude.Mods
-open Interlude.Web.Server
+open Catnip
+open Catnip.Mods
+open MiaouVSRG.Web.Server
 type AccuraciesState = Map<string, float>
 
 type Score =

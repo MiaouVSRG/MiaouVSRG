@@ -1,9 +1,9 @@
-﻿namespace Interlude.Web.Server.Domain.Core
+﻿namespace MiaouVSRG.Web.Server.Domain.Core
 
 open Percyqaz.Common
 open Percyqaz.Data.Sqlite
-open Prelude.Calculator
-open Interlude.Web.Server
+open Catnip.Calculator
+open MiaouVSRG.Web.Server
 
 type XPLeaderboardModel = { UserId: int64; XP: int64; Playtime: float }
 

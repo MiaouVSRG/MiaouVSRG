@@ -1,11 +1,11 @@
-﻿namespace Interlude.Web.Server.Domain.Services
+﻿namespace MiaouVSRG.Web.Server.Domain.Services
 
 open System
 open System.Collections.Generic
 open Percyqaz.Common
-open Interlude.Web.Shared
-open Interlude.Web.Server
-open Interlude.Web.Server.Domain.Core
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Server
+open MiaouVSRG.Web.Server.Domain.Core
 
 module Users =
 

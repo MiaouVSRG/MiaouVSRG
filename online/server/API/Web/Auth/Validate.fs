@@ -1,18 +1,18 @@
-namespace Interlude.Web.Server.API.Web.Auth
+namespace MiaouVSRG.Web.Server.API.Web.Auth
 
 open System
 open System.Net.Http
 open System.Net.Http.Json
 open FParsec
-open Interlude.Web.Server
-open Interlude.Web.Server.API
-open Interlude.Web.Server.API.Auth.Discord
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.Core.Stats
-open Interlude.Web.Server.Domain.Services
-open Interlude.Web.Server.Domain.Services.Users
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests.Web.Auth.Validate
+open MiaouVSRG.Web.Server
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.API.Auth.Discord
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Core.Stats
+open MiaouVSRG.Web.Server.Domain.Services
+open MiaouVSRG.Web.Server.Domain.Services.Users
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests.Web.Auth.Validate
 open NetCoreServer
 open Percyqaz.Common
 

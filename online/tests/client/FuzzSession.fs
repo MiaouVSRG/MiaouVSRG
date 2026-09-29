@@ -1,11 +1,11 @@
-﻿namespace Interlude.Web.Tests.Client
+﻿namespace MiaouVSRG.Web.Tests.Client
 
 open System.Net.Security
 open System.Net.Sockets
 open System.Security.Authentication
 open NetCoreServer
 open Percyqaz.Common
-open Interlude.Web.Shared
+open MiaouVSRG.Web.Shared
 
 module FuzzSession =
 

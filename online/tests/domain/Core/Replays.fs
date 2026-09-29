@@ -1,9 +1,9 @@
-﻿namespace Interlude.Web.Tests.Domain.Core
+﻿namespace MiaouVSRG.Web.Tests.Domain.Core
 
 open NUnit.Framework
 
-open Prelude.Gameplay.Replays
-open Interlude.Web.Server.Domain.Core
+open Catnip.Gameplay.Replays
+open MiaouVSRG.Web.Server.Domain.Core
 
 module Replays =
 

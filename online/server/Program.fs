@@ -5,11 +5,11 @@ open System.Security.Authentication
 open System.Security.Cryptography.X509Certificates
 open NetCoreServer
 open Percyqaz.Common
-open Interlude.Web.Shared
-open Interlude.Web.Server
-open Interlude.Web.Server.Online
-open Interlude.Web.Server.API
-open Interlude.Web.Server.Bot
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Server
+open MiaouVSRG.Web.Server.Online
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.Bot
 
 let SOCKET_PORT = 32767
 let HTTPS_PORT = 444 // Avoid errors with HTTPS port 443

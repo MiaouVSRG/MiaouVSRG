@@ -1,4 +1,4 @@
-﻿namespace Interlude.Web.Shared
+﻿namespace MiaouVSRG.Web.Shared
 
 open System.Net
 open System.Net.Security

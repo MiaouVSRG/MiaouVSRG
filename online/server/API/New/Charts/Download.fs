@@ -1,18 +1,18 @@
-﻿namespace Interlude.Web.Server.API.New.Charts
+﻿namespace MiaouVSRG.Web.Server.API.New.Charts
 
 open System.IO
 
 open System.IO.Compression
-open Interlude.Web.Server.API
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.New
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.New
 open NetCoreServer
-open Interlude.Web.Shared
+open MiaouVSRG.Web.Shared
 open Percyqaz.Common
-open Prelude
-open Prelude.Calculator
-open Prelude.Formats
-open Prelude.Formats.Osu
+open Catnip
+open Catnip.Calculator
+open Catnip.Formats
+open Catnip.Formats.Osu
 
 module Download =
     let handle

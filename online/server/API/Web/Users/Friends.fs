@@ -1,11 +1,11 @@
-namespace Interlude.Web.Server.Web.Users
+namespace MiaouVSRG.Web.Server.Web.Users
 
-open Interlude.Web.Shared.Requests.Web.User.Friends
+open MiaouVSRG.Web.Shared.Requests.Web.User.Friends
 open NetCoreServer
-open Interlude.Web.Shared
-open Interlude.Web.Server.API
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Online
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Online
 
 module Friends =
 

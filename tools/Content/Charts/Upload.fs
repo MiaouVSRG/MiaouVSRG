@@ -1,14 +1,14 @@
-﻿namespace YAVSRG.CLI.Features.Backbeat
+﻿namespace MiaouVSRG.CLI.Features.Backbeat
 
 open System.IO
 open System.Net.Http
 open Percyqaz.Common
-open Prelude
-open Prelude.Charts
-open Prelude.Data
-open Prelude.Data.Library
-open Prelude.Data.Library.Imports
-open Interlude.Web.Shared
+open Catnip
+open Catnip.Charts
+open Catnip.Data
+open Catnip.Data.Library
+open Catnip.Data.Library.Imports
+open MiaouVSRG.Web.Shared
 open Bytewizer.Backblaze.Client
 
 type BackbeatChart = Backbeat.Archive.Chart
@@ -35,7 +35,7 @@ module Upload =
 
     let private cdn_httpclient = new HttpClient()
     let check_cdn_file_exists(file_name: string) =
-        let req = new HttpRequestMessage(HttpMethod.Head, "https://cdn.yavsrg.net/" + file_name)
+        let req = new HttpRequestMessage(HttpMethod.Head, "https://cdn.miaouvsrg.com/" + file_name)
         let reply = cdn_httpclient.Send(req)
         reply.IsSuccessStatusCode
 
@@ -208,16 +208,16 @@ module Upload =
         }
 
     let has_folder (folder_name: string) =
-        interlude_chart_db.Entries
+        miaouvsrg_chart_db.Entries
         |> Seq.where (fun meta -> meta.Packs.Contains folder_name)
         |> Seq.map (fun meta -> meta.Origins |> Set.exists _.SuitableForUpload && match meta.Audio with AssetPath.Hash _ -> true | _ -> false)
         |> fun s -> not (Seq.isEmpty s) && Seq.forall id s
 
     let upload_folder (folder_name: string) =
         seq {
-            for chart_meta in interlude_chart_db.Entries |> Seq.where (fun meta -> meta.Packs.Contains folder_name) do
+            for chart_meta in miaouvsrg_chart_db.Entries |> Seq.where (fun meta -> meta.Packs.Contains folder_name) do
                 async {
-                    match ChartDatabase.get_chart chart_meta.Hash interlude_chart_db with
+                    match ChartDatabase.get_chart chart_meta.Hash miaouvsrg_chart_db with
                     | Ok chart ->
                         match! upload_chart chart_meta chart with
                         | Ok () -> Logging.Debug "Uploaded '%s'" chart_meta.Title
@@ -231,7 +231,7 @@ module Upload =
         Logging.Info "Uploading '%s' complete!" folder_name
 
     let get_etterna_pack (pack_name: string) =
-        OnlineImports.download_by_origin (ChartOrigin.Etterna pack_name, interlude_library.Charts, interlude_scores_db, TaskProgress.log_progress_bar pack_name)
+        OnlineImports.download_by_origin (ChartOrigin.Etterna pack_name, miaouvsrg_library.Charts, miaouvsrg_scores_db, TaskProgress.log_progress_bar pack_name)
         |> Async.RunSynchronously
 
     let etterna_pack_aio (pack_name: string) =

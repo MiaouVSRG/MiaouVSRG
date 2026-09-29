@@ -1,10 +1,10 @@
-﻿namespace Interlude.Web.Server.API
+﻿namespace MiaouVSRG.Web.Server.API
 
 open System
-open Interlude.Web.Server
-open Interlude.Web.Shared
+open MiaouVSRG.Web.Server
+open MiaouVSRG.Web.Shared
 open Percyqaz.Common
-open Interlude.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Core
 
 [<AutoOpen>]
 module Utils =

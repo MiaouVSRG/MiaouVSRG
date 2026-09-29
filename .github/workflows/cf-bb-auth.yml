@@ -6,7 +6,7 @@ on:
     
 jobs:
   build:
-    if: github.repository == 'YAVSRG/YAVSRG'
+    if: github.repository == 'MiaouVSRG/MiaouVSRG'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

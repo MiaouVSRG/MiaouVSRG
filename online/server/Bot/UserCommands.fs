@@ -1,12 +1,12 @@
-﻿namespace Interlude.Web.Server.Bot
+﻿namespace MiaouVSRG.Web.Server.Bot
 
 open System
 open Discord
 open Discord.WebSocket
-open Prelude.Gameplay.Rulesets
-open Prelude.Backbeat.Archive
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.Services
+open Catnip.Gameplay.Rulesets
+open Catnip.Backbeat.Archive
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Services
 
 module UserCommands =
 

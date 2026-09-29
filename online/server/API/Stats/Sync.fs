@@ -1,12 +1,12 @@
-﻿namespace Interlude.Web.Server.API.Stats
+﻿namespace MiaouVSRG.Web.Server.API.Stats
 
 open NetCoreServer
 open Percyqaz.Common
-open Prelude
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests
-open Interlude.Web.Server.API
-open Interlude.Web.Server.Domain.Services
+open Catnip
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.Domain.Services
 
 module Sync =
 

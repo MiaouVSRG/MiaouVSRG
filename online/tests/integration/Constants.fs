@@ -1,4 +1,4 @@
-namespace Interlude.Web.Tests.Integration
+namespace MiaouVSRG.Web.Tests.Integration
 
 [<AutoOpen>]
 module IntegrationTestConstants =

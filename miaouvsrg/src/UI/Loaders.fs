@@ -1,0 +1,204 @@
+﻿namespace MiaouVSRG.UI
+
+open System
+open MiaouVSRG.Content
+open Percyqaz.Common
+open Percyqaz.Flux.Graphics
+open Percyqaz.Flux.UI
+open Catnip
+
+module LoadingIndicator =
+
+    type Strip(is_loading: unit -> bool) =
+        inherit StaticWidget(NodeType.None)
+
+        let animation = Animation.Counter(1500.0)
+        let fade = Animation.Fade 0.0f
+
+        override this.Update(elapsed_ms, moved) =
+            base.Update(elapsed_ms, moved)
+            animation.Update elapsed_ms
+            fade.Target <- if is_loading () then 1.0f else 0.0f
+            fade.Update elapsed_ms
+
+        override this.Draw() =
+            if fade.Alpha = 0 then
+                ()
+            else
+
+                let tick_width = this.Bounds.Width * 0.2f
+
+                let pos =
+                    -tick_width
+                    + (this.Bounds.Width + tick_width) * float32 animation.Progress
+
+                Render.rect_edges
+                    (this.Bounds.Left + max 0.0f pos)
+                    this.Bounds.Top
+                    (this.Bounds.Left + min this.Bounds.Width (pos + tick_width))
+                    this.Bounds.Bottom
+                    (Colors.white.O4a fade.Alpha)
+
+    type Border(is_loading: unit -> bool) =
+        inherit StaticWidget(NodeType.None)
+
+        let animation = Animation.Counter(1500.0)
+        let fade = Animation.Fade 0.0f
+
+        override this.Update(elapsed_ms, moved) =
+            base.Update(elapsed_ms, moved)
+            animation.Update elapsed_ms
+            fade.Target <- if is_loading () then 1.0f else 0.0f
+            fade.Update elapsed_ms
+
+        override this.Draw() =
+            if fade.Alpha = 0 then
+                ()
+            else
+
+                let b = this.Bounds.Expand(Style.PADDING)
+                LoadingAnimation.draw_border b (float32 animation.Progress) (Colors.white.O4a fade.Alpha)
+                
+    type Percentage(initial_count: int) =
+        inherit StaticWidget(NodeType.None)
+        
+        member val Count = initial_count with get, set
+        member val TotalCount = 1 with get, set
+        member val Alpha = 255 with get, set // See LoadingScreen.draw to understand why we need this value
+
+        override this.Update(elapsed_ms, moved) =
+            base.Update(elapsed_ms, moved)
+
+        override this.Draw() =
+            let percent = float32 this.Count / float32 this.TotalCount
+            let TAIL_SIZE = 100.0f // 100px width and 100px height
+
+            Render.sprite this.Bounds (Colors.white.O4a this.Alpha) (Content.Texture "loading-screen-progress-bar-empty")
+                
+            let r_progress_bar: Rect = {
+                Left = this.Bounds.Left
+                Top = this.Bounds.Top
+                Right = this.Bounds.Left + (this.Bounds.Width * percent)
+                Bottom = this.Bounds.Bottom
+            }
+            Render.sprite r_progress_bar (Colors.white.O4a this.Alpha) ((Content.Texture "loading-screen-progress-bar-full"))
+                
+            let left_pos =
+                if percent = 1.0f then
+                    this.Bounds.Right - (TAIL_SIZE / 2.0f)
+                else
+                    this.Bounds.Left + ((this.Bounds.Width - TAIL_SIZE) * percent)
+            let r_tail: Rect = Rect.FromSize(left_pos, this.Bounds.Top, TAIL_SIZE, TAIL_SIZE)
+            Render.sprite r_tail (Colors.white.O4a this.Alpha) (Content.Texture "loading-screen-progress-bar-tail")
+
+type WIP() as this =
+    inherit StaticWidget(NodeType.None)
+
+    let text = %"misc.wip"
+
+    do this.Position <- Position.SliceB(100.0f)
+
+    override this.Draw() =
+        Render.rect this.Bounds (Color.FromArgb(127, Color.Yellow))
+        let w = this.Bounds.Width / 20.0f
+
+        for i = 0 to 19 do
+            Render.rect_size
+                (this.Bounds.Left + w * float32 i)
+                this.Bounds.Top
+                w
+                10.0f
+                (if i % 2 = 0 then Color.Yellow else Color.Black)
+
+            Render.rect_size
+                (this.Bounds.Left + w * float32 i)
+                (this.Bounds.Bottom - 10.0f)
+                w
+                10.0f
+                (if i % 2 = 1 then Color.Yellow else Color.Black)
+
+        Text.fill_b (Style.font, text, this.Bounds.Shrink(20.0f), Colors.text, Alignment.CENTER)
+
+// todo: give empty states an optional action
+type EmptyState(icon: string, text: string) =
+    inherit StaticWidget(NodeType.None)
+
+    member val Subtitle = "" with get, set
+
+    override this.Draw() =
+        Text.fill_b (Style.font, icon, this.Bounds.Shrink(30.0f, 100.0f).SliceT(200.0f), Colors.text_greyout, Alignment.CENTER)
+
+        Text.fill_b (
+            Style.font,
+            text,
+            this.Bounds.Shrink(30.0f, 100.0f).ShrinkT(175.0f).SliceT(60.0f),
+            Colors.text_greyout,
+            Alignment.CENTER
+        )
+
+        Text.fill_b (
+            Style.font,
+            this.Subtitle,
+            this.Bounds.Shrink(30.0f, 100.0f).ShrinkT(230.0f).SliceT(40.0f),
+            Colors.text_greyout,
+            Alignment.CENTER
+        )
+
+// todo: perhaps bin this in favour of the loading indicators which are much better
+// OR add the loading indicator to this and it will look good
+type LoadingState() =
+    inherit StaticWidget(NodeType.None)
+
+    let animation = Animation.Counter(250.0)
+
+    let animation_frames =
+        [|
+            Icons.CLOUD_SNOW
+            Icons.CLOUD_DRIZZLE
+            Icons.CLOUD_RAIN
+            Icons.CLOUD_DRIZZLE
+        |]
+
+    member val Text = %"misc.loading" with get, set
+
+    override this.Update(elapsed_ms, moved) =
+        base.Update(elapsed_ms, moved)
+        animation.Update elapsed_ms
+
+    override this.Draw() =
+        let color = (!*Palette.LIGHT, !*Palette.DARKER)
+        let icon = animation_frames.[animation.Loops % animation_frames.Length]
+        Text.fill_b (Style.font, icon, this.Bounds.Shrink(30.0f, 100.0f).SliceT(200.0f), color, Alignment.CENTER)
+
+        Text.fill_b (
+            Style.font,
+            this.Text,
+            this.Bounds.Shrink(30.0f, 100.0f).ShrinkT(175.0f).SliceT(60.0f),
+            color,
+            Alignment.CENTER
+        )
+
+type NewAndShiny() =
+    inherit StaticWidget(NodeType.None)
+
+    member val Icon = Icons.ALERT_CIRCLE with get, set
+
+    override this.Draw() =
+        let x, y = this.Bounds.Right, this.Bounds.Bottom // todo: alignment options
+        let r = 18f
+        let angle = MathF.PI / 15.0f
+
+        let vec i =
+            let angle = float32 i * angle
+            let struct (a, b) = MathF.SinCos(angle)
+            (x + r * a, y - r * b)
+
+        for i = 0 to 29 do
+            Render.quad_points
+                (x, y)
+                (x, y)
+                (vec i)
+                (vec (i + 1))
+                Colors.red_accent
+
+        Text.fill_b (Style.font, this.Icon, Rect.FromSize(x, y, 0.0f, 0.0f).Expand(r), Colors.text, Alignment.CENTER)

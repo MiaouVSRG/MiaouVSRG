@@ -1,11 +1,11 @@
-namespace Interlude.Web.Server.API.Web.Users
+namespace MiaouVSRG.Web.Server.API.Web.Users
 
-open Interlude.Web.Server.API
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests.Web.User.Login
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests.Web.User.Login
 open NetCoreServer
-open Prelude
+open Catnip
 open BCrypt.Net
 
 module Login =

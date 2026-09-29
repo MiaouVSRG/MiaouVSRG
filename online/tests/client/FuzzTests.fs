@@ -1,6 +1,6 @@
-﻿namespace Interlude.Web.Tests.Client
+﻿namespace MiaouVSRG.Web.Tests.Client
 
-open Interlude.Web.Shared
+open MiaouVSRG.Web.Shared
 
 type MalformedPacketsSession() =
     inherit FuzzSession("malformed_packet", ignore)

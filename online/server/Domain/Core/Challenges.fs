@@ -1,9 +1,9 @@
-namespace Interlude.Web.Server.Domain.Core
+namespace MiaouVSRG.Web.Server.Domain.Core
 
-open Interlude.Web.Server
+open MiaouVSRG.Web.Server
 open Percyqaz.Common
 open Percyqaz.Data.Sqlite
-open Prelude
+open Catnip
 
 type Challenge =
     {

@@ -1,4 +1,4 @@
-name: Deploy online.yavsrg.net
+name: Deploy online.miaouvsrg.com
 on:
   push:
     branches: [ "main" ]
@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   build_and_push:
-    if: github.repository == 'YAVSRG/YAVSRG'
+    if: github.repository == 'MiaouVSRG/MiaouVSRG'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,10 +24,10 @@ jobs:
           dotnet-version: 9.0.x
           
       - name: Unit tests
-        run: dotnet test -v q online/tests/domain/Interlude.Web.Tests.Domain.fsproj
+        run: dotnet test -v q online/tests/domain/MiaouVSRG.Web.Tests.Domain.fsproj
         
       - name: Build image 
-        run: docker build -t interlude-web-server -f online/server/dockerfile .
+        run: docker build -t miaouvsrg-web-server -f online/server/dockerfile .
         
       - name: Install doctl 
         uses: digitalocean/action-doctl@v2
@@ -39,10 +39,10 @@ jobs:
         
       - name: Tag image 
         run:
-          docker tag interlude-web-server registry.digitalocean.com/yavsrg/interlude-web-server:latest
+          docker tag miaouvsrg-web-server registry.digitalocean.com/miaouvsrg/miaouvsrg-web-server:latest
           
       - name: Push image
-        run: docker push registry.digitalocean.com/yavsrg/interlude-web-server:latest
+        run: docker push registry.digitalocean.com/miaouvsrg/miaouvsrg-web-server:latest
         
       - name: Run update script on server
         uses: appleboy/ssh-action@v0.1.7
