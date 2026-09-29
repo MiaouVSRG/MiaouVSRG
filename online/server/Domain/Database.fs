@@ -1,13 +1,13 @@
-﻿namespace Interlude.Web.Server.Domain
+﻿namespace MiaouVSRG.Web.Server.Domain
 
 open System
 open Percyqaz.Common
 open Percyqaz.Data.Sqlite
-open Interlude.Web.Server
+open MiaouVSRG.Web.Server
 
 module Migrations =
 
-    open Interlude.Web.Server.Domain.Core
+    open MiaouVSRG.Web.Server.Domain.Core
 
     let run_core (db: Database) : unit =
         Database.migrate
@@ -78,7 +78,7 @@ module Migrations =
             (fun db -> MonthlyStats.CREATE_TABLE.Execute () db |> expect |> ignore)
             db
 
-    open Interlude.Web.Server.Domain.Backbeat
+    open MiaouVSRG.Web.Server.Domain.Backbeat
 
     let run_backbeat (db: Database) : unit =
         Database.migrate
@@ -123,7 +123,7 @@ module Migrations =
                 """ db |> expect |> ignore)
             db
             
-    open Interlude.Web.Server.Domain.New
+    open MiaouVSRG.Web.Server.Domain.New
     
     let run_new (db: Database) : unit =
         Database.migrate

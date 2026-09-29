@@ -1,20 +1,20 @@
-﻿namespace Interlude.Web.Server.API.Web.Users
+﻿namespace MiaouVSRG.Web.Server.API.Web.Users
 
 open System
 open System.IO
 open System.IO.Compression
 open System.Linq
-open Interlude.Web.Server.API
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.Core.Score
-open Interlude.Web.Server.Domain.New
-open Interlude.Web.Server.Domain.Services
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests.Web.User.Completion
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Core.Score
+open MiaouVSRG.Web.Server.Domain.New
+open MiaouVSRG.Web.Server.Domain.Services
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests.Web.User.Completion
 open NetCoreServer
 open Percyqaz.Common
-open Prelude.Charts
-open Prelude.Formats.Osu
+open Catnip.Charts
+open Catnip.Formats.Osu
 
 module Completion =
     let handle

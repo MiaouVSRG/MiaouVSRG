@@ -1,15 +1,15 @@
-﻿namespace Interlude.Web.Server.API.Tables.Suggestions
+﻿namespace MiaouVSRG.Web.Server.API.Tables.Suggestions
 
 open NetCoreServer
 open Percyqaz.Common
-open Prelude
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests
-open Interlude.Web.Server
-open Interlude.Web.Server.API
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.Backbeat
-open Interlude.Web.Server.Domain.Services
+open Catnip
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests
+open MiaouVSRG.Web.Server
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Backbeat
+open MiaouVSRG.Web.Server.Domain.Services
 
 module Accept =
 

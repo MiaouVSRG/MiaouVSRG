@@ -1,10 +1,10 @@
-﻿namespace Interlude.Web.Server.Online
+﻿namespace MiaouVSRG.Web.Server.Online
 
 open System
 open System.Collections.Generic
 open Percyqaz.Common
-open Interlude.Web.Shared
-open Interlude.Web.Server.Domain.Services
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Server.Domain.Services
 
 [<RequireQualifiedAccess>]
 type SessionState =

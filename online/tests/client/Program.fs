@@ -1,8 +1,8 @@
 ﻿open System
 open System.Net.Http
 open Percyqaz.Common
-open Interlude.Web.Shared
-open Interlude.Web.Tests.Client
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Tests.Client
 
 Logging.Info "Make sure you have the server running"
 

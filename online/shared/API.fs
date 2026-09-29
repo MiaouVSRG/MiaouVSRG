@@ -1,15 +1,15 @@
-﻿namespace Interlude.Web.Shared
+﻿namespace MiaouVSRG.Web.Shared
 
 open System
 open System.Web
 open System.Net
-open Interlude.Web.Shared
+open MiaouVSRG.Web.Shared
 open NetCoreServer
 open System.Net.Http
 open System.Net.Sockets
 open System.Diagnostics
 open Percyqaz.Common
-open Prelude
+open Catnip
 
 [<AutoOpen>]
 module HttpResponseExtensions =

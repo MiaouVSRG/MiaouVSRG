@@ -1,17 +1,17 @@
-﻿namespace YAVSRG.CLI
+﻿namespace MiaouVSRG.CLI
 
 open System
 open System.IO
 open System.Text.RegularExpressions
 open System.Collections.Generic
-open Prelude.Mods
-open YAVSRG.CLI.Utils
+open Catnip.Mods
+open MiaouVSRG.CLI.Utils
 
 module Check =
 
     let private load_locale (file: string) =
         let mapping = new Dictionary<string, string>()
-        let path = Path.Combine(INTERLUDE_SOURCE_PATH, "Resources", "Locale", file + ".txt")
+        let path = Path.Combine(MIAOUVSRG_SOURCE_PATH, "Resources", "Locale", file + ".txt")
         let lines = File.ReadAllLines path
 
         Array.iter
@@ -31,13 +31,13 @@ module Check =
             printfn "%s" (String match_span)
 
     let simple_view_all () =
-        for filename, file_contents in walk_fs_files YAVSRG_PATH do
+        for filename, file_contents in walk_fs_files MIAOUVSRG_PATH do
             printfn "%s\n====\n" filename
             simple_view file_contents
 
     let check_linecounts () =
         let mutable loc = 0
-        for filename, file_contents in walk_fs_files YAVSRG_PATH do
+        for filename, file_contents in walk_fs_files MIAOUVSRG_PATH do
             let lines = file_contents.Split('\n').Length
 
             if lines > 300 then
@@ -64,7 +64,7 @@ module Check =
                     yield m.Index, (m.Groups.[1].Value)
             }
 
-        for filename, file_contents in walk_fs_files INTERLUDE_SOURCE_PATH do
+        for filename, file_contents in walk_fs_files MIAOUVSRG_SOURCE_PATH do
 
             for position, m in matches """ [^%]%"([a-z\-_\.]*)" """ file_contents do
                 find m (sprintf "%s (position %i)" filename position)
@@ -111,10 +111,10 @@ module Check =
                 if i < 9 then
                     find (sprintf "noteskin.notecolors.ddr.%i" i) "Note color tooltips"
 
-            for m in Prelude.Data.Library.Grouping.modes.Keys do
+            for m in Catnip.Data.Library.Grouping.modes.Keys do
                 find (sprintf "levelselect.groupby.%s" m) "Level select grouping"
 
-            for m in Prelude.Data.Library.Sorting.modes.Keys do
+            for m in Catnip.Data.Library.Sorting.modes.Keys do
                 find (sprintf "levelselect.sortby.%s" m) "Level select sorting"
 
         for m in found |> Seq.sort do
@@ -145,7 +145,7 @@ module Check =
             |> Seq.sort
             |> Seq.map (fun key -> sprintf "%s=%s" key (new_locale.[key].Replace("\n", "\\n")))
             |> fun contents ->
-                File.WriteAllLines(Path.Combine(INTERLUDE_SOURCE_PATH, "Resources", "Locale", file + ".txt"), contents)
+                File.WriteAllLines(Path.Combine(MIAOUVSRG_SOURCE_PATH, "Resources", "Locale", file + ".txt"), contents)
 
     let locale_rename (file: string) (before: string) =
         let locale = load_locale file
@@ -180,7 +180,7 @@ module Check =
 
             result
 
-        for filename, file_contents in walk_fs_files INTERLUDE_SOURCE_PATH do
+        for filename, file_contents in walk_fs_files MIAOUVSRG_SOURCE_PATH do
             let replaced_contents =
                 file_contents
                 |> replaces """ ([^%])%"([a-z\-_\.]*)" """ "%s%%\"%s\""
@@ -197,6 +197,6 @@ module Check =
         locale.Keys
         |> Seq.sort
         |> Seq.map (fun key -> sprintf "%s=%s" key (locale.[key].Replace("\n", "\\n")))
-        |> fun contents -> File.WriteAllLines(Path.Combine(INTERLUDE_SOURCE_PATH, "Resources", "Locale", file + ".txt"), contents)
+        |> fun contents -> File.WriteAllLines(Path.Combine(MIAOUVSRG_SOURCE_PATH, "Resources", "Locale", file + ".txt"), contents)
 
     let format_all_code () = exec "fantomas" "."

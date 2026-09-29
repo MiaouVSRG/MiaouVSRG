@@ -1,7 +1,7 @@
-﻿namespace Interlude.Web.Tests.Integration
+﻿namespace MiaouVSRG.Web.Tests.Integration
 
 open NUnit.Framework
-open Interlude.Web.Shared.Requests
+open MiaouVSRG.Web.Shared.Requests
 open System.Threading
 
 module Tables =

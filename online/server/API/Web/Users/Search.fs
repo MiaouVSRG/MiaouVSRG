@@ -1,19 +1,19 @@
-﻿namespace Interlude.Web.Server.API.Web.Users
+﻿namespace MiaouVSRG.Web.Server.API.Web.Users
 
 open System
 open System.Linq
-open Interlude.Web.Server.API
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.New
-open Interlude.Web.Server.Online
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests.Web.User.Search
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.New
+open MiaouVSRG.Web.Server.Online
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests.Web.User.Search
 open NetCoreServer
 open Percyqaz.Common
-open Prelude.Calculator.NoteDifficulty
-open Prelude.Data.User.Stats
-open Prelude.Gameplay.Rulesets
-open Prelude.Gameplay.Scoring
+open Catnip.Calculator.NoteDifficulty
+open Catnip.Data.User.Stats
+open Catnip.Gameplay.Rulesets
+open Catnip.Gameplay.Scoring
 
 module Search =
     

@@ -1,11 +1,11 @@
-﻿namespace Interlude.Web.Tests.Domain.Backbeat
+﻿namespace MiaouVSRG.Web.Tests.Domain.Backbeat
 
 open NUnit.Framework
 
-open Prelude
-open Prelude.Charts
-open Prelude.Backbeat.Archive
-open Interlude.Web.Server.Domain.Backbeat
+open Catnip
+open Catnip.Charts
+open Catnip.Backbeat.Archive
+open MiaouVSRG.Web.Server.Domain.Backbeat
 
 module Songs =
 

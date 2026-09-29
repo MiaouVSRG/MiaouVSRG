@@ -1,2 +1,2 @@
-# Interlude.Charts
-Repository for charts, tables and the relevant tooling for YAVSRG: Interlude
+# Backbeat
+This project is deprecated in favor of MiaouVSRG.CLI

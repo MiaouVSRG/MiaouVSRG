@@ -1,12 +1,12 @@
-﻿namespace Interlude.Web.Server.Domain.Services
+﻿namespace MiaouVSRG.Web.Server.Domain.Services
 
 open System.Collections.Generic
 open Percyqaz.Common
-open Prelude.Gameplay.Rulesets
-open Prelude.Backbeat
-open Prelude.Backbeat.Archive
-open Interlude.Web.Server
-open Interlude.Web.Server.Domain.Core
+open Catnip.Gameplay.Rulesets
+open Catnip.Backbeat
+open Catnip.Backbeat.Archive
+open MiaouVSRG.Web.Server
+open MiaouVSRG.Web.Server.Domain.Core
 
 module Backbeat =
 
@@ -199,7 +199,7 @@ module Backbeat =
             | Some chart -> Some chart
             | None -> None
 
-        open Prelude.Charts
+        open Catnip.Charts
         
         let fetch_new (chart_id: string) =
             by_hash_new chart_id
@@ -221,7 +221,7 @@ module Backbeat =
                             | Some(chart, song) ->
 
                             let header = Archive.make_chart_header (chart, song)
-                            let! message = http_client.GetAsync("https://cdn.yavsrg.net/" + hash) |> Async.AwaitTask
+                            let! message = http_client.GetAsync("https://cdn.miaouvsrg.com/" + hash) |> Async.AwaitTask
 
                             if message.IsSuccessStatusCode then
                                 use stream = message.Content.ReadAsStream()

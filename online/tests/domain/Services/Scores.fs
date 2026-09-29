@@ -1,15 +1,15 @@
-﻿namespace Interlude.Web.Tests.Domain.Services
+﻿namespace MiaouVSRG.Web.Tests.Domain.Services
 
 open NUnit.Framework
-open Prelude
+open Catnip
 open Percyqaz.Common
-open Prelude.Gameplay.Replays
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.Services
+open Catnip.Gameplay.Replays
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Services
 
 module Scores =
 
-    module Scores = Interlude.Web.Tests.Domain.Core.Scores
+    module Scores = MiaouVSRG.Web.Tests.Domain.Core.Scores
 
     [<Test>]
     let DecompressUntrustedString () =

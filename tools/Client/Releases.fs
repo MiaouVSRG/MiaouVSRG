@@ -1,8 +1,8 @@
-﻿namespace YAVSRG.CLI.Features
+﻿namespace MiaouVSRG.CLI.Features
 
 open System.IO
 open System.IO.Compression
-open YAVSRG.CLI.Utils
+open MiaouVSRG.CLI.Utils
 
 module Releases =
 
@@ -25,11 +25,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ----
 
-Thank you for playing Interlude!
+Thank you for playing MiaouVSRG!
 Information, future updates and support available at:
-    https://yavsrg.net
+    https://miaouvsrg.com
     OR https://discord.com/invite/tA22tWR
-    OR https://github.com/YAVSRG/YAVSRG
+    OR https://github.com/MiaouVSRG/MiaouVSRG
     """
 
     type BuildPlatformInfo =
@@ -86,10 +86,10 @@ Information, future updates and support available at:
     let build_platform (info: BuildPlatformInfo) =
 
         let build_dir =
-            Path.Combine(INTERLUDE_SOURCE_PATH, "bin", "Release", "net9.0", info.RuntimeId)
+            Path.Combine(MIAOUVSRG_SOURCE_PATH, "bin", "Release", "net9.0", info.RuntimeId)
 
         let clean_dir =
-            Path.Combine(YAVSRG_PATH, "interlude", "releases", $"MiaouVSRG-{info.Name}")
+            Path.Combine(MIAOUVSRG_PATH, "miaouvsrg", "releases", $"MiaouVSRG-{info.Name}")
 
         try
             Directory.Delete(build_dir, true)
@@ -101,7 +101,7 @@ Information, future updates and support available at:
         with _ ->
             ()
 
-        exec_at INTERLUDE_SOURCE_PATH
+        exec_at MIAOUVSRG_SOURCE_PATH
             "dotnet"
             $"publish --configuration Release -r {info.RuntimeId} -p:PublishSingleFile=True --self-contained true"
 
@@ -120,12 +120,12 @@ Information, future updates and support available at:
                 | _ -> ()
 
         File.Copy(
-            Path.Combine(YAVSRG_PATH, "engine", "lib", info.RuntimeId, info.BassLibraryFile),
+            Path.Combine(MIAOUVSRG_PATH, "engine", "lib", info.RuntimeId, info.BassLibraryFile),
             Path.Combine(clean_dir, info.BassLibraryFile)
         )
 
         File.Copy(
-            Path.Combine(YAVSRG_PATH, "engine", "lib", info.RuntimeId, info.BassFxLibraryFile),
+            Path.Combine(MIAOUVSRG_PATH, "engine", "lib", info.RuntimeId, info.BassFxLibraryFile),
             Path.Combine(clean_dir, info.BassFxLibraryFile)
         )
 

@@ -1,0 +1,86 @@
+﻿namespace MiaouVSRG.Features.Rulesets
+
+open Percyqaz.Common
+open Percyqaz.Flux.Windowing
+open Percyqaz.Flux.UI
+open Catnip
+open Catnip.Gameplay.Rulesets
+open MiaouVSRG.UI
+open MiaouVSRG.Content
+
+module RulesetSwitcher =
+
+    let make_dropdown (setting: Setting<string>) (w: DropdownWrapper) =
+        w.Toggle(fun () ->
+            let rulesets = Rulesets.list ()
+            let remove_bracket = System.Text.RegularExpressions.Regex("\\(.+?\\)")
+            let groups =
+                rulesets
+                |> Seq.groupBy(fun (id, _) -> id.Split("-").[0].Trim())
+                |> Seq.map (fun (_, grouped) ->
+                    let arr = grouped |> Array.ofSeq
+                    let group_name = remove_bracket.Replace((snd arr.[0]).Name, "").Trim()
+                    group_name, arr
+                )
+                |> Array.ofSeq
+            let dropdown_items =
+                seq {
+                    // yield (
+                    //     (fun () -> SelectRulesetPage().Show()),
+                    //     %"rulesets"
+                    // )
+                    for name, items in groups do
+                        if items.Length < 3 then
+                            for (id, rs) in items do
+                                yield ((fun () -> setting.Set id), rs.Name)
+                        else
+                            let inner_items = items |> Array.map (fun (id, rs) -> (fun () -> setting.Set id), rs.Name)
+                            let inner_dropdown = DropdownMenu { Items = inner_items }
+                            yield (
+                                (fun () ->
+                                    GameThread.defer (fun () ->
+                                        w.Show inner_dropdown
+                                        w.OnClose <- Selection.unclamp
+                                        Selection.clamp_to inner_dropdown
+                                    )
+                                ),
+                                name + " >"
+                            )
+                }
+            DropdownMenu
+                {
+                    Items = dropdown_items
+                }
+        )
+
+type RulesetSwitcher(setting: Setting<string>) =
+    inherit Container(NodeType.None)
+
+    let dropdown_wrapper = DropdownWrapper(fun d -> Position.BorderT(min d.Height 500.0f).Shrink(Style.PADDING, 0.0f).Translate(0.0f, -Style.PADDING))
+
+    override this.Init(parent: Widget) =
+        this
+            .Add(
+                InlaidButton(
+                    (fun () -> Rulesets.current.Name),
+                    (fun () -> this.ToggleDropdown()),
+                    ButtonType.CustomSprite "ruleset-button", 
+                    (10.0f, 13.0f),
+                    (fun () ->
+                        match Rulesets.current.Name.ToUpper() with
+                        | "EASY" -> Colors.green_judgement
+                        | "NORMAL" -> Colors.cyan_judgement
+                        | "HARD" -> Colors.red_judgement
+                        | "STRICT" -> Colors.purple_judgement
+                        | _ -> Colors.TRANSPARENT
+                     ),
+                    NoHover = true
+                )
+                    .Hotkey("ruleset_switch"),
+                dropdown_wrapper
+            )
+
+        base.Init parent
+
+    member this.ToggleDropdown() =
+        RulesetSwitcher.make_dropdown setting dropdown_wrapper

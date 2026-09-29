@@ -1,12 +1,12 @@
-﻿namespace Interlude.Web.Server.API.Stats.Leaderboard
+﻿namespace MiaouVSRG.Web.Server.API.Stats.Leaderboard
 
 open NetCoreServer
 open Percyqaz.Common
-open Prelude.Data.User.Stats
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests
-open Interlude.Web.Server.API
-open Interlude.Web.Server.Domain.Core
+open Catnip.Data.User.Stats
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.Domain.Core
 
 module MonthlyKeymode =
 

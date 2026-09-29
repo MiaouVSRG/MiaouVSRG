@@ -1,9 +1,9 @@
-﻿namespace Interlude.Web.Server.API.Health
+﻿namespace MiaouVSRG.Web.Server.API.Health
 
 open NetCoreServer
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests
-open Interlude.Web.Server.API
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests
+open MiaouVSRG.Web.Server.API
 
 module Status =
 
