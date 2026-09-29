@@ -1,12 +1,12 @@
-﻿namespace Interlude.Web.Server.API.Web
+﻿namespace MiaouVSRG.Web.Server.API.Web
 
 open System
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.Core.Stats
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests.Web.Leaderboard
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Core.Stats
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests.Web.Leaderboard
 open NetCoreServer
-open Prelude.Data.User.Stats
+open Catnip.Data.User.Stats
 
 module Leaderboard =
     

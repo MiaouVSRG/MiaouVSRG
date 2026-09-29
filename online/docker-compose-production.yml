@@ -2,7 +2,7 @@ version: "3.9"
 services:
     server:
         container_name: server
-        image: registry.digitalocean.com/yavsrg/interlude-web-server
+        image: registry.digitalocean.com/miaouvsrg/miaouvsrg-web-server
         restart: unless-stopped
         ports:
             - 32767:32767

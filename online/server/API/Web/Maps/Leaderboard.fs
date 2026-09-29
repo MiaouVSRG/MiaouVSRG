@@ -2,23 +2,23 @@ namespace Interlude.Web.Server.API.Web.Maps
 
 open System.IO
 open System.IO.Compression
-open Interlude.Web.Server.API
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.New
-open Interlude.Web.Server.Domain.Services
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests.Web.Map.Leaderboard
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.New
+open MiaouVSRG.Web.Server.Domain.Services
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests.Web.Map.Leaderboard
 open NetCoreServer
 open Percyqaz.Common
-open Prelude.Calculator
-open Prelude.Charts
-open Prelude.Data
-open Prelude.Formats
-open Prelude.Formats.Osu
-open Prelude.Gameplay.Replays
-open Prelude.Gameplay.Rulesets.Defaults
-open Prelude.Gameplay.Scoring
-open Prelude.Mods
+open Catnip.Calculator
+open Catnip.Charts
+open Catnip.Data
+open Catnip.Formats
+open Catnip.Formats.Osu
+open Catnip.Gameplay.Replays
+open Catnip.Gameplay.Rulesets.Defaults
+open Catnip.Gameplay.Scoring
+open Catnip.Mods
 
 module Leaderboard =
     let download_mapset_from_mino(url: string, output: string) =
@@ -46,10 +46,10 @@ module Leaderboard =
         async {
             require_query_parameter query_params "chart"
             let chart_id = query_params["chart"][0]
-            match Interlude.Web.Server.Domain.New.Charts.get_chart_by_id chart_id with
+            match MiaouVSRG.Web.Server.Domain.New.Charts.get_chart_by_id chart_id with
             | Some chart ->
                 
-                let mutable scorable_chart = Unchecked.defaultof<Prelude.Charts.Chart>
+                let mutable scorable_chart = Unchecked.defaultof<Catnip.Charts.Chart>
                 
                 let mutable source_folder = ""
                 let mutable require_folder_deletion = false
@@ -85,7 +85,7 @@ module Leaderboard =
                             }
                                 
                         let converted_chart =
-                            match Osu_To_Interlude.convert beatmap.Value action with
+                            match Osu_To_Miaouvsrg.convert beatmap.Value action with
                             | Ok chart -> Some chart
                             | Error err ->
                                 Logging.Error "%s ::: %s" (fst err) (snd err)
@@ -94,7 +94,7 @@ module Leaderboard =
                         if converted_chart.IsNone then
                             response.ReplyError(404, "chart not convertible")
                         else
-                            let hash = Prelude.Charts.Chart.hash converted_chart.Value.Chart
+                            let hash = Catnip.Charts.Chart.hash converted_chart.Value.Chart
                             if hash = chart_id then
                                 scorable_chart <- converted_chart.Value.Chart
                 

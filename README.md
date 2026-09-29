@@ -1,16 +1,16 @@
-<img src="https://github.com/MiaouVSRG/MiaouVSRG/blob/master/interlude/src/Resources/default/Textures/LOGO%20RAW.png" align="left" height="400">
+<img src="https://github.com/MiaouVSRG/MiaouVSRG/blob/master/miaouvsrg/src/Resources/default/Textures/LOGO%20RAW.png" align="left" height="400">
 
 ### MiaouVSRG
 
-**MiaouVSRG** is a **work-in-progress** rhythm game project built upon the engine of **[YAVSRG](https://github.com/YAVSRG/YAVSRG)** (Yet Another Vertically Scrolling Rhythm Game), created by [@Percyqaz](https://github.com/YAVSRG).
+**MiaouVSRG** is a **work-in-progress** rhythm game project built upon the **[Percyqaz.Flux](https://github.com/YAVSRG/YAVSRG/tree/main/engine)**.
 
 Our goal is to deliver a fresh rhythm game experience, featuring:
 - Lots of quality-of-life improvements
 - A brand new cute, cat-inspired art style :3
 
-A huge thanks to **Percyqaz** for giving us permission to build on his work and for his kind support throughout the development!
+A huge thanks to **Percyqaz** for his kind support throughout the development!
 
-Check out [yavsrg.net](https://www.yavsrg.net) to learn more about the original project.
+Check out [miaouvsrg.com](https://www.miaouvsrg.com) to learn more about the project.
 
 <br/>
 <br/>
@@ -29,11 +29,13 @@ We chat, we build, we break stuff (always), and we have a good time doing it �
 
 See you there! 💜
 
+### Roadmap
+MiaouVSRG features a [roadmap](https://github.com/orgs/MiaouVSRG/projects/1) you can access on GitHub.
+We're doing our best to update the roadmap as frequently as possible !
+
 ---
 
-
-
-![miaouVSRG Screenshot](https://i.ibb.co/cXr93sQb/20250404-215447.jpg)
+![MiaouVSRG Screenshot](https://i.ibb.co/cXr93sQb/20250404-215447.jpg)
 
 Enjoy the game! 🎮🐾
 

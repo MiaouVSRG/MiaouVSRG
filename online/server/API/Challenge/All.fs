@@ -1,9 +1,9 @@
-namespace Interlude.Web.Server.API.Challenge
+namespace MiaouVSRG.Web.Server.API.Challenge
 
 open System.Linq
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests.Challenge.All
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests.Challenge.All
 open NetCoreServer
 open Percyqaz.Common
 

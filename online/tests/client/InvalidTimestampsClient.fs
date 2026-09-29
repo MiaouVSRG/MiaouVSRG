@@ -1,6 +1,6 @@
-﻿namespace Interlude.Web.Tests.Client
+﻿namespace MiaouVSRG.Web.Tests.Client
 
-open Interlude.Web.Shared
+open MiaouVSRG.Web.Shared
 
 // Client that echos replays like EchoClient but garbles the timestamps
 type InvalidTimestampsClient(token: string) =

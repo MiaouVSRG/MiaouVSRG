@@ -1,22 +1,22 @@
-namespace Interlude.Web.Server.API.Web.Maps
+namespace MiaouVSRG.Web.Server.API.Web.Maps
 
 open System.IO
 open System.IO.Compression
 open System.Linq
-open Interlude.Web.Server.API
-open Interlude.Web.Server.API.New.Charts
-open Interlude.Web.Server.API.New.Charts.Add
-open Interlude.Web.Server.Domain.New
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests.Web.Map.Info
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.API.New.Charts
+open MiaouVSRG.Web.Server.API.New.Charts.Add
+open MiaouVSRG.Web.Server.Domain.New
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests.Web.Map.Info
 open NetCoreServer
 open Percyqaz.Common
-open Prelude
-open Prelude.Calculator
-open Prelude.Charts
-open Prelude.Data
-open Prelude.Formats
-open Prelude.Formats.Osu
+open Catnip
+open Catnip.Calculator
+open Catnip.Charts
+open Catnip.Data
+open Catnip.Formats
+open Catnip.Formats.Osu
 
 module Info =
     let download_mapset_from_mino(url: string, output: string) =
@@ -96,7 +96,7 @@ module Info =
                             }
                                 
                         let converted_chart =
-                            match Osu_To_Interlude.convert beatmap.Value action with
+                            match Osu_To_Miaouvsrg.convert beatmap.Value action with
                             | Ok chart -> Some chart
                             | Error err ->
                                 Logging.Error "%s ::: %s" (fst err) (snd err)
@@ -104,7 +104,7 @@ module Info =
                                 
                         let hash: string option =
                             match converted_chart with
-                            | Some chart_import -> Some (Prelude.Charts.Chart.hash chart_import.Chart)
+                            | Some chart_import -> Some (Catnip.Charts.Chart.hash chart_import.Chart)
                             | None -> None
                                 
                         let rating =

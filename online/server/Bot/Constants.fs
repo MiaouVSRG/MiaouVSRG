@@ -1,6 +1,6 @@
-﻿namespace Interlude.Web.Server.Bot
+﻿namespace MiaouVSRG.Web.Server.Bot
 
-open Interlude.Web.Server
+open MiaouVSRG.Web.Server
 
 [<AutoOpen>]
 module Constants =

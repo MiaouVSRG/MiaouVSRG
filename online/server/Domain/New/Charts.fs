@@ -1,11 +1,11 @@
-﻿namespace Interlude.Web.Server.Domain.New
+﻿namespace MiaouVSRG.Web.Server.Domain.New
 
 open Discord
 open Percyqaz.Data
 open Percyqaz.Data.Sqlite
 open Percyqaz.Common
 
-open Interlude.Web.Server
+open MiaouVSRG.Web.Server
 
 type Chart =
     {

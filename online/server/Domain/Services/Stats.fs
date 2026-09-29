@@ -1,8 +1,8 @@
-﻿namespace Interlude.Web.Server.Domain.Services
+﻿namespace MiaouVSRG.Web.Server.Domain.Services
 
 open Percyqaz.Common
-open Prelude.Data.User.Stats
-open Interlude.Web.Server.Domain.Core
+open Catnip.Data.User.Stats
+open MiaouVSRG.Web.Server.Domain.Core
 
 module Stats =
 

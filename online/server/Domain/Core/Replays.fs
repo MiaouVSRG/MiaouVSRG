@@ -1,9 +1,9 @@
-﻿namespace Interlude.Web.Server.Domain.Core
+﻿namespace MiaouVSRG.Web.Server.Domain.Core
 
 open Percyqaz.Common
 open Percyqaz.Data.Sqlite
-open Prelude.Gameplay.Replays
-open Interlude.Web.Server
+open Catnip.Gameplay.Replays
+open MiaouVSRG.Web.Server
 
 type Replay =
     {

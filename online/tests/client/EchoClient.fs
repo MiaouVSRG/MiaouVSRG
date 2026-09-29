@@ -1,6 +1,6 @@
-﻿namespace Interlude.Web.Tests.Client
+﻿namespace MiaouVSRG.Web.Tests.Client
 
-open Interlude.Web.Shared
+open MiaouVSRG.Web.Shared
 
 // Client that logs in, joins a lobby, and then echoes the replay data of a user named 'Percyqaz'
 type EchoClient(token: string) =

@@ -1,4 +1,4 @@
-# YAVSRG code style guidelines
+# MiaouVSRG code style guidelines
 
 ### Commit messages
 
@@ -21,12 +21,12 @@ You don't have to care about them - in PRs I can just squash with an emoji commi
 
 ### Pull requests
 
-Step 1: Create a fork of YAVSRG  
+Step 1: Create a fork of MiaouVSRG  
 
 Step 2: Make your changes  
 I reccommend doing this in a branch other than `main` as it makes it easy to have both your fork and the upstream as a remote
 
-Step 3: [Submit PR](https://github.com/YAVSRG/YAVSRG/pulls)
+Step 3: [Submit PR](https://github.com/MiaouVSRG/MiaouVSRG/pulls)
 
 Pull requests will be reviewed by Percyqaz for correctness and code style, then merged if all OK
 

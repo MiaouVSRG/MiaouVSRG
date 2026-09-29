@@ -1,16 +1,16 @@
-namespace Interlude.Web.Server.API.Web.Auth
+namespace MiaouVSRG.Web.Server.API.Web.Auth
 
 open System
 open System.Diagnostics
-open Interlude.Web.Server
-open Interlude.Web.Server.API
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.Core.Stats
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests.Web.Leaderboard
+open MiaouVSRG.Web.Server
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Core.Stats
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests.Web.Leaderboard
 open NetCoreServer
 open Percyqaz.Common
-open Prelude.Data.User.Stats
+open Catnip.Data.User.Stats
 
 module Discord =
     

@@ -1,0 +1,194 @@
+namespace Catnip.Skins.Themes
+
+open System.IO
+open System.IO.Compression
+open Percyqaz.Common
+open Percyqaz.Data
+open Catnip
+open Catnip.Skins
+
+(*
+    Default config values for themes, textures, noteskins, widget layouts
+*)
+
+// todo: themes let you override the hard coded palette values in Percyqaz.Flux.UI.Style for UI color themes
+[<Json.AutoCodec(false)>]
+type ThemeConfig =
+    {
+        Name: string
+        Font: string
+        DefaultAccentColor: Color
+        AlwaysUseDefaultAccentColor: bool
+        AlwaysUseDefaultBackground: bool
+        CursorSize: float32
+    }
+    static member Default: ThemeConfig =
+        {
+            Name = "Unnamed Theme"
+            Font = "MiaouVSRG"
+            DefaultAccentColor = Color.FromArgb(0, 160, 200)
+            AlwaysUseDefaultAccentColor = false
+            AlwaysUseDefaultBackground = false
+            CursorSize = 50.0f
+        }
+
+    member this.Validate: ThemeConfig = this
+
+type Theme(storage) as this =
+    inherit Storage(storage)
+
+    let mutable config: ThemeConfig = ThemeConfig.Default
+
+    do
+        this.ReloadFromDisk()
+
+    member this.Config
+        with set conf =
+            config <- conf
+            this.WriteJson(config, "theme.json")
+        and get () = config
+
+    override this.ReloadFromDisk() =
+        base.ReloadFromDisk()
+        config <-
+            match this.TryGetJson<ThemeConfig>(true, "theme.json") with
+            | Some data -> data.Validate
+            | None -> failwith "theme.json was missing or didn't load properly"
+
+    member this.GetTexture(name: string) : TextureLoadResult =
+        let name =
+            if
+                (name = "logo" || name = "rain")
+                && (let dayOfYear = System.DateTime.Today.DayOfYear in dayOfYear < 5 || dayOfYear > 350)
+            then
+                name + "-meowmas"
+            else
+                name
+
+        let rules =
+            {
+                IsRequired = true
+                MustBeSquare = false // name <> "background"
+                MaxGridSize = (1, 1)
+            }
+
+        this.LoadTexture(name, rules, "Textures")
+
+    member this.GetSound(name: string) : Stream option =
+        this.TryReadFile("Sounds", name + ".wav")
+
+    member this.GetFonts() : Stream seq =
+        seq {
+            for file in this.GetFiles "Fonts" do
+                match Path.GetExtension(file).ToLower() with
+                | ".otf"
+                | ".ttf" ->
+                    match this.TryReadFile("Fonts", file) with
+                    | Some s ->
+                        // Font loading requires seek
+                        use ms = new MemoryStream()
+                        s.CopyTo ms
+                        ms.Position <- 0
+                        yield ms
+                        s.Dispose()
+                    | None -> ()
+                | _ -> ()
+        }
+
+    static member FromZipStream(stream: Stream) =
+        new Theme(Embedded(new ZipArchive(stream)))
+
+    static member FromPath(path: string) = new Theme(Folder path)
+
+    static member FromFolderName(name: string) =
+        Theme.FromPath(get_game_folder (Path.Combine("Themes", name)))
+
+module Theme =
+
+    let TEXTURES = [|
+        "loading-screen"
+        "loading-screen-progress-bar-full"
+        "loading-screen-progress-bar-empty"
+        "loading-screen-progress-bar-tail"
+        "background"
+        "rain"
+        "logo"
+        "cursor"
+        
+        // MAIN MENU
+        "play-button"
+        "options-button"
+        "quit-button"
+        "play-button-hover"
+        "options-button-hover"
+        "quit-button-hover"
+        
+        // DEFAULTS
+        "default-button"
+        "default-button-hover"
+        "default-button-bottomrounded"
+        "default-button-bottomrounded-hover"
+        
+        // LEVEL SELECT SCREEN
+        "chart-selection-background"
+        "chart-selection-background-hover"
+        "chart-description"
+        "chart-description-nopb"
+        "chart-namebox"
+        "preview-button"
+        "preview-button-hover"
+        "mods-button"
+        "mods-button-hover"
+        "ruleset-button"
+        "leaderboard-score"
+        "leaderboard-score-hover"
+        "leaderboard-first-button"
+        "leaderboard-first-button-hover"
+        "leaderboard-sort-button"
+        "leaderboard-sort-button-hover"
+        "leaderboard-filter-button"
+        "leaderboard-filter-button-hover"
+        "searchbar"
+        "map-group"
+        "map-group-hover"
+        
+        // SCORE SCREEN
+        "score-screen"
+        
+        // RANKS
+        "pass"
+        "clear"
+        "clearplus"
+        "overclear"
+        "overclearplus"
+        "perfect"
+        
+        // SETTINGS SCREEN
+        "settings-frame"
+        
+        // Beatmap download
+        "online-beatmap-card"
+        "online-beatmap-card-hover"
+        
+        // Misc
+        "slider-dot"
+        "slider-empty"
+        "slider-full"
+        "hintbox"
+    |]
+
+    let SOUNDS =
+        [|
+            "hello"
+            "goodbye"
+            "click"
+            "hover"
+            "text-open"
+            "text-close"
+            "key"
+            "notify-error"
+            "notify-info"
+            "notify-system"
+            "notify-task"
+            "score-screen"
+        |]

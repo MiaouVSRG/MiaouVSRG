@@ -1,21 +1,21 @@
-﻿namespace Interlude.Web.Server.Domain.Services
+﻿namespace MiaouVSRG.Web.Server.Domain.Services
 
 open System.IO
 open System.IO.Compression
-open Interlude.Web.Server.Domain.New
+open MiaouVSRG.Web.Server.Domain.New
 open Percyqaz.Common
-open Prelude
-open Prelude.Calculator
-open Prelude.Data
-open Prelude.Formats
-open Prelude.Formats.Osu
-open Prelude.Mods
-open Prelude.Gameplay.Replays
-open Prelude.Gameplay.Scoring
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.Services
-open Interlude.Web.Server.Domain
-open Prelude.Gameplay.Rulesets
+open Catnip
+open Catnip.Calculator
+open Catnip.Data
+open Catnip.Formats
+open Catnip.Formats.Osu
+open Catnip.Mods
+open Catnip.Gameplay.Replays
+open Catnip.Gameplay.Scoring
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Services
+open MiaouVSRG.Web.Server.Domain
+open Catnip.Gameplay.Rulesets
 
 module Scores =
 
@@ -101,7 +101,7 @@ module Scores =
                     }
                                     
                 let converted_chart =
-                    match Osu_To_Interlude.convert beatmap.Value action with
+                    match Osu_To_Miaouvsrg.convert beatmap.Value action with
                     | Ok chart -> Some chart
                     | Error err ->
                         Logging.Error "%s ::: %s" (fst err) (snd err)
@@ -111,7 +111,7 @@ module Scores =
                     Logging.Error "chart not convertible"
                 else
                     let chart = converted_chart.Value.Chart
-                    let hash = Prelude.Charts.Chart.hash converted_chart.Value.Chart
+                    let hash = Catnip.Charts.Chart.hash converted_chart.Value.Chart
                     if hash <> chart_id then
                         ()
                     else

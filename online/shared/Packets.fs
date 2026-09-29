@@ -1,8 +1,8 @@
-﻿namespace Interlude.Web.Shared
+﻿namespace MiaouVSRG.Web.Shared
 
 open System
 open System.IO
-open Prelude
+open Catnip
 
 [<AutoOpen>]
 module Packets =

@@ -1,9 +1,9 @@
-﻿namespace YAVSRG.CLI.Features
+﻿namespace MiaouVSRG.CLI.Features
 
 open System.IO
-open Prelude.Common
+open Catnip.Common
 open Percyqaz.Data
-open YAVSRG.CLI.Utils
+open MiaouVSRG.CLI.Utils
 
 module Wiki =
 
@@ -51,11 +51,11 @@ module Wiki =
 
     let generate_toc () =
         let wiki_pages =
-            Directory.EnumerateFiles(Path.Combine(YAVSRG_PATH, "interlude", "docs", "wiki"))
+            Directory.EnumerateFiles(Path.Combine(MIAOUVSRG_PATH, "miaouvsrg", "docs", "wiki"))
             |> Seq.filter (fun f -> f.EndsWith ".md" && not (f.EndsWith "index.md"))
             |> Seq.map parse_wiki_file
             |> Array.ofSeq
 
         let wiki_toc = wiki_pages |> Array.groupBy (fun p -> p.Folder) |> Map.ofSeq
 
-        JSON.ToFile (Path.Combine(YAVSRG_PATH, "interlude", "docs", "wiki", "index.json"), true) wiki_toc
+        JSON.ToFile (Path.Combine(MIAOUVSRG_PATH, "miaouvsrg", "docs", "wiki", "index.json"), true) wiki_toc

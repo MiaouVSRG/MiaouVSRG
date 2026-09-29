@@ -1,11 +1,11 @@
-﻿namespace Interlude.Web.Server.Domain.Backbeat
+﻿namespace MiaouVSRG.Web.Server.Domain.Backbeat
 
-open Prelude
+open Catnip
 open Percyqaz.Common
 open Percyqaz.Data
 open Percyqaz.Data.Sqlite
-open Prelude
-open Interlude.Web.Server
+open Catnip
+open MiaouVSRG.Web.Server
 
 type Source =
     {

@@ -1,8 +1,8 @@
-﻿namespace Interlude.Web.Server.Online
+﻿namespace MiaouVSRG.Web.Server.Online
 
 open System
-open Interlude.Web.Shared
-open Interlude.Web.Server.Domain.Services
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Server.Domain.Services
 
 module Online =
 

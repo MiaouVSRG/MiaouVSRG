@@ -1,4 +1,4 @@
-﻿namespace Interlude.Web.Shared
+﻿namespace MiaouVSRG.Web.Shared
 
 open System
 open System.Net.Sockets

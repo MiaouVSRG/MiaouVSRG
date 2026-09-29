@@ -1,9 +1,9 @@
-﻿namespace YAVSRG.CLI.Features
+﻿namespace MiaouVSRG.CLI.Features
 
 open System.IO
 open System.IO.Compression
-open Prelude.Skins.Noteskins
-open YAVSRG.CLI
+open Catnip.Skins.Noteskins
+open MiaouVSRG.CLI
 
 module Assets =
 

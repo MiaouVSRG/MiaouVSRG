@@ -1,12 +1,12 @@
-﻿namespace Interlude.Web.Server.API.New.Charts
+﻿namespace MiaouVSRG.Web.Server.API.New.Charts
 
 open System.Linq
-open Interlude.Web.Server.Domain.New
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests.New.Charts.Migrate
+open MiaouVSRG.Web.Server.Domain.New
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests.New.Charts.Migrate
 open NetCoreServer
 open Percyqaz.Common
-open Prelude.Formats.Osu
+open Catnip.Formats.Osu
 
 module Migrate =
     
