@@ -1,12 +1,12 @@
-﻿namespace Interlude.Web.Shared.Requests
+﻿namespace MiaouVSRG.Web.Shared.Requests
 
 open Percyqaz.Data
-open Prelude
-open Prelude.Charts
-open Prelude.Gameplay.Replays
-open Prelude.Gameplay.Scoring
-open Prelude.Mods
-open Interlude.Web.Shared.API
+open Catnip
+open Catnip.Charts
+open Catnip.Gameplay.Replays
+open Catnip.Gameplay.Scoring
+open Catnip.Mods
+open MiaouVSRG.Web.Shared.API
 
 module Health =
 
@@ -24,7 +24,7 @@ module Auth =
 
     /// url parameters:
     ///  code - given by discord auth to identify you
-    ///  state - state token previously provided by server to identify which Interlude client is logging in
+    ///  state - state token previously provided by server to identify which MiaouVSRG client is logging in
     module Discord =
 
         let ROUTE = (GET, "/auth/discord")
@@ -37,7 +37,7 @@ module Charts =
 
         let ROUTE = (GET, "/charts/identify")
 
-        open Prelude.Backbeat.Archive
+        open Catnip.Backbeat.Archive
 
         [<Json.AutoCodec>]
         type Info = { Song: Song; Chart: Chart }
@@ -56,7 +56,7 @@ module Charts =
 
         let ROUTE = (POST, "/charts/add")
 
-        open Prelude.Backbeat.Archive
+        open Catnip.Backbeat.Archive
 
         [<Json.AutoCodec>]
         type Request =
@@ -143,7 +143,7 @@ module Charts =
 
 module Songs =
 
-    open Prelude.Backbeat.Archive
+    open Catnip.Backbeat.Archive
 
     /// url parameters:
     ///  query - search query to find songs for
@@ -248,7 +248,7 @@ module Tables =
 
         let ROUTE = (GET, "/tables")
 
-        open Prelude.Backbeat
+        open Catnip.Backbeat
 
         [<Json.AutoCodec>]
         type Table =
@@ -271,7 +271,7 @@ module Tables =
 
         let ROUTE = (GET, "/tables/charts")
 
-        open Prelude.Backbeat.Archive
+        open Catnip.Backbeat.Archive
 
         [<Json.AutoCodec>]
         type ChartInfo =
@@ -344,7 +344,7 @@ module Tables =
 
             let ROUTE = (GET, "/tables/suggestions")
 
-            open Prelude.Backbeat.Archive
+            open Catnip.Backbeat.Archive
 
             [<Json.AutoCodec>]
             type Suggestion =
@@ -560,7 +560,7 @@ module Friends =
 
 module Stats =
 
-    open Prelude.Data.User.Stats
+    open Catnip.Data.User.Stats
 
     /// requires login token as Authorization header
     module Fetch =
@@ -725,6 +725,75 @@ module New =
             let get(callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE, callback)
                 
+module Challenge =
+    module Generate =
+        let ROUTE = (GET, "/challenge/generate")
+        
+        [<Json.AutoCodec>]
+        type Response =
+            {
+                Success: bool
+            }
+            
+    module Single =
+        let ROUTE = (GET, "/challenge")
+        
+        [<Json.AutoCodec>]
+        type Response =
+            {
+                Name: string
+                Type: string
+                EndDate: int64
+                Difficulty: string
+                Coins: int64 option
+                Keymode: int
+                Ongoing: bool
+            }
+            
+    module All =
+        let ROUTE = (GET, "/challenge/all")
+        
+        [<Json.AutoCodec>]
+        type ChallengeResponse =
+            {
+                Name: string
+                Type: string
+                EndDate: int64
+                Difficulty: string
+                Coins: int64 option
+                Keymode: int
+                Ongoing: bool
+            }
+        
+        [<Json.AutoCodec>]
+        type Response = ChallengeResponse array
+    
+    module Ongoing =
+        let ROUTE = (GET, "/challenge/ongoing")
+        
+        [<Json.AutoCodec>]
+        type ChallengeChartResponse =
+            {
+                Charts: string array // chart ids so the user can miaoudirect
+                GoalAccuracy: float option
+            }
+        
+        [<Json.AutoCodec>]
+        type Challenge =
+            {
+                Name: string
+                Type: string
+                EndDate: int64
+                Difficulty: string
+                Coins: int64 option
+                Keymode: int
+                ChallengeType: string
+                ChallengeChart: ChallengeChartResponse option
+            }
+        
+        [<Json.AutoCodec>]
+        type Response = Challenge array
+
 module Web =
     
     let MAIN_ENDPOINT = "/web"

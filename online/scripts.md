@@ -11,7 +11,7 @@ For manual use, also see the github action which does the same
 
 Build (from top level repo folder)
 ```
-docker build -t interlude-web-server -f Interlude.Web/server/dockerfile .
+docker build -t miaouvsrg-web-server -f MiaouVSRG.Web/server/dockerfile .
 ```
 
 gh actions uses doctl for this
@@ -21,8 +21,8 @@ docker login -u <TOKEN> -p <TOKEN> registry.digitalocean.com
 
 Push
 ```
-docker tag interlude-web-server registry.digitalocean.com/yavsrg/interlude-web-server:latest
-docker push registry.digitalocean.com/yavsrg/interlude-web-server:latest
+docker tag miaouvsrg-web-server registry.digitalocean.com/miaouvsrg/miaouvsrg-web-server:latest
+docker push registry.digitalocean.com/miaouvsrg/miaouvsrg-web-server:latest
 ```
 
 # Droplet setup
@@ -52,20 +52,20 @@ certbot certonly --standalone
 ```
 
 Then login to docker repo
-`docker login registry.digitalocean.com/yavsrg/interlude-web-server`
+`docker login registry.digitalocean.com/miaouvsrg/miaouvsrg-web-server`
 Enter DO API key for both username and password
 
 ### ./update.sh
 ```
-docker pull registry.digitalocean.com/yavsrg/interlude-web-server
-wget https://raw.githubusercontent.com/YAVSRG/YAVSRG/main/online/docker-compose-production.yml -O ./docker-compose.yml
+docker pull registry.digitalocean.com/miaouvsrg/miaouvsrg-web-server
+wget https://raw.githubusercontent.com/MiaouVSRG/MiaouVSRG/main/online/docker-compose-production.yml -O ./docker-compose.yml
 docker compose up --detach
 ```
 
 ### ./cert.sh
 ```
 mkdir ./secrets
-openssl pkcs12 -export -out ./secrets/api.pfx -inkey /etc/letsencrypt/live/api.yavsrg.net/privkey.pem -in /etc/letsencrypt/live/api.yavsrg.net/fullchain.pem
+openssl pkcs12 -export -out ./secrets/api.pfx -inkey /etc/letsencrypt/live/api.miaouvsrg.com/privkey.pem -in /etc/letsencrypt/live/api.miaouvsrg.com/fullchain.pem
 ```
 
 ### ./logs.sh

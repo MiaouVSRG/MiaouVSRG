@@ -1,8 +1,8 @@
-﻿namespace Interlude.Web.Tests.Domain.Backbeat
+﻿namespace MiaouVSRG.Web.Tests.Domain.Backbeat
 
 open NUnit.Framework
 
-open Interlude.Web.Server.Domain.Backbeat
+open MiaouVSRG.Web.Server.Domain.Backbeat
 
 module Sources =
 
@@ -11,7 +11,7 @@ module Sources =
             Id = "ultra 7k megapack vol.1"
             Mirrors =
                 [
-                    "https://yavsrg.net/packs/ultra-7k-megapack-1"
+                    "https://miaouvsrg.com/packs/ultra-7k-megapack-1"
                     "https://chart-pack-mirrors.io/ultra-7k-megapack-1"
                 ]
             Namespace = "ultra-7k-megapack"

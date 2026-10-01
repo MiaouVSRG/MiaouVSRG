@@ -1,7 +1,7 @@
 open NUnit.Framework
 
 open System
-open Interlude.Web.Server.Domain
+open MiaouVSRG.Web.Server.Domain
 
 [<SetUpFixture>]
 type Setup() =

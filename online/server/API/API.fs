@@ -1,13 +1,13 @@
-﻿namespace Interlude.Web.Server.API
+﻿namespace MiaouVSRG.Web.Server.API
 
 open System.Collections.Generic
 open NetCoreServer
 open Percyqaz.Common
-open Interlude.Web.Shared
-open Interlude.Web.Shared.API
-open Interlude.Web.Shared.Requests
-open Interlude.Web.Server
-open Interlude.Web.Server.API
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.API
+open MiaouVSRG.Web.Shared.Requests
+open MiaouVSRG.Web.Server
+open MiaouVSRG.Web.Server.API
 
 module API =
 
@@ -71,6 +71,11 @@ module API =
         
         add_endpoint New.Charts.Add.ROUTE (BodyType.String New.Charts.Add.handle)
         add_endpoint New.Charts.Download.ROUTE (BodyType.String New.Charts.Download.handle)
+        
+        add_endpoint Challenge.Generate.ROUTE (BodyType.String Challenge.Generate.handle)
+        add_endpoint Challenge.Ongoing.ROUTE (BodyType.String Challenge.Ongoing.handle)
+        add_endpoint Challenge.Single.ROUTE (BodyType.String Challenge.Single.handle)
+        add_endpoint Challenge.All.ROUTE (BodyType.String Challenge.All.handle)
         
         // WEBSITE REQUESTS
         add_endpoint Web.Auth.Discord.ROUTE (BodyType.String Web.Auth.Discord.handle)

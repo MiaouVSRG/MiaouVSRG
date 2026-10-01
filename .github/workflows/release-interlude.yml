@@ -1,19 +1,19 @@
-name: Release Interlude
+name: Release MiaouVSRG
 
 on:
   push:
     branches: [ "main" ]
-    paths: "interlude/docs/changelog-latest.md"
+    paths: "miaouvsrg/docs/changelog-latest.md"
   workflow_dispatch:
   # for debug purposes
   
 concurrency:
-  group: "interlude_release"
+  group: "miaouvsrg_release"
   cancel-in-progress: false
 
 jobs:
   build:
-    if: github.repository == 'YAVSRG/YAVSRG'
+    if: github.repository == 'MiaouVSRG/MiaouVSRG'
     runs-on: ubuntu-latest
 
     steps:
@@ -26,32 +26,32 @@ jobs:
       with:
         dotnet-version: 9.0.x
         
-    - name: Package Interlude
+    - name: Package MiaouVSRG
       id: package
       run: |
         cd scripts
         chmod +x ./setup_cli.sh
         ./setup_cli.sh
-        yavsrg pack_win_x64
-        yavsrg pack_linux_x64
-        echo "VERSION=v$(yavsrg version)" >> $GITHUB_OUTPUT
+        miaouvsrg pack_win_x64
+        miaouvsrg pack_linux_x64
+        echo "VERSION=v$(miaouvsrg version)" >> $GITHUB_OUTPUT
         
     - name: Create Release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "interlude/releases/*.zip"
-        bodyFile: "interlude/docs/changelog-latest.md"
+        artifacts: "miaouvsrg/releases/*.zip"
+        bodyFile: "miaouvsrg/docs/changelog-latest.md"
         token: ${{ secrets.GITHUB_TOKEN }}
-        owner: YAVSRG
-        repo: YAVSRG
-        tag: interlude-${{ steps.package.outputs.VERSION }}
+        owner: MiaouVSRG
+        repo: MiaouVSRG
+        tag: miaouvsrg-${{ steps.package.outputs.VERSION }}
         commit: main
 
     - name: Read changelog contents
       id: read_file
       uses: andstor/file-reader-action@v1
       with:
-        path: "interlude/docs/changelog-latest.md"
+        path: "miaouvsrg/docs/changelog-latest.md"
 
     - name: Post Changelog via Webhook
       uses: tsickert/discord-webhook@v5.3.0
@@ -62,4 +62,4 @@ jobs:
           ```
           ${{ steps.read_file.outputs.contents }}
           ```
-          Update ingame or [download Interlude from GitHub](https://github.com/YAVSRG/YAVSRG/releases/latest/download/Interlude-win64.zip)
+          Update ingame or [download MiaouVSRG from GitHub](https://github.com/MiaouVSRG/MiaouVSRG/releases/latest/download/MiaouVSRG-win64.zip)

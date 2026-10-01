@@ -1,4 +1,4 @@
-﻿namespace Interlude.Web.Shared
+﻿namespace MiaouVSRG.Web.Shared
 
 #nowarn "3370"
 

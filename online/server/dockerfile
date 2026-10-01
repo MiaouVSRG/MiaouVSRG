@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-env
 WORKDIR /src
 
 COPY online ./online
-COPY prelude/ ./prelude
+COPY catnip/ ./catnip
 COPY libraries/Percyqaz.Common/ ./libraries/Percyqaz.Common
 COPY libraries/Percyqaz.Data/ ./libraries/Percyqaz.Data
 
@@ -15,4 +15,4 @@ FROM mcr.microsoft.com/dotnet/runtime:9.0
 WORKDIR /docker_root
 COPY --from=build-env /src/online/server/out .
 RUN mkdir -p /docker_root/secrets
-ENTRYPOINT ["dotnet", "Interlude.Web.Server.dll"]
+ENTRYPOINT ["dotnet", "MiaouVSRG.Web.Server.dll"]

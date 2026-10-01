@@ -1,8 +1,8 @@
-﻿namespace Interlude.Web.Server.Domain.Core
+﻿namespace MiaouVSRG.Web.Server.Domain.Core
 
 open Percyqaz.Common
 open Percyqaz.Data.Sqlite
-open Interlude.Web.Server
+open MiaouVSRG.Web.Server
 
 module TableRating =
 

@@ -1,9 +1,9 @@
-﻿namespace Interlude.Web.Server.Domain.Services
+﻿namespace MiaouVSRG.Web.Server.Domain.Services
 
 open Percyqaz.Common
-open Prelude.Backbeat
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.Backbeat
+open Catnip.Backbeat
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Backbeat
 
 module Tables =
 

@@ -507,7 +507,7 @@ module Sprite =
 
             { Texture = sprite.Texture; Layer = sprite.Z; UV = quad }
 
-    // todo: relocate, remove or rename this, only used for Interlude's song background image
+    // todo: relocate, remove or rename this, only used for MiaouVSRG's song background image
     let tiling (scale: float32, left: float32, top: float32) (sprite: Sprite) (quad: Quad) : QuadTexture =
 
         let width = float32 sprite.Width * scale

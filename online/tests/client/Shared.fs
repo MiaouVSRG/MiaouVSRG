@@ -1,4 +1,4 @@
-﻿namespace Interlude.Web.Tests.Client
+﻿namespace MiaouVSRG.Web.Tests.Client
 
 type Status =
     | Disconnected

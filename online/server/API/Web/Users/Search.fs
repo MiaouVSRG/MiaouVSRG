@@ -1,19 +1,20 @@
-﻿namespace Interlude.Web.Server.API.Web.Users
+﻿namespace MiaouVSRG.Web.Server.API.Web.Users
 
 open System
 open System.Linq
-open Interlude.Web.Server.API
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.New
-open Interlude.Web.Server.Online
-open Interlude.Web.Shared
-open Interlude.Web.Shared.Requests.Web.User.Search
+open Catnip.Mods
+open MiaouVSRG.Web.Server.API
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.New
+open MiaouVSRG.Web.Server.Online
+open MiaouVSRG.Web.Shared
+open MiaouVSRG.Web.Shared.Requests.Web.User.Search
 open NetCoreServer
 open Percyqaz.Common
-open Prelude.Calculator.NoteDifficulty
-open Prelude.Data.User.Stats
-open Prelude.Gameplay.Rulesets
-open Prelude.Gameplay.Scoring
+open Catnip.Calculator.NoteDifficulty
+open Catnip.Data.User.Stats
+open Catnip.Gameplay.Rulesets
+open Catnip.Gameplay.Scoring
 
 module Search =
     
@@ -149,13 +150,19 @@ module Search =
                                     else
                                         "not available"
                                         
+                                let keymode =
+                                    if score.Mods.ContainsKey("column_swap") then
+                                        ColumnSwap.keys score.Mods["column_swap"]
+                                    else
+                                        chart.Keymode
+                                        
                                 let play: Play = {
                                     ChartHash = score.ChartId
                                     ChartName = chart.Title
                                     ChartDiffName = chart.DifficultyName
                                     ChartBackground = chart_background
                                     ChartRating = chart.Difficulty
-                                    Keymode = chart.Keymode
+                                    Keymode = keymode
                                     Grade = NORMAL.GradeName score.Grade
                                     Rate = score.Rate
                                     Accuracy = score.Accuracy

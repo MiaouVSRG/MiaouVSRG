@@ -1,12 +1,12 @@
-﻿namespace YAVSRG.CLI.Features
+﻿namespace MiaouVSRG.CLI.Features
 
 open System.IO
-open YAVSRG.CLI.Utils
+open MiaouVSRG.CLI.Utils
 
 module Version =
 
     let mutable private current_version =
-        let file = Path.Combine(INTERLUDE_SOURCE_PATH, "Interlude.fsproj")
+        let file = Path.Combine(MIAOUVSRG_SOURCE_PATH, "MiaouVSRG.fsproj")
         let f = File.ReadAllText file
 
         let i = f.IndexOf "<AssemblyVersion>"
@@ -16,7 +16,7 @@ module Version =
 
     let publish () =
 
-        let changelog = Path.Combine(YAVSRG_PATH, "interlude", "docs", "changelog.md")
+        let changelog = Path.Combine(MIAOUVSRG_PATH, "miaouvsrg", "docs", "changelog.md")
         let logtxt = File.ReadAllText(changelog)
         let latest = logtxt.Split(current_version + "\r\n" + "====", 2).[0]
 
@@ -24,11 +24,11 @@ module Version =
             failwithf "No changelog for new version. Create this first"
 
         let v = latest.Split("====", 2).[0].Trim()
-        File.WriteAllText(Path.Combine(YAVSRG_PATH, "interlude", "docs", "changelog-latest.md"), latest)
+        File.WriteAllText(Path.Combine(MIAOUVSRG_PATH, "miaouvsrg", "docs", "changelog-latest.md"), latest)
 
         printfn "Version: %s -> %s" current_version v
         printfn "%s" latest
-        let file = Path.Combine(INTERLUDE_SOURCE_PATH, "Interlude.fsproj")
+        let file = Path.Combine(MIAOUVSRG_SOURCE_PATH, "MiaouVSRG.fsproj")
         let mutable f = File.ReadAllText file
 
         do

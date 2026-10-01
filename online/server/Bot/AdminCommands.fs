@@ -1,14 +1,14 @@
-﻿namespace Interlude.Web.Server.Bot
+﻿namespace MiaouVSRG.Web.Server.Bot
 
 open System
 open Discord
 open Discord.WebSocket
 open Percyqaz.Common
-open Prelude.Data.User.Stats
-open Interlude.Web.Server.Domain.Backbeat
-open Interlude.Web.Server.Domain.Core
-open Interlude.Web.Server.Domain.Services
-open Interlude.Web.Server.Online
+open Catnip.Data.User.Stats
+open MiaouVSRG.Web.Server.Domain.Backbeat
+open MiaouVSRG.Web.Server.Domain.Core
+open MiaouVSRG.Web.Server.Domain.Services
+open MiaouVSRG.Web.Server.Online
 
 module AdminCommands =
 
@@ -191,7 +191,7 @@ module AdminCommands =
                 let monthly_playtime = MonthlyStats.sum_playtime month
 
                 do!
-                    EmbedBuilder(Title = "Interlude server stats")
+                    EmbedBuilder(Title = "MiaouVSRG server stats")
                         .WithDescription(
                             sprintf "Total time game open: %s\nTotal time playing: %s\nMonthly playtime: %s"
                                 (format_long_time total_gametime)
