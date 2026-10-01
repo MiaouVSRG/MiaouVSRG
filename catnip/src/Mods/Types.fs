@@ -72,6 +72,9 @@ type Mod =
         /// Short code representing the mod, to be abbreviated in places without room for the full names
         /// Language independent
         Shorthand: int64 -> string
+        /// Returns wether the applied mod options can be ranked or not.
+        /// Only used by ColumnSwap to only rank 7K -> 6K with "123567" configuration
+        RankingCondition: int64 -> bool
     }
     static member internal Default =
         {
@@ -80,4 +83,5 @@ type Mod =
             Exclusions = []
             Apply = (fun _ mc -> mc, false)
             Shorthand = fun _ -> "??"
+            RankingCondition = fun _ -> true
         }

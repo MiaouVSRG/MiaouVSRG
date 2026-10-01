@@ -82,7 +82,8 @@ module Mods =
 
             "column_swap",
              { Mod.Default with
-                 Status = ModStatus.Offline
+                 Status = ModStatus.Ranked
+                 RankingCondition = ColumnSwap.is_configuration_rankable
                  Type = ColumnSwap
                  Exclusions = [ "shuffle"; "random"; "mirror" ]
                  Apply = fun s mc -> ColumnSwap.apply (ColumnSwap.unpack s) mc

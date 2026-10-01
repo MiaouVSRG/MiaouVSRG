@@ -2,6 +2,7 @@
 
 open System
 open System.Linq
+open Catnip.Mods
 open MiaouVSRG.Web.Server.API
 open MiaouVSRG.Web.Server.Domain.Core
 open MiaouVSRG.Web.Server.Domain.New
@@ -149,13 +150,19 @@ module Search =
                                     else
                                         "not available"
                                         
+                                let keymode =
+                                    if score.Mods.ContainsKey("column_swap") then
+                                        ColumnSwap.keys score.Mods["column_swap"]
+                                    else
+                                        chart.Keymode
+                                        
                                 let play: Play = {
                                     ChartHash = score.ChartId
                                     ChartName = chart.Title
                                     ChartDiffName = chart.DifficultyName
                                     ChartBackground = chart_background
                                     ChartRating = chart.Difficulty
-                                    Keymode = chart.Keymode
+                                    Keymode = keymode
                                     Grade = NORMAL.GradeName score.Grade
                                     Rate = score.Rate
                                     Accuracy = score.Accuracy

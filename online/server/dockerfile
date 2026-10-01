@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-env
 WORKDIR /src
 
 COPY online ./online
-COPY prelude/ ./prelude
+COPY catnip/ ./catnip
 COPY libraries/Percyqaz.Common/ ./libraries/Percyqaz.Common
 COPY libraries/Percyqaz.Data/ ./libraries/Percyqaz.Data
 

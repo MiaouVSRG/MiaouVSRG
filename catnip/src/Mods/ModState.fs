@@ -64,6 +64,8 @@ module ModState =
             if mod_was_applied then
                 mods_applied <- mods_applied @ [ id ]
                 modchart_internal <- new_mc
+                if m.Status.IsRanked && not(m.RankingCondition state) then
+                    status <- max status ModStatus.Unranked
                 status <- max status m.Status
 
         {
@@ -102,9 +104,12 @@ module ModState =
 
             for m in mods.Keys do
                 if AVAILABLE_MODS.ContainsKey m then
-                    status <- max status AVAILABLE_MODS.[m].Status
+                    let available_mod = AVAILABLE_MODS.[m]
+                    if available_mod.Status.IsRanked && not(available_mod.RankingCondition mods[m]) then
+                        status <- max status ModStatus.Unranked
+                    status <- max status available_mod.Status
 
-                    match AVAILABLE_MODS.[m].Type with
+                    match available_mod.Type with
                     | Stateless ->
                         if mods.[m] <> 0L then failwithf "Mod '%s' in invalid state %i" m mods.[m]
                     | RandomSeed -> ()
@@ -113,7 +118,7 @@ module ModState =
                         if mods.[m] < 0L || mods.[m] >= states then
                             failwithf "Mod '%s' in invalid state %i" m mods.[m]
 
-                    for e in AVAILABLE_MODS.[m].Exclusions do
+                    for e in available_mod.Exclusions do
                         if mods.ContainsKey e then
                             failwithf "Mods '%s' and '%s' cannot both be selected" m e
                 else

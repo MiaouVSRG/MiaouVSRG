@@ -1,4 +1,4 @@
-namespace Interlude.Web.Server.API.Web.Maps
+namespace MiaouVSRG.Web.Server.API.Web.Maps
 
 open System.IO
 open System.IO.Compression

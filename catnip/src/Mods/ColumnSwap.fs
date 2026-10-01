@@ -1,6 +1,7 @@
 ﻿namespace Catnip.Mods
 
 open System
+open System.Linq
 open Catnip
 open Catnip.Charts
 
@@ -67,3 +68,9 @@ module ColumnSwap =
              let i = int (packed_bits &&& 0x0FL)
              if i = 0x0F then -1 else i
          )
+         
+    let is_configuration_rankable(packed_bits: int64): bool =
+        let RANKED_CONFIGURATIONS = [
+            106176774L
+        ]
+        RANKED_CONFIGURATIONS.Contains(packed_bits)
