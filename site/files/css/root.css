@@ -22,3 +22,50 @@
     --light-main-hsl: var(--main-h), var(--main-s), 97.5%;
     --secondary-text-hsl: var(--main-h), var(--main-s), 7.5%;
 }
+
+
+/* https://www.w3schools.com/css/css_tooltip.asp */
+.tooltip {
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+}
+
+/* https://www.w3schools.com/css/css_tooltip.asp */
+.tooltip .tooltiptext {
+	visibility: hidden;
+	position: absolute;
+	width: 120px;
+	background-color: var(--main-color);
+	color: var(--text-color);
+	text-align: center;
+	padding: 5px 0;
+	border-radius: 6px;
+	z-index: 1;
+	opacity: 0;
+	transition: opacity .6s;
+}
+
+/* https://www.w3schools.com/css/css_tooltip.asp */
+.tooltip-top {
+	bottom: 125%;
+	left: 50%;
+	margin-left: -60px;
+}
+
+/* https://www.w3schools.com/css/css_tooltip.asp */
+.tooltip-top::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: var(--main-color) transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}

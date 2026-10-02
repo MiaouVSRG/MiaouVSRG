@@ -11,6 +11,57 @@ function getApiEndpoint(){
     }
 }
 
+async function checkCookie(){
+    return fetch(getApiEndpoint() + "/web/login/verify", {
+        method: "GET",
+        credentials: "include"
+    })
+    .then((response) => response.json())
+    .then((json) => {return json.Success})
+    // Error means there is no token
+    .catch((reason) => {return false});
+}
+
+/**
+ * Returns true if the user stored in the local storage
+ * 
+ * OR
+ * 
+ * if the user has a valid cookie set
+ * 
+ * else, returns false.
+ */
+async function checkUserCache(){
+    // Checks if cookie is still valid
+    const isConnected = await checkCookie();
+    if(!isConnected){
+        return false;
+    }
+
+    if(localStorage.getItem('userInfo')){
+        return true;
+    } else {
+        return fetch(getApiEndpoint() + "/web/user", {
+            method: "GET",
+            credentials: "include"
+        })
+        .then((response) => response.json())
+        .then((json) => {
+            localStorage.setItem('userInfo', JSON.stringify(json));
+            return true;
+        })
+    };
+}
+
+async function getUserInfo(){
+    let result = await checkUserCache()
+    return result ? JSON.parse(localStorage.getItem('userInfo')) : null;
+}
+
+function setUserInfo(userInfo){
+    localStorage.setItem('userInfo', JSON.stringify(userInfo));
+}
+
 function getDiffColor(difficulty){
     const diffColors = [
         '#4290FB',
@@ -28,4 +79,4 @@ function getDiffColor(difficulty){
     return diffColors[difficulty]
 }
 
-export {getApiEndpoint, getDiffColor};
+export {getApiEndpoint, getDiffColor, getUserInfo};

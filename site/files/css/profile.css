@@ -229,8 +229,7 @@ html, body {
     margin-top: 1rem;
     border: none;
     margin-left: 3rem;
-    background-color: var(--main-color);
-    color: var(--text-color);
+    background-color: var(--text-color);
     padding: 0.6rem;
     font-family: "Fredoka One";
     width: 10rem;
@@ -423,7 +422,6 @@ html, body {
 .rulesetfilter {
     border: none;
     background-color: var(--main-color);
-    color: var(--text-color);
     padding: 0.4rem;
     font-family: "Fredoka One";
     width: 10rem;
@@ -570,6 +568,10 @@ html, body {
     display: none !important;
 }
 
+.hidden{
+    visibility: hidden;
+}
+
 
 .scoretemplate {
     background-color: blue;
@@ -577,7 +579,7 @@ html, body {
     width: 100%;
     height: 3.75rem;
     border-radius: 15px;
-    color: white;
+    color: var(--text-color);
     box-shadow: black 5px 5px 5px;
 
 }
@@ -625,8 +627,6 @@ html, body {
     color: #8dffff;
     font-style: italic;
     z-index: 0;
-    display: flex;
-    gap: 0.1rem;
 }
 
 
@@ -645,11 +645,11 @@ html, body {
     justify-content: center;
     align-items: center;
     font-size: 1.2rem;
+
 }
 
 .topscore-rate {
     background-color: var(--main-color);
-    color: var(--text-color);
     z-index: 0;
     border-radius: 15px;
     padding: 0.5rem 0.5rem 0.5rem 0.5rem;
@@ -675,7 +675,6 @@ html, body {
     align-items: center;
     border-radius: 15px;
     background-color: var(--main-color-no-transparency);
-    color: var(--text-color);
     width: 55%;
     font-size: 2rem;
     opacity: 1;
@@ -688,8 +687,7 @@ html, body {
 .keymodefiltertopplays {
     border: none;
     margin-left: 1.5rem;
-    background-color: var(--main-color);
-    color: var(--text-color);
+    background-color: white;
     padding: 0.6rem;
     font-family: "Fredoka One";
     width: 5rem;
@@ -1181,3 +1179,29 @@ input {
     margin-bottom: 1rem;
 }
 
+.convertlogotooltip{
+    align-self: center;
+    justify-self: center;
+    margin-right: 0.5rem;
+}
+
+.convertlogo{
+    width: 35px;
+    height: 35px;
+}
+
+.includeconvertcheckbox{
+   width: 1rem;
+    height: 1rem;
+    border-radius: 50px;
+
+}
+.convertdiv{
+    top:0;
+    right:0;
+    margin-top:0.5rem;
+    margin-right:0.5rem;
+    position: absolute;
+    display: flex;
+    color: var(--text-color);
+}

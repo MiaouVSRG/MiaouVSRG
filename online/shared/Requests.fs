@@ -808,6 +808,7 @@ module Web =
                     GlobalRanking: int
                     CountryRanking: int
                     PlayerRating: float
+                    PlayerRatingNoCSW: float
                     Completion: string
                 }
                 
@@ -844,6 +845,8 @@ module Web =
                     Rate: float32
                     Accuracy: float
                     Rating: float32
+                    IsConvert: bool
+                    ConvertString: string
                 }
             
             [<Json.AutoCodec>]
@@ -855,6 +858,7 @@ module Web =
                     Level: int64
                     StatsGlobal: Stats
                     Stats4K: Stats
+                    Stats6K: Stats
                     Stats7K: Stats
                     Playtime: string
                     GradeCount: GradeCount

@@ -117,21 +117,19 @@ module Search =
                         Perfect = perfect_scores
                     }
                 
-                let get_lb_infos (keymode: int): int * float32 =
+                let get_lb_infos (keymode: int): int =
                     let lb_combined =
                         match keymode with
                         | 4 -> Stats.leaderboard_4k_combined()
                         | 7 -> Stats.leaderboard_7k_combined()
                         | _ -> Stats.leaderboard_4k_combined()
                     let mutable rank = 0
-                    let mutable player_rating = 0.0f
                     for i in 0 .. lb_combined.Length - 1 do
                         let lb_entry_4k = lb_combined[i]
                         if lb_entry_4k.UserId = user_id then
                             rank <- i + 1
-                            player_rating <- lb_entry_4k.Combined
                             
-                    (rank, player_rating)
+                    rank
                     
                 let get_top_plays (scores: Score.ScoreByUserIdModel array): Play array =
                     let mutable plays: Play array = Array.Empty()
@@ -150,11 +148,15 @@ module Search =
                                     else
                                         "not available"
                                         
+                                let column_swapped = score.Mods.ContainsKey("column_swap")
+                                        
                                 let keymode =
-                                    if score.Mods.ContainsKey("column_swap") then
+                                    if column_swapped then
                                         ColumnSwap.keys score.Mods["column_swap"]
                                     else
                                         chart.Keymode
+                                        
+                                let column_swap_text = if column_swapped then $"{chart.Keymode}K to {keymode}K" else ""
                                         
                                 let play: Play = {
                                     ChartHash = score.ChartId
@@ -167,6 +169,8 @@ module Search =
                                     Rate = score.Rate
                                     Accuracy = score.Accuracy
                                     Rating = score.Rating
+                                    IsConvert = column_swapped
+                                    ConvertString = column_swap_text
                                 }
                                 plays <- plays.Append(play) |> _.ToArray()
                                 charts <- charts.Append(score.ChartId) |> _.ToArray()
@@ -188,25 +192,37 @@ module Search =
                                 else
                                     "not available"
                                     
+                            let column_swapped = score.Mods.ContainsKey("column_swap")
+                                        
+                            let keymode =
+                                if column_swapped then
+                                    ColumnSwap.keys score.Mods["column_swap"]
+                                else
+                                    chart.Keymode
+                                        
+                            let column_swap_text = if column_swapped then $"{chart.Keymode}K to {keymode}K" else ""
+                                    
                             let play: Play = {
                                 ChartHash = score.ChartId
                                 ChartName = chart.Title
                                 ChartDiffName = chart.DifficultyName
                                 ChartBackground = chart_background
                                 ChartRating = chart.Difficulty
-                                Keymode = chart.Keymode
+                                Keymode = keymode
                                 Grade = NORMAL.GradeName score.Grade
                                 Rate = float32 score.Rate
                                 Accuracy = score.Accuracy
                                 Rating = score.Rating
+                                IsConvert = column_swapped
+                                ConvertString = column_swap_text
                             }
                             plays <- plays.Append(play) |> _.ToArray()
                         
                     plays
                     
                     
-                let rank_4k, rating_4k = get_lb_infos 4
-                let rank_7k, rating_7k = get_lb_infos 7
+                let rank_4k = get_lb_infos 4
+                let rank_7k = get_lb_infos 7
                 
                 let easy_grades = get_user_grades(EASY, scores)
                 let normal_grades = get_user_grades(NORMAL, scores)
@@ -215,6 +231,7 @@ module Search =
                 
                 let completion_percent_global = sprintf "%.2f%%" (get_completion(scores, all_charts, None) * 100.0f)
                 let completion_percent_4k = sprintf "%.2f%%" (get_completion(scores, all_charts, Some 4) * 100.0f)
+                let completion_percent_6k = sprintf "%.2f%%" (get_completion(scores, all_charts, Some 6) * 100.0f)
                 let completion_percent_7k = sprintf "%.2f%%" (get_completion(scores, all_charts, Some 7) * 100.0f)
                 
                 let completion_osu = sprintf "%.2f%%" (get_completion(scores, osu_charts, None) * 100.0f)
@@ -228,18 +245,30 @@ module Search =
                 let recent_plays = get_recent_plays recent_scores
                 
                 // TODO: THIS IS TEMPORARY AND FOR INTERNAL TESTING ONLY
-                // THIS IS NOT THE NEW RATING SYSTEM
-                let mutable global_rating = 0.0f
-                let scores_to_count =
-                    if top_plays.Length >= 100 then
-                        100
-                    else
-                        top_plays.Length - 1
-                for i in 1..scores_to_count do
-                    let play = top_plays[i]
-                    global_rating <- global_rating + play.Rating
+                // THIS IS NOT THE NEW RATING SYSTEM     
+                let rating_by_keymode (keymode: int) =
+                    let mutable rating = 0.0f
+                    let mutable rating_no_csw = 0.0f
+                    let scores = if keymode = -1 then top_plays else top_plays |> Array.filter(fun play -> play.Keymode = keymode)
+                    let scores_to_count =
+                        if scores.Length >= 100 then
+                            99
+                        else
+                            scores.Length - 1
+                    for i in 0..scores_to_count do
+                        let play = scores[i]
+                        rating <- rating + play.Rating
+                        if not play.IsConvert then
+                            rating_no_csw <- rating_no_csw + play.Rating
+                        
+                    rating <- rating / float32 (scores_to_count + 1)
+                    rating_no_csw <- rating_no_csw / float32 (scores_to_count + 1)
+                    rating, rating_no_csw
                 
-                global_rating <- global_rating / float32 scores_to_count
+                let global_rating = rating_by_keymode(-1)
+                let rating_4k = rating_by_keymode(4)
+                let rating_6k = rating_by_keymode(6)
+                let rating_7k = rating_by_keymode(7)
                 
                 let profile_info: ProfileInfo = {
                     Username = db_user.Username
@@ -249,19 +278,29 @@ module Search =
                     StatsGlobal = {
                         GlobalRanking = rank_4k
                         CountryRanking = 0
-                        PlayerRating = float global_rating
+                        PlayerRating = float (fst global_rating)
+                        PlayerRatingNoCSW = float (snd global_rating)
                         Completion = completion_percent_global
                     }
                     Stats4K = {
                         GlobalRanking = rank_4k
                         CountryRanking = 0
-                        PlayerRating = Math.Round(float rating_4k, 2)
+                        PlayerRating = float (fst rating_4k)
+                        PlayerRatingNoCSW = float (snd rating_4k)
                         Completion = completion_percent_4k
+                    }
+                    Stats6K = {
+                        GlobalRanking = rank_4k
+                        CountryRanking = 0
+                        PlayerRating = float (fst rating_6k)
+                        PlayerRatingNoCSW = float (snd rating_6k)
+                        Completion = completion_percent_6k
                     }
                     Stats7K = {
                         GlobalRanking = rank_7k
                         CountryRanking = 0
-                        PlayerRating = Math.Round(float rating_7k, 2)
+                        PlayerRating = float (fst rating_7k)
+                        PlayerRatingNoCSW = float (snd rating_7k)
                         Completion = completion_percent_7k
                     }
                     Playtime = format_long_time stats.Playtime

@@ -1,0 +1,225 @@
+body {
+    background-image: url("../../../assets/images/storebg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: "Fredoka One";
+    margin: 0;
+    scrollbar-width: none;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.headinfo{
+    display: flex;
+    border-radius: 15px;
+    background:linear-gradient(rgb(0 0 0 / 0.35), rgb(0 0 0 / 0.73));
+    width: 90rem;
+    height: 5rem;
+    margin-top: 6rem;
+}
+
+.mainbox{
+    display: flex;
+    border-radius: 15px;
+    //background: linear-gradient(rgb(0 0 0 / 0.42), rgb(0 0 0 / 0.92));
+    width: 90rem;
+    height: 47rem;
+    margin-top: 1rem;
+    flex-direction: column;
+}
+
+.headmiddle{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 25rem;
+  // background-color: #b700ff;
+    justify-content: center;
+    align-items: center;
+    margin-left: 33.5rem;
+
+}
+
+.shopspan{
+    color: white;
+    font-weight: bold;
+    font-size: 3rem;
+}
+
+.shopresetspan{
+    color: white;
+    font-size: 1rem;
+    margin-top: -0.5rem;
+}
+
+.userbalance{
+    display: flex;
+    height: 100%;
+    width: 15rem;
+   //background-color: #0051ff;
+    justify-content: center;
+    align-items: center;
+    margin-left: 20rem;
+}
+
+.userbalanceamount{
+    color: white;
+    font-weight: bold;
+    font-size: 1.5rem;
+
+}
+
+.tokensvg{
+    margin-left: 0.6rem;
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.usernamedecorationsection{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 33%;
+    //background-color: #73f3ff;
+}
+
+.titlesection{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 33%;
+    //background-color: #8dff73;
+}
+
+.casesection{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 34%;
+    //background-color: #ff73e9;
+}
+
+.sectionheader{
+    display: flex;
+    width: 100%;
+    height: 1.5rem;
+    color: white;
+   // background: linear-gradient(rgb(0 0 0 / 0.35), rgb(0 0 0 / 0.73));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "comfortaa";
+    border-radius: 15px;
+
+
+}
+
+.itemcard{
+
+    display: flex;
+    flex-direction: column;
+    width: 12rem;
+    height: 14rem;
+    background: linear-gradient(rgb(0 0 0 / 0.42), rgb(0 0 0 / 0.92));
+    border-radius: 15px;
+    align-items: center;
+
+    box-shadow: #ffffff 3px 3px 3px;
+
+}
+
+.itempreview{
+    width: 10rem;
+    height: 8rem;
+    background:linear-gradient(rgb(0 0 0 / 0.35), rgb(0 0 0 / 0.73));
+    margin-top:1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    border-radius: 15px;
+
+}
+
+.previewspan{
+    text-align: center;
+    color: white;
+}
+
+.itemname{
+    font-family: "comfortaa";
+    color: white;
+    padding-top:0.4rem;
+    padding-bottom:0.4rem;
+}
+
+.itempricediv{
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    background:linear-gradient(rgb(80 223 0), rgb(2 163 3 / 0.92));
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding-top: 0.2rem;
+    padding-bottom:0.2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 15px;
+}
+
+.itemprice{
+    color: white;
+font-size: 1.1rem;
+}
+
+.tokenincardsvg{
+    margin-left: 0.6rem;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.firstitemdiv{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+   // background-color: white;
+    justify-content: space-around;
+
+}
+
+.seconditemdiv{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    //background-color: white;
+    justify-content: space-around;
+}
+
+.thirditemdiv{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+  //  background-color: white;
+    justify-content: space-around;
+}
+
+.boosterimg{
+
+    width: 8.5rem;
+    height: 8.5rem;
+
+}
+
+.boosterspan{
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: white;
+}

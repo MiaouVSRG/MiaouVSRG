@@ -20,29 +20,6 @@
 
 <body>
 
-<!--header-->
-<div class="headerfix">
-    <div class="header">
-        <img class="pipheader" src="/favicon.png">
-        <div class="homebutton">home</div>
-        <div class="lbbutton">leaderboards</div>
-        <div class="challengebutton">challenges</div>
-        <div class="shopbutton">shop</div>
-        <div class="completionbutton">completion</div>
-        <svg fill="#ffffff" height="34px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-            <g id="SVGRepo_iconCarrier">
-                <path
-                        d="M20.207 18.793L16.6 15.184a7.027 7.027 0 1 0-1.416 1.416l3.609 3.609a1 1 0 0 0 1.414-1.416zM6 11a5 5 0 1 1 5 5 5.006 5.006 0 0 1-5-5z">
-                </path>
-            </g>
-        </svg>
-        <div id="headerusername" class="headerusername">username</div>
-        <img id="headerpfp" class="headerpfp" src="/assets/images/placeholder/PFP%20PLACEHOLDER.png">
-    </div>
-</div>
-
 
 <div class="mainbox">
     <img id="bannerimg" class="profilebanner" width="100%" height="233px">
@@ -50,11 +27,16 @@
         <div class="profileinfo-info">
             <img id="avatarimg" class="profilepic">
             <span id="username" class="username">...</span>
-            <span class="  fi fi-fr userflag"> </span>
+            <span class="" id="userflag"> </span>
             <span id="level" class="lvlvalue">...</span>
             <div class="status">
                 <div class="statusdot offline" id="user-status-style"></div>
                 <span class="" id="user-status">offline</span></div>
+
+            <div class="convertdiv">
+                <input type="checkbox" id="includeconvertcheckbox" class="includeconvertcheckbox" >
+                <span>include converts</span>
+            </div>
         </div>
         <div class="profileinfo-followers">
             <div class="followers-button">
@@ -74,8 +56,10 @@
             <select id="keymodefilter" class="keymodefilter">
                 <option value="global">All Keymodes</option>
                 <option value="4K">4k</option>
+                <option value="6K">6k</option>
                 <option value="7K">7k</option>
             </select>
+
         </div>
         <div class="profileinfo-stats">
 
@@ -172,7 +156,7 @@
                         <span>Osu! total completion:</span>
                         <span>O2Jam total completion:</span>
                         <span>BMS total completion:</span>
-                        <span>Etterna total completion:</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     </div>
 
                     <div class="value">
@@ -283,7 +267,26 @@
         <span class="topscoresnumberofmaps" id="topscores-numberofmaps">0</span>
     </div>
     <div class="thirdboxmain" id="topscores-box">
-
+        <div class="scoretemplate topscore">
+            <img class="chartbg" src="https://assets.ppy.sh/beatmaps/1158628/covers/cover@2x.jpg">
+            <img class="topscore-grade" src="/assets/images/grades/overclearplus.png">
+            <div class="topscore-namebox">
+                <span class="topscore-name"><a class="chartpagelink" href="/charts/chartpage/11773466984A2E36A3EF34732C5D426D70767AFD89C53D4FE318F3EF1F43EE0E" target="_blank">GOTTASADAE</a></span>
+                <div class="topscore-diffname">
+                    <a class="chartpagelink" href="/charts/chartpage/11773466984A2E36A3EF34732C5D426D70767AFD89C53D4FE318F3EF1F43EE0E" target="_blank">GOTTASADAE</a>
+                </div>
+                
+            </div>
+            <div class="topscore-endbox">
+                <div class="tooltip convertlogotooltip">
+                    <img src="/assets/images/convertlogo.png" alt="" class="convertlogo">
+                    <span class="tooltiptext tooltip-top">Tooltip text</span>
+                </div>
+                <div class="topscore-ratebox"><span class="topscore-rate">1.00x</span></div>
+                <div class="topscore-accbox"><span class="topscore-acc">99.31%</span></div>
+                <div class="topscore-ratingbox"><span class="topscore-ratingvalue">12.29</span></div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -383,14 +386,15 @@
                 <div class="colorpickergroup">
                     <label class="color_wrapper"><input type="color" class="primarycolor" id="colorpickermain"></label>
                     <div class="colorpickergroup-alpha">
-                        <span id="alphaprimaryvalue">Opacity: </span> 
+                        <span id="alphaprimaryvalue">Opacity: </span>
                         <input type="range" id="alphaprimary" min="0" max="1" step="0.1">
                     </div>
                 </div>
                 <div class="colorpickergroup">
-                    <label class="color_wrapper"><input type="color" class="primarycolor" id="colorpickersecondary"></label>
+                    <label class="color_wrapper"><input type="color" class="primarycolor"
+                                                        id="colorpickersecondary"></label>
                     <div class="colorpickergroup-alpha">
-                        <span id="alphasecondaryvalue">Opacity: </span> 
+                        <span id="alphasecondaryvalue">Opacity: </span>
                         <input type="range" id="alphasecondary" min="0" max="1" step="0.1">
                     </div>
                 </div>
@@ -416,106 +420,14 @@
 </dialog>
 
 
-<div class="miniprofilebox invisible">
-    <span class="miniprofileprofile">profile</span>
-    <span class="miniprofilefriends">friends</span>
-    <span class="miniprofilesettings">settings</span>
-    <span class="miniprofilelogout">log out</span>
-</div>
-
-<div class="challengesbox invisible">
-    <div class="challbg ">
-
-    <div class="challkeybox">
-
-        <span class="challkeyspan">4k</span>
-        <span class="challkeyspan">5k</span>
-        <span class="challkeyspan">6k</span>
-        <span class="challkeyspan">7k</span>
-        <span class="challkeyspan">8k</span>
-        <span class="challkeyspan">9k</span>
-        <span class="challkeyspan">10k</span>
-
-
-    </div>
-
-    <div class="challdiffbox hard">
-        <div class="switch"><</div>
-        <span class="challdiffspan">normal</span>
-        <div class="switch">></div>
-    </div>
-
-    <div class="challtypebox">
-        <div class="switch"><</div>
-        <span class="challtypespan">daily</span>
-        <div class="switch">></div>
-    </div>
-
-    </div>
-
-
-    <div class="challcard">
-
-        <div class="namediffchall">
-            <span class="mapchallname">galaxy collapse</span>
-             <span class="challsr">[6.80✦] </span>
-        </div>
-            <div class="challacc">>95%</div>
-            <span class="reward">1,000$</span>
-
-
-
-
-    </div>
-
-    <div class="challcard">
-
-        <div class="namediffchall">
-            <span class="mapchallname">Roars of V.E.N.G.E.A.N.C.E -Take Back Everything-</span>
-            <span class="challsr">[8.20✦]</span>
-        </div>
-             <div class="challacc">>95%</div>
-            <span class="reward">1,000$</span>
-
-
-
-
-    </div>
-
-    <div class="challcard">
-
-
-            <span class="challsizediv">get 90%+ on x maps >5✦</span>
-            <span class="rewardonly"> 1,000$</span>
-
-    </div>
-
-    <div class="challcard">
-
-
-            <span class="challsizediv">get 5+ rating on x maps</span>
-            <span class="rewardonly"> 1,000$</span>
-
-    </div>
-
-    <div class="challcard">
-
-
-            <span class="challsizediv">get 7+ rating on x maps</span>
-            <span class="rewardonly"> 1,000$</span>
-
-    </div>
-
-
-</div>
-
-
 <!-- Render me! -->
 <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
 
 <!-- Write me! -->
 <script src="https://cdn.jsdelivr.net/npm/overtype@latest"></script>
 
+<script type="module"
+" src="/js/header.js"></script>
 <script type="module" src="/js/index.js"></script>
 </body>
 

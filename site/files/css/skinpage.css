@@ -1,0 +1,162 @@
+body{
+    background: linear-gradient(#193b45, #431c47);
+    background-attachment: fixed;
+    font-family: "Fredoka One";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainbox{
+    margin-top: 10rem;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: rgb(0 209 255 / 0);
+    width: 82rem;
+    justify-content: flex-start;
+    gap: 0.7rem;
+
+}
+
+.card{
+    width: 26.67rem;
+    height: 19rem;
+    border-radius: 15px;
+    box-shadow: 5px 5px 5px rgb(0 0 0 / 0.53);
+}
+
+.card:hover{
+    cursor: pointer;
+}
+
+.rskinpreview{
+    background-image: url('/assets/images/skins/Rskin/4k.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 15rem;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom: solid #ff0000 4px ;
+}
+
+.fnfpreview{
+    background-image: url('/assets/images/skins/fnf/4k.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 15rem;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom: solid #ff0000 4px ;
+}
+
+.circledefaultpreview{
+    background-image: url('/assets/images/skins/default circle/4k.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 15rem;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom: solid #ff0000 4px ;
+}
+
+.arrowdefaultpreview{
+    background-image: url('/assets/images/skins/default arrow/4k.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 15rem;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom: solid #ff0000 4px ;
+}
+
+.bardefaultpreview{
+    background-image: url('/assets/images/skins/default bar/4k.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 15rem;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom: solid #ff0000 4px ;
+}
+
+.diamonddefaultpreview{
+    background-image: url('/assets/images/skins/default diamond/4k.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 15rem;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom: solid #ff0000 4px ;
+}
+
+.o2jampreview{
+    background-image: url('/assets/images/skins/O2jam Sylveon/7k.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 15rem;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom: solid #ff0000 4px ;
+}
+
+.previewkeymodespan{
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    justify-content: start;
+    font-family: "Comfortaa";
+    color:white;
+    font-size: 0.8rem;
+    height: 9rem;
+    padding-top: 0.5rem;
+    padding-left: 0.5rem;
+    border-radius: 15px;
+    background-color: rgb(0 0 0 / 0.34);
+    width: 1.5rem;
+    gap:0.7rem;
+}
+
+.previewinfobox{
+    margin-top:5.75rem;
+    display: flex;
+    width: 100%;
+    height: 3.79rem;
+    background: linear-gradient(to bottom ,#2c6175, #783380);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    flex-direction: column;
+    font-family: "Comfortaa";
+    color:white;
+    font-weight: bolder;
+
+}
+
+.infoboxname{
+    padding-top: 0.6rem;
+    padding-left: 0.5rem;
+    width: 70%;
+}
+
+.infoboxauthor{
+    padding-top: 0.4rem;
+    padding-left: 0.5rem;
+    width: 70%;
+    font-size: 0.8rem;
+    color: rgb(255 255 255 / 0.69);
+}
+
+
+
+.downloadbutton{
+    display: flex;
+    justify-content: end;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+}

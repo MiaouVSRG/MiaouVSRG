@@ -1,0 +1,565 @@
+.cyanneon{
+    color: #ffffff;
+    text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #00f, 0 0 30px #00f;
+}
+
+.redneon{
+    color: #ffffff;
+    text-shadow: 0 0 5px #ff8787, 0 0 10px #ff8383, 0 0 20px #ff0000, 0 0 30px #ff0000;
+}
+
+.pinkneon{
+    color: #ffffff;
+    text-shadow: 0 0 5px #e587ff, 0 0 10px #fb83ff, 0 0 20px #ff00dd, 0 0 30px #ff00dd;
+}
+
+
+@font-face {
+    font-family: "Agu Display Uzo";
+    src: url("/assets/fonts/AguDisplay[MORF].ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Akronim";
+    src: url("/assets/fonts/Akronim-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Alegreya Sans ExtraBold";
+    src: url("/assets/fonts/AlegreyaSans-ExtraBoldItalic.ttf") format("truetype");
+    font-weight: 800;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Allura";
+    src: url("/assets/fonts/Allura-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Astloch";
+    src: url("/assets/fonts/Astloch-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Badeen Display";
+    src: url("/assets/fonts/BadeenDisplay-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Bahianita";
+    src: url("/assets/fonts/Bahianita-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Bakbak One";
+    src: url("/assets/fonts/BakbakOne-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Barrio";
+    src: url("/assets/fonts/Barrio-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Bungee Shade";
+    src: url("/assets/fonts/BungeeShade-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Cabin Sketch";
+    src: url("/assets/fonts/CabinSketch-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Caveat Brush";
+    src: url("/assets/fonts/CaveatBrush-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Ceviche One";
+    src: url("/assets/fonts/CevicheOne-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Corben";
+    src: url("/assets/fonts/Corben-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Danfo";
+    src: url("/assets/fonts/Danfo[ELSH].ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Delius Swash Caps";
+    src: url("/assets/fonts/DeliusSwashCaps-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Delius Unicase";
+    src: url("/assets/fonts/DeliusUnicase-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Delius Unicase";
+    src: url("/assets/fonts/DeliusUnicase-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Devonshire";
+    src: url("/assets/fonts/Devonshire-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Erica One";
+    src: url("/assets/fonts/EricaOne-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Ewert";
+    src: url("/assets/fonts/Ewert-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Fascinate Inline";
+    src: url("/assets/fonts/FascinateInline-Regular.ttf") format("truetype");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Faster One";
+    src: url("/assets/fonts/FasterOne-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Finger Paint";
+    src: url("/assets/fonts/FingerPaint-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Ga Maamli";
+    src: url("/assets/fonts/GaMaamli-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Galada";
+    src: url("/assets/fonts/Galada-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Gveret Levin";
+    src: url("/assets/fonts/GveretLevin-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Henny Penny";
+    src: url("/assets/fonts/HennyPenny-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Inconsolata UltraExpanded ExtraBold";
+    src: url("/assets/fonts/Inconsolata-UltraExpandedExtraBold.ttf") format("truetype");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Ingrid Darling";
+    src: url("/assets/fonts/IngridDarling-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Kavoon";
+    src: url("/assets/fonts/Kavoon-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Londrina Shadow";
+    src: url("/assets/fonts/LondrinaShadow-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Original Surfer";
+    src: url("/assets/fonts/OriginalSurfer-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Porter Sans Block";
+    src: url("/assets/fonts/PorterSansBlock-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Press Start 2P";
+    src: url("/assets/fonts/PressStart2P-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Rubik Beastly";
+    src: url("/assets/fonts/RubikBeastly-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Rubik Burned";
+    src: url("/assets/fonts/RubikBurned-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Rubik Wet Paint";
+    src: url("/assets/fonts/RubikWetPaint-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Rye";
+    src: url("/assets/fonts/Rye-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Saira Stencil One";
+    src: url("/assets/fonts/SairaStencilOne-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Silkscreen";
+    src: url("/assets/fonts/Silkscreen-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Sonsie One";
+    src: url("/assets/fonts/SonsieOne-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Stalinist One";
+    src: url("/assets/fonts/StalinistOne-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Stardos Stencil";
+    src: url("/assets/fonts/StardosStencil-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Stick";
+    src: url("/assets/fonts/Stick-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Yuyu";
+    src: url("/assets/fonts/Yuyu-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Font family utility classes */
+
+.font-agu-display-uzo {
+    font-family: "Agu Display Uzo";
+}
+
+.font-akronim {
+    font-family: "Akronim";
+}
+
+.font-alegreya-sans {
+    font-family: "Alegreya Sans";
+}
+
+.font-allura {
+    font-family: "Allura";
+}
+
+.font-astloch {
+    font-family: "Astloch";
+}
+
+.font-badeen-display {
+    font-family: "Badeen Display";
+}
+
+.font-bahianita {
+    font-family: "Bahianita";
+}
+
+.font-bakbak-one {
+    font-family: "Bakbak One";
+}
+
+.font-barrio {
+    font-family: "Barrio";
+}
+
+.font-bungee-shade {
+    font-family: "Bungee Shade";
+}
+
+.font-cabin-sketch {
+    font-family: "Cabin Sketch";
+}
+
+.font-caveat-brush {
+    font-family: "Caveat Brush";
+}
+
+.font-ceviche-one {
+    font-family: "Ceviche One";
+}
+
+.font-corben {
+    font-family: "Corben";
+}
+
+.font-danfo {
+    font-family: "Danfo";
+}
+
+.font-delius-swash-caps {
+    font-family: "Delius Swash Caps";
+}
+
+.font-delius-unicase {
+    font-family: "Delius Unicase";
+}
+
+.font-devonshire {
+    font-family: "Devonshire";
+}
+
+.font-erica-one {
+    font-family: "Erica One";
+}
+
+.font-ewert {
+    font-family: "Ewert";
+}
+
+.font-fascinate-inline {
+    font-family: "Fascinate Inline";
+}
+
+.font-faster-one {
+    font-family: "Faster One";
+}
+
+.font-finger-paint {
+    font-family: "Finger Paint";
+}
+
+.font-ga-maamli {
+    font-family: "Ga Maamli";
+}
+
+.font-galada {
+    font-family: "Galada";
+}
+
+.font-gveret-levin {
+    font-family: "Gveret Levin";
+}
+
+.font-henny-penny {
+    font-family: "Henny Penny";
+}
+
+.font-inconsolata-ultraexpanded-extrabold {
+    font-family: "Inconsolata UltraExpanded ExtraBold";
+}
+
+.font-ingrid-darling {
+    font-family: "Ingrid Darling";
+}
+
+.font-kavoon {
+    font-family: "Kavoon";
+}
+
+.font-londrina-shadow {
+    font-family: "Londrina Shadow";
+}
+
+.font-original-surfer {
+    font-family: "Original Surfer";
+}
+
+.font-porter-sans-block {
+    font-family: "Porter Sans Block";
+}
+
+.font-press-start-2p {
+    font-family: "Press Start 2P";
+}
+
+.font-rubik-beastly {
+    font-family: "Rubik Beastly";
+}
+
+.font-rubik-burned {
+    font-family: "Rubik Burned";
+}
+
+.font-rubik-wet-paint {
+    font-family: "Rubik Wet Paint";
+}
+
+.font-rye {
+    font-family: "Rye";
+}
+
+.font-saira-stencil-one {
+    font-family: "Saira Stencil One";
+}
+
+.font-silkscreen {
+    font-family: "Silkscreen";
+}
+
+.font-sonsie-one {
+    font-family: "Sonsie One";
+}
+
+.font-stalinist-one {
+    font-family: "Stalinist One";
+}
+
+.font-stardos-stencil {
+    font-family: "Stardos Stencil";
+}
+
+.font-stick {
+    font-family: "Stick";
+}
+
+.font-yuyu {
+    font-family: "Yuyu";
+}

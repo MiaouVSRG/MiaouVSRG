@@ -1,7 +1,9 @@
-import { getApiEndpoint } from "./utils.js"
+import { getApiEndpoint, getUserInfo } from "./utils.js"
+import { waitForHeaderToInitialize } from "./header.js";
 
 const rulesetGradesSelect = document.getElementById("ruleset-grades");
 
+const includeconvertcheckbox = document.getElementById("includeconvertcheckbox");
 const topscoresBox = document.getElementById("topscores-box");
 const topscoresMainBox = document.getElementById("topscores-mainbox");
 const recentscoresBox = document.getElementById("recentscores-box");
@@ -14,8 +16,7 @@ const keymodefilterTopPlays = document.getElementById("keymodefiltertopplays");
 const keymodefilterRecentPlays = document.getElementById("keymodefilterrecentplays");
 const topscoresNumberofmaps = document.getElementById("topscores-numberofmaps");
 const recentscoresNumberofmaps = document.getElementById("recentscores-numberofmaps");
-const headerpfp = document.getElementById("headerpfp");
-const headerusername = document.getElementById("headerusername");
+const userFlag = document.getElementById("userflag");
 
 const userStatus = document.getElementById("user-status");
 const userStatusDotStyle = document.getElementById("user-status-style");
@@ -83,7 +84,11 @@ function init(response, isCurrentUser){
     mePreview.innerHTML =
       marked.parse(response.ProfileInfo.AboutMe);
 
+    
+    const headerpfp = document.getElementById("headerpfp");
     headerpfp.src = response.ProfileInfo.Avatar;
+    
+    const headerusername = document.getElementById("headerusername");
     headerusername.innerText = response.ProfileInfo.Username;
 
     backgroundImage = response.ProfileInfo.BackgroundImage;
@@ -160,7 +165,8 @@ function init(response, isCurrentUser){
     htmlusername.innerText=response.ProfileInfo.Username
 
 
-
+    const countryflagclassname = response.ProfileInfo.Country ?? "unknown"
+    userFlag.classList.add("fi", "fi-" + countryflagclassname, "userflag");
 
 
     //main stats
@@ -240,6 +246,13 @@ function init(response, isCurrentUser){
     // On l'appellera automatique à chaque fois qu'une valeur différente sera choisie dans le select par l'utilisateur
     // Tout le code à l'intérieur de cette fonction sera alors exécuté
     function changeValues(){
+        function getRating(apiPath){
+            console.log(includeconvertcheckbox.checked)
+            if(includeconvertcheckbox.checked){
+                return apiPath.PlayerRating;
+            }
+            return apiPath.PlayerRatingNoCSW;
+        }
         // On récupère la champ "value" de l'option choisie par l'utilisateur
         // Donc, par rapport à mon HTML, si l'utilisateur choisit "All keymodes", alors la variable value sera égale à "global"
         var value = keymodefilter.value;
@@ -248,7 +261,7 @@ function init(response, isCurrentUser){
             // Alors le texte de la page doit valoir ce qui est contenu dans response.ProfileInfo.StatsGlobal
             global_ranking_value.innerText ="#" + response.ProfileInfo.StatsGlobal.GlobalRanking
             country_ranking_value.innerText ="#" + response.ProfileInfo.StatsGlobal.CountryRanking
-            playerrating.innerText = Number(response.ProfileInfo.StatsGlobal.PlayerRating).toFixed(2);
+            playerrating.innerText = Number(getRating(response.ProfileInfo.StatsGlobal)).toFixed(2);
             playtime.innerText = response.ProfileInfo.Playtime
             htmlcompletion.innerText = response.ProfileInfo.StatsGlobal.Completion
         }
@@ -257,16 +270,25 @@ function init(response, isCurrentUser){
             // Alors le texte de la page doit valoir ce qui est contenu dans response.ProfileInfo.Stats4K
             global_ranking_value.innerText ="#" + response.ProfileInfo.Stats4K.GlobalRanking
             country_ranking_value.innerText ="#" + response.ProfileInfo.Stats4K.CountryRanking
-            playerrating.innerText = response.ProfileInfo.Stats4K.PlayerRating
+            playerrating.innerText = Number(getRating(response.ProfileInfo.Stats4K)).toFixed(2);
             htmlcompletion.innerText = response.ProfileInfo.Stats4K.Completion
             //playtime.innerText = response.ProfileInfo.Stats4K.Playtime
         }
+        // Sinon si la value est égale à "6K"
+        else if(value === "6K"){
+            // Alors le texte de la page doit valoir ce qui est contenu dans response.ProfileInfo.Stats6K
+            global_ranking_value.innerText ="#" + response.ProfileInfo.Stats6K.GlobalRanking
+            country_ranking_value.innerText ="#" + response.ProfileInfo.Stats6K.CountryRanking
+            playerrating.innerText = Number(getRating(response.ProfileInfo.Stats6K)).toFixed(2);
+            htmlcompletion.innerText = response.ProfileInfo.Stats6K.Completion
+            //playtime.innerText = response.ProfileInfo.Stats6K.Playtime
+        }
         // Sinon si la value est égale à "7K"
         else if(value === "7K"){
-            // Alors le texte de la page doit valoir ce qui est contenu dans response.ProfileInfo.Stats4K
+            // Alors le texte de la page doit valoir ce qui est contenu dans response.ProfileInfo.Stats6K
             global_ranking_value.innerText ="#" + response.ProfileInfo.Stats7K.GlobalRanking
             country_ranking_value.innerText ="#" + response.ProfileInfo.Stats7K.CountryRanking
-            playerrating.innerText = response.ProfileInfo.Stats7K.PlayerRating
+            playerrating.innerText = Number(getRating(response.ProfileInfo.Stats7K)).toFixed(2);
             htmlcompletion.innerText = response.ProfileInfo.Stats7K.Completion
             //playtime.innerText = response.ProfileInfo.Stats7K.Playtime
         }
@@ -280,6 +302,10 @@ function init(response, isCurrentUser){
 
     keymodefilterTopPlays.onchange = () => showTopPlays(response, keymodefilterTopPlays.value);
     keymodefilterRecentPlays.onchange = () => showRecentPlays(response, keymodefilterRecentPlays.value);
+    includeconvertcheckbox.onchange = () => {
+        changeValues();
+        showTopPlays(response, keymodefilterTopPlays.value);
+    }
 
     showTopPlays(response, "any");
     showRecentPlays(response, "any");
@@ -367,93 +393,115 @@ function showTopPlays(response, keymode){
     var i = 1;
     topPlays.forEach(play => {
         if(i < 100){
-            let div = document.createElement("div");
-            div.classList.add("scoretemplate");
-            div.classList.add("topscore");
+            if(!play.IsConvert || includeconvertcheckbox.checked){
+                let div = document.createElement("div");
+                div.classList.add("scoretemplate");
+                div.classList.add("topscore");
 
-            let chartBg = document.createElement("img");
-            chartBg.classList.add("chartbg");
-            chartBg.src = play.ChartBackground;
-            
-            div.appendChild(chartBg);
+                let chartBg = document.createElement("img");
+                chartBg.classList.add("chartbg");
+                chartBg.src = play.ChartBackground;
+                
+                div.appendChild(chartBg);
 
-            let topscoreGrade = document.createElement("img");
-            topscoreGrade.classList.add("topscore-grade");
-            topscoreGrade.src = "/assets/images/grades/" + play.Grade.toLowerCase().replace("+", "plus") + ".png";
-            div.appendChild(topscoreGrade);
+                let topscoreGrade = document.createElement("img");
+                topscoreGrade.classList.add("topscore-grade");
+                topscoreGrade.src = "/assets/images/grades/" + play.Grade.toLowerCase().replace("+", "plus") + ".png";
+                div.appendChild(topscoreGrade);
 
-            let nameBox = document.createElement("div");
-            nameBox.classList.add("topscore-namebox");
+                let nameBox = document.createElement("div");
+                nameBox.classList.add("topscore-namebox");
 
-            let name = document.createElement("span");
-            name.classList.add("topscore-name");
-            let mapLink = document.createElement("a");
-            mapLink.classList.add("chartpagelink");
-            mapLink.href = "/charts/chartpage/" + play.ChartHash;
-            mapLink.target = "_blank";
-            mapLink.innerText = play.ChartName;
-            name.appendChild(mapLink);
+                let name = document.createElement("span");
+                name.classList.add("topscore-name");
+                let mapLink = document.createElement("a");
+                mapLink.classList.add("chartpagelink");
+                mapLink.href = "/charts/chartpage/" + play.ChartHash;
+                mapLink.target = "_blank";
+                mapLink.innerText = play.ChartName;
+                name.appendChild(mapLink);
 
-            nameBox.appendChild(name);
+                nameBox.appendChild(name);
 
-            let diffName = document.createElement("div");
-            diffName.classList.add("topscore-diffname");
-            let mapLinkDiff = document.createElement("a");
-            mapLinkDiff.classList.add("chartpagelink");
-            mapLinkDiff.href = "/charts/chartpage/" + play.ChartHash;
-            mapLinkDiff.target = "_blank";
-            mapLinkDiff.innerText = play.ChartDiffName;
-            diffName.appendChild(mapLinkDiff);
+                let diffName = document.createElement("div");
+                diffName.classList.add("topscore-diffname");
+                let mapLinkDiff = document.createElement("a");
+                mapLinkDiff.classList.add("chartpagelink");
+                mapLinkDiff.href = "/charts/chartpage/" + play.ChartHash;
+                mapLinkDiff.target = "_blank";
+                mapLinkDiff.innerText = play.ChartDiffName;
+                diffName.appendChild(mapLinkDiff);
 
-            nameBox.appendChild(diffName);
+                nameBox.appendChild(diffName);
 
-            div.appendChild(nameBox);
+                div.appendChild(nameBox);
 
-            let topscoreEndBox = document.createElement("div");
-            topscoreEndBox.classList.add("topscore-endbox");
-            
-            let topscoreRateBox = document.createElement("div");
-            topscoreRateBox.classList.add("topscore-ratebox");
-            let topscoreRate = document.createElement("span");
-            topscoreRate.classList.add("topscore-rate");
-            topscoreRate.innerText = Number(play.Rate).toFixed(2) + "x";
+                let topscoreEndBox = document.createElement("div");
+                topscoreEndBox.classList.add("topscore-endbox");
 
-            topscoreRateBox.appendChild(topscoreRate);
+                let convertlogotooltip = document.createElement("div");
+                convertlogotooltip.classList.add("convertlogotooltip");
 
-            let topscoreAccBox = document.createElement("div");
-            topscoreAccBox.classList.add("topscore-accbox");
-            let topscoreAcc = document.createElement("span");
-            topscoreAcc.classList.add("topscore-acc");
-            if(play.Accuracy === 1){
-                topscoreAcc.innerText = "100%";
-            } else {
-                topscoreAcc.innerText = Number(play.Accuracy * 100).toFixed(2) + "%";
+                let convertlogo = document.createElement("img");
+                convertlogo.classList.add("convertlogo");
+                convertlogo.src = "/assets/images/convertlogo.png";
+                convertlogotooltip.appendChild(convertlogo);
+
+                if(!play.IsConvert){
+                    convertlogotooltip.classList.add("hidden");
+                } else {
+                    convertlogotooltip.classList.add("tooltip");
+                    let tooltiptext = document.createElement("span");
+                    tooltiptext.classList.add("tooltiptext");
+                    tooltiptext.classList.add("tooltip-top");
+                    tooltiptext.innerText = play.ConvertString;
+                    convertlogotooltip.appendChild(tooltiptext);
+                }
+                
+                let topscoreRateBox = document.createElement("div");
+                topscoreRateBox.classList.add("topscore-ratebox");
+                let topscoreRate = document.createElement("span");
+                topscoreRate.classList.add("topscore-rate");
+                topscoreRate.innerText = Number(play.Rate).toFixed(2) + "x";
+
+                topscoreRateBox.appendChild(topscoreRate);
+
+                let topscoreAccBox = document.createElement("div");
+                topscoreAccBox.classList.add("topscore-accbox");
+                let topscoreAcc = document.createElement("span");
+                topscoreAcc.classList.add("topscore-acc");
+                if(play.Accuracy === 1){
+                    topscoreAcc.innerText = "100%";
+                } else {
+                    topscoreAcc.innerText = Number(play.Accuracy * 100).toFixed(2) + "%";
+                }
+
+                topscoreAccBox.appendChild(topscoreAcc);
+
+                let topscoreRatingBox = document.createElement("div");
+                topscoreRatingBox.classList.add("topscore-ratingbox");
+                let topscoreRatingvalue = document.createElement("span");
+                topscoreRatingvalue.classList.add("topscore-ratingvalue");
+                topscoreRatingvalue.innerText = Number(play.Rating).toFixed(2);
+
+                topscoreRatingBox.appendChild(topscoreRatingvalue);
+
+                topscoreEndBox.appendChild(convertlogotooltip);
+                topscoreEndBox.appendChild(topscoreRateBox);
+                topscoreEndBox.appendChild(topscoreAccBox);
+                topscoreEndBox.appendChild(topscoreRatingBox);
+
+                div.appendChild(topscoreEndBox);
+
+                if(i > 5){
+                    div.classList.add("invisible");
+                }
+
+                topscoresBox.append(div);
+
             }
-
-            topscoreAccBox.appendChild(topscoreAcc);
-
-            let topscoreRatingBox = document.createElement("div");
-            topscoreRatingBox.classList.add("topscore-ratingbox");
-            let topscoreRatingvalue = document.createElement("span");
-            topscoreRatingvalue.classList.add("topscore-ratingvalue");
-            topscoreRatingvalue.innerText = Number(play.Rating).toFixed(2);
-
-            topscoreRatingBox.appendChild(topscoreRatingvalue);
-
-            topscoreEndBox.appendChild(topscoreRateBox);
-            topscoreEndBox.appendChild(topscoreAccBox);
-            topscoreEndBox.appendChild(topscoreRatingBox);
-
-            div.appendChild(topscoreEndBox);
-
-            if(i > 5){
-                div.classList.add("invisible");
-            }
-
-            topscoresBox.append(div);
-
+            i++;
         }
-        i++;
     });
 
     showMoreButton.onclick = (event) => {
@@ -560,6 +608,25 @@ function showRecentPlays(response, keymode){
 
             let topscoreEndBox = document.createElement("div");
             topscoreEndBox.classList.add("topscore-endbox");
+
+            let convertlogotooltip = document.createElement("div");
+            convertlogotooltip.classList.add("convertlogotooltip");
+
+            let convertlogo = document.createElement("img");
+            convertlogo.classList.add("convertlogo");
+            convertlogo.src = "/assets/images/convertlogo.png";
+            convertlogotooltip.appendChild(convertlogo);
+
+            if(!play.IsConvert){
+                convertlogotooltip.classList.add("hidden");
+            } else {
+                convertlogotooltip.classList.add("tooltip");
+                let tooltiptext = document.createElement("span");
+                tooltiptext.classList.add("tooltiptext");
+                tooltiptext.classList.add("tooltip-top");
+                tooltiptext.innerText = play.ConvertString;
+                convertlogotooltip.appendChild(tooltiptext);
+            }
             
             let topscoreRateBox = document.createElement("div");
             topscoreRateBox.classList.add("topscore-ratebox");
@@ -589,6 +656,7 @@ function showRecentPlays(response, keymode){
 
             topscoreRatingBox.appendChild(topscoreRatingvalue);
 
+            topscoreEndBox.appendChild(convertlogotooltip);
             topscoreEndBox.appendChild(topscoreRateBox);
             topscoreEndBox.appendChild(topscoreAccBox);
             topscoreEndBox.appendChild(topscoreRatingBox);
@@ -756,44 +824,39 @@ function updateMe(){
     })
 }
 
-window.onload = (event) => {
+window.addEventListener("DOMContentLoaded", async (event) => {
+    await waitForHeaderToInitialize();
     const parts = location.pathname.split("/").filter(Boolean);
     let username = parts.at(-1);
     let page = parts.at(-2);
+    
+    const user = await getUserInfo();
 
     if(username && page === "profile"){
-        // On crée une requête vide que l'on met dans une variable nommée "request". En JS, ce qui représente une requête se nomme XMLHttpRequest
-        var request=new XMLHttpRequest()
+        if(!!user && username === user.ProfileInfo.Username){
+            init(user, true);
+        } else {
+            // On crée une requête vide que l'on met dans une variable nommée "request". En JS, ce qui représente une requête se nomme XMLHttpRequest
+            var request=new XMLHttpRequest()
 
-        // On remplit la requête vide grâce à ".open()". Dans le "open()", on remplit les informations de la requête,
-        // à savoir : la méthode (GET) et l'url. Le "false" indique qu'on doit attendre que le serveur réponde avant de continuer le code.
-        request.open("get", getApiEndpoint() + "/web/user?name=" + username, false)
+            // On remplit la requête vide grâce à ".open()". Dans le "open()", on remplit les informations de la requête,
+            // à savoir : la méthode (GET) et l'url. Le "false" indique qu'on doit attendre que le serveur réponde avant de continuer le code.
+            request.open("get", getApiEndpoint() + "/web/user?name=" + username, false)
 
-        // On envoie la requête au serveur (l'équivalent invisible de coller l'url dans le navigateur)
-        request.send()
+            // On envoie la requête au serveur (l'équivalent invisible de coller l'url dans le navigateur)
+            request.send()
 
-        // Comme on a envoyé la requête au serveur (étape 3),
-        // on peut récupérer ce que le serveur nous a renvoyé grâce à la propriété "responseText" !
-        // le JSON.parse permet de convertir la réponse du serveur en code utilisable en JS
-        var response=JSON.parse(request.responseText)
-        init(response, false)
+            // Comme on a envoyé la requête au serveur (étape 3),
+            // on peut récupérer ce que le serveur nous a renvoyé grâce à la propriété "responseText" !
+            // le JSON.parse permet de convertir la réponse du serveur en code utilisable en JS
+            var response=JSON.parse(request.responseText)
+            init(response, false)
+        }
     } else {
-
-        fetch(getApiEndpoint() + "/web/login/verify", {
-            method: "GET",
-            credentials: "include"
-        })
-        .then((response) => response.json())
-        .then((json) => {
-            if (json.Success){
-                fetch(getApiEndpoint() + "/web/user", {
-                    method: "GET",
-                    credentials: "include"
-                })
-                .then((response) => response.json())
-                .then((json) => init(json, true))
-            } else {
-            }
-        });
+        if(!!user){
+            init(user, true);
+        } else {
+            location.href = "/user/login";
+        }
     }
-}
+});
