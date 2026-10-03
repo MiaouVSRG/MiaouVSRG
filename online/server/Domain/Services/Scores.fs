@@ -50,7 +50,7 @@ module Scores =
         let mutable i = 0
 
         while i < existing_lb.Length do
-            if score.Accuracy > existing_lb.[i].Accuracy then
+            if score.Rating > existing_lb.[i].Rating then
                 position <- i
                 i <- existing_lb.Length
             elif existing_lb.[i].UserId = score.UserId then

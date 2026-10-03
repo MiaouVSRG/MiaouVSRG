@@ -234,6 +234,7 @@ module Score =
             Grade: int
             Lamp: int
             ReplayId: int64 option
+            Rating: float32
         }
 
     let LEADERBOARD_SIZE = 20
@@ -243,15 +244,15 @@ module Score =
                 """
             WITH UserBestScores AS (
                 SELECT
-                    UserId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp, ReplayId,
-                    ROW_NUMBER() OVER (PARTITION BY UserId ORDER BY Accuracy DESC, TimePlayed ASC) AS UserScoreRank
+                    UserId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp, ReplayId, Rating,
+                    ROW_NUMBER() OVER (PARTITION BY UserId ORDER BY Rating DESC, TimePlayed ASC) AS UserScoreRank
                 FROM scores2
                 WHERE ChartId = @ChartId AND Ranked = 1
             )
 
-            SELECT UserId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp, ReplayId FROM UserBestScores
+            SELECT UserId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp, ReplayId, Rating FROM UserBestScores
             WHERE UserScoreRank = 1
-            ORDER BY Accuracy DESC, TimePlayed ASC
+            ORDER BY Rating DESC, TimePlayed ASC
             LIMIT 20;
             """
             Parameters = [ "@ChartId", SqliteType.Text, -1 ]
@@ -269,6 +270,7 @@ module Score =
                         Grade = r.Int32
                         Lamp = r.Int32
                         ReplayId = r.Int64Option
+                        Rating = r.Float32
                     }
                 )
         }
