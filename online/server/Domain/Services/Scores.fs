@@ -43,7 +43,11 @@ module Scores =
     let new_leaderboard_position (score: Score) : int option =
         if not score.Ranked then None else
 
-        let existing_lb = Score.get_leaderboard score.ChartId
+        let existing_lb =
+            if score.Mods.ContainsKey("column_swap") then
+                Score.get_leaderboard_csw score.ChartId
+            else
+                Score.get_leaderboard_no_csw score.ChartId
 
         let mutable already_has_score = false
         let mutable position = Score.LEADERBOARD_SIZE
@@ -203,6 +207,7 @@ module Scores =
             
                 match new_leaderboard_position score with
                 | Some p ->
+                    let column_swap_used = score.Mods.ContainsKey("column_swap")
                     let replay_id =
                         (user_id, chart_id, timestamp, replay)
                         |> Replay.create

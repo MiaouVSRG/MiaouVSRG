@@ -277,6 +277,86 @@ module Score =
 
     let get_leaderboard (chart_id: string) =
         GET_LEADERBOARD.Execute chart_id core_db |> expect
+        
+    let private GET_LEADERBOARD_CSW: Query<string, LeaderboardScore> =
+        {
+            SQL =
+                """
+            WITH UserBestScores AS (
+                SELECT
+                    UserId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp, ReplayId, Rating,
+                    ROW_NUMBER() OVER (PARTITION BY UserId ORDER BY Rating DESC, TimePlayed ASC) AS UserScoreRank
+                FROM scores2
+                WHERE ChartId = @ChartId AND Ranked = 1 AND Mods LIKE '%column_swap%'
+            )
+
+            SELECT UserId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp, ReplayId, Rating FROM UserBestScores
+            WHERE UserScoreRank = 1
+            ORDER BY Rating DESC, TimePlayed ASC
+            LIMIT 20;
+            """
+            Parameters = [ "@ChartId", SqliteType.Text, -1 ]
+            FillParameters =
+                fun p chart_id ->
+                    p.String chart_id
+            Read =
+                (fun r ->
+                    {
+                        UserId = r.Int64
+                        TimePlayed = r.Int64
+                        Rate = r.Float32 * 1.0f<rate>
+                        Mods = r.Json JSON
+                        Accuracy = r.Float64
+                        Grade = r.Int32
+                        Lamp = r.Int32
+                        ReplayId = r.Int64Option
+                        Rating = r.Float32
+                    }
+                )
+        }
+        
+    let get_leaderboard_csw (chart_id: string) =
+        GET_LEADERBOARD_CSW.Execute chart_id core_db |> expect
+        
+    let private GET_LEADERBOARD_NO_CSW: Query<string, LeaderboardScore> =
+        {
+            SQL =
+                """
+            WITH UserBestScores AS (
+                SELECT
+                    UserId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp, ReplayId, Rating,
+                    ROW_NUMBER() OVER (PARTITION BY UserId ORDER BY Rating DESC, TimePlayed ASC) AS UserScoreRank
+                FROM scores2
+                WHERE ChartId = @ChartId AND Ranked = 1 AND Mods NOT LIKE '%column_swap%'
+            )
+
+            SELECT UserId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp, ReplayId, Rating FROM UserBestScores
+            WHERE UserScoreRank = 1
+            ORDER BY Rating DESC, TimePlayed ASC
+            LIMIT 20;
+            """
+            Parameters = [ "@ChartId", SqliteType.Text, -1 ]
+            FillParameters =
+                fun p chart_id ->
+                    p.String chart_id
+            Read =
+                (fun r ->
+                    {
+                        UserId = r.Int64
+                        TimePlayed = r.Int64
+                        Rate = r.Float32 * 1.0f<rate>
+                        Mods = r.Json JSON
+                        Accuracy = r.Float64
+                        Grade = r.Int32
+                        Lamp = r.Int32
+                        ReplayId = r.Int64Option
+                        Rating = r.Float32
+                    }
+                )
+        }
+        
+    let get_leaderboard_no_csw (chart_id: string) =
+        GET_LEADERBOARD_CSW.Execute chart_id core_db |> expect
 
     type UserLeaderboardScore =
         {

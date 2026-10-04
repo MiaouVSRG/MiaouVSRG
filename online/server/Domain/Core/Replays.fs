@@ -137,7 +137,8 @@ module Replay =
                     // If exact replay already exists in DB just return that ID (should not happen)
                     existing_id
                 else
-                    DELETE_BY_ID.Execute existing_id core_db |> expect |> ignore
+                    // if not column_swap_used then // TODO: handle column_swap replays and delete them
+                    //     DELETE_BY_ID.Execute existing_id core_db |> expect |> ignore
                     SAVE_LEADERBOARD.Execute replay core_db
                     |> expect
                     |> Array.exactlyOne
