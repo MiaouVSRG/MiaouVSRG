@@ -421,7 +421,7 @@ html, body {
 
 .rulesetfilter {
     border: none;
-    background-color: var(--main-color);
+    background-color: var(--text-color);
     padding: 0.4rem;
     font-family: "Fredoka One";
     width: 10rem;
@@ -969,8 +969,9 @@ input {
 }
 
 .challengesbox {
+    display: none;
     position: fixed;
-    display: flex;
+    /* display: flex; */
     flex-direction: column;
 
     align-items: center;
@@ -1204,4 +1205,30 @@ input {
     position: absolute;
     display: flex;
     color: var(--text-color);
+}
+
+.refresh-icon{
+    align-self: center;
+    margin-left: 1rem;
+}
+
+.refresh-icon path{
+    stroke: white;
+}
+
+.refresh-icon:hover{
+    cursor: pointer;
+}
+
+.rotating {
+  animation: rotating 2s linear infinite;
+}
+
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

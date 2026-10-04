@@ -28,6 +28,12 @@ const editMeIcon = document.getElementById("edit-me-icon");
 const mePreview = document.getElementById('me-preview');
 const meEditor = document.getElementById("me-editor");
 
+const refreshTopPlaysIcon = document.getElementById("refreshtopplays");
+const refreshRecentPlaysIcon = document.getElementById("refreshrecentplays");
+
+let cachedTopPlays = [];
+let cachedRecentPlays = [];
+
 var aboutMeValue = "";
 
 // settings box
@@ -81,6 +87,9 @@ function initializeMeEditor(text){
 }
 
 function init(response, isCurrentUser){
+    refreshPlays(true, true, response.ProfileInfo.Username);
+    refreshPlays(false, true, response.ProfileInfo.Username);
+
     mePreview.innerHTML =
       marked.parse(response.ProfileInfo.AboutMe);
 
@@ -300,16 +309,54 @@ function init(response, isCurrentUser){
     keymodefilter.onchange = changeValues
     rulesetGradesSelect.onchange = () => showUserGrades(response, rulesetGradesSelect.value);
 
-    keymodefilterTopPlays.onchange = () => showTopPlays(response, keymodefilterTopPlays.value);
-    keymodefilterRecentPlays.onchange = () => showRecentPlays(response, keymodefilterRecentPlays.value);
+    keymodefilterTopPlays.onchange = () => refreshPlays(true, false, response.ProfileInfo.Username);
+    keymodefilterRecentPlays.onchange = () => refreshPlays(false, false, response.ProfileInfo.Username);
     includeconvertcheckbox.onchange = () => {
         changeValues();
-        showTopPlays(response, keymodefilterTopPlays.value);
+        refreshPlays(true, false, response.ProfileInfo.Username);
     }
+    refreshTopPlaysIcon.onclick = () => refreshPlays(true, true, response.ProfileInfo.Username);
+    refreshRecentPlaysIcon.onclick = () => refreshPlays(false, true, response.ProfileInfo.Username);
 
-    showTopPlays(response, "any");
-    showRecentPlays(response, "any");
     showUserGrades(response, "Easy");
+}
+
+// topplays: wether we want to refresh topplays or recentplays
+function refreshPlays(topplays, makeRequest, username){
+    if(topplays){
+        refreshTopPlaysIcon.classList.add("rotating");
+        if(makeRequest){
+            fetch(getApiEndpoint() + "/web/user/best?name=" + username, {
+                method: "GET"
+            })
+            .then((response) => response.json())
+            .then((json) => {
+                cachedTopPlays = json.Plays;
+                showTopPlays(keymodefilterTopPlays.value);
+            })
+            .catch((reason => console.error("Failed to retrieve best scores : " + reason)));
+        } else {
+            showTopPlays(keymodefilterTopPlays.value)
+        }
+        refreshTopPlaysIcon.classList.remove("rotating");
+        
+    } else {
+        refreshRecentPlaysIcon.classList.add("rotating");
+        if(makeRequest){
+            fetch(getApiEndpoint() + "/web/user/recent?name=" + username, {
+                method: "GET"
+            })
+            .then((response) => response.json())
+            .then((json) => {
+                cachedRecentPlays = json.Plays;
+                showRecentPlays(keymodefilterRecentPlays.value)
+            })
+            .catch((reason => console.error("Failed to retrieve recent scores : " + reason)));
+        } else {
+            showRecentPlays(keymodefilterRecentPlays.value)
+        }
+        refreshRecentPlaysIcon.classList.remove("rotating");
+    }
 }
 
 function showUserGrades(response, judgement){
@@ -349,38 +396,38 @@ function showUserGrades(response, judgement){
     perfectcount.innerText = grades.Perfect
 }
 
-function showTopPlays(response, keymode){
+function showTopPlays(keymode){
     // On vide la div pour mettre les nouveaux scores filtrés;
     topscoresBox.innerHTML = "";
     topscoresMainBox.style.height = "25rem";
     showMoreText.innerText = "show more \xa0v"
 
-    var topPlays = response.ProfileInfo.TopPlays;
+    var topPlays = cachedTopPlays;
 
     switch(keymode){
         case "4":
-            topPlays = response.ProfileInfo.TopPlays.filter(play => play.Keymode === 4);
+            topPlays = cachedTopPlays.filter(play => play.Keymode === 4);
             break;
         case "5":
-            topPlays = response.ProfileInfo.TopPlays.filter(play => play.Keymode === 5);
+            topPlays = cachedTopPlays.filter(play => play.Keymode === 5);
             break;
         case "6":
-            topPlays = response.ProfileInfo.TopPlays.filter(play => play.Keymode === 6);
+            topPlays = cachedTopPlays.filter(play => play.Keymode === 6);
             break;
         case "7":
-            topPlays = response.ProfileInfo.TopPlays.filter(play => play.Keymode === 7);
+            topPlays = cachedTopPlays.filter(play => play.Keymode === 7);
             break;
         case "8":
-            topPlays = response.ProfileInfo.TopPlays.filter(play => play.Keymode === 8);
+            topPlays = cachedTopPlays.filter(play => play.Keymode === 8);
             break;
         case "9":
-            topPlays = response.ProfileInfo.TopPlays.filter(play => play.Keymode === 9);
+            topPlays = cachedTopPlays.filter(play => play.Keymode === 9);
             break;
         case "10":
-            topPlays = response.ProfileInfo.TopPlays.filter(play => play.Keymode === 10);
+            topPlays = cachedTopPlays.filter(play => play.Keymode === 10);
             break;
         case "any":
-            topPlays = response.ProfileInfo.TopPlays;
+            topPlays = cachedTopPlays;
             break;
     }
 
@@ -511,43 +558,43 @@ function showTopPlays(response, keymode){
             [...hiddenPlays].forEach(hiddenPlay => hiddenPlay.classList.remove("invisible"));
             showMoreText.innerText = "show less \xa0^"
         } else {
-            showTopPlays(response, keymode);
+            showTopPlays(keymode);
         }
     }
 }
 
-function showRecentPlays(response, keymode){
+function showRecentPlays(keymode){
     // On vide la div pour mettre les nouveaux scores filtrés;
     recentscoresBox.innerHTML = "";
     recentscoresMainBox.style.height = "25rem";
     showMoreTextRecent.innerText = "show more \xa0v"
 
-    var recentPlays = response.ProfileInfo.RecentPlays;
+    var recentPlays = cachedRecentPlays;
 
     switch(keymode){
         case "4":
-            recentPlays = response.ProfileInfo.RecentPlays.filter(play => play.Keymode === 4);
+            recentPlays = cachedRecentPlays.filter(play => play.Keymode === 4);
             break;
         case "5":
-            recentPlays = response.ProfileInfo.RecentPlays.filter(play => play.Keymode === 5);
+            recentPlays = cachedRecentPlays.filter(play => play.Keymode === 5);
             break;
         case "6":
-            recentPlays = response.ProfileInfo.RecentPlays.filter(play => play.Keymode === 6);
+            recentPlays = cachedRecentPlays.filter(play => play.Keymode === 6);
             break;
         case "7":
-            recentPlays = response.ProfileInfo.RecentPlays.filter(play => play.Keymode === 7);
+            recentPlays = cachedRecentPlays.filter(play => play.Keymode === 7);
             break;
         case "8":
-            recentPlays = response.ProfileInfo.RecentPlays.filter(play => play.Keymode === 8);
+            recentPlays = cachedRecentPlays.filter(play => play.Keymode === 8);
             break;
         case "9":
-            recentPlays = response.ProfileInfo.RecentPlays.filter(play => play.Keymode === 9);
+            recentPlays = cachedRecentPlays.filter(play => play.Keymode === 9);
             break;
         case "10":
-            recentPlays = response.ProfileInfo.RecentPlays.filter(play => play.Keymode === 10);
+            recentPlays = cachedRecentPlays.filter(play => play.Keymode === 10);
             break;
         case "any":
-            recentPlays = response.ProfileInfo.RecentPlays;
+            recentPlays = cachedRecentPlays;
             break;
     }
 
@@ -680,7 +727,7 @@ function showRecentPlays(response, keymode){
             [...hiddenPlays].forEach(hiddenPlay => hiddenPlay.classList.remove("invisible"));
             showMoreTextRecent.innerText = "show less \xa0^"
         } else {
-            showRecentPlays(response, keymode);
+            showRecentPlays(keymode);
         }
     }
 }
@@ -834,27 +881,20 @@ window.addEventListener("DOMContentLoaded", async (event) => {
 
     if(username && page === "profile"){
         if(!!user && username === user.ProfileInfo.Username){
-            init(user, true);
+            init(user, true, user.ProfileInfo.Username);
         } else {
-            // On crée une requête vide que l'on met dans une variable nommée "request". En JS, ce qui représente une requête se nomme XMLHttpRequest
-            var request=new XMLHttpRequest()
-
-            // On remplit la requête vide grâce à ".open()". Dans le "open()", on remplit les informations de la requête,
-            // à savoir : la méthode (GET) et l'url. Le "false" indique qu'on doit attendre que le serveur réponde avant de continuer le code.
-            request.open("get", getApiEndpoint() + "/web/user?name=" + username, false)
-
-            // On envoie la requête au serveur (l'équivalent invisible de coller l'url dans le navigateur)
-            request.send()
-
-            // Comme on a envoyé la requête au serveur (étape 3),
-            // on peut récupérer ce que le serveur nous a renvoyé grâce à la propriété "responseText" !
-            // le JSON.parse permet de convertir la réponse du serveur en code utilisable en JS
-            var response=JSON.parse(request.responseText)
-            init(response, false)
+            fetch(getApiEndpoint() + "/web/user?name=" + username, {
+                method: "GET"
+            })
+            .then((response) => response.json())
+            .then((json) => {
+                init(json, false, username)
+            })
+            .catch((reason => console.error("failed to retrieve user : " + reason)));
         }
     } else {
         if(!!user){
-            init(user, true);
+            init(user, true, user.ProfileInfo.Username);
         } else {
             location.href = "/user/login";
         }
