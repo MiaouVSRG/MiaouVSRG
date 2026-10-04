@@ -84,6 +84,8 @@ module API =
         add_endpoint Web.Auth.Validate.ROUTE (BodyType.String Web.Auth.Validate.handle)
         
         add_endpoint Web.User.Search.ROUTE (BodyType.String Web.Users.Search.handle)
+        add_endpoint Web.User.TopPlays.ROUTE (BodyType.String Web.Users.TopPlays.handle)
+        add_endpoint Web.User.RecentPlays.ROUTE (BodyType.String Web.Users.RecentPlays.handle)
         add_endpoint Web.User.Login.ROUTE (BodyType.String Web.Users.Login.handle)
         add_endpoint Web.User.Register.ROUTE (BodyType.String Web.Users.Register.handle)
         add_endpoint Web.User.Completion.ROUTE (BodyType.String Web.Users.Completion.handle)

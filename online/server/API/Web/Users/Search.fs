@@ -40,7 +40,6 @@ module Search =
                 let followers = (Friends.get_followers_ids user_id).Count
                 let stats = Stats.get_or_default user_id
                 let scores = Score.user_top_plays user_id
-                let recent_scores = Score.get_user_recent (user_id, 100)
                 let all_charts = Charts.get_all
                 let osu_charts = Charts.get_by_source "osu!"
                 let etterna_charts = Charts.get_by_source "Etterna"
@@ -136,18 +135,11 @@ module Search =
                     let mutable charts: (string * bool) array = Array.Empty()
                     
                     for score in scores do
-                        let chartop = Charts.get_chart_by_id score.ChartId
+                        let chartop = all_charts |> Array.tryFind(fun c -> c.ChartId = score.ChartId)
                         if chartop.IsSome then
                             let cond = score.ChartId, score.Mods.ContainsKey("column_swap")
                             if not(charts.Contains(cond)) then
                                 let chart = chartop.Value
-                                let chart_background =
-                                    if chart.ImageLink.StartsWith("https://cdn.miaouvsrg.com/") then
-                                        chart.ImageLink
-                                    elif chart.DownloadLink.Contains("https://catboy.best/") then
-                                        $"""https://assets.ppy.sh/beatmaps/{chart.DownloadLink.Replace("https://catboy.best/d/", "").Replace("n", "")}/covers/cover@2x.jpg"""
-                                    else
-                                        "not available"
                                         
                                 let column_swapped = score.Mods.ContainsKey("column_swap")
                                         
@@ -157,67 +149,13 @@ module Search =
                                     else
                                         chart.Keymode
                                         
-                                let column_swap_text = if column_swapped then $"{chart.Keymode}K to {keymode}K" else ""
-                                        
                                 let play: Play = {
-                                    ChartHash = score.ChartId
-                                    ChartName = chart.Title
-                                    ChartDiffName = chart.DifficultyName
-                                    ChartBackground = chart_background
-                                    ChartRating = chart.Difficulty
                                     Keymode = keymode
-                                    Grade = NORMAL.GradeName score.Grade
-                                    Rate = score.Rate
-                                    Accuracy = score.Accuracy
                                     Rating = score.Rating
                                     IsConvert = column_swapped
-                                    ConvertString = column_swap_text
                                 }
                                 plays <- plays.Append(play) |> _.ToArray()
                                 charts <- charts.Append(score.ChartId, score.Mods.ContainsKey("column_swap")) |> _.ToArray()
-                        
-                    plays
-                    
-                let get_recent_plays (scores: Score.RecentScore array): Play array =
-                    let mutable plays: Play array = Array.Empty()
-                    
-                    for score in scores do
-                        let chartop = Charts.get_chart_by_id score.ChartId
-                        if chartop.IsSome then
-                            let chart = chartop.Value
-                            let chart_background =
-                                if chart.ImageLink.StartsWith("https://cdn.miaouvsrg.com/") then
-                                    chart.ImageLink
-                                elif chart.DownloadLink.Contains("https://catboy.best/") then
-                                    $"""https://assets.ppy.sh/beatmaps/{chart.DownloadLink.Replace("https://catboy.best/d/", "").Replace("n", "")}/covers/cover@2x.jpg"""
-                                else
-                                    "not available"
-                                    
-                            let column_swapped = score.Mods.ContainsKey("column_swap")
-                                        
-                            let keymode =
-                                if column_swapped then
-                                    ColumnSwap.keys score.Mods["column_swap"]
-                                else
-                                    chart.Keymode
-                                        
-                            let column_swap_text = if column_swapped then $"{chart.Keymode}K to {keymode}K" else ""
-                                    
-                            let play: Play = {
-                                ChartHash = score.ChartId
-                                ChartName = chart.Title
-                                ChartDiffName = chart.DifficultyName
-                                ChartBackground = chart_background
-                                ChartRating = chart.Difficulty
-                                Keymode = keymode
-                                Grade = NORMAL.GradeName score.Grade
-                                Rate = float32 score.Rate
-                                Accuracy = score.Accuracy
-                                Rating = score.Rating
-                                IsConvert = column_swapped
-                                ConvertString = column_swap_text
-                            }
-                            plays <- plays.Append(play) |> _.ToArray()
                         
                     plays
                     
@@ -243,7 +181,6 @@ module Search =
                 let is_online = Session.list_online_users() |> Array.contains((user_id, db_user.Username))
                 
                 let top_plays = get_top_plays scores
-                let recent_plays = get_recent_plays recent_scores
                 
                 // TODO: THIS IS TEMPORARY AND FOR INTERNAL TESTING ONLY
                 // THIS IS NOT THE NEW RATING SYSTEM     
@@ -320,8 +257,6 @@ module Search =
                     O2JamCompletion = completion_o2jam
                     BMSCompletion = completion_bms
                     HitAccuracy = sprintf "%.2f%%" average_acc
-                    TopPlays = top_plays
-                    RecentPlays = recent_plays
                     
                     // User always has default values in db
                     PrimaryColor = db_user.PrimaryColor.Value

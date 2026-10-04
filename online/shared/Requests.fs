@@ -802,6 +802,13 @@ module Web =
         module Search =
             let ROUTE = (GET, MAIN_ENDPOINT + "/user")
             
+            type Play =
+                {
+                    Keymode: int
+                    Rating: float32
+                    IsConvert: bool
+                }
+            
             [<Json.AutoCodec>]
             type Stats =
                 {
@@ -831,23 +838,6 @@ module Web =
                     Hard: GradeCountInfo
                     Strict: GradeCountInfo
                 }
-                
-            [<Json.AutoCodec>]
-            type Play =
-                {
-                    ChartHash: string
-                    ChartName: string
-                    ChartDiffName: string
-                    ChartBackground: string
-                    ChartRating: float32
-                    Keymode: int
-                    Grade: string
-                    Rate: float32
-                    Accuracy: float
-                    Rating: float32
-                    IsConvert: bool
-                    ConvertString: string
-                }
             
             [<Json.AutoCodec>]
             type ProfileInfo =
@@ -871,8 +861,6 @@ module Web =
                     O2JamCompletion: string
                     BMSCompletion: string
                     HitAccuracy: string
-                    TopPlays: Play array
-                    RecentPlays: Play array
                     PrimaryColor: string
                     SecondaryColor: string
                     TextColor: string
@@ -885,6 +873,64 @@ module Web =
             type Response =
                 {
                     ProfileInfo: ProfileInfo
+                }
+            
+            let get (name: string, callback: Response option -> unit) =
+                Client.get<Response> (snd ROUTE + "?name=" + name, callback)
+                
+        module TopPlays =
+            let ROUTE = (GET, MAIN_ENDPOINT + "/user/best")
+            
+            [<Json.AutoCodec>]
+            type Play =
+                {
+                    ChartHash: string
+                    ChartName: string
+                    ChartDiffName: string
+                    ChartBackground: string
+                    ChartRating: float32
+                    Keymode: int
+                    Grade: string
+                    Rate: float32
+                    Accuracy: float
+                    Rating: float32
+                    IsConvert: bool
+                    ConvertString: string
+                }
+                
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Plays: Play array
+                }
+            
+            let get (name: string, callback: Response option -> unit) =
+                Client.get<Response> (snd ROUTE + "?name=" + name, callback)
+        
+        module RecentPlays =
+            let ROUTE = (GET, MAIN_ENDPOINT + "/user/recent")
+            
+            [<Json.AutoCodec>]
+            type Play =
+                {
+                    ChartHash: string
+                    ChartName: string
+                    ChartDiffName: string
+                    ChartBackground: string
+                    ChartRating: float32
+                    Keymode: int
+                    Grade: string
+                    Rate: float32
+                    Accuracy: float
+                    Rating: float32
+                    IsConvert: bool
+                    ConvertString: string
+                }
+                
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Plays: Play array
                 }
             
             let get (name: string, callback: Response option -> unit) =
