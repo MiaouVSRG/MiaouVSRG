@@ -133,12 +133,13 @@ module Search =
                     
                 let get_top_plays (scores: Score.ScoreByUserIdModel array): Play array =
                     let mutable plays: Play array = Array.Empty()
-                    let mutable charts: string array = Array.Empty()
+                    let mutable charts: (string * bool) array = Array.Empty()
                     
                     for score in scores do
                         let chartop = Charts.get_chart_by_id score.ChartId
                         if chartop.IsSome then
-                            if not(charts.Contains(score.ChartId)) then
+                            let cond = score.ChartId, score.Mods.ContainsKey("column_swap")
+                            if not(charts.Contains(cond)) then
                                 let chart = chartop.Value
                                 let chart_background =
                                     if chart.ImageLink.StartsWith("https://cdn.miaouvsrg.com/") then
@@ -173,7 +174,7 @@ module Search =
                                     ConvertString = column_swap_text
                                 }
                                 plays <- plays.Append(play) |> _.ToArray()
-                                charts <- charts.Append(score.ChartId) |> _.ToArray()
+                                charts <- charts.Append(score.ChartId, score.Mods.ContainsKey("column_swap")) |> _.ToArray()
                         
                     plays
                     
