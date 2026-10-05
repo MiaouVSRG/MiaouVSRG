@@ -74,8 +74,18 @@ module Scores =
     let calculate_rating_and_accuracies(chart_id: string, replay: ReplayData, rate: Rate, mods: ModState) =
         // If we are at this stage it means that the chart is in the database for sure
         let db_chart = (Charts.get_chart_by_id chart_id).Value
-        let source_folder = db_chart.ChartId
-        download_mapset(db_chart.DownloadLink, db_chart.ChartId) |> Async.RunSynchronously
+        
+        let beatmap_on_server = db_chart.Path <> ""
+            
+        let source_folder =
+            if not beatmap_on_server then
+                // not on server <=> catboy.best download link
+                $"""./maps/osu/{db_chart.DownloadLink.Replace("https://catboy.best/d/", "").Replace("n", "")}"""
+            else
+                db_chart.Path
+                
+        if not beatmap_on_server && not (Directory.Exists(source_folder)) then
+            download_mapset(db_chart.DownloadLink, source_folder) |> Async.RunSynchronously
         
         let mutable final_rating: float32 = 0.0f
         let mutable final_accuracies: AccuraciesState = Unchecked.defaultof<AccuraciesState>
@@ -164,11 +174,26 @@ module Scores =
                             |> Map.add "NORMAL" scoring_normal.Accuracy
                             |> Map.add "HARD" scoring_hard.Accuracy
                             |> Map.add "STRICT" scoring_strict.Accuracy
+                            
+                        if not beatmap_on_server then
+                            let rec find_background_file e =
+                                match e with
+                                | (Background(bg, _, _)) :: _ -> bg
+                                | _ :: es -> find_background_file es
+                                | [] -> ""
+                            let updated_chart = {
+                                db_chart with
+                                    DownloadLink = $"https://beta.api.miaouvsrg.com/v2/download?id={db_chart.ChartId}"
+                                    Path = source_folder
+                                    ImageLink = $"""https://cdn.miaouvsrg.com/{source_folder.Replace("./", "")}/{find_background_file beatmap.Value.Events}"""
+                            }
+
+                            if not (Charts.update db_chart.ChartId updated_chart) then
+                                Logging.Error "Failed to migrate chart from catboy.best to api.miaouvsrg"
                         
                         final_accuracies <- accuracies
                         final_rating <- rating
-
-        Directory.Delete(source_folder, true)
+                        
         (final_accuracies, final_rating)
             
     let proceed

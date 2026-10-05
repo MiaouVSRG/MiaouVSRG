@@ -431,6 +431,13 @@ function showTopPlays(keymode){
             break;
     }
 
+    topPlays = topPlays.filter(play => {
+        if(includeconvertcheckbox.checked){
+            return true;
+        }
+        return !play.IsConvert;
+    });
+
     topscoresNumberofmaps.innerText = topPlays.length;
 
     const mapsLength = topPlays.length > 100 ? 99 : topPlays.length
@@ -440,115 +447,113 @@ function showTopPlays(keymode){
     var i = 1;
     topPlays.forEach(play => {
         if(i < 100){
-            if(!play.IsConvert || includeconvertcheckbox.checked){
-                let div = document.createElement("div");
-                div.classList.add("scoretemplate");
-                div.classList.add("topscore");
+            let div = document.createElement("div");
+            div.classList.add("scoretemplate");
+            div.classList.add("topscore");
 
-                let chartBg = document.createElement("img");
-                chartBg.classList.add("chartbg");
-                chartBg.src = play.ChartBackground;
+            let chartBg = document.createElement("img");
+            chartBg.classList.add("chartbg");
+            chartBg.src = play.ChartBackground;
                 
-                div.appendChild(chartBg);
+            div.appendChild(chartBg);
 
-                let topscoreGrade = document.createElement("img");
-                topscoreGrade.classList.add("topscore-grade");
-                topscoreGrade.src = "/assets/images/grades/" + play.Grade.toLowerCase().replace("+", "plus") + ".png";
-                div.appendChild(topscoreGrade);
+            let topscoreGrade = document.createElement("img");
+            topscoreGrade.classList.add("topscore-grade");
+            topscoreGrade.src = "/assets/images/grades/" + play.Grade.toLowerCase().replace("+", "plus") + ".png";
+            div.appendChild(topscoreGrade);
 
-                let nameBox = document.createElement("div");
-                nameBox.classList.add("topscore-namebox");
+            let nameBox = document.createElement("div");
+            nameBox.classList.add("topscore-namebox");
 
-                let name = document.createElement("span");
-                name.classList.add("topscore-name");
-                let mapLink = document.createElement("a");
-                mapLink.classList.add("chartpagelink");
-                mapLink.href = "/charts/chartpage/" + play.ChartHash;
-                mapLink.target = "_blank";
-                mapLink.innerText = play.ChartName;
-                name.appendChild(mapLink);
+            let name = document.createElement("span");
+            name.classList.add("topscore-name");
+            let mapLink = document.createElement("a");
+            mapLink.classList.add("chartpagelink");
+            mapLink.href = "/charts/chartpage/" + play.ChartHash;
+            mapLink.target = "_blank";
+            mapLink.innerText = play.ChartName;
+            name.appendChild(mapLink);
 
-                nameBox.appendChild(name);
+            nameBox.appendChild(name);
 
-                let diffName = document.createElement("div");
-                diffName.classList.add("topscore-diffname");
-                let mapLinkDiff = document.createElement("a");
-                mapLinkDiff.classList.add("chartpagelink");
-                mapLinkDiff.href = "/charts/chartpage/" + play.ChartHash;
-                mapLinkDiff.target = "_blank";
-                mapLinkDiff.innerText = play.ChartDiffName;
-                diffName.appendChild(mapLinkDiff);
+            let diffName = document.createElement("div");
+            diffName.classList.add("topscore-diffname");
+            let mapLinkDiff = document.createElement("a");
+            mapLinkDiff.classList.add("chartpagelink");
+            mapLinkDiff.href = "/charts/chartpage/" + play.ChartHash;
+            mapLinkDiff.target = "_blank";
+            mapLinkDiff.innerText = play.ChartDiffName;
+            diffName.appendChild(mapLinkDiff);
 
-                nameBox.appendChild(diffName);
+            nameBox.appendChild(diffName);
 
-                div.appendChild(nameBox);
+            div.appendChild(nameBox);
 
-                let topscoreEndBox = document.createElement("div");
-                topscoreEndBox.classList.add("topscore-endbox");
+            let topscoreEndBox = document.createElement("div");
+            topscoreEndBox.classList.add("topscore-endbox");
 
-                let convertlogotooltip = document.createElement("div");
-                convertlogotooltip.classList.add("convertlogotooltip");
+            let convertlogotooltip = document.createElement("div");
+            convertlogotooltip.classList.add("convertlogotooltip");
 
-                let convertlogo = document.createElement("img");
-                convertlogo.classList.add("convertlogo");
-                convertlogo.src = "/assets/images/convertlogo.png";
-                convertlogotooltip.appendChild(convertlogo);
+            let convertlogo = document.createElement("img");
+            convertlogo.classList.add("convertlogo");
+            convertlogo.src = "/assets/images/convertlogo.png";
+            convertlogotooltip.appendChild(convertlogo);
 
-                if(!play.IsConvert){
-                    convertlogotooltip.classList.add("hidden");
-                } else {
-                    convertlogotooltip.classList.add("tooltip");
-                    let tooltiptext = document.createElement("span");
-                    tooltiptext.classList.add("tooltiptext");
-                    tooltiptext.classList.add("tooltip-top");
-                    tooltiptext.innerText = play.ConvertString;
-                    convertlogotooltip.appendChild(tooltiptext);
-                }
-                
-                let topscoreRateBox = document.createElement("div");
-                topscoreRateBox.classList.add("topscore-ratebox");
-                let topscoreRate = document.createElement("span");
-                topscoreRate.classList.add("topscore-rate");
-                topscoreRate.innerText = Number(play.Rate).toFixed(2) + "x";
-
-                topscoreRateBox.appendChild(topscoreRate);
-
-                let topscoreAccBox = document.createElement("div");
-                topscoreAccBox.classList.add("topscore-accbox");
-                let topscoreAcc = document.createElement("span");
-                topscoreAcc.classList.add("topscore-acc");
-                if(play.Accuracy === 1){
-                    topscoreAcc.innerText = "100%";
-                } else {
-                    topscoreAcc.innerText = Number(play.Accuracy * 100).toFixed(2) + "%";
-                }
-
-                topscoreAccBox.appendChild(topscoreAcc);
-
-                let topscoreRatingBox = document.createElement("div");
-                topscoreRatingBox.classList.add("topscore-ratingbox");
-                let topscoreRatingvalue = document.createElement("span");
-                topscoreRatingvalue.classList.add("topscore-ratingvalue");
-                topscoreRatingvalue.innerText = Number(play.Rating).toFixed(2);
-
-                topscoreRatingBox.appendChild(topscoreRatingvalue);
-
-                topscoreEndBox.appendChild(convertlogotooltip);
-                topscoreEndBox.appendChild(topscoreRateBox);
-                topscoreEndBox.appendChild(topscoreAccBox);
-                topscoreEndBox.appendChild(topscoreRatingBox);
-
-                div.appendChild(topscoreEndBox);
-
-                if(i > 5){
-                    div.classList.add("invisible");
-                }
-
-                topscoresBox.append(div);
-
+            if(!play.IsConvert){
+                convertlogotooltip.classList.add("hidden");
+            } else {
+                convertlogotooltip.classList.add("tooltip");
+                let tooltiptext = document.createElement("span");
+                tooltiptext.classList.add("tooltiptext");
+                tooltiptext.classList.add("tooltip-top");
+                tooltiptext.innerText = play.ConvertString;
+                convertlogotooltip.appendChild(tooltiptext);
             }
-            i++;
+                
+            let topscoreRateBox = document.createElement("div");
+            topscoreRateBox.classList.add("topscore-ratebox");
+            let topscoreRate = document.createElement("span");
+            topscoreRate.classList.add("topscore-rate");
+            topscoreRate.innerText = Number(play.Rate).toFixed(2) + "x";
+
+            topscoreRateBox.appendChild(topscoreRate);
+
+            let topscoreAccBox = document.createElement("div");
+            topscoreAccBox.classList.add("topscore-accbox");
+            let topscoreAcc = document.createElement("span");
+            topscoreAcc.classList.add("topscore-acc");
+            if(play.Accuracy === 1){
+                topscoreAcc.innerText = "100%";
+            } else {
+                topscoreAcc.innerText = Number(play.Accuracy * 100).toFixed(2) + "%";
+            }
+
+            topscoreAccBox.appendChild(topscoreAcc);
+
+            let topscoreRatingBox = document.createElement("div");
+            topscoreRatingBox.classList.add("topscore-ratingbox");
+            let topscoreRatingvalue = document.createElement("span");
+            topscoreRatingvalue.classList.add("topscore-ratingvalue");
+            topscoreRatingvalue.innerText = Number(play.Rating).toFixed(2);
+
+            topscoreRatingBox.appendChild(topscoreRatingvalue);
+
+            topscoreEndBox.appendChild(convertlogotooltip);
+            topscoreEndBox.appendChild(topscoreRateBox);
+            topscoreEndBox.appendChild(topscoreAccBox);
+            topscoreEndBox.appendChild(topscoreRatingBox);
+
+            div.appendChild(topscoreEndBox);
+
+            if(i > 5){
+                div.classList.add("invisible");
+            }
+
+            topscoresBox.append(div);
+
         }
+        i++;
     });
 
     showMoreButton.onclick = (event) => {
