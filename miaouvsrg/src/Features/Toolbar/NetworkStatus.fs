@@ -88,6 +88,7 @@ type NetworkStatus() as this =
             ]
         | Network.LoggedIn ->
             [
+                (fun () -> open_url($"https://www.beta.miaouvsrg.com/user/profile/{Network.credentials.Username}")), Icons.USER + " " + %"network.profile"
                 fun () ->
                     match Network.lobby with
                     | Some l ->  Screen.change ScreenType.Lobby Transitions.Default |> ignore

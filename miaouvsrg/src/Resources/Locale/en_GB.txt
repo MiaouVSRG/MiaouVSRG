@@ -744,6 +744,7 @@ network.logout=Log out
 network.multiplayer=Multiplayer
 network.multiplayer.in_lobby=In a lobby
 network.players=Players
+network.profile=Profile
 noteskin.advancedcolumnspacing=Column spacing
 noteskin.advancedcolumnspacing.tooltip=These are visual spacings between columns, in pixels.
 noteskin.alignmentanchor=Alignment anchor

@@ -18,6 +18,24 @@ type CurrentChart() =
     
     override this.Init(parent: Widget) =
         this
+            .With(
+                InlaidButton(
+                    Icons.GLOBE,
+                    (fun () ->
+                        let link =
+                            match SelectedChart.CACHE_DATA with
+                            | None -> "404"
+                            | Some c ->
+                                c.Hash
+                        open_url($"https://www.beta.miaouvsrg.com/charts/chartpage/{link}")
+                    ),
+                    ButtonType.Transparent,
+                    (0.0f, 0.0f) // No shrink so the Icon can take all the space
+                )
+                    .Position(
+                        Position.SliceL(60.0f).SliceB(60.0f).TranslateX(20.0f).TranslateY(-5.0f)
+                    )
+            )
             .Add(
                 InlaidButton(
                     Icons.TARGET,
