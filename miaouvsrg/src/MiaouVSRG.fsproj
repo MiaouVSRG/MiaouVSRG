@@ -275,6 +275,7 @@
         <Compile Include="Features\LevelSelect\Info\GameplayInfo.fs"/>
         <Compile Include="Features\LevelSelect\Info\Patterns.fs"/>
         <Compile Include="Features\LevelSelect\Info\InfoPanel.fs"/>
+        <Compile Include="Features\LevelSelect\Info\ProfileBox.fs" />
         <Compile Include="Features\LevelSelect\LevelSelectScreen.fs"/>
         <Compile Include="Features\Options\System\HotkeysPage.fs"/>
         <Compile Include="Features\Options\System\PerformanceSettingsPage.fs"/>

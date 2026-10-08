@@ -70,6 +70,9 @@ type LevelSelectScreen() =
 
                 info_panel_container
                     .Position(InfoPanel.SHOW_POS),
+                
+                ProfileBox()
+                    .Position(Position.SliceB(105.0f).ShrinkPercentL(INFO_SCREEN_SPLIT + 0.01f).ShrinkR(CHART_WIDTH - CHART_LEFT_MARGIN + 20.0f)),
 
                 // Empty states explaining why there are no charts to show
                 Container(NodeType.None)

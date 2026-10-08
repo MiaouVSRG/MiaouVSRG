@@ -40,7 +40,7 @@ type VersionDisplay(group: SkinGroup, version: SkinVersion) as this =
                 ImageServices.get_cached_image.Request(
                     version.Preview,
                     function
-                    | Some img -> GameThread.defer (fun () -> this.FinishLoading img)
+                    | Some img -> GameThread.defer (fun () -> this.FinishLoading(img, "NOTESKIN_PREVIEW"))
                     | None -> Logging.Warn "Failed to load noteskin preview '%s'" version.Preview
                 )
         }
@@ -125,7 +125,7 @@ type GroupDisplay(group: SkinGroup, selected: Setting<bool>) =
                 ImageServices.get_cached_image.Request(
                     group.Thumbnail,
                     function
-                    | Some img -> GameThread.defer (fun () -> this.FinishLoading img)
+                    | Some img -> GameThread.defer (fun () -> this.FinishLoading(img, "NOTESKIN_PREVIEW"))
                     | None -> Logging.Warn "Failed to load noteskin thumbnail '%s'" group.Thumbnail
                 )
         }

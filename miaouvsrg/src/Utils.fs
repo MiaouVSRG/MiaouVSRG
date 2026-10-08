@@ -4,8 +4,6 @@ open System
 open System.Reflection
 open System.IO
 
-open Percyqaz.Common
-
 module Utils =
 
     let get_resource_stream (name: string) : Stream =

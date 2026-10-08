@@ -78,7 +78,7 @@ type SkinsBrowserPage() =
         error <- false
         noteskin_items.Clear()
         WebServices.download_json (
-            sprintf "https://raw.%s.com/MiaouVSRG/MiaouVSRG/main/backbeat/skins/skins.json" "githubusercontent",
+            sprintf "https://raw.%s.com/MiaouVSRG/MiaouVSRG/master/backbeat/skins/skins.json" "githubusercontent",
             fun data ->
                 match data with
                 | WebResult.Ok(d: SkinRepo) ->

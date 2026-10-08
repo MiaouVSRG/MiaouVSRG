@@ -682,3 +682,39 @@ module Score =
         
     let get_all =
         GET_SOME.Execute 50000000 core_db |> expect
+        
+    let GET_MEAN_ACCURACY_BY_USER_ID: Query<int64, float> =
+        {
+            SQL =
+                """
+                    SELECT AVG(accuracy) FROM scores2
+                    WHERE UserId = @UserId
+                """
+            Parameters = [ "@UserId", SqliteType.Integer, 8 ]
+            FillParameters = fun p user_id -> p.Int64 user_id
+            Read = _.Float64
+        }
+        
+    let get_mean_accuracy_by_user_id(user_id: int64) =
+        GET_MEAN_ACCURACY_BY_USER_ID.Execute user_id core_db |> expect |> Array.exactlyOne
+        
+    let USER_GLOBAL_RATING: Query<int64, float> =
+        {
+            SQL =
+                """
+                -- ONLY FOR DEBUG PURPOSES UNTIL 0.3.0 release
+                WITH UserBestRatings AS (
+                    SELECT Rating FROM scores2
+                    WHERE UserId = @UserId
+                    ORDER BY Rating DESC
+                    LIMIT 100
+                )
+                SELECT AVG(Rating) FROM UserBestRatings
+                """
+            Parameters = [ "@UserId", SqliteType.Integer, 8 ]
+            FillParameters = fun p user_id -> p.Int64 user_id
+            Read = _.Float64
+        }
+        
+    let user_global_rating_WIP(user_id: int64) =
+        USER_GLOBAL_RATING.Execute user_id core_db |> expect |> Array.exactlyOne

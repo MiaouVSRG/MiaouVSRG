@@ -31,10 +31,10 @@ type Thumbnail() =
                 (Colors.white.O4a fade.Alpha) p
         | None -> ()
 
-    member this.FinishLoading(img: Bitmap) =
+    member this.FinishLoading(img: Bitmap, label: string) =
         loaded_thumbnail <-
             Some
-            <| Sprite.upload_one false LinearSampling (SpriteUpload.OfImage("NOTESKIN_PREVIEW", img))
+            <| Sprite.upload_one false LinearSampling (SpriteUpload.OfImage(label, img))
         fade.Target <- 1.0f
 
     member this.FinishLoading(sprite: Sprite) =

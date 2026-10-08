@@ -52,6 +52,7 @@ module API =
         add_endpoint Tables.Suggestions.Accept.ROUTE (BodyType.String Tables.Suggestions.Accept.handle)
         add_endpoint Tables.Suggestions.Reject.ROUTE (BodyType.String Tables.Suggestions.Reject.handle)
 
+        add_endpoint Players.Miniprofile.ROUTE (BodyType.String Players.Miniprofile.handle)
         add_endpoint Players.Online.ROUTE (BodyType.String Players.Online.handle)
         add_endpoint Players.Search.ROUTE (BodyType.String Players.Search.handle)
 

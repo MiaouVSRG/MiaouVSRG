@@ -151,6 +151,7 @@ module Theme =
         "searchbar"
         "map-group"
         "map-group-hover"
+        "miniprofile"
         
         // SCORE SCREEN
         "score-screen"

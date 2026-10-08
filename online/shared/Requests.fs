@@ -449,6 +449,22 @@ module Players =
 
         let get (query: string, callback: Response option -> unit) =
             Client.get<Response> (snd ROUTE + "?query=" + escape query, callback)
+    
+    /// requires login token as Authorization header      
+    module Miniprofile =
+        let ROUTE = (GET, "/players/miniprofile")
+        
+        [<Json.AutoCodec>]
+        type Response =
+            {
+                MeanAccuracy: float
+                OverallRating: float
+                GlobalRank: int
+                ProfilePictureLink: string
+            }
+            
+        let get (callback: Response option -> unit) =
+            Client.get<Response> (snd ROUTE, callback)
 
     module Profile =
 
