@@ -1,5 +1,6 @@
 ﻿namespace MiaouVSRG.Features.LevelSelect
 
+open MiaouVSRG.Web.Shared.Requests
 open Percyqaz.Common
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.Graphics
@@ -13,6 +14,7 @@ open MiaouVSRG.Features.Gameplay
 open MiaouVSRG.UI
 open MiaouVSRG.Features.Online
 open MiaouVSRG.Features.Play
+open Percyqaz.Flux.Windowing
 
 type LevelSelectScreen() =
     inherit Screen()
@@ -23,14 +25,29 @@ type LevelSelectScreen() =
     let current_chart_container = CurrentChart()
     let info_panel_container = InfoPanel()
     let library_view_controls_container = LibraryViewControls()
+    let miniprofile = ProfileBox()
     let searchbox_container = SearchBox(search_text, fun f -> LevelSelect.filter <- f; Tree.refresh ())
     
     let enter_screen_sequence = Animation.Group()
     let exit_screen_sequence = Animation.Group()
     let mutable enter = false
     let mutable exit = false
+    let mutable last_login_status = Network.status
     
     let slide_animation = Animation.Fade 0.0f
+    
+    let load_profile() =
+        Logging.Debug "je load le profile"
+        Players.Miniprofile.get (
+             fun response ->
+                 GameThread.defer
+                 <| fun () ->
+                     match response with
+                     | Some result ->
+                         Logging.Debug $"acc : {result.MeanAccuracy}; rating : {result.OverallRating}"
+                         miniprofile.Load(result)
+                     | None -> ()
+        )
     
     member this.ApplyKeymodeFilter(keymode : int) =
         let inner_filter = LevelSelect.filter.Filter
@@ -71,8 +88,8 @@ type LevelSelectScreen() =
                 info_panel_container
                     .Position(InfoPanel.SHOW_POS),
                 
-                ProfileBox()
-                    .Position(Position.SliceB(105.0f).ShrinkPercentL(INFO_SCREEN_SPLIT + 0.01f).ShrinkR(CHART_WIDTH - CHART_LEFT_MARGIN + 20.0f)),
+                miniprofile
+                    .Position(ProfileBox.HIDDEN_POS),
 
                 // Empty states explaining why there are no charts to show
                 Container(NodeType.None)
@@ -146,6 +163,10 @@ type LevelSelectScreen() =
 
     override this.Update(elapsed_ms, moved) =
         base.Update(elapsed_ms, moved)
+        
+        if not last_login_status.IsLoggedIn && Network.status.IsLoggedIn then
+            load_profile()
+            last_login_status <- Network.Status.LoggedIn
             
         slide_animation.Update elapsed_ms
 
@@ -182,6 +203,8 @@ type LevelSelectScreen() =
     override this.OnEnter(_: ScreenType) =
         LevelSelect.exit_gameplay()
         Song.on_finish <- SongFinishAction.LoopFromPreview
+        if Network.status.IsLoggedIn then
+            load_profile()
         
         Toolbar.show(true, false)
 
@@ -194,6 +217,8 @@ type LevelSelectScreen() =
                 Animation.Action info_panel_container.Show
                 Animation.Action library_view_controls_container.Show
                 Animation.Action searchbox_container.Show
+                Animation.Delay 50.0
+                Animation.Action miniprofile.Show
                 Animation.Delay 650.0
                 Animation.Action (fun () -> slide_animation.Target <- 1.0f)
                 Animation.Action (fun () -> Screen.reset_default_background_fade())
@@ -203,6 +228,7 @@ type LevelSelectScreen() =
         <| Animation.seq
             [
                 Animation.Action(fun () -> Screen.start_default_background_fade(true))
+                Animation.Action miniprofile.Hide
                 Animation.Action current_chart_container.Hide
                 Animation.Action info_panel_container.Hide
                 Animation.Delay 100.0
