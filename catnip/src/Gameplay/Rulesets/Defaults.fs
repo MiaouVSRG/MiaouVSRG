@@ -39,6 +39,7 @@ module Defaults =
                         BreaksCombo = true
                     }
                 |]
+            JudgementsWeight = [|1.0; 1.0; 2.0/3.0; 2.0/9.0|]
             Grades =
                 [|
                     {
@@ -98,7 +99,12 @@ module Defaults =
                         Color = Color.FromArgb(0, 255, 160)
                     }
                 |]
-            Accuracy = AccuracyPoints.PointsPerJudgement([| 1.0; 1.0; 2.0/3.0; 2.0/9.0 |])
+            Accuracy = AccuracyPoints.BaseScoreWithBonus(
+                [| 250.0; 200.0; 100.0; 0.0 |],
+                [| 32.0; 32.0; 16.0; 0.0 |],
+                [| 2.0; 1.0; 0.0; 0.0 |],
+                [| 0.0; 0.0; 8.0; 75.0 |],
+                1000000.0)
             HitMechanics =
                 {
                     NotePriority = NotePriority.OsuMania
@@ -143,6 +149,7 @@ module Defaults =
                         BreaksCombo = true
                     }
                 |]
+            JudgementsWeight = [|1.0; 1.0; 2.0/3.0; 2.0/9.0|]
             Grades =
                 [|
                     {
@@ -202,7 +209,12 @@ module Defaults =
                         Color = Color.FromArgb(0, 255, 160)
                     }
                 |]
-            Accuracy = AccuracyPoints.PointsPerJudgement([| 1.0; 1.0; 2.0/3.0; 2.0/9.0 |])
+            Accuracy = AccuracyPoints.BaseScoreWithBonus(
+                [| 250.0; 200.0; 100.0; 0.0 |],
+                [| 32.0; 32.0; 16.0; 0.0 |],
+                [| 2.0; 1.0; 0.0; 0.0 |],
+                [| 0.0; 0.0; 8.0; 75.0 |],
+                1000000.0)
             HitMechanics =
                 {
                     NotePriority = NotePriority.OsuMania
@@ -247,6 +259,7 @@ module Defaults =
                         BreaksCombo = true
                     }
                 |]
+            JudgementsWeight = [|1.0; 1.0; 2.0/3.0; 2.0/9.0|]
             Grades =
                 [|
                     {
@@ -306,7 +319,12 @@ module Defaults =
                         Color = Color.FromArgb(0, 255, 160)
                     }
                 |]
-            Accuracy = AccuracyPoints.PointsPerJudgement([| 1.0; 1.0; 2.0/3.0; 2.0/9.0 |])
+            Accuracy = AccuracyPoints.BaseScoreWithBonus(
+                [| 250.0; 200.0; 100.0; 0.0 |],
+                [| 32.0; 32.0; 16.0; 0.0 |],
+                [| 2.0; 1.0; 0.0; 0.0 |],
+                [| 0.0; 0.0; 8.0; 75.0 |],
+                1000000.0)
             HitMechanics =
                 {
                     NotePriority = NotePriority.OsuMania
@@ -351,6 +369,7 @@ module Defaults =
                         BreaksCombo = true
                     }
                 |]
+            JudgementsWeight = [|1.0; 1.0; 2.0/3.0; 2.0/9.0|]
             Grades =
                 [|
                     {
@@ -410,7 +429,12 @@ module Defaults =
                         Color = Color.FromArgb(0, 255, 160)
                     }
                 |]
-            Accuracy = AccuracyPoints.PointsPerJudgement([| 1.0; 1.0; 2.0/3.0; 2.0/9.0 |])
+            Accuracy = AccuracyPoints.BaseScoreWithBonus(
+                [| 250.0; 200.0; 100.0; 0.0 |],
+                [| 32.0; 32.0; 16.0; 0.0 |],
+                [| 2.0; 1.0; 0.0; 0.0 |],
+                [| 0.0; 0.0; 8.0; 75.0 |],
+                1000000.0)
             HitMechanics =
                 {
                     NotePriority = NotePriority.OsuMania

@@ -132,6 +132,7 @@ module OsuMania =
                         BreaksCombo = true
                     }
                 |]
+            JudgementsWeight = [|1.0; 1.0; 2.0/3.0; 1.0/3.0; 1.0/6.0; 0.0|]
             Grades =
                 [|
                     {

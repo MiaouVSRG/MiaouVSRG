@@ -84,6 +84,7 @@ module Quaver =
                         BreaksCombo = true
                     }
                 |]
+            JudgementsWeight = [| 1.0; 0.9825; 0.65; 0.25; -1.0; -0.5 |]
             Grades =
                 [|
                     {

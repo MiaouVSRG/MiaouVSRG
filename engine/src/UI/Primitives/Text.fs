@@ -13,6 +13,7 @@ type Text(text_func: unit -> string) =
 
     member val Align : float32 = Alignment.CENTER with get, set
     member val Color : unit -> Color * Color = K Colors.text with get, set
+    member val CharSpacing : float32 = 0.0f with get, set
 
     override this.Draw() =
         Text.fill_b (Style.font, text_func (), this.Bounds, this.Color(), this.Align)
