@@ -1232,3 +1232,380 @@ input {
     transform: rotate(360deg);
   }
 }
+
+@media (min-width: 200px) and (max-width: 640px){
+
+    .mainbox {
+        margin-top: 6rem;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        width:97%;
+        height:51rem;
+        border-radius: 15px;
+        flex-direction: column;
+        box-shadow: black 5px 5px 5px;
+    }
+
+    .catlineartimg {
+        display: none;
+        height: 1%;
+    }
+
+    .otherstats {
+        border-bottom-right-radius: 15px;
+        display: flex;
+        width: 95%;
+        height: 100%;
+        flex-direction: row;
+        border-left: white solid 0px;
+        border-top: white solid 2px;
+    }
+
+    .text{
+        margin-left: 0.5rem;
+        font-size: 1rem;
+        gap: 0.2rem;
+    }
+
+    .value{
+        margin-left: 2.5rem;
+        font-size: 1rem;
+        gap: 0.2rem;
+        width: 30%;
+    }
+
+    .profilepic {
+        border-radius: 15px;
+        margin-left: 1rem;
+        height: 5rem;
+    }
+
+    .profileinfo-info {
+        display: flex;
+        width: 100%;
+        height: 7rem;
+        align-items: center;
+        justify-content: start;
+        backdrop-filter: blur(3px);
+    }
+
+    .status {
+        position: absolute;
+        display: flex;
+        align-self: end;
+        color: white;
+        margin-left: 4rem;
+        margin-bottom: 1.4rem;
+        width: 10rem;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2.5rem;
+
+    }
+
+    .profileinfo-followers {
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .followers-button {
+        gap: 0.5rem;
+        margin-top: 1rem;
+        margin-left: 2.6rem;
+        background-color: var(--main-color);
+        display: flex;
+        padding: 0.6rem;
+        width: 4.5rem;
+        border-radius: 1.3rem;
+    }
+
+    .followers-number {
+        color: var(--text-color);
+        font-size: 1.5rem;
+    }
+
+    .userflag {
+        border-radius: 5px;
+        margin-left: 0.4rem;
+        font-size: 1.4rem;
+        margin-bottom:2rem;
+    }
+
+    .lvlvalue{
+        display: none;
+    }
+
+    .username {
+        margin-left: 0.4rem;
+        margin-bottom:2rem;
+        font-size: 1.5rem;
+        color: var(--text-color);
+    }
+
+    .stats-clears {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        border-bottom-left-radius: 15px;
+        border-radius: 10px;
+    }
+
+    .profileinfo-endpanel {
+        display: flex;
+        border-radius: 15px;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        ba
+    }
+
+    .profileinfo-stats {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 22rem;
+        border-bottom-right-radius: 15px;
+        border-bottom-left-radius: 15px;
+    }
+
+    .profileinfo-startpanel {
+        margin-top: 1rem;
+        display: flex;
+        width: 100%;
+        height: 9rem;
+        color: var(--text-color);
+        flex-wrap: wrap;
+    }
+
+    .convertdiv {
+        top: 0;
+        right: 0;
+        margin-top: -9rem;
+        margin-right: 0.5rem;
+        position: absolute;
+        display: flex;
+        color: var(--text-color);
+    }
+
+    .globalranking-title {
+        font-size: 1rem;
+    }
+
+    .globalranking-value {
+        font-size: 1.7rem;
+    }
+
+    .countryranking-title {
+        font-size: 1rem;
+    }
+
+    .countryranking-value {
+        font-size: 1.7rem;
+    }
+
+    .rating-title {
+        font-size: 1rem;
+    }
+
+    .rating-value {
+        font-size: 1.7rem;
+    }
+
+    .playtime-title {
+        font-size: 1rem;
+    }
+
+    .playtime-value {
+        font-size: 1.7rem;
+    }
+
+    .completion-title {
+        font-size: 1rem;
+    }
+
+    .completion-value {
+        font-size: 1.7rem;
+    }
+
+    .statusdot {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+    }
+
+    .profilebanner {
+        z-index: 0;
+        display: flex;
+        object-fit: cover;
+        border-top-right-radius: 15px;
+        border-top-left-radius: 15px;
+        width: 100%;
+        height: 120px;
+    }
+
+    .secondbox {
+        margin-top: 1rem;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        width: 97%;
+        height: 35rem;
+        border-radius: 15px;
+        flex-direction: column;
+        box-shadow: black 5px 5px 5px;
+        background: linear-gradient(var(--secondary-color), var(--main-color) 80%);
+    }
+
+    .metxt {
+        margin-left: 1rem;
+        font-size: 1rem;
+        color: var(--text-color);
+        width: 4rem;
+    }
+
+    .editpensvg{
+        margin-left: 11rem;
+    }
+
+    .thirdbox {
+        margin-top: 1rem;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        width: 97%;
+        height: 25rem;
+        border-radius: 15px;
+        flex-direction: column;
+        box-shadow: black 5px 5px 5px;
+        background: linear-gradient(var(--main-color), var(--secondary-color) 80%);
+    }
+
+    .thirdboxmain {
+        margin-top: 0.8rem;
+        margin-right: 0.1rem;
+        margin-left: 0.1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 62%;
+        gap: 5px;
+    }
+
+    .scoretemplate {
+        display: flex;
+        width: 99.5%;
+        height: 2.8rem;
+        border-radius: 15px;
+        color: var(--text-color);
+        box-shadow: black 5px 5px 5px;
+    }
+
+    .topscore-grade {
+        padding-left: 0.2rem;
+        z-index: 1;
+        height: 2.5rem;
+    }
+
+    .topscore-name {
+        margin-top:0.2rem;
+        font-size: 0.8rem;
+        text-overflow: ellipsis;
+        overflow:hidden;
+        white-space:nowrap;
+    }
+
+    .topscore-diffname {
+        color: #8dffff;
+        font-style: italic;
+        z-index: 0;
+        font-size: 0.7rem;
+    }
+
+    .convertlogo {
+        width: 20px;
+        height: 20px;
+        margin-right: 3rem;
+        margin-top:0.2rem
+    }
+
+    .topscore-ratebox {
+        position: absolute;
+        display: flex;
+        border-radius: 15px;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.8rem;
+        margin-top: 1.2rem;
+    }
+
+    .topscore-rate {
+        background-color: transparent;
+        z-index: 0;
+        border-radius: 15px;
+        margin-right: 1rem;
+    }
+
+    .topscore-accbox {
+        position: absolute;
+        margin-top:0.2rem;
+        margin-left: 5.1rem;
+        padding-left: 0.2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+        //background-color: #43e1ef;
+        width: 0;
+        font-size: 0.9rem;
+    }
+
+    .topscore-ratingbox {
+        margin-top:1.5rem;
+        margin-left: 3.2rem;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+        background-color: var(--main-color-no-transparency);
+        width: 4rem;
+        font-size: 1rem;
+        opacity: 1;
+    }
+
+    .topscore-namebox {
+        display: flex;
+        flex-direction: column;
+        width: 57.5%;
+    }
+
+    .topscore-endbox {
+        display: flex;
+        flex-direction: column;
+        z-index: 0;
+        //background-color: deeppink;
+        width: 30%;
+        border-radius: 15px;
+    }
+
+    .fourthbox {
+        margin-top: 2rem;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        width: 97%;
+        height: 25rem;
+        border-radius: 15px;
+        flex-direction: column;
+        box-shadow: black 5px 5px 5px;
+        background: linear-gradient(var(--secondary-color), var(--main-color) 80%);
+    }
+
+
+}
