@@ -64,6 +64,13 @@ type Lamp =
 type AccuracyPoints =
     | WifeCurve of judge: int
     | PointsPerJudgement of points: float array
+    | CappedScore of points: float array * max_score: float
+    | BaseScoreWithBonus of
+        points: float array *
+        bonuses: float array *
+        hit_bonus: float array *
+        hit_punishment: float array *
+        max_score: float
     member internal this.Clone =
         match this with
         | PointsPerJudgement points -> PointsPerJudgement (Array.copy points)
@@ -136,6 +143,7 @@ type Ruleset =
         Description: string
 
         Judgements: Judgement array
+        JudgementsWeight: float array
         Lamps: Lamp array
         Grades: Grade array
         HitMechanics: HitMechanics
@@ -149,6 +157,7 @@ type Ruleset =
             Description = this.Description
 
             Judgements = Array.copy this.Judgements
+            JudgementsWeight = Array.copy this.JudgementsWeight
             Lamps = Array.copy this.Lamps
             Grades = Array.copy this.Grades
             HitMechanics = this.HitMechanics
@@ -257,6 +266,9 @@ module Ruleset =
             | None ->
                 bw.Write 0.0f
                 bw.Write 0.0f
+                
+        for j in ruleset.JudgementsWeight do
+            bw.Write j
 
         for g in ruleset.Grades do
             bw.Write g.Accuracy
@@ -324,6 +336,20 @@ module Ruleset =
         | AccuracyPoints.PointsPerJudgement points ->
             for p in points do
                 bw.Write p
+        | AccuracyPoints.CappedScore(points, max_score) ->
+            for p in points do
+                bw.Write p
+            bw.Write max_score
+        | AccuracyPoints.BaseScoreWithBonus(points, bonuses, hit_bonus, hit_punishment, max_score) ->
+            for p in points do
+                bw.Write p
+            for b in bonuses do
+                bw.Write b
+            for hb in hit_bonus do
+                bw.Write hb
+            for hp in hit_punishment do
+                bw.Write hp
+            bw.Write max_score
 
         let first_character =
             match ruleset.Name.Trim() with
@@ -396,8 +422,10 @@ module Ruleset =
             | HoldMechanics.CombineHeadAndTail rule ->
 
                 match ruleset.Accuracy with
-                | AccuracyPoints.PointsPerJudgement _ -> ()
-                | _ -> failwith "CombineHeadAndTail rules must be used with PointsPerJudgement accuracy (otherwise it isn't clear what points you give overholds)"
+                | AccuracyPoints.PointsPerJudgement _
+                | AccuracyPoints.CappedScore _
+                | AccuracyPoints.BaseScoreWithBonus _ -> ()
+                | _ -> failwith "CombineHeadAndTail rules must be used with PointsPerJudgement, BaseScoreWithBonus or CappedScore accuracy (otherwise it isn't clear what points you give overholds)"
 
                 match rule with
                 | HeadTailCombineRule.OsuMania windows ->
@@ -448,6 +476,35 @@ module Ruleset =
                 if points.Length <> ruleset.Judgements.Length then failwithf "PointsPerJudgement `points` provides %i values but there are %i judgements" points.Length ruleset.Judgements.Length
                 for p in points do
                     if not (Double.IsFinite p) then failwith "PointsPerJudgement `points` contains invalid floating point values"
+            | AccuracyPoints.CappedScore (points, max_score) ->
+                if points.Length <> ruleset.Judgements.Length then failwithf "CappedScore `points` provides %i values but there are %i judgements" points.Length ruleset.Judgements.Length
+                for p in points do
+                    if not (Double.IsFinite p) then failwith "CappedScore `points` contains invalid floating point values"
+                    if p < 0 then failwith "CappedScore `points` contains negative point values"
+                if max_score < 0 then failwith "CappedScore `max_score` must be non-negative"
+            | AccuracyPoints.BaseScoreWithBonus(points, bonuses, hit_bonus, hit_punishment, max_score) ->
+                if points.Length <> ruleset.Judgements.Length then failwithf "CappedScore `points` provides %i values but there are %i judgements" points.Length ruleset.Judgements.Length
+                if bonuses.Length <> ruleset.Judgements.Length then failwithf "CappedScore `bonuses` provides %i values but there are %i judgements" bonuses.Length ruleset.Judgements.Length
+                if hit_bonus.Length <> ruleset.Judgements.Length then failwithf "CappedScore `hit_bonus` provides %i values but there are %i judgements" hit_bonus.Length ruleset.Judgements.Length
+                if hit_punishment.Length <> ruleset.Judgements.Length then failwithf "CappedScore `hit_punishment` provides %i values but there are %i judgements" hit_punishment.Length ruleset.Judgements.Length
+                
+                for p in points do
+                    if not (Double.IsFinite p) then failwith "CappedScore `points` contains invalid floating point values"
+                    if p < 0 then failwith "CappedScore `points` contains negative point values"
+                    
+                for b in bonuses do
+                    if not (Double.IsFinite b) then failwith "CappedScore `points` contains invalid floating point values"
+                    if b < 0 then failwith "CappedScore `points` contains negative point values"
+                    
+                for hb in hit_bonus do
+                    if not (Double.IsFinite hb) then failwith "CappedScore `points` contains invalid floating point values"
+                    if hb < 0 then failwith "CappedScore `points` contains negative point values"
+                    
+                for hp in hit_punishment do
+                    if not (Double.IsFinite hp) then failwith "CappedScore `points` contains invalid floating point values"
+                    if hp < 0 then failwith "CappedScore `points` contains negative point values"
+                
+                if max_score < 0 then failwith "CappedScore `max_score` must be non-negative"
 
             if not (Enum.IsDefined ruleset.Formatting.DecimalPlaces) then
                 failwithf "Unsupported decimal places formatting: %O" ruleset.Formatting.DecimalPlaces
@@ -475,6 +532,7 @@ module Ruleset =
                     [| { ruleset.Judgements.[j] with Name = ruleset.Judgements.[j].Name + "'" } |]
                     Array.skip (j + 1) ruleset.Judgements
                 ]
+            JudgementsWeight = duplicate ruleset.JudgementsWeight
             Lamps =
                 ruleset.Lamps
                 |> Array.map (fun l ->
@@ -500,6 +558,9 @@ module Ruleset =
             Accuracy =
                 match ruleset.Accuracy with
                 | AccuracyPoints.PointsPerJudgement ps -> AccuracyPoints.PointsPerJudgement (duplicate ps)
+                | AccuracyPoints.CappedScore (points, max_score) -> AccuracyPoints.CappedScore ((duplicate points), max_score)
+                | AccuracyPoints.BaseScoreWithBonus(points, bonuses, hit_bonus, hit_punishment, max_score) ->
+                    AccuracyPoints.BaseScoreWithBonus ((duplicate points), (duplicate bonuses), (duplicate hit_bonus), (duplicate hit_punishment), max_score)
                 | AccuracyPoints.WifeCurve j -> AccuracyPoints.WifeCurve j
             Formatting = { DecimalPlaces = ruleset.Formatting.DecimalPlaces }
         }
@@ -535,6 +596,7 @@ module Ruleset =
             Name = ruleset.Name
             Description = ruleset.Description
             Judgements = Array.removeAt j ruleset.Judgements
+            JudgementsWeight = Array.removeAt j ruleset.JudgementsWeight
             Lamps =
                 ruleset.Lamps
                 |> Array.choose (fun l ->
@@ -575,6 +637,9 @@ module Ruleset =
             Accuracy =
                 match ruleset.Accuracy with
                 | AccuracyPoints.PointsPerJudgement ps -> AccuracyPoints.PointsPerJudgement (Array.removeAt j ps)
+                | AccuracyPoints.CappedScore (points, max_score) -> AccuracyPoints.CappedScore ((Array.removeAt j points), max_score)
+                | AccuracyPoints.BaseScoreWithBonus(points, bonuses, hit_bonus, hit_punishment, max_score) ->
+                    AccuracyPoints.BaseScoreWithBonus ((Array.removeAt j points), (Array.removeAt j bonuses), (Array.removeAt j hit_bonus), (Array.removeAt j hit_punishment), max_score)
                 | AccuracyPoints.WifeCurve j -> AccuracyPoints.WifeCurve j
             Formatting = { DecimalPlaces = ruleset.Formatting.DecimalPlaces }
         }

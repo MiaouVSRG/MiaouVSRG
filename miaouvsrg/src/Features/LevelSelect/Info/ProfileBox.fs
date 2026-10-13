@@ -1,10 +1,13 @@
 namespace MiaouVSRG.Features.LevelSelect
 
 open System.Drawing
+open Catnip
 open Catnip.Data
 open MiaouVSRG.Content
+open MiaouVSRG.Features.LevelSelect
 open MiaouVSRG.Features.Online
 open MiaouVSRG.Features.Skins.Browser
+open MiaouVSRG.UI
 open MiaouVSRG.Web.Shared.Requests
 open Percyqaz.Common
 open Percyqaz.Flux.Graphics
@@ -41,11 +44,21 @@ type private UserInfos() =
                     .Color((Color.White, Color.Transparent)),
                 Container(NodeType.None)
                     .With(
-                        Text(fun () -> sprintf "Accuracy: %.2f%%" acc)
+                        Text(fun () ->
+                            if Network.status.IsLoggedIn then
+                                sprintf "Accuracy: %.2f%%" acc
+                            else
+                                "Not connected"
+                        )
                             .Position(Position.GridY(1, 3))
                             .Align(Alignment.LEFT)
                             .Color((Color.White, Color.Transparent)),
-                        Text(fun () -> sprintf "Rating: %.2f" rating)
+                        Text(fun () ->
+                            if Network.status.IsLoggedIn then
+                                sprintf "Rating: %.2f" rating
+                            else
+                                "Click to login !"
+                        )
                             .Position(Position.GridY(2, 3))
                             .Align(Alignment.LEFT)
                             .Color((Color.White, Color.Transparent))
@@ -53,12 +66,22 @@ type private UserInfos() =
                     .Position(Position.ShrinkT(0.8f * BASE_HEIGHT).SliceT(1.6f * BASE_HEIGHT))
             )
             .Add(
-                Text(fun () -> sprintf "#%i" global_ranking)
+                Text(fun () ->
+                    if Network.status.IsLoggedIn then
+                        sprintf "#%i" global_ranking
+                    else
+                        ""
+                )
                     .Position(Position.SliceB(1.5f * BASE_HEIGHT))
                     .Color(((Color.White.O4a 150), Color.Transparent))
                     .Align(Alignment.RIGHT)
             )
         base.Init(parent)
+        
+module ProfileBox =
+    let HIDDEN_POS = Position.SliceB(105.0f).ShrinkPercentL(INFO_SCREEN_SPLIT + 0.01f).ShrinkR(CHART_WIDTH - CHART_LEFT_MARGIN + 20.0f).TranslateY(SCREEN_OFFSET)
+    let HIDDEN_POS_DOS = Position.SliceB(105.0f).ShrinkPercentL(INFO_SCREEN_SPLIT + 0.01f).ShrinkR(CHART_WIDTH - CHART_LEFT_MARGIN + 20.0f).TranslateY(500.0f)
+    let SHOW_POS = Position.SliceB(105.0f).ShrinkPercentL(INFO_SCREEN_SPLIT + 0.01f).ShrinkR(CHART_WIDTH - CHART_LEFT_MARGIN + 20.0f)
 
 type ProfileBox() =
     inherit SlideContainer(NodeType.None)
@@ -83,32 +106,29 @@ type ProfileBox() =
                     | None -> Logging.Warn "Failed to load avatar thumbnail from '%s'" download_link
                 )
         }
-    
-    let load_profile() =
-        Logging.Debug "je load le profile"
-        Players.Miniprofile.get (
-             fun response ->
-                 GameThread.defer
-                 <| fun () ->
-                     match response with
-                     | Some result ->
-                         user_infos_box.LoadStats(result)
-                         download_link <- result.ProfilePictureLink
-                         thumbnail.Load()
-                     | None -> ()
-        )
+        
+    member this.Load(infos: Players.Miniprofile.Response) =
+        user_infos_box.LoadStats(infos)
+        download_link <- infos.ProfilePictureLink
+        thumbnail.Load()
     
     override this.Init(parent: Widget) =
-        load_profile()
         let POSITION_RIGHT_TO_PFP = Position.ShrinkX(PADDING_MINIPROFILE).ShrinkL(90.0f + MARGIN).ShrinkT(PADDING_MINIPROFILE)
         this
             .With(
                 thumbnail
-                    .Position(Position.Shrink(PADDING_MINIPROFILE).SliceL(90.0f).SliceT(90.0f))
-            )
-            .Add(
+                    .Position(Position.Shrink(PADDING_MINIPROFILE).SliceL(90.0f).SliceT(90.0f)),
                 user_infos_box
                     .Position(POSITION_RIGHT_TO_PFP)
+            )
+            .Add(
+                MouseListener()
+                    .OnLeftClick(fun() ->
+                        if Network.status.IsLoggedIn then
+                            open_url($"https://www.beta.miaouvsrg.com/user/profile/{Network.credentials.Username}")
+                        elif Network.status.IsConnected then
+                            Menu.ShowPage LoginPage
+                    )
             )
         base.Init(parent)
     
@@ -116,4 +136,10 @@ type ProfileBox() =
         let sprite = Content.Texture "miniprofile"
         Render.sprite this.Bounds Color.White sprite
         base.Draw()
+        
+    member this.Show() =
+        this.Position <- ProfileBox.SHOW_POS
+        
+    member this.Hide() =
+        this.Position <- ProfileBox.HIDDEN_POS_DOS
         

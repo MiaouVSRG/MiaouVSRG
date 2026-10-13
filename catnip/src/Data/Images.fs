@@ -43,3 +43,8 @@ module ImageServices =
                         | None -> return None
                 }
         }
+        
+    let clear_cache() =
+        let downloads_folder = Path.Combine(get_game_folder "Downloads")
+        for file in Directory.GetFiles(downloads_folder) do
+            File.Delete(file)

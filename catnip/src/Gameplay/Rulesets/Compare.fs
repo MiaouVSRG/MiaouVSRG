@@ -50,6 +50,7 @@ module RulesetComparison =
                 let points =
                     match ruleset.Accuracy with
                     | AccuracyPoints.PointsPerJudgement p -> p.[i]
+                    | AccuracyPoints.CappedScore (p, _) -> p[i] // TODO: handle the real point system
                     | AccuracyPoints.WifeCurve j ->
                         let delta = 0.5f * (late + previous_window)
                         Wife3Curve.calculate j delta
@@ -62,6 +63,7 @@ module RulesetComparison =
         let miss_points =
             match ruleset.Accuracy with
             | AccuracyPoints.PointsPerJudgement p -> Array.last p
+            | AccuracyPoints.CappedScore (p, _) -> Array.last p
             | AccuracyPoints.WifeCurve _ -> -2.75
 
         total <- total + miss_points * non_misses * (1.0 - previous_proportion) // notes that were missed by deviating out of the windows

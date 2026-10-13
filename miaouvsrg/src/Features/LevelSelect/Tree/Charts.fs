@@ -42,8 +42,19 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
     
     let mutable slide_animation = 0.0f
     
-    let TEXT_MARGIN = 60.0f
-    let TEXT_MARGIN_NO_PB = 12.0f
+    let get_star_icon (divider: int) =
+        let texture =
+            match divider with
+            | 1 -> "star"
+            | 2 -> "star-big-half"
+            | 3 -> "star-half"
+            | 4 -> "star-semi-half"
+            | _ -> "star"
+            
+        Content.Texture texture
+            
+    
+    let TEXT_MARGIN = 90.0f
 
     let get_pb (bests: PersonalBests<'T>) (rate: Rate) =
         match PersonalBests.get_best_above rate bests with
@@ -136,7 +147,7 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
 
     override this.Bounds(top: float32) : Rect =
         Rect.FromEdges(Render.width() - (CHART_WIDTH - CHART_LEFT_MARGIN) + Style.PADDING, top, Render.width() + CHART_LEFT_MARGIN, top + CHART_HEIGHT)
-    override this.Spacing : float32 = Style.PADDING_SONG_SELECT
+    override this.Spacing : float32 = CHART_SPACING
 
     member this.Selected : bool = tree_ctx.IsSelected(chart_meta, library_ctx)
     member this.Chart : ChartMeta = chart_meta
@@ -176,22 +187,12 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
     member private this.DrawRank(bounds: Rect, data: PersonalBestCached, pos: float32, accent: Color): unit =
         if TEXTURES.Contains(data.Text.ToLower().Replace("+", "plus")) then
             let sprite = Content.Texture (data.Text.ToLower().Replace("+", "plus"))
-            let r = bounds.SliceX(50.0f).TranslateX(-pos).SliceY(50.0f)
+            let r = Rect.FromSize(bounds.Left + pos, bounds.Top + 60.0f, 60.0f, 60.0f)
             
             Render.tex_quad
                 (r |> _.AsQuad)
                 Color.White.AsQuad
                 (Sprite.pick_texture (0,0) sprite)
-        else
-            Text.draw_aligned_b (
-                Style.font,
-                data.Text,
-                20.0f,
-                bounds.Right - pos,
-                bounds.Top + 20.0f,
-                (data.Color, Color.Black),
-                0.5f
-            )
 
     /// Only called if this chart can be seen on screen
     member private this.DrawCulled(bounds: Rect) : unit =
@@ -252,11 +253,18 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             (Sprite.pick_texture (0,0) chart_selection_background_texture)
 
         if personal_bests.IsSome then
-            this.DrawRank(r, grade_or_accuracy.Value, 390.0f, accent_color)
-            
-        let get_text_margin = if personal_bests.IsSome then TEXT_MARGIN else TEXT_MARGIN_NO_PB
+            this.DrawRank(r, grade_or_accuracy.Value, 25.0f, accent_color)
 
         // draw text
+        Text.draw_b (
+            Style.font,
+            sprintf "%iK" new_meta.Keys,
+            30.0f,
+            left + 30.0f + (remaining_left * (1.0f - slide_animation)),
+            bounds.Top + 10.0f,
+            Colors.text
+        )
+        
         Text.draw_b (
             Style.font,
             (
@@ -265,9 +273,9 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
                 else
                     chart_meta.Title
             ),
-            23.0f,
-            left + get_text_margin + (remaining_left * (1.0f - slide_animation)),
-            bounds.Top,
+            21.0f,
+            left + TEXT_MARGIN + (remaining_left * (1.0f - slide_animation)),
+            bounds.Top + 5.0f,
             if this.Selected then Colors.text_yellow_2 else Colors.text
         )
 
@@ -275,36 +283,37 @@ type private ChartItem(tree_ctx: TreeContext, group_name: string, group_ctx: Lib
             Style.font,
             sprintf "%s  •  %s" (if options.TreeShowNativeText.Value then chart_meta.ArtistNative |> Option.defaultValue chart_meta.Artist else chart_meta.Artist) chart_meta.Creator,
             18.0f,
-            left + get_text_margin + (remaining_left * (1.0f - slide_animation)),
-            bounds.Top + 34.0f,
+            left + TEXT_MARGIN + (remaining_left * (1.0f - slide_animation)),
+            bounds.Top + 33.0f,
             Colors.text_subheading
         )
         
-        // Drawing the star before the text because of the HAPPYMASS font (which adds an automatic bottom margin to every char)
-        Text.draw_b (
-            Style.font,
-            Icons.STAR,
-            36.0f,
-            right - get_text_margin - (if this.Selected then 300.0f else 350.0f) + ((Render.width() - left) * (1.0f - slide_animation)),
-            bounds.Top + ((bounds.Bottom - bounds.Top) / 4.0f) - 5.0f,
-            (Colors.white, Difficulty.color chart_meta.Rating)
-        )
-        
-        Text.draw_b (
-            Style.font,
-            $"{Math.Round(cached_meta.Rating |> float, 2)}",
-            36.0f,
-            right - get_text_margin - (if this.Selected then 250.0f else 300.0f) + ((Render.width() - left) * (1.0f - slide_animation)),
-            bounds.Top + ((bounds.Bottom - bounds.Top) / 4.0f),
-            (Colors.white, Difficulty.color chart_meta.Rating)
-        )
+        // star icons
+        // shows sdfsdfsdflkj 
+        for i in 0.0..14.0 do
+            let left_value = left + TEXT_MARGIN + (remaining_left * (1.0f - slide_animation)) + 35.0f * float32 i
+            let b = Rect.FromSize(left_value, bounds.Top + 85.0f, 32.0f, 32.0f)
+            
+            let h,s,v = Color.White.ToHsv()
+            let color = Color.FromHsv(h, s, v - 0.5f)
+            Render.sprite b color (get_star_icon(1))
+            
+            let rating = float cached_meta.Rating
+            if rating >= i + 1.0 then
+                Render.sprite b Color.White (get_star_icon(1))
+            elif rating >= i + 0.75 then
+                Render.sprite b Color.White (get_star_icon(2))
+            elif rating >= i + 0.50 then
+                Render.sprite b Color.White (get_star_icon(3))
+            elif rating >= i + 0.25 then
+                Render.sprite b Color.White (get_star_icon(4))
 
         Text.draw_b (
             Style.font,
             chart_meta.Subtitle |> Option.defaultValue chart_meta.DifficultyName,
-            15.0f,
-            left + get_text_margin + (remaining_left * (1.0f - slide_animation)),
-            bounds.Top + 65.0f,
+            18.0f,
+            left + TEXT_MARGIN + (remaining_left * (1.0f - slide_animation)),
+            bounds.Top + 60.0f,
             Colors.text_subheading
         )
 

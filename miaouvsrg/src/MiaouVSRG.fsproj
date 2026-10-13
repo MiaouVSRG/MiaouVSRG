@@ -136,6 +136,7 @@
         <Compile Include="Features\Score\BottomBanner.fs"/>
         <Compile Include="Features\Score\Confetti.fs"/>
         <Compile Include="Features\Score\PlayerRating.fs"/>
+        <Compile Include="Features\Score\ScoreDisplay.fs" />
         <Compile Include="Features\Score\ScoreScreen.fs"/>
         <Compile Include="Features\Import\TaskTracking.fs"/>
         <Compile Include="Features\Import\osu!\Skins.fs"/>

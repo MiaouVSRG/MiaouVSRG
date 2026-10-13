@@ -12,19 +12,21 @@ type ConfigureAccuracyPage(ruleset: Setting<Ruleset>) =
     let is_wife_curve =
         match ruleset.Value.Accuracy with
         | AccuracyPoints.WifeCurve _ -> true
-        | AccuracyPoints.PointsPerJudgement _ -> false
+        | _ -> false
         |> Setting.simple
 
     let wife_judge =
         match ruleset.Value.Accuracy with
         | AccuracyPoints.WifeCurve j -> j
         | AccuracyPoints.PointsPerJudgement _ -> 4
+        | _ -> 4
         |> Setting.simple
 
     let points_per_judgement : float array =
         match ruleset.Value.Accuracy with
         | AccuracyPoints.WifeCurve _ -> Array.create ruleset.Value.Judgements.Length 1.0
         | AccuracyPoints.PointsPerJudgement p -> p
+        | _ -> Array.zeroCreate(1)
 
     let decimal_places = Setting.simple ruleset.Value.Formatting.DecimalPlaces
 

@@ -14,6 +14,16 @@ module Wife3 =
             else
                 let scale = (10.0f - float32 judge) / 6.0f
                 45.0f<ms / rate> * scale
+                
+        let MISS_PENALTY_POINTS =
+            match judge with
+            | 4 -> -1.0
+            | 5 -> -1.6
+            | 6 -> -2.6
+            | 7 -> -4.7
+            | 8 -> -10.0
+            | 9 -> -20.0
+            | _ -> failwithf "Judge must be between 4 and 9, '%i' is not supported" judge
 
         {
             Name = if judge = 9 then "Wife3 JUSTICE" else sprintf "Wife3 J%i" judge
@@ -57,6 +67,8 @@ module Wife3 =
                         TimingWindows = None
                     }
                 |]
+            // TODO: This not the actual Wife3 system
+            JudgementsWeight = [|1.0; 0.9; 0.5; -0.5; MISS_PENALTY_POINTS; MISS_PENALTY_POINTS|]
             Grades =
                 [|
                     {

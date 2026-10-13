@@ -94,11 +94,13 @@ type ScoreScreen(score_info: ScoreInfo, results: ImprovementFlags * SessionXPGai
             .Position(Position.SliceT(170.0f).SliceR(365.0f).TranslateY(660.0f).TranslateX(-70.0f))
         |+ TopBanner(score_info)
             .Position(Position.SliceT(180.0f))
+        |+ ScoreDisplay(score_info)
+            .Position(Position.SliceT(110.0f).SliceR(740.0f).TranslateY(325.0f).TranslateX(-615.0f))
         |+ MiddleBox(
             stats,
             score_info
         )
-            .Position(Position.SliceT(580.0f).TranslateY(246.0f).SliceR(885.0f).TranslateX(-540.0f))
+            .Position(Position.SliceT(495.0f).TranslateY(450.0f).SliceR(885.0f).TranslateX(-540.0f))
         |+ bottom_info
         |* Confetti()
 

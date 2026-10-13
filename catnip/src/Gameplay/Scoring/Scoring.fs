@@ -6,6 +6,7 @@ open Catnip.Mods
 open Catnip.Charts
 open Catnip.Gameplay.Replays
 open Catnip.Gameplay.Rulesets
+open Percyqaz.Common
 
 type GameplayAction =
     | Hit of
@@ -70,6 +71,11 @@ type ScoreProcessor(ruleset: Ruleset, keys: int, replay: IReplay, notes: TimeArr
     let judgement_counts = Array.zeroCreate ruleset.Judgements.Length
     let mutable points_scored = 0.0
     let mutable max_possible_points = 0.0
+    
+    let mutable accuracy_weigth = 0.0
+    let mutable max_accuracy_weight = 0.0
+    
+    let mutable current_bonus_value = 100.0
 
     let mutable current_combo = 0
     let mutable best_combo = 0
@@ -87,9 +93,14 @@ type ScoreProcessor(ruleset: Ruleset, keys: int, replay: IReplay, notes: TimeArr
         best_combo <- max best_combo current_combo
 
     let score_points (judgement_points: float, judgement: int) =
-        max_possible_points <- max_possible_points + 1.0
+        match ruleset.Accuracy with
+        | AccuracyPoints.CappedScore(_, max_score) -> max_possible_points <- max_score
+        | _ -> max_possible_points <- max_possible_points + 1.0
         points_scored <- points_scored + judgement_points
         judgement_counts.[judgement] <- judgement_counts.[judgement] + 1
+        
+        accuracy_weigth <- accuracy_weigth + ruleset.JudgementsWeight[judgement]
+        max_accuracy_weight <- max_accuracy_weight + (ruleset.JudgementsWeight |> Array.max)
 
     let add_judgement (judgement: int) =
         judgement_counts.[judgement] <- judgement_counts.[judgement] + 1
@@ -106,6 +117,17 @@ type ScoreProcessor(ruleset: Ruleset, keys: int, replay: IReplay, notes: TimeArr
             do
             j <- j + 1
         j
+        
+    let note_count =
+        let mutable rice_notes = 0
+        for { Data = nr } in notes do
+            for n in nr do
+                if n = NoteType.NORMAL then
+                    rice_notes <- rice_notes + 1
+                elif n = NoteType.HOLDHEAD then
+                    rice_notes <- rice_notes + 1
+        rice_notes
+        
 
     let judgement_or_ms_to_points : GameplayTime -> int -> float =
         match ruleset.Accuracy with
@@ -113,10 +135,22 @@ type ScoreProcessor(ruleset: Ruleset, keys: int, replay: IReplay, notes: TimeArr
             fun (delta: GameplayTime) _ -> Wife3Curve.calculate j delta
         | AccuracyPoints.PointsPerJudgement weights ->
             fun _ (judgement: int) -> weights.[judgement]
+        | AccuracyPoints.CappedScore (weights, max_score) ->
+            fun _ (judgement: int) -> CappedScore.calculate(weights[judgement], max_score, weights |> Array.max, note_count, rate)
+        | AccuracyPoints.BaseScoreWithBonus(weights, bonuses, hit_bonus, hit_punishment, max_score) ->
+            fun _ (judgement: int) ->
+                let points, bonus = BaseScoreWithBonus.calculate(weights[judgement], bonuses[judgement], hit_bonus[judgement], hit_punishment[judgement], max_score, note_count, weights |> Array.max, current_bonus_value, rate)
+                current_bonus_value <- bonus
+                points
 
     let judgement_to_points (judgement: int) : float =
         match ruleset.Accuracy with
         | AccuracyPoints.PointsPerJudgement weights -> weights.[judgement]
+        | AccuracyPoints.CappedScore (weights, max_score) -> CappedScore.calculate(weights[judgement], max_score, weights |> Array.max, note_count, rate)
+        | AccuracyPoints.BaseScoreWithBonus(weights, bonuses, hit_bonus, hit_punishment, max_score) ->
+            let points, bonus = BaseScoreWithBonus.calculate(weights[judgement], bonuses[judgement], hit_bonus[judgement], hit_punishment[judgement], max_score, note_count, weights |> Array.max, current_bonus_value, rate)
+            current_bonus_value <- bonus
+            points
         | _ -> failwith "Ruleset isn't using PointsPerJudgement + a feature that expects it to be used. This line should be unreachable if the ruleset was validated"
 
     member val Duration : Time = (TimeArray.last notes).Value.Time - (TimeArray.first notes).Value.Time
@@ -125,7 +159,7 @@ type ScoreProcessor(ruleset: Ruleset, keys: int, replay: IReplay, notes: TimeArr
     member val Keys : int = keys
     member val internal Notes : TimeArray<NoteRow> = notes
 
-    member this.Accuracy : float = if max_possible_points = 0.0 then 1.0 else points_scored / max_possible_points
+    member this.Accuracy : float = if max_accuracy_weight = 0.0 then 1.0 else accuracy_weigth / max_accuracy_weight
     member this.FormattedAccuracy : string = ruleset.FormatAccuracy this.Accuracy
 
     member this.CurrentCombo : int = current_combo
@@ -164,7 +198,7 @@ type ScoreProcessor(ruleset: Ruleset, keys: int, replay: IReplay, notes: TimeArr
             Hit
                 {|
                     Delta = delta
-                    Judgement = Some (judgement, points)
+                    Judgement = Some (judgement, ruleset.JudgementsWeight[judgement])
                     Missed = is_missed
                 |}
 
@@ -182,7 +216,7 @@ type ScoreProcessor(ruleset: Ruleset, keys: int, replay: IReplay, notes: TimeArr
             Hold
                 {|
                     Delta = delta
-                    Judgement = Some (judgement, points)
+                    Judgement = Some (judgement, ruleset.JudgementsWeight[judgement])
                     Missed = is_missed
                 |}
 
@@ -213,7 +247,7 @@ type ScoreProcessor(ruleset: Ruleset, keys: int, replay: IReplay, notes: TimeArr
             Release
                 {|
                     Delta = release_delta
-                    Judgement = Some (judgement, points)
+                    Judgement = Some (judgement, ruleset.JudgementsWeight[judgement])
                     Missed = missed
                     Overhold = overheld
                     Dropped = dropped
@@ -235,7 +269,7 @@ type ScoreProcessor(ruleset: Ruleset, keys: int, replay: IReplay, notes: TimeArr
             Release
                 {|
                     Delta = release_delta
-                    Judgement = Some (judgement, points)
+                    Judgement = Some (judgement, ruleset.JudgementsWeight[judgement])
                     Missed = missed
                     Overhold = overheld
                     Dropped = dropped
@@ -279,7 +313,7 @@ type ScoreProcessor(ruleset: Ruleset, keys: int, replay: IReplay, notes: TimeArr
             Release
                 {|
                     Delta = release_delta
-                    Judgement = Some (judgement, points)
+                    Judgement = Some (judgement, ruleset.JudgementsWeight[judgement])
                     Missed = missed
                     Overhold = overheld
                     Dropped = dropped
@@ -301,7 +335,7 @@ type ScoreProcessor(ruleset: Ruleset, keys: int, replay: IReplay, notes: TimeArr
             Release
                 {|
                     Delta = release_delta
-                    Judgement = Some (judgement, points)
+                    Judgement = Some (judgement, ruleset.JudgementsWeight[judgement])
                     Missed = missed
                     Overhold = overheld
                     Dropped = dropped
@@ -323,7 +357,7 @@ type ScoreProcessor(ruleset: Ruleset, keys: int, replay: IReplay, notes: TimeArr
             score_points(points, judgement)
 
             (if ruleset.Judgements.[judgement].BreaksCombo then Break true else NoChange),
-            GhostTap {| Judgement = Some (judgement, points) |}
+            GhostTap {| Judgement = Some (judgement, ruleset.JudgementsWeight[judgement]) |}
         | None ->
         NoChange,
         GhostTap {| Judgement = None |}

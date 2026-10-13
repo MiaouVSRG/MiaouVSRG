@@ -132,6 +132,10 @@ module Theme =
         // LEVEL SELECT SCREEN
         "chart-selection-background"
         "chart-selection-background-hover"
+        "star"
+        "star-big-half"
+        "star-half"
+        "star-semi-half"
         "chart-description"
         "chart-description-nopb"
         "chart-namebox"

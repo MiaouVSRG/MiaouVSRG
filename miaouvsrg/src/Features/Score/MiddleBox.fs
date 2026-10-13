@@ -6,8 +6,6 @@ open Percyqaz.Flux.UI
 open Catnip.Mods
 open Catnip.Gameplay.Scoring
 open Catnip.Data.User
-open Catnip.Calculator
-open MiaouVSRG.UI
 
 #nowarn "3370"
 
@@ -31,12 +29,12 @@ type MiddleBox(stats: ScoreScreenStats ref, score_info: ScoreInfo) =
 
     override this.Init(parent) =
         this
-        |+ Text(fun () -> sprintf "%s" (score_info.Scoring.Ruleset.FormatAccuracy (!stats).Accuracy))
+        |+ Text(fun () -> sprintf "%s" (score_info.Scoring.Ruleset.FormatAccuracy score_info.Scoring.Accuracy))
             .Align(Alignment.CENTER)
-            .Position(Position.SliceB(70.0f).SliceR(160.0f).TranslateX(-115.0f).TranslateY(-20.0f).Expand(10.0f))
+            .Position(Position.SliceB(70.0f).SliceR(160.0f).TranslateX(-115.0f).TranslateY(-20.0f))
         |* Text(fun () -> sprintf "%ix" score_info.Scoring.BestCombo)
             .Align(Alignment.CENTER)
-            .Position(Position.SliceB(70.0f).SliceL(110.0f).TranslateX(110.0f).TranslateY(-20.0f).Expand(10.0f))
+            .Position(Position.SliceB(70.0f).SliceL(110.0f).TranslateX(110.0f).TranslateY(-20.0f))
 
         base.Init(parent)
 

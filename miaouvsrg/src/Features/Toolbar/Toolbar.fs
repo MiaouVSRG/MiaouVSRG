@@ -1,5 +1,7 @@
 namespace MiaouVSRG.Features.Toolbar
 
+open Catnip.Data
+open MiaouVSRG.Features.Skins.Browser
 open Percyqaz.Common
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.Audio
@@ -90,6 +92,8 @@ type Toolbar() =
             .Add(
                 HotkeyListener("reload_content", fun () ->
                     if not (Dialog.exists()) then
+                        ImageServices.clear_cache ()
+                        Thumbnail.ReloadAll()
                         Themes.reload_current ()
                         Skins.load()
                         Rulesets.load()
@@ -143,6 +147,8 @@ type Toolbar() =
             .Add(
                 HotkeyListener("reload_content", fun () ->
                     if not (Dialog.exists()) then
+                        ImageServices.clear_cache ()
+                        Thumbnail.ReloadAll()
                         Themes.reload_current ()
                         Skins.load()
                         Rulesets.load()
@@ -212,6 +218,8 @@ type Toolbar() =
             .Add(
                 HotkeyListener("reload_content", fun () ->
                     if not (Dialog.exists()) then
+                        ImageServices.clear_cache ()
+                        Thumbnail.ReloadAll()
                         Themes.reload_current ()
                         Skins.load()
                         Rulesets.load()

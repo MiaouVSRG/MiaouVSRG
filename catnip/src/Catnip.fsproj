@@ -59,6 +59,8 @@
     <Compile Include="Gameplay\Rulesets\Wife3.fs" />
     <Compile Include="Gameplay\Rulesets\Defaults.fs" />
     <Compile Include="Gameplay\Scoring\WifeCurve.fs" />
+    <Compile Include="Gameplay\Scoring\BaseScoreWithBonus.fs" />
+    <Compile Include="Gameplay\Scoring\CappedScore.fs" />
     <Compile Include="Gameplay\Rulesets\Compare.fs" />
     <Compile Include="Gameplay\Rulesets\Helpers.fs" />
     <Compile Include="Gameplay\Scoring\Grades.fs" />

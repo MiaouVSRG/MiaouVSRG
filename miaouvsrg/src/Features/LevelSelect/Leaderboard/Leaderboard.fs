@@ -59,14 +59,14 @@ type private LeaderboardHeader(display: Setting<InfoPanelMode>) =
             .Add(
                 InlaidButton(
                     %"levelselect.info.leaderboard",
-                    (fun () -> display.Set InfoPanelMode.Patterns),
+                    (fun () -> display.Set InfoPanelMode.Local),
                     ButtonType.CustomSprite "leaderboard-first-button"
                 )
                     .Hotkey("scoreboard_storage")
                     .Position(
                         Position
                             .SliceT(50.0f)
-                            .GridX(1, 3)
+                            .GridX(1, 2)
                     )
                     .Help(Help.Info("levelselect.info.mode", "scoreboard_storage")),
 
@@ -79,22 +79,22 @@ type private LeaderboardHeader(display: Setting<InfoPanelMode>) =
                     .Position(
                         Position
                             .SliceT(50.0f)
-                            .GridX(2, 3)
+                            .GridX(2, 2)
                     )
-                    .Help(Help.Info("levelselect.info.scoreboard.sort", "scoreboard_sort")),
+                    .Help(Help.Info("levelselect.info.scoreboard.sort", "scoreboard_sort"))
 
-                InlaidButton(
-                    Icons.FILTER + " " + %"levelselect.info.scoreboard.filter.none",
-                    ignore,
-                    ButtonType.CustomSprite "leaderboard-filter-button"
-                )
-                    .Hotkey("scoreboard_filter")
-                    .Position(
-                        Position
-                            .SliceT(50.0f)
-                            .GridX(3, 3)
-                    )
-                    .Help(Help.Info("levelselect.info.scoreboard.filter", "scoreboard_filter"))
+                // InlaidButton(
+                //     Icons.FILTER + " " + %"levelselect.info.scoreboard.filter.none",
+                //     ignore,
+                //     ButtonType.CustomSprite "leaderboard-filter-button"
+                // )
+                //     .Hotkey("scoreboard_filter")
+                //     .Position(
+                //         Position
+                //             .SliceT(50.0f)
+                //             .GridX(3, 3)
+                //     )
+                //     .Help(Help.Info("levelselect.info.scoreboard.filter", "scoreboard_filter"))
             )
         
         base.Init(parent)

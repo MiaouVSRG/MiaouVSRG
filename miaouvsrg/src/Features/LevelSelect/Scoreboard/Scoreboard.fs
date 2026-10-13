@@ -75,47 +75,49 @@ type private ScoreboardHeader(display: Setting<InfoPanelMode>, cycle_sort: unit 
                     .Position(
                         Position
                             .SliceT(50.0f)
-                            .GridX(1, 3)
+                            .GridX(1, 2)
                     )
                     .Help(Help.Info("levelselect.info.mode", "scoreboard_storage")),
 
                 InlaidButton(
                     (fun () ->
-                        Icons.CHEVRONS_UP + " " +
-                        match sort.Value with
-                        | Sort.Accuracy -> %"levelselect.info.scoreboard.sort.accuracy"
-                        | Sort.Performance -> %"levelselect.info.scoreboard.sort.performance"
-                        | _ -> %"levelselect.info.scoreboard.sort.time"
+                        Icons.SETTINGS + " " +
+                        %"levelselect.info.leaderboard.settings"
+                        // Icons.CHEVRONS_UP + " " +
+                        // match sort.Value with
+                        // | Sort.Accuracy -> %"levelselect.info.scoreboard.sort.accuracy"
+                        // | Sort.Performance -> %"levelselect.info.scoreboard.sort.performance"
+                        // | _ -> %"levelselect.info.scoreboard.sort.time"
                     ),
                     cycle_sort,
                     ButtonType.CustomSprite "leaderboard-sort-button"
                 )
-                    .Hotkey("scoreboard_sort")
+                    // .Hotkey("scoreboard_sort")
                     .Position(
                         Position
                             .SliceT(50.0f)
-                            .GridX(2, 3)
+                            .GridX(2, 2)
                     )
-                    .Help(Help.Info("levelselect.info.scoreboard.sort", "scoreboard_sort")),
+                    .Help(Help.Info("levelselect.info.leaderboard.settings"))
 
-                InlaidButton(
-                    (fun () ->
-                        Icons.FILTER + " " +
-                        match filter.Value with
-                        | Filter.CurrentMods -> %"levelselect.info.scoreboard.filter.currentmods"
-                        | Filter.CurrentRate -> %"levelselect.info.scoreboard.filter.currentrate"
-                        | _ -> %"levelselect.info.scoreboard.filter.none"
-                    ),
-                    cycle_filter,
-                    ButtonType.CustomSprite "leaderboard-filter-button"
-                )
-                    .Hotkey("scoreboard_filter")
-                    .Position(
-                        Position
-                            .SliceT(50.0f)
-                            .GridX(3, 3)
-                    )
-                    .Help(Help.Info("levelselect.info.scoreboard.filter", "scoreboard_filter"))
+                // InlaidButton(
+                //     (fun () ->
+                //         Icons.FILTER + " " +
+                //         match filter.Value with
+                //         | Filter.CurrentMods -> %"levelselect.info.scoreboard.filter.currentmods"
+                //         | Filter.CurrentRate -> %"levelselect.info.scoreboard.filter.currentrate"
+                //         | _ -> %"levelselect.info.scoreboard.filter.none"
+                //     ),
+                //     cycle_filter,
+                //     ButtonType.CustomSprite "leaderboard-filter-button"
+                // )
+                //     .Hotkey("scoreboard_filter")
+                //     .Position(
+                //         Position
+                //             .SliceT(50.0f)
+                //             .GridX(3, 3)
+                //     )
+                //     .Help(Help.Info("levelselect.info.scoreboard.filter", "scoreboard_filter"))
             )
         
         base.Init(parent)

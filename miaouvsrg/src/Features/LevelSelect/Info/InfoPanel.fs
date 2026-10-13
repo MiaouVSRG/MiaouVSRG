@@ -62,15 +62,14 @@ type GameplayUtils(change_rate: Rate -> unit) =
         this.Position <- GameplayUtils.SHOW_POS
 
 module MainDisplay =
-    let SHOW_POS = Position.ShrinkB(GameplayInfo.HEIGHT + AngledButton.HEIGHT + Style.PADDING)
-    let HIDDEN_POS = Position.ShrinkB(GameplayInfo.HEIGHT + AngledButton.HEIGHT + Style.PADDING).TranslateX(-SCREEN_OFFSET)
+    let SHOW_POS = Position.ShrinkB(GameplayInfo.HEIGHT + AngledButton.HEIGHT + Style.PADDING).SlicePercentL(0.75f)
+    let HIDDEN_POS = Position.ShrinkB(GameplayInfo.HEIGHT + AngledButton.HEIGHT + Style.PADDING).SlicePercentL(0.75f).TranslateX(-SCREEN_OFFSET)
     
 type MainDisplay(info_panel_mode: Setting<InfoPanelMode,unit>) =
     inherit SlideContainer(NodeType.None)
     
     let scoreboard = Scoreboard(info_panel_mode)
     let leaderboard = Leaderboard(info_panel_mode)
-    let patterns = Patterns(info_panel_mode)
     
     override this.Init(parent: Widget) =
         this
@@ -78,9 +77,7 @@ type MainDisplay(info_panel_mode: Setting<InfoPanelMode,unit>) =
                 scoreboard
                     .Conditional(fun () -> info_panel_mode.Value = InfoPanelMode.Local),
                 leaderboard
-                    .Conditional(fun () -> info_panel_mode.Value = InfoPanelMode.Online),
-                patterns
-                    .Conditional(fun () -> info_panel_mode.Value = InfoPanelMode.Patterns)
+                    .Conditional(fun () -> info_panel_mode.Value = InfoPanelMode.Online)
             )
             
         base.Init(parent)
@@ -91,17 +88,15 @@ type MainDisplay(info_panel_mode: Setting<InfoPanelMode,unit>) =
     member this.Hide() : unit =
         scoreboard.Hide()
         leaderboard.Hide()
-        patterns.Hide()
         
     member this.Show() : unit =
         scoreboard.Show(info_panel_mode.Value = InfoPanelMode.Local)
         leaderboard.Show(info_panel_mode.Value = InfoPanelMode.Online)
-        patterns.Show(info_panel_mode.Value = InfoPanelMode.Patterns)
         
 
 module InfoPanel =
-    let SHOW_POS = Position.ShrinkT(TOP_BAR_HEIGHT + 5.0f).SlicePercentL(INFO_SCREEN_SPLIT)
-    let HIDDEN_POS = Position.ShrinkT(TOP_BAR_HEIGHT + 5.0f).SlicePercentL(INFO_SCREEN_SPLIT).TranslateX(-SCREEN_OFFSET)
+    let SHOW_POS = Position.ShrinkT(TOP_BAR_HEIGHT + 55.0f).SlicePercentL(INFO_SCREEN_SPLIT)
+    let HIDDEN_POS = Position.ShrinkT(TOP_BAR_HEIGHT + 55.0f).SlicePercentL(INFO_SCREEN_SPLIT).TranslateX(-SCREEN_OFFSET)
 
 type InfoPanel() =
     inherit SlideContainer(NodeType.None)
@@ -134,9 +129,6 @@ type InfoPanel() =
                 main_display
                     .Position(MainDisplay.SHOW_POS),
 
-                gameplay_info
-                    .Position(GameplayInfo.HIDDEN_POS),
-
                 gameplay_utils
                     .Position(GameplayUtils.HIDDEN_POS)
             )
@@ -161,10 +153,8 @@ type InfoPanel() =
         
     member this.Hide() : unit =
         main_display.Hide()
-        gameplay_info.Hide()
         gameplay_utils.Hide()
         
     member this.Show() : unit =
         main_display.Show()
-        gameplay_info.Show()
         gameplay_utils.Show()

@@ -66,6 +66,8 @@ module SC =
                         TimingWindows = None
                     }
                 |]
+            // TODO: Maybe not correct
+            JudgementsWeight = [|1.0; 0.9; 0.5; -0.5; MISS_PENALTY_POINTS; MISS_PENALTY_POINTS|]
             Grades =
                 [|
                     {
