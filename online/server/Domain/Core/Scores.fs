@@ -171,7 +171,7 @@ module Score =
     let save (score: Score) : int64 =
         SAVE.Execute score core_db |> expect |> Array.exactlyOne
 
-    let PRIMARY_RULESET = "NC9EB014D"
+    let PRIMARY_RULESET = "N82D82048"
 
     type RecentScore =
         {
