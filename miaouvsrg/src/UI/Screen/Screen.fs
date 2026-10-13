@@ -251,6 +251,10 @@ module Screen =
                     Background.draw (this.Bounds, Color.White, 1.0f)
                     Render.sprite this.Bounds (Color.White.O4a alpha) (Content.Texture "background")
                 elif
+                    current_type = ScreenType.LevelSelect
+                then
+                    Background.draw (this.Bounds, Color.White, 1.0f)
+                elif
                     (current_type <> ScreenType.Play || Background.dim_percent.Value < 1.0f)
                 then
                     Background.draw_with_dim (this.Bounds, Color.White, 1.0f)

@@ -10,53 +10,53 @@ open MiaouVSRG.UI
 open MiaouVSRG.Features.Gameplay
 
 module CurrentChart =
-    let SHOW_POS = Position.SliceT(TOP_BAR_HEIGHT).SlicePercentL(INFO_SCREEN_SPLIT)
-    let HIDDEN_POS = Position.SliceT(TOP_BAR_HEIGHT).SlicePercentL(INFO_SCREEN_SPLIT).TranslateX(-SCREEN_OFFSET + 2000.0f)
+    let SHOW_POS = Position.SliceT(TOP_BAR_HEIGHT + 50.0f).SlicePercentL(INFO_SCREEN_SPLIT * 0.8f)
+    let HIDDEN_POS = Position.SliceT(TOP_BAR_HEIGHT + 50.0f).SlicePercentL(INFO_SCREEN_SPLIT * 0.8f).TranslateX(-SCREEN_OFFSET + 2000.0f)
 
 type CurrentChart() =
     inherit SlideContainer(NodeType.None)
     
     override this.Init(parent: Widget) =
-        this
-            .With(
-                InlaidButton(
-                    Icons.GLOBE,
-                    (fun () ->
-                        let link =
-                            match SelectedChart.CACHE_DATA with
-                            | None -> "404"
-                            | Some c ->
-                                c.Hash
-                        open_url($"https://www.beta.miaouvsrg.com/charts/chartpage/{link}")
-                    ),
-                    ButtonType.Transparent,
-                    (0.0f, 0.0f) // No shrink so the Icon can take all the space
-                )
-                    .Position(
-                        Position.SliceL(60.0f).SliceB(60.0f).TranslateX(20.0f).TranslateY(-5.0f)
-                    )
-            )
-            .Add(
-                InlaidButton(
-                    Icons.TARGET,
-                    (fun () ->
-                        SelectedChart.when_loaded true
-                        <| fun info ->
-                            Screen.change_new
-                                (fun () -> PracticeScreen.Create(info, 0.0f<ms>))
-                                ScreenType.Practice
-                                Transitions.Default
-                            |> ignore
-                    ),
-                    ButtonType.Transparent,
-                    (0.0f, 0.0f) // No shrink so the Icon can take all the space
-                )
-                    .Hotkey("practice_mode")
-                    .Position(
-                        Position.SliceR(60.0f).SliceB(60.0f).TranslateX(-20.0f).TranslateY(-5.0f)
-                    )
-                    .Help(Help.Info("levelselect.practice_mode", "practice_mode"))
-                )
+        // this
+            // .With(
+            //     InlaidButton(
+            //         Icons.GLOBE,
+            //         (fun () ->
+            //             let link =
+            //                 match SelectedChart.CACHE_DATA with
+            //                 | None -> "404"
+            //                 | Some c ->
+            //                     c.Hash
+            //             open_url($"https://www.beta.miaouvsrg.com/charts/chartpage/{link}")
+            //         ),
+            //         ButtonType.Transparent,
+            //         (0.0f, 0.0f) // No shrink so the Icon can take all the space
+            //     )
+            //         .Position(
+            //             Position.SliceL(60.0f).SliceB(60.0f).TranslateX(20.0f).TranslateY(-5.0f)
+            //         )
+            // )
+            // .Add(
+            //     InlaidButton(
+            //         Icons.TARGET,
+            //         (fun () ->
+            //             SelectedChart.when_loaded true
+            //             <| fun info ->
+            //                 Screen.change_new
+            //                     (fun () -> PracticeScreen.Create(info, 0.0f<ms>))
+            //                     ScreenType.Practice
+            //                     Transitions.Default
+            //                 |> ignore
+            //         ),
+            //         ButtonType.Transparent,
+            //         (0.0f, 0.0f) // No shrink so the Icon can take all the space
+            //     )
+            //         .Hotkey("practice_mode")
+            //         .Position(
+            //             Position.SliceR(60.0f).SliceB(60.0f).TranslateX(-20.0f).TranslateY(-5.0f)
+            //         )
+            //         .Help(Help.Info("levelselect.practice_mode", "practice_mode"))
+            //     )
         
         base.Init(parent)
 
@@ -76,11 +76,15 @@ type CurrentChart() =
 
         let diff_text =
             match SelectedChart.CACHE_DATA with
-            | None -> "--"
+            | None -> ""
             | Some c ->
-                if c.Audio.IsAbsolute then Icons.LINK + " " + c.OriginString
-                else c.OriginString
-        Text.fill_b (Style.font, diff_text, this.Bounds.Shrink(20.0f, 10.0f).SliceB(50.0f), Colors.text, Alignment.CENTER)
+                c.DifficultyName
+                
+        Text.fill_b (Style.font, diff_text, this.Bounds.Shrink(20.0f, 10.0f).ShrinkT(70.0f).SliceT(50.0f), Colors.text, Alignment.CENTER)
+        
+        let rate_text = sprintf "x%.2f" SelectedChart.rate.Value
+        
+        Text.fill_b (Style.font, rate_text, this.Bounds.Shrink(20.0f, 10.0f).ShrinkT(100.0f).SliceT(40.0f), Colors.text, Alignment.CENTER)
         
         base.Draw()
         

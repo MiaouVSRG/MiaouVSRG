@@ -75,13 +75,15 @@ module LoadingIndicator =
 
             Render.sprite this.Bounds (Colors.white.O4a this.Alpha) (Content.Texture "loading-screen-progress-bar-empty")
                 
-            let r_progress_bar: Rect = {
-                Left = this.Bounds.Left
-                Top = this.Bounds.Top
-                Right = this.Bounds.Left + (this.Bounds.Width * percent)
-                Bottom = this.Bounds.Bottom
-            }
-            Render.sprite r_progress_bar (Colors.white.O4a this.Alpha) ((Content.Texture "loading-screen-progress-bar-full"))
+            // let r_progress_bar: Rect = {
+            //     Left = this.Bounds.Left
+            //     Top = this.Bounds.Top
+            //     Right = this.Bounds.Left + (this.Bounds.Width * percent)
+            //     Bottom = this.Bounds.Bottom
+            // }
+            let s = (Content.Texture "loading-screen-progress-bar-full")
+            Logging.Debug $"oui : {s.PrecomputedQuad.IsSome}"
+            Render.sprite (this.Bounds.SlicePercentL(percent)) (Colors.white.O4a this.Alpha) ((Content.Texture "loading-screen-progress-bar-full"))
                 
             let left_pos =
                 if percent = 1.0f then
