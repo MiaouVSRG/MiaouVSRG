@@ -25,8 +25,18 @@
         <img class="pipheader" src="/favicon.png">
         <div class="homebutton">home</div>
         <div class="lbbutton">leaderboards</div>
-        <div class="friendsbutton">friends</div>
-        <svg  fill="#ffffff"  height="34px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20.207 18.793L16.6 15.184a7.027 7.027 0 1 0-1.416 1.416l3.609 3.609a1 1 0 0 0 1.414-1.416zM6 11a5 5 0 1 1 5 5 5.006 5.006 0 0 1-5-5z"></path> </g></svg>
+        <div class="challengebutton">challenges</div>
+        <div class="shopbutton">shop</div>
+        <div class="completionbutton">completion</div>
+        <svg fill="#ffffff" height="34px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path
+                        d="M20.207 18.793L16.6 15.184a7.027 7.027 0 1 0-1.416 1.416l3.609 3.609a1 1 0 0 0 1.414-1.416zM6 11a5 5 0 1 1 5 5 5.006 5.006 0 0 1-5-5z">
+                </path>
+            </g>
+        </svg>
         <div id="headerusername" class="headerusername">username</div>
         <img id="headerpfp" class="headerpfp" src="/assets/images/placeholder/PFP%20PLACEHOLDER.png">
     </div>
@@ -35,7 +45,7 @@
 
 
 
-<img class="bg" id="bg" src="">
+<img class="bg" id="bg" src="" crossorigin="anonymous">
 
 
 <div class="mainbox">
@@ -252,6 +262,7 @@
         <div CLASS="leaderboardhead">
 
             <span class="leaderboardheadspan secondarytext rank">RANK</span>
+            <span class="leaderboardheadspan secondarytext score">SCORE</span>
             <span class="leaderboardheadspan secondarytext rating">RATING</span>
             <span class="leaderboardheadspan secondarytext acc">ACC</span>
             <span class="leaderboardheadspan secondarytext player">PLAYER</span>
@@ -269,11 +280,15 @@
 
         <div class="leaderboardplayercardbox" id="leaderboard-player-card-box">
 
-        <!-- <div CLASS="leaderboardplayercard">
+         <!-- <div CLASS="leaderboardplayercard">
 
             <div class="playercarddivrank">
             <span class="leaderboardplayerspan">#1</span>
             </div>
+
+             <div class="playercarddivscore">
+                 <span class="leaderboardplayerspan">1,000,000</span>
+             </div>
 
             <div class="playercarddivrating">
             <span class="leaderboardplayerspan">22.33</span>
@@ -315,823 +330,823 @@
             <span class="leaderboardplayerspan ">1.25 MR</span>
             </div>
 
-        </div>
-
-        <div CLASS="leaderboardplayercard2">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#2</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#3</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard2">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#4</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#5</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard2">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#6</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#7</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard2">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#8</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#9</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard2">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#10</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#11</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard2">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#12</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#13</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard2">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#14</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#15</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard2">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#16</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#17</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
-        </div>
-
-        <div CLASS="leaderboardplayercard2">
-
-            <div class="playercarddivrank">
-                <span class="leaderboardplayerspan">#18</span>
-            </div>
-
-            <div class="playercarddivrating">
-                <span class="leaderboardplayerspan">22.33</span>
-            </div>
-
-            <div class="playercarddivacc">
-                <span class="leaderboardplayerspan ">99.99%</span>
-            </div>
-
-            <div class="playercarddivplayer">
-                <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
-            </div>
-
-            <div class="playercarddivcombo">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivperf">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivgreat">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmeh">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivmiss">
-                <span class="leaderboardplayerspan ">99999</span>
-            </div>
-
-            <div class="playercarddivtime">
-                <span class="leaderboardplayerspan ">31d</span>
-            </div>
-
-            <div class="playercarddivmods">
-                <span class="leaderboardplayerspan ">1.25 MR</span>
-            </div>
-
         </div> -->
+
+            <!--<div CLASS="leaderboardplayercard2">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#2</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#3</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard2">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#4</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#5</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard2">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#6</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#7</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard2">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#8</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#9</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard2">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#10</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#11</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard2">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#12</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#13</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard2">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#14</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#15</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard2">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#16</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#17</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div>
+
+            <div CLASS="leaderboardplayercard2">
+
+                <div class="playercarddivrank">
+                    <span class="leaderboardplayerspan">#18</span>
+                </div>
+
+                <div class="playercarddivrating">
+                    <span class="leaderboardplayerspan">22.33</span>
+                </div>
+
+                <div class="playercarddivacc">
+                    <span class="leaderboardplayerspan ">99.99%</span>
+                </div>
+
+                <div class="playercarddivplayer">
+                    <span class="leaderboardplayerspan ">VERYLONGUSERNAME</span>
+                </div>
+
+                <div class="playercarddivcombo">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivperf">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivgreat">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmeh">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivmiss">
+                    <span class="leaderboardplayerspan ">99999</span>
+                </div>
+
+                <div class="playercarddivtime">
+                    <span class="leaderboardplayerspan ">31d</span>
+                </div>
+
+                <div class="playercarddivmods">
+                    <span class="leaderboardplayerspan ">1.25 MR</span>
+                </div>
+
+            </div> -->
 
         </div>
 

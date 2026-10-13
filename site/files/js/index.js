@@ -224,8 +224,8 @@ function init(response, isCurrentUser){
     var htmllevel=document.getElementById("bmstotalcompletion")
     htmllevel.innerText=response.ProfileInfo.BMSCompletion
 
-    var htmllevel=document.getElementById("etternatotalcompletion")
-    htmllevel.innerText=response.ProfileInfo.EtternaCompletion
+    // var htmllevel=document.getElementById("etternatotalcompletion")
+    // htmllevel.innerText=response.ProfileInfo.EtternaCompletion
 
 
 

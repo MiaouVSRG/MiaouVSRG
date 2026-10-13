@@ -1147,6 +1147,7 @@ module Web =
                     MehCount: int
                     MissCount: int
                     Rating: float32
+                    Score: float
                 }
 
             [<Json.AutoCodec>]

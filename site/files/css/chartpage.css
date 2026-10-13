@@ -461,7 +461,7 @@ input[type=range]::-moz-range-thumb{
     Z-index: 1;
  //background-color: rgb(0 0 0 / 0.75);
     display: flex;
-    width: 42rem;
+    width: 44rem;
     height: 40.5rem;
     border-radius: 15px;
     margin-top:0.5rem;
@@ -796,11 +796,15 @@ input[type=range]::-moz-range-thumb{
 
 
 .rank{
-    margin-left: 0.5rem;
+    margin-left: 0.6rem;
+}
+
+.score{
+    margin-left: 1rem;
 }
 
 .rating{
-    margin-left: 1.5rem;
+    margin-left: 1.2rem;
 }
 
 .acc{
@@ -812,26 +816,26 @@ input[type=range]::-moz-range-thumb{
 }
 
 .combo{
-    margin-left: 4.5rem;
+    margin-left: 3.9rem;
 }
 
 .perf{
-    margin-left: 1.2rem;
+    margin-left: 1.1rem;
     color: rgb(80 255 235 / 0.67);
 }
 
 .great{
-    margin-left: 1.2rem;
+    margin-left: 1.1rem;
     color: rgb(255 237 137 / 0.66);
 }
 
 .meh{
-    margin-left: 1.2rem;
+    margin-left: 1.1rem;
     color: rgb(244 84 255 / 0.65);
 }
 
 .miss{
-    margin-left: 1.2rem;
+    margin-left: 1.3rem;
     color: rgb(255 84 84 / 0.65);
 }
 
@@ -840,7 +844,7 @@ input[type=range]::-moz-range-thumb{
 }
 
 .mods{
-    margin-left: 1.5rem;
+    margin-left: 1.1rem;
 }
 
 
@@ -878,7 +882,7 @@ input[type=range]::-moz-range-thumb{
     width: 3.5rem;
 //  background-color: #6e190d;
     text-align: center;
-    color: #50ff6d;
+    //color: #50ff6d;
 }
 
 .playercarddivperf{
