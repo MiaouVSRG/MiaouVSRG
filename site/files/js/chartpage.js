@@ -85,6 +85,8 @@ function createLeaderboard(){
 
         const playercarddivrank = document.createElement("div");
         playercarddivrank.classList.add("playercarddivrank");
+        const playercarddivscore = document.createElement("div");
+        playercarddivscore.classList.add("playercarddivscore");
         const playercarddivrating = document.createElement("div");
         playercarddivrating.classList.add("playercarddivrating");
         const playercarddivacc = document.createElement("div");
@@ -109,6 +111,10 @@ function createLeaderboard(){
         let span = createSpan("#" + score.Rank);
         playercarddivrank.appendChild(span);
         main.appendChild(playercarddivrank);
+
+        span = createSpan(parseInt(score.Score));
+        playercarddivscore.appendChild(span);
+        main.appendChild(playercarddivscore);
 
 
         span = createSpan(Number(score.Rating).toFixed(2));
