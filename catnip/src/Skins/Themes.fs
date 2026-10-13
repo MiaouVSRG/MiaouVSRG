@@ -180,6 +180,10 @@ module Theme =
         "slider-empty"
         "slider-full"
         "hintbox"
+        "rice"
+        "bpm"
+        "ln"
+        "time"
     |]
 
     let SOUNDS =

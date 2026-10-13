@@ -35,6 +35,8 @@ type LoadedChartInfo =
 
         WithMods: ModdedChart
         NotecountsString: string
+        RiceCount: int
+        HoldCount: int
         Difficulty: Difficulty
         Rate: Rate
         Patterns: PatternReport
@@ -55,14 +57,14 @@ module SelectedChart =
         | None -> 0.0f<ms>
         |> fun x -> x / _rate.Value
         |> fun x -> (x / 1000.0f / 60.0f |> int, (x / 1000f |> int) % 60)
-        |> fun (x, y) -> sprintf "%s %i:%02i" Icons.CLOCK x y
+        |> fun (x, y) -> sprintf "%i:%02i" x y
 
     let private format_bpm (chart_meta: ChartMeta option) =
         match chart_meta with
-        | Some chart_meta -> sprintf "%s %i" Icons.MUSIC (float32 chart_meta.BPM * float32 _rate.Value |> round |> int)
-        | None -> sprintf "%s 120" Icons.MUSIC
-
-    let private format_notecounts (chart: ModdedChart) =
+        | Some chart_meta -> sprintf "%i" (float32 chart_meta.BPM * float32 _rate.Value |> round |> int)
+        | None -> sprintf "120"
+        
+    let private get_rice_and_hold_count (chart: ModdedChart) =
         let mutable notes = 0
         let mutable lnotes = 0
 
@@ -73,20 +75,14 @@ module SelectedChart =
                 elif n = NoteType.HOLDHEAD then
                     notes <- notes + 1
                     lnotes <- lnotes + 1
-
-        let hold_count =
-            let pc = (100.0f * float32 lnotes / float32 notes)
-
-            if pc < 0.5f then
-                sprintf "%i Holds" lnotes
-            else
-                sprintf "%.0f%% Holds" pc
-
-        sprintf "%iK | %i Notes | %s" chart.Keys notes hold_count
+        
+        notes, lnotes
 
     let mutable CACHE_DATA: ChartMeta option = None
     let mutable FMT_DURATION: string = format_duration None
     let mutable FMT_BPM: string = format_bpm None
+    let mutable RICE_COUNT: int = 0
+    let mutable HOLD_COUNT: int = 0
     let mutable LIBRARY_CTX = LibraryContext.None
 
     let mutable CHART: Chart option = None
@@ -112,6 +108,8 @@ module SelectedChart =
 
             WithMods = WITH_MODS.Value
             NotecountsString = FMT_NOTECOUNTS.Value
+            RiceCount = RICE_COUNT
+            HoldCount = HOLD_COUNT
             Difficulty = DIFFICULTY.Value
             Rate = RATE
             Patterns = PATTERNS.Value
@@ -194,7 +192,7 @@ module SelectedChart =
                         let rating = Difficulty.calculate(rate, with_mods.Notes)
                         let patterns = PatternReport.from_chart(rating, with_mods.AsChart)
 
-                        let note_counts = format_notecounts with_mods
+                        let note_counts = get_rice_and_hold_count with_mods
 
                         yield
                             fun () ->
@@ -202,7 +200,9 @@ module SelectedChart =
                                 WITH_COLORS <- Some with_colors
                                 DIFFICULTY <- Some rating
                                 PATTERNS <- Some patterns
-                                FMT_NOTECOUNTS <- Some note_counts
+                                FMT_NOTECOUNTS <- Some (sprintf "%i %i" (fst note_counts) (snd note_counts))
+                                RICE_COUNT <- fst note_counts
+                                HOLD_COUNT <- snd note_counts
                                 RATE <- rate
                                 chart_change_finished.Trigger(create_loaded_chart_info ())
 
@@ -227,7 +227,7 @@ module SelectedChart =
 
                         let rating = Difficulty.calculate(rate, with_mods.Notes)
 
-                        let note_counts = format_notecounts with_mods
+                        let note_counts = get_rice_and_hold_count with_mods
                         let patterns = PatternReport.from_chart(rating, with_mods.AsChart)
 
                         yield
@@ -236,7 +236,9 @@ module SelectedChart =
                                 WITH_COLORS <- Some with_colors
                                 DIFFICULTY <- Some rating
                                 PATTERNS <- Some patterns
-                                FMT_NOTECOUNTS <- Some note_counts
+                                FMT_NOTECOUNTS <- Some (sprintf "%i %i" (fst note_counts) (snd note_counts))
+                                RICE_COUNT <- fst note_counts
+                                HOLD_COUNT <- snd note_counts
                                 RATE <- rate
 
                                 if is_interrupted_load then

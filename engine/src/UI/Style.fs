@@ -24,6 +24,7 @@ module Colors =
     let grey_2 = Color.FromArgb 0xFF_b4b3bc
     let dark_gray = Color.FromArgb 0xFF_303030
     let text = white, shadow_1
+    let text_no_shadow = white, Color.Transparent
     let text_subheading = grey_1, shadow_2
     let text_greyout = grey_2, shadow_2
     let text_witheout = Color.White, shadow_2

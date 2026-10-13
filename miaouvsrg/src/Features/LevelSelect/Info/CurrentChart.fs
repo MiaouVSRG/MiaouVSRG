@@ -16,7 +16,17 @@ module CurrentChart =
 type CurrentChart() =
     inherit SlideContainer(NodeType.None)
     
+    let mutable rice = ""
+    let mutable hold = ""
+    
+    let refresh(info: LoadedChartInfo) =
+        rice <- $"{info.RiceCount}"
+        hold <- $"{info.HoldCount}"
+    
     override this.Init(parent: Widget) =
+        SelectedChart.on_chart_change_finished.Add refresh
+        SelectedChart.on_chart_update_finished.Add refresh
+        SelectedChart.if_loaded refresh
         // this
             // .With(
             //     InlaidButton(
@@ -72,7 +82,7 @@ type CurrentChart() =
             match SelectedChart.CACHE_DATA with
             | None -> %"jukebox.no_chart_selected"
             | Some c -> c.Title
-        Text.fill_b (Style.font, title_text, this.Bounds.Shrink(20.0f, 10.0f).SliceT(80.0f), Colors.text, Alignment.CENTER)
+        Text.fill_b (Style.font, title_text, this.Bounds.Shrink(35.0f, 10.0f).SliceT(80.0f), Colors.text, Alignment.CENTER)
 
         let diff_text =
             match SelectedChart.CACHE_DATA with
@@ -80,11 +90,33 @@ type CurrentChart() =
             | Some c ->
                 c.DifficultyName
                 
-        Text.fill_b (Style.font, diff_text, this.Bounds.Shrink(20.0f, 10.0f).ShrinkT(70.0f).SliceT(50.0f), Colors.text, Alignment.CENTER)
+        Text.fill_b (Style.font, diff_text, this.Bounds.Shrink(35.0f, 10.0f).ShrinkT(70.0f).SliceT(50.0f), Colors.text, Alignment.CENTER)
         
-        let rate_text = sprintf "x%.2f" SelectedChart.rate.Value
+        // let rate_text = sprintf "x%.2f" SelectedChart.rate.Value
         
-        Text.fill_b (Style.font, rate_text, this.Bounds.Shrink(20.0f, 10.0f).ShrinkT(100.0f).SliceT(40.0f), Colors.text, Alignment.CENTER)
+        // Text.fill_b (Style.font, rate_text, this.Bounds.Shrink(35.0f, 10.0f).ShrinkT(110.0f).SliceT(30.0f), Colors.text_no_shadow, Alignment.CENTER)
+        
+        let time_sprite = Content.Texture "time"
+        let bpm_sprite = Content.Texture "bpm"
+        let rice_sprite = Content.Texture "rice"
+        let ln_sprite = Content.Texture "ln"
+        
+        let base_bounds = this.Bounds.Shrink(100.0f, 10.0f).SliceB(40.0f)
+        let grid_x (pos: float32) =
+            let cols = 4.0f
+            base_bounds.ShrinkPercentL(1.0f / cols * (pos - 1.0f)).SlicePercentL(1.0f / (cols - pos + 1.0f))
+            
+        Text.fill_b (Style.font, SelectedChart.FMT_DURATION, grid_x(1.0f).SlicePercentL(0.8f), Colors.text_no_shadow, Alignment.RIGHT)
+        Render.sprite (grid_x(1.0f).SliceR(35.0f).SliceY(35.0f).TranslateX(20.0f).TranslateY(-3.0f)) Color.White time_sprite
+        
+        Text.fill_b (Style.font, SelectedChart.FMT_BPM, grid_x(2.0f).SlicePercentL(0.8f).TranslateX(-10.0f), Colors.text_no_shadow, Alignment.RIGHT)
+        Render.sprite (grid_x(2.0f).SliceR(35.0f).SliceY(35.0f).TranslateX(10.0f).TranslateY(-3.0f)) Color.White bpm_sprite
+        
+        Text.fill_b (Style.font, rice, grid_x(3.0f).SlicePercentL(0.8f).TranslateX(5.0f), Colors.text_no_shadow, Alignment.RIGHT)
+        Render.sprite (grid_x(3.0f).SliceR(35.0f).SliceY(35.0f).TranslateX(25.0f).TranslateY(-3.0f)) Color.White rice_sprite
+        
+        Text.fill_b (Style.font, hold, grid_x(4.0f).SlicePercentL(0.8f).TranslateX(5.0f), Colors.text_no_shadow, Alignment.RIGHT)
+        Render.sprite (grid_x(4.0f).SliceR(35.0f).SliceY(35.0f).TranslateX(25.0f).TranslateY(-3.0f)) Color.White ln_sprite
         
         base.Draw()
         
