@@ -36,6 +36,7 @@ module API =
         add_endpoint Charts.Add.ROUTE (BodyType.String Charts.Add.handle)
         add_endpoint Charts.Scores.Save.ROUTE (BodyType.String Charts.Scores.Save.handle)
         add_endpoint Charts.Scores.Leaderboard.ROUTE (BodyType.String Charts.Scores.Leaderboard.handle)
+        add_endpoint Charts.Scores.UserRank.ROUTE (BodyType.String Charts.Scores.UserRank.handle)
 
         add_endpoint Songs.Search.ROUTE (BodyType.String Songs.Search.handle)
         add_endpoint Songs.Scan.ROUTE (BodyType.String Songs.Scan.handle)

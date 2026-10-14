@@ -140,6 +140,26 @@ module Charts =
 
             let get_async (chart: string, callback: Response option -> unit) =
                 Client.get_async<Response> (snd ROUTE + "?chart=" + chart, callback)
+                
+        module UserRank =
+            let ROUTE = (GET, "/charts/score")
+            
+            [<Json.AutoCodec>]
+            type Response =
+                {
+                    Username: string
+                    Rank: int
+                    Replay: string
+                    Rate: Rate
+                    Mods: ModState
+                    Timestamp: int64
+                }
+                
+            let get (chart: string, callback: Response option -> unit) =
+                Client.get<Response> (snd ROUTE + "?chart=" + chart, callback)
+
+            let get_async (chart: string, callback: Response option -> unit) =
+                Client.get_async<Response> (snd ROUTE + "?chart=" + chart, callback)
 
 module Songs =
 

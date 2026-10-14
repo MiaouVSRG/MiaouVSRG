@@ -357,7 +357,67 @@ module Score =
         
     let get_leaderboard_no_csw (chart_id: string) =
         GET_LEADERBOARD_CSW.Execute chart_id core_db |> expect
-
+    
+    type PositionedLeaderboardScore =
+        {
+            UserId: int64
+            TimePlayed: int64
+            Rate: Rate
+            Mods: ModState
+            Accuracy: float
+            Grade: int
+            Lamp: int
+            ReplayId: int64 option
+            Rating: float32
+            Position: int
+        }    
+    let private GET_USER_RANK: Query<string * int64, PositionedLeaderboardScore> =
+        {
+            SQL =
+                """
+            WITH UserBestScores AS (
+                SELECT
+                    UserId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp, ReplayId, Rating,
+                    ROW_NUMBER() OVER (PARTITION BY UserId ORDER BY Rating DESC, TimePlayed ASC) AS UserScoreRank
+                FROM scores2
+                WHERE ChartId = @ChartId AND Ranked = 1
+            ),
+                 Leaderboard AS (
+                     SELECT
+                         UserId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp, ReplayId, Rating,
+                         ROW_NUMBER() OVER (ORDER BY Rating DESC, TimePlayed ASC) AS Position
+                     FROM UserBestScores
+                     WHERE UserScoreRank = 1
+                 )
+            SELECT UserId, TimePlayed, Rate, Mods, Accuracy, Grade, Lamp, ReplayId, Rating, Position
+            FROM Leaderboard
+            WHERE UserId = @UserId;
+            """
+            Parameters = [ "@ChartId", SqliteType.Text, -1; "@UserId", SqliteType.Integer, 8 ]
+            FillParameters =
+                fun p (chart_id, user_id) ->
+                    p.String chart_id
+                    p.Int64 user_id
+            Read =
+                (fun r ->
+                    {
+                        UserId = r.Int64
+                        TimePlayed = r.Int64
+                        Rate = r.Float32 * 1.0f<rate>
+                        Mods = r.Json JSON
+                        Accuracy = r.Float64
+                        Grade = r.Int32
+                        Lamp = r.Int32
+                        ReplayId = r.Int64Option
+                        Rating = r.Float32
+                        Position = r.Int32
+                    }
+                )
+        }
+        
+    let get_user_rank (chart_id: string, user_id: int64) =
+        GET_USER_RANK.Execute (chart_id, user_id) core_db |> expect |> Array.tryExactlyOne
+        
     type UserLeaderboardScore =
         {
             TimePlayed: int64

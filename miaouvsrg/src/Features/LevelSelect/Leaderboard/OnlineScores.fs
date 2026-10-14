@@ -92,7 +92,11 @@ module OnlineScores =
                                 Chart = req.CurrentChart
                                 WithMods = with_mods
 
-                                PlayedBy = ScorePlayedBy.Username score.Username
+                                PlayedBy =
+                                    if score.Username = Network.credentials.Username then
+                                        ScorePlayedBy.You
+                                    else
+                                        ScorePlayedBy.Username score.Username
                                 TimePlayed = score.Timestamp
                                 Rate = score.Rate
 

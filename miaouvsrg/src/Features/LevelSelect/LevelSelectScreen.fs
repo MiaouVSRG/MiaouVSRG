@@ -33,21 +33,34 @@ type LevelSelectScreen() =
     let mutable enter = false
     let mutable exit = false
     let mutable last_login_status = Network.status
+    let mutable try_load_user_score = false
     
     let slide_animation = Animation.Fade 0.0f
     
     let load_profile() =
-        Logging.Debug "je load le profile"
         Players.Miniprofile.get (
              fun response ->
                  GameThread.defer
                  <| fun () ->
                      match response with
                      | Some result ->
-                         Logging.Debug $"acc : {result.MeanAccuracy}; rating : {result.OverallRating}"
                          miniprofile.Load(result)
                      | None -> ()
         )
+        
+    let set_user_score_card(info: LoadedChartInfo) =
+        Logging.Debug "requête"
+        Charts.Scores.UserRank.get (
+            info.ChartMeta.Hash,
+            fun response ->
+                 GameThread.defer
+                 <| fun () ->
+                     match response with
+                     | Some result ->
+                         Logging.Debug $"ok: {result.Rate}"
+                     | None -> ()
+        )
+        
     
     member this.ApplyKeymodeFilter(keymode : int) =
         let inner_filter = LevelSelect.filter.Filter
@@ -71,6 +84,7 @@ type LevelSelectScreen() =
             | "lamp" -> LevelSelect.refresh_all()
             | _ -> LevelSelect.refresh_details()
         )
+        OnlineScores.leaderboard_loaded.Add (fun b -> try_load_user_score <- b)
 
         if not (Sorting.modes.ContainsKey options.ChartSortMode.Value) then
             options.ChartSortMode.Value <- "title"
@@ -163,6 +177,10 @@ type LevelSelectScreen() =
 
     override this.Update(elapsed_ms, moved) =
         base.Update(elapsed_ms, moved)
+        
+        if try_load_user_score then
+            SelectedChart.if_loaded set_user_score_card
+            try_load_user_score <- false
         
         if not last_login_status.IsLoggedIn && Network.status.IsLoggedIn then
             load_profile()
