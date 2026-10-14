@@ -130,6 +130,7 @@ module Leaderboard =
                             GreatCount = scoring.JudgementCounts[1]
                             Acc = scoring.Accuracy
                             Rating = user_rating
+                            Score = scoring.PointsScored
                         }
                     )
                     
