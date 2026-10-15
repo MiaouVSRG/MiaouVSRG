@@ -19,11 +19,9 @@ module SearchBoxPositionsForLevelSelect =
     let SCREEN_OFFSET = 10000.0f
     let MARGIN_TOP = 5.0f
     let SHOW_POS = Position
-                            .SliceT(TOP_BAR_HEIGHT / 1.5f)
-                            .ShrinkB(AngledButton.HEIGHT)
-                            .SliceY(HEIGHT)
-                            .ShrinkPercentL(0.4f)
-                            .ShrinkL(500.0f)
+                            .ShrinkT(50.0f + MARGIN_TOP) // Height of libraryview buttons is 50px
+                            .SliceT(HEIGHT)
+                            .ShrinkPercentL(0.7f)
                             .ShrinkR((TOP_BAR_HEIGHT - AngledButton.HEIGHT - HEIGHT - Style.PADDING) * 0.5f)
                             .TranslateY(MARGIN_TOP)
                             

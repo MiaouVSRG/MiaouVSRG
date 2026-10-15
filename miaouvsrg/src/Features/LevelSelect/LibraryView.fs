@@ -86,9 +86,10 @@ module LibraryViewControls =
     let LIBRARY_VIEW_WIDTH = 3.5f * InlaidButton.WIDTH + 20.0f
     
     let MARGIN_RIGHT = 30.0f
+    let MARGIN_TOP = 5.0f
     
-    let SHOW_POS = Position.SliceT(TOP_BAR_HEIGHT / 1.35f).SliceB(50.0f).ShrinkPercentL(0.55f).SliceR(LIBRARY_VIEW_WIDTH + MARGIN_RIGHT)
-    let HIDDEN_POS = Position.SliceT(TOP_BAR_HEIGHT / 1.35f).SliceB(50.0f).ShrinkPercentL(0.55f).SliceR(LIBRARY_VIEW_WIDTH + MARGIN_RIGHT).TranslateX(SCREEN_OFFSET + 50000.0f)
+    let SHOW_POS = Position.ShrinkT(MARGIN_TOP).SliceT(50.0f).ShrinkPercentL(0.55f).SliceR(LIBRARY_VIEW_WIDTH + MARGIN_RIGHT)
+    let HIDDEN_POS = Position.ShrinkT(MARGIN_TOP).SliceT(50.0f).ShrinkPercentL(0.55f).SliceR(LIBRARY_VIEW_WIDTH + MARGIN_RIGHT).TranslateX(SCREEN_OFFSET + 50000.0f)
 
 type LibraryViewControls() =
     inherit SlideContainer(NodeType.None)

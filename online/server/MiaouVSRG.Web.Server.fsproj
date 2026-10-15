@@ -58,6 +58,7 @@
     <Compile Include="API\Players\Search.fs" />
     <Compile Include="API\Players\Online.fs" />
     <Compile Include="API\Players\Miniprofile.fs" />
+    <Compile Include="API\Players\ProfilePicture.fs" />
     <Compile Include="API\Friends\List.fs" />
     <Compile Include="API\Friends\Add.fs" />
     <Compile Include="API\Friends\Remove.fs" />

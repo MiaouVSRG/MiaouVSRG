@@ -1,6 +1,11 @@
 ﻿namespace MiaouVSRG.Features.LevelSelect
 
+open System.Globalization
+open System.Linq
+open Catnip
+open Catnip.Skins.Themes.Theme
 open MiaouVSRG.Content
+open MiaouVSRG.Features.Online
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.Input
 open Percyqaz.Flux.UI
@@ -34,37 +39,36 @@ type private OnlineScoreCard(score: LeaderboardScore, score_info: ScoreInfo) =
             
         let show_mod_string =
             if not (score_info.ModString() = "") then
-                $" • {score_info.ModString()}"
+                $", {score_info.ModString()}"
             else
                 ""
 
         this
             .Add(
+                ProfilePicture(score.Username)
+                    .Position(Position.ShrinkL(10.0f).ShrinkT(10.0f).SliceL(65.0f)),
                 Text(fun () ->
-                    sprintf "#%i %s"
-                        score.Rank
+                    sprintf "%s"
                         score.Username
                 )
                     .Color(text_color)
                     .Align(Alignment.LEFT)
-                    .Position(Position.SlicePercentT(0.6f).SlicePercentL(0.6f).TranslateY(5.0f).ShrinkL(10.0f)),
+                    .Position(Position.SlicePercentT(0.6f).SlicePercentL(0.6f).TranslateY(5.0f).ShrinkL(10.0f).TranslateX(130.0f)),
 
                 Text(fun () ->
                     sprintf
-                        "%s • %ix • %.2f %s"
-                        (score_info.Ruleset.LampName score_info.Lamp)
-                        score_info.Scoring.BestCombo
-                        score_info.Performance
-                        show_mod_string
+                        "%s"
+                        ((int score_info.Scoring.PointsScored).ToString("N0", CultureInfo.InvariantCulture))
                 )
                     .Color(text_subcolor)
                     .Align(Alignment.LEFT)
-                    .Position(Position.SlicePercentB(0.4f).SlicePercentL(0.5f).ExpandT(5.0f).TranslateY(5.0f).ShrinkL(10.0f)),
+                    .Position(Position.SlicePercentB(0.4f).SlicePercentL(0.5f).ExpandT(5.0f).TranslateY(5.0f).ShrinkL(10.0f).TranslateX(130.0f)),
 
                 Text(fun () ->
                     sprintf
-                        "%.2fx"
+                        "%.2fx%s"
                         score_info.Rate
+                        show_mod_string
                 )
                     .Color(text_subcolor)
                     .Align(Alignment.RIGHT)
@@ -72,7 +76,8 @@ type private OnlineScoreCard(score: LeaderboardScore, score_info: ScoreInfo) =
 
                 Text( fun () ->
                     sprintf
-                        "%s"
+                        "%s - %s"
+                        (if score_info.Ruleset.LampName score_info.Lamp = "FC" then "FC" else (string score_info.Scoring.BestCombo) + "x")
                         score_info.Scoring.FormattedAccuracy
                 )
                     .Color(text_color)
@@ -94,19 +99,59 @@ type private OnlineScoreCard(score: LeaderboardScore, score_info: ScoreInfo) =
         base.OnFocus by_mouse
         Style.hover.Play()
         
+    member private this.DrawGrade(bounds: Rect, grade: string, pos: float32): unit =
+        if TEXTURES.Contains(grade.ToLower().Replace("+", "plus")) then
+            let sprite = Content.Texture (grade.ToLower().Replace("+", "plus"))
+            let r = bounds.SliceL(50.0f).SliceY(50.0f).TranslateX(pos)
+            
+            Render.tex_quad
+                (r |> _.AsQuad)
+                Color.White.AsQuad
+                (Sprite.pick_texture (0,0) sprite)
+        else
+            Text.draw_aligned_b (
+                Style.font,
+                grade,
+                20.0f,
+                bounds.Right - pos,
+                bounds.Top + 20.0f,
+                (Colors.white, Color.Black),
+                0.5f
+            )
+        
     override this.Draw() =
+        
+        let get_grade_name(acc: float) =
+            if acc = 1.0 then
+                "PERFECT"
+            elif acc < 1.0 && acc >= 0.99 then
+                "OVERCLEAR+"
+            elif acc < 0.99 && acc >= 0.97 then
+                "OVERCLEAR"
+            elif acc < 0.97 && acc >= 0.95 then
+                "CLEAR+"
+            elif acc < 0.95 && acc >= 0.9 then
+                "CLEAR"
+            elif acc < 0.9 && acc >= 0.85 then
+                "PASS"
+            else
+                "FAIL"
         
         let sprite =
             if this.Focused then
                 Content.Texture "leaderboard-score-hover"
             else
                 Content.Texture "leaderboard-score"
-        let q = this.Bounds.ExpandB(10.0f).ExpandL(5.0F) |> _.AsQuad
+        let r = this.Bounds.ExpandB(10.0f)
+        let q = r |> _.AsQuad
         
         Render.tex_quad
             q
             Colors.white.AsQuad
             (Sprite.pick_texture (0,0) sprite)
+   
+        let grade_name = get_grade_name(score_info.Accuracy)
+        this.DrawGrade(r, grade_name, 85.0f)
         
         base.Draw()
 

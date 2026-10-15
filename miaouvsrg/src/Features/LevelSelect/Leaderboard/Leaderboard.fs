@@ -11,8 +11,8 @@ open MiaouVSRG.Options
 open MiaouVSRG.Features.Gameplay
 
 module OnlineScoreList =
-    let SHOW_POS = Position.ShrinkT(50.0f).SliceL(370.0f)
-    let HIDDEN_POS = Position.ShrinkT(50.0f).SliceL(370.0f).TranslateX(-SCREEN_OFFSET)
+    let SHOW_POS = Position.ShrinkT(50.0f).SliceL(460.0f)
+    let HIDDEN_POS = Position.ShrinkT(50.0f).SliceL(460.0f).TranslateX(-SCREEN_OFFSET)
     
 type private OnlineScoreList(scores_list: FlowContainer.Vertical<OnlineScoreCard>) =
     inherit SlideContainer(NodeType.None)

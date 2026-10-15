@@ -253,6 +253,7 @@
         <Compile Include="Features\LevelSelect\Shared.fs"/>
         <Compile Include="Features\LevelSelect\Filters.fs"/>
         <Compile Include="Features\LevelSelect\LevelSelectOptions.fs"/>
+        <Compile Include="Features\LevelSelect\ProfilePicture.fs" />
         <Compile Include="Features\LevelSelect\ContextMenus\ChartContextMenus.fs"/>
         <Compile Include="Features\LevelSelect\ContextMenus\GroupContextMenus.fs"/>
         <Compile Include="Features\LevelSelect\ContextMenus\BulkActionsMenus.fs"/>
@@ -271,12 +272,14 @@
         <Compile Include="Features\LevelSelect\Leaderboard\OnlineScores.fs"/>
         <Compile Include="Features\LevelSelect\Leaderboard\OnlineScoreCard.fs"/>
         <Compile Include="Features\LevelSelect\Leaderboard\Leaderboard.fs"/>
+        <Compile Include="Features\LevelSelect\Leaderboard\PersonalScoreCard.fs" />
         <Compile Include="Features\LevelSelect\Info\CurrentChart.fs"/>
         <Compile Include="Features\LevelSelect\Info\GameplayInfoBoxes.fs"/>
         <Compile Include="Features\LevelSelect\Info\GameplayInfo.fs"/>
         <Compile Include="Features\LevelSelect\Info\Patterns.fs"/>
         <Compile Include="Features\LevelSelect\Info\InfoPanel.fs"/>
         <Compile Include="Features\LevelSelect\Info\ProfileBox.fs" />
+        <Compile Include="Features\LevelSelect\Info\MiniChartInfo.fs" />
         <Compile Include="Features\LevelSelect\LevelSelectScreen.fs"/>
         <Compile Include="Features\Options\System\HotkeysPage.fs"/>
         <Compile Include="Features\Options\System\PerformanceSettingsPage.fs"/>

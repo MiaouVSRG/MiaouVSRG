@@ -1,5 +1,9 @@
 ﻿namespace MiaouVSRG.Features.LevelSelect
 
+open Catnip.Calculator
+open Catnip.Data.User
+open Catnip.Gameplay.Scoring
+open Catnip.Mods
 open MiaouVSRG.Web.Shared.Requests
 open Percyqaz.Common
 open Percyqaz.Flux.Input
@@ -8,12 +12,12 @@ open Percyqaz.Flux.Audio
 open Percyqaz.Flux.UI
 open Catnip
 open Catnip.Data.Library
+open Catnip.Gameplay.Replays
 open MiaouVSRG.Content
 open MiaouVSRG.Options
 open MiaouVSRG.Features.Gameplay
 open MiaouVSRG.UI
 open MiaouVSRG.Features.Online
-open MiaouVSRG.Features.Play
 open Percyqaz.Flux.Windowing
 
 type LevelSelectScreen() =
@@ -23,10 +27,14 @@ type LevelSelectScreen() =
     let search_text = Setting.simple ""
     
     let current_chart_container = CurrentChart()
+    let mini_chart_info_container = MiniChartInfo()
     let info_panel_container = InfoPanel()
     let library_view_controls_container = LibraryViewControls()
     let miniprofile = ProfileBox()
     let searchbox_container = SearchBox(search_text, fun f -> LevelSelect.filter <- f; Tree.refresh ())
+    
+    let personal_leaderboard_card = PersonalScoreCard(PersonalLeaderboardScore.Default, None)
+    let mutable personal_card_loaded = false
     
     let enter_screen_sequence = Animation.Group()
     let exit_screen_sequence = Animation.Group()
@@ -49,7 +57,6 @@ type LevelSelectScreen() =
         )
         
     let set_user_score_card(info: LoadedChartInfo) =
-        Logging.Debug "requête"
         Charts.Scores.UserRank.get (
             info.ChartMeta.Hash,
             fun response ->
@@ -57,8 +64,45 @@ type LevelSelectScreen() =
                  <| fun () ->
                      match response with
                      | Some result ->
-                         Logging.Debug $"ok: {result.Rate}"
-                     | None -> ()
+                         personal_leaderboard_card.Score <- result
+                         let with_mods = ModState.apply result.Mods info.Chart
+                         let replay_data = Replay.decompress_string result.Replay
+
+                         let scoring =
+                             ScoreProcessor.run
+                                 Rulesets.current
+                                 with_mods.Keys
+                                 (StoredReplay replay_data)
+                                 with_mods.Notes
+                                 result.Rate
+
+                         let rating = Difficulty.calculate(result.Rate, with_mods.Notes)
+                         let score_info: ScoreInfo =
+                            {
+                                ChartMeta = info.ChartMeta
+                                Chart = info.Chart
+                                WithMods = with_mods
+
+                                PlayedBy = ScorePlayedBy.You
+                                TimePlayed = result.Timestamp
+                                Rate = result.Rate
+
+                                Replay = replay_data
+                                Scoring = scoring
+                                Lamp = Lamp.calculate Rulesets.current.Lamps scoring.JudgementCounts scoring.ComboBreaks
+                                Grade = Grade.calculate Rulesets.current.Grades scoring.Accuracy
+
+                                Rating = rating
+                                Performance = Performance.calculate rating scoring
+
+                                ImportedFromOsu = false
+                                IsFailed = false
+                            }
+                            
+                         personal_leaderboard_card.ScoreInfo <- score_info
+                         personal_card_loaded <- true
+                         personal_leaderboard_card.Show(true)
+                     | None -> personal_leaderboard_card.Hide(true)
         )
         
     
@@ -95,12 +139,18 @@ type LevelSelectScreen() =
             .With(
                 current_chart_container
                     .Position(CurrentChart.HIDDEN_POS),
+                mini_chart_info_container
+                    .Position(MiniChartInfo.HIDDEN_POS),
                 searchbox_container
                     .Position(SearchBoxPositionsForLevelSelect.HIDDEN_POS)
                     .Help(Help.Info("levelselect.search", "search")),
 
                 info_panel_container
                     .Position(InfoPanel.SHOW_POS),
+                    
+                personal_leaderboard_card
+                    .Position(PersonalScoreCard.HIDDEN_POS)
+                    .Conditional(fun () -> personal_card_loaded),
                 
                 miniprofile
                     .Position(ProfileBox.HIDDEN_POS),
@@ -204,7 +254,7 @@ type LevelSelectScreen() =
         elif (%%"end").Pressed() then
             Tree.bottom_of_group ()
 
-        Tree.update (this.Bounds.Top + TOP_BAR_HEIGHT / 1.35f, this.Bounds.Bottom, elapsed_ms)
+        Tree.update (this.Bounds.Top, this.Bounds.Bottom, elapsed_ms)
         
         if not exit && enter then
             enter_screen_sequence.Update elapsed_ms
@@ -214,7 +264,7 @@ type LevelSelectScreen() =
 
     override this.Draw() =
 
-        Tree.draw (this.Bounds.Top + TOP_BAR_HEIGHT / 1.35f, this.Bounds.Bottom, slide_animation.Value)
+        Tree.draw (this.Bounds.Top, this.Bounds.Bottom, slide_animation.Value)
 
         base.Draw()
 
@@ -231,6 +281,7 @@ type LevelSelectScreen() =
         enter_screen_sequence.Add
         <| Animation.seq
             [
+                Animation.Action mini_chart_info_container.Show
                 Animation.Action current_chart_container.Show
                 Animation.Action info_panel_container.Show
                 Animation.Action library_view_controls_container.Show
@@ -248,6 +299,7 @@ type LevelSelectScreen() =
                 Animation.Action(fun () -> Screen.start_default_background_fade(true))
                 Animation.Action miniprofile.Hide
                 Animation.Action current_chart_container.Hide
+                Animation.Action mini_chart_info_container.Hide
                 Animation.Action info_panel_container.Hide
                 Animation.Delay 100.0
                 Animation.Action (fun () -> slide_animation.Target <- 0.0f)

@@ -15,6 +15,7 @@ open MiaouVSRG.Features.Online
 open MiaouVSRG.Web.Shared.Requests
 
 type LeaderboardScore = Charts.Scores.Leaderboard.Score
+type PersonalLeaderboardScore = Charts.Scores.UserRank.Response
 
 module OnlineScores =
 

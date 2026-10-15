@@ -1,5 +1,6 @@
 ﻿namespace MiaouVSRG.Web.Shared.Requests
 
+open Percyqaz.Common
 open Percyqaz.Data
 open Catnip
 open Catnip.Charts
@@ -154,6 +155,15 @@ module Charts =
                     Mods: ModState
                     Timestamp: int64
                 }
+                static member Default =
+                    {
+                        Username = "Loading"
+                        Rank = 99
+                        Replay = ""
+                        Rate = 1.0f<rate>
+                        Mods = Map.empty
+                        Timestamp = Timestamp.now()
+                    }
                 
             let get (chart: string, callback: Response option -> unit) =
                 Client.get<Response> (snd ROUTE + "?chart=" + chart, callback)
@@ -469,6 +479,18 @@ module Players =
 
         let get (query: string, callback: Response option -> unit) =
             Client.get<Response> (snd ROUTE + "?query=" + escape query, callback)
+            
+    module ProfilePicture =
+        let ROUTE = (GET, "/players/profilepicture")
+        
+        [<Json.AutoCodec>]
+        type Response =
+            {
+                ProfilePictureLink: string
+            }
+            
+        let get (username: string, callback: Response option -> unit) =
+            Client.get<Response> (snd ROUTE + "?username=" + escape username, callback)
     
     /// requires login token as Authorization header      
     module Miniprofile =

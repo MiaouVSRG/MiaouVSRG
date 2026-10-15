@@ -1,6 +1,7 @@
 ﻿namespace MiaouVSRG.Features.LevelSelect
 
 open System
+open System.Globalization
 open System.Linq
 open MiaouVSRG.Content
 open MiaouVSRG.Features.Online
@@ -42,14 +43,14 @@ type private LocalScoreCard(score_info: ScoreInfo) =
             
         let show_mod_string =
             if not (score_info.ModString() = "") then
-                $" • {score_info.ModString()}"
+                $", {score_info.ModString()}"
             else
                 ""
                 
         this
             .Add(
                 Text(fun () ->
-                    sprintf "%s" 
+                    sprintf "%s"
                         (match score_info.PlayedBy with
                             | ScorePlayedBy.You -> Network.credentials.Username
                             | ScorePlayedBy.Username username -> username
@@ -61,11 +62,8 @@ type private LocalScoreCard(score_info: ScoreInfo) =
 
                 Text(fun () ->
                     sprintf
-                        "%s • %ix • %.2f %s"
-                        (score_info.Ruleset.LampName score_info.Lamp)
-                        score_info.Scoring.BestCombo
-                        score_info.Performance
-                        show_mod_string
+                        "%s"
+                        ((int score_info.Scoring.PointsScored).ToString("N0", CultureInfo.InvariantCulture))
                 )
                     .Color(text_subcolor)
                     .Align(Alignment.LEFT)
@@ -73,8 +71,9 @@ type private LocalScoreCard(score_info: ScoreInfo) =
 
                 Text(fun () ->
                     sprintf
-                        "%.2fx"
+                        "%.2fx%s"
                         score_info.Rate
+                        show_mod_string
                 )
                     .Color(text_subcolor)
                     .Align(Alignment.RIGHT)
@@ -82,7 +81,8 @@ type private LocalScoreCard(score_info: ScoreInfo) =
 
                 Text( fun () ->
                     sprintf
-                        "%s"
+                        "%s - %s"
+                        (if score_info.Ruleset.LampName score_info.Lamp = "FC" then "FC" else (string score_info.Scoring.BestCombo) + "x")
                         score_info.Scoring.FormattedAccuracy
                 )
                     .Color(text_color)
